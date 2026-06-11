@@ -7,6 +7,9 @@ from pathlib import Path
 import numpy as np
 
 from .metrics.detection import e_measure, f_measure, mae, s_measure, weighted_f_measure
+from .metrics.instance import boundary_iou, dice, iou
+from .metrics.perceptual import ms_ssim, ssim
+from .metrics.video import boundary_f_score, j_and_f, jaccard_index, temporal_stability
 from .results import ResultsTable
 
 
@@ -39,6 +42,24 @@ def _metric_value(name: str, pred: np.ndarray, gt: np.ndarray) -> dict[str, floa
         return {f"Em_{subkey}": value for subkey, value in e_measure(pred, gt).items()}
     if key in {"f_measure", "f"}:
         return {f"F_{subkey}": value for subkey, value in f_measure(pred, gt).items()}
+    if key in {"iou"}:
+        return {"IoU": iou(pred, gt)}
+    if key in {"dice"}:
+        return {"Dice": dice(pred, gt)}
+    if key in {"boundary_iou"}:
+        return {"BoundaryIoU": boundary_iou(pred, gt)}
+    if key in {"ssim"}:
+        return {"SSIM": ssim(pred, gt)}
+    if key in {"ms_ssim", "msssim"}:
+        return {"MS_SSIM": ms_ssim(pred, gt)}
+    if key in {"j", "jaccard"}:
+        return {"J": jaccard_index(pred, gt)}
+    if key in {"boundary_f", "f_boundary"}:
+        return {"BoundaryF": boundary_f_score(pred, gt)}
+    if key in {"jf", "j_and_f"}:
+        return {"JF": j_and_f(pred, gt)}
+    if key in {"temporal", "temporal_stability"}:
+        return {"Temporal": temporal_stability(pred, gt)}
     raise KeyError(f"Unsupported metric '{name}'.")
 
 
