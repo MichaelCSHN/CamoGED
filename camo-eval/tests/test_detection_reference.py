@@ -3,7 +3,16 @@ import warnings
 import numpy as np
 import pytest
 
-from camo_eval import e_measure, f_measure, mae, s_measure, weighted_f_measure
+from camo_eval import (
+    e_measure,
+    f_measure,
+    mae,
+    precision,
+    precision_recall_curve,
+    recall,
+    s_measure,
+    weighted_f_measure,
+)
 
 py_sod_metrics = pytest.importorskip("py_sod_metrics")
 
@@ -107,6 +116,22 @@ def test_detection_metrics_handle_single_pixel_inputs():
     assert s_measure(pred, gt) == pytest.approx(1.0)
     assert e_measure(pred, gt)["adaptive"] == pytest.approx(1.0)
     assert f_measure(pred, gt)["adaptive"] == pytest.approx(1.0)
+    assert precision(pred, gt)["adaptive"] == pytest.approx(1.0)
+    assert recall(pred, gt)["adaptive"] == pytest.approx(1.0)
+
+
+def test_precision_recall_curve_shapes_and_bounds():
+    pred = np.array([[0, 64, 128], [255, 192, 32]], dtype=np.uint8)
+    gt = np.array([[0, 0, 255], [255, 255, 0]], dtype=np.uint8)
+    curve = precision_recall_curve(pred, gt)
+
+    assert curve["thresholds"].shape == (256,)
+    assert curve["precision"].shape == (256,)
+    assert curve["recall"].shape == (256,)
+    assert np.all(curve["precision"] >= 0.0)
+    assert np.all(curve["precision"] <= 1.0)
+    assert np.all(curve["recall"] >= 0.0)
+    assert np.all(curve["recall"] <= 1.0)
 
 
 def test_weighted_f_measure_all_background_matches_reference_behavior():

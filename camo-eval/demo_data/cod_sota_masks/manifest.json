@@ -1,0 +1,26 @@
+{
+  "name": "cod_sota_masks_demo",
+  "observer": "model",
+  "channel": "rgb",
+  "task": "image-cod",
+  "protocol": "COD/SOD metric visualization demo",
+  "notes": "Synthetic 96x96 mask pairs for COD metric scoring and visualization demos.",
+  "pred_dir": "pred",
+  "gt_dir": "gt",
+  "pred_source": "demo_data/cod_sota_masks/pred",
+  "gt_source": "demo_data/cod_sota_masks/gt",
+  "metrics": [
+    "mae",
+    "fw",
+    "sm",
+    "em",
+    "f",
+    "precision",
+    "recall",
+    "iou",
+    "dice",
+    "boundary_iou",
+    "ssim",
+    "ms_ssim"
+  ]
+}
