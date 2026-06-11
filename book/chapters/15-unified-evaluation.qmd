@@ -189,7 +189,7 @@ plt.tight_layout()
 
 过去十年的物理对抗综述已经把这一点讲得很清楚：没有视角、尺度、距离、光照、天气、成像设备、打印误差、安装误差等维度上的系统测试，所谓“攻击成功”往往只是实验室里的局部胜利[@wei2024decade; @csur2026physical]。这也是第 6 章三难困境的评价面：有效性、隐蔽性、鲁棒性很难同时最优。攻击越强，往往越显眼；越追求视觉自然，模型上的效果可能越弱；越要求跨场景稳健，制造与部署成本又会上升。
 
-近年的综述还进一步提醒我们，对抗伪装不该只报“能否骗过模型”，而应并列报告 effectivness、stealthiness、robustness、practicability、aesthetics、economics 等维度[@wei2024decade]。这说明物理对抗领域其实已经在实践一种“多维 scorecard”，只是尚未形成跨生物、跨军事、跨 CV 的统一语言。本章所谓“统一标尺”，正是试图把这种多维评价意识系统化。
+近年的综述还进一步提醒我们，对抗伪装不该只报“能否骗过模型”，而应并列报告 effectiveness、stealthiness、robustness、practicability、aesthetics、economics 等维度[@wei2024decade]。这说明物理对抗领域其实已经在实践一种“多维 scorecard”，只是尚未形成跨生物、跨军事、跨 CV 的统一语言。本章所谓“统一标尺”，正是试图把这种多维评价意识系统化。
 
 对抗鲁棒性可以拆成四层协议。第一层是**白盒数字攻击**：攻击目标模型已知，输入直接是数字图像，报告 ASR、AP drop、mAP drop、recall drop。这一层适合验证优化目标是否有效，但不能说明物理部署。第二层是**黑盒/迁移攻击**：攻击在模型 A 上优化，在模型 B/C/D 上测试，报告 transferability。它回答伪装是否抓住了更一般的识别弱点，而不是只过拟合某个网络。第三层是**渲染扰动**：把图案放入可控渲染器，系统改变视角、尺度、距离、光照、背景、相机噪声，报告扰动网格上的平均与最差性能。第四层是**真实物理实验**：打印或制造实物，在真实环境拍摄，报告不同设备、天气、距离和观察者下的成功率。
 
@@ -456,7 +456,7 @@ notes: bundled lightweight demo, not a full benchmark
 
 这五条原则可以直接转化为 CamoGED 未来的贡献要求：提交一个新模型，不只提交论文分数，还要提交预测文件或外部日志；提交一个新生成方法，不只提交好看的图，还要提交欺骗性和隐蔽性成对结果；提交一个新外场或人因实验，不只提交结论，还要提交协议字段和统计摘要。这样，评价才不会沦为附录，而会成为整个项目持续积累的公共资产。
 
-## 15.7 小结 {#sec-summary}
+## 15.7 小结 {#sec-15-summary}
 
 评价是博弈的裁判：识别质量量化揭示方，生成质量与鲁棒性量化守方，人因与跨域评价把观察者、信道与任务重新拉回裁判席，而陷阱清单守住了“可比性”这条底线。沿着这条线看，生物学、军事、CV/ML 与对抗研究虽然各用一套术语，却都在回答同一个问题：**伪装是否真的改变了揭示方的成功概率。**
 
@@ -484,7 +484,7 @@ notes: bundled lightweight demo, not a full benchmark
 
 规则先行。
 
-## 延伸阅读 {#sec-further}
+## 延伸阅读 {#sec-15-further}
 
 - 指标原文：foreground map 评价[@margolin2014]；S-measure[@fan2017smeasure]；E-measure[@fan2018emeasure]；视频评价[@perazzi2016davis]。
 - 人因/生物口径：Cuthill[@cuthill2019]；Neider 与 Zelinsky[@neider2006camouflagedsearch]；Troscianko 等[@troscianko2017quantifying]。
