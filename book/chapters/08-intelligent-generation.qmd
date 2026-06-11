@@ -1,0 +1,7 @@
+# Intelligent-Domain Generation (AIGC x Camouflage)
+
+::: {.callout-note}
+Chapter stub. Outline lives in the project plan (docs/PROJECT_PLAN.md). Contributions welcome — see CONTRIBUTING.md.
+:::
+
+<!-- TODO: write this chapter. Keep the hide-seek game as the connecting thread. -->

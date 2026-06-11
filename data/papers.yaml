@@ -1,0 +1,108 @@
+# CamoGED — papers / methods registry (single source of truth)
+# Consumed by awesome/README.md and the website /papers page.
+# Seed entries below; verify metrics/links before release. Add via PR or issue template.
+
+papers:
+  # ---- Surveys ----
+  - title: "A Survey of Camouflaged Object Detection and Beyond"
+    authors: "Xiao et al."
+    venue: "CAAI AIR"
+    year: 2024
+    task: survey
+    domain: intelligent
+    pillar: detection
+    code: "https://github.com/ChunmingHe/awesome-concealed-object-segmentation"
+    paper: "https://arxiv.org/abs/2408.14562"
+    dataset: []
+
+  # ---- Image COD ----
+  - title: "ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection"
+    authors: "Pang et al."
+    venue: "TPAMI"
+    year: 2024
+    task: image-cod
+    domain: intelligent
+    pillar: detection
+    code: null
+    paper: "https://doi.org/10.1109/TPAMI.2024.3417329"
+    dataset: ["COD10K", "CAMO", "NC4K"]
+
+  - title: "HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection"
+    authors: "—"
+    venue: "IEEE TIP"
+    year: 2024
+    task: image-cod
+    domain: intelligent
+    pillar: detection
+    code: null
+    paper: null
+    dataset: ["COD10K", "CAMO", "NC4K"]
+
+  # ---- Video COD ----
+  - title: "When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation"
+    authors: "Zhou et al."
+    venue: "Visual Intelligence"
+    year: 2025
+    task: video-cod
+    domain: intelligent
+    pillar: detection
+    code: "https://github.com/"
+    paper: "https://arxiv.org/abs/2409.18653"
+    dataset: ["MoCA-Mask"]
+
+  - title: "CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection"
+    authors: "Zhang et al."
+    venue: "arXiv"
+    year: 2025
+    task: video-cod
+    domain: intelligent
+    pillar: detection
+    code: null
+    paper: "https://arxiv.org/abs/2504.00375"
+    dataset: ["MoCA-Mask"]
+
+  # ---- Generation / Adversarial ----
+  - title: "CamDiff: Camouflage Image Augmentation via Diffusion"
+    authors: "Luo et al."
+    venue: "CAAI AIR"
+    year: 2023
+    task: generation
+    domain: intelligent
+    pillar: generation
+    code: null
+    paper: "https://www.sciopen.com/article/10.26599/AIR.2023.9150021"
+    dataset: ["COD10K"]
+
+  - title: "PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack"
+    authors: "Zhang et al."
+    venue: "AAAI"
+    year: 2025
+    task: adversarial
+    domain: physical
+    pillar: generation
+    code: null
+    paper: "https://doi.org/10.1609/aaai.v39i10.33110"
+    dataset: []
+
+  - title: "CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction"
+    authors: "—"
+    venue: "Electronics (MDPI)"
+    year: 2025
+    task: adversarial
+    domain: physical
+    pillar: generation
+    code: null
+    paper: "https://www.mdpi.com/2079-9292/14/19/3868"
+    dataset: []
+
+  # ---- Cross-domain reference (military/biology) ----
+  - title: "Cultural evolution of military camouflage"
+    authors: "—"
+    venue: "Phil. Trans. R. Soc. B"
+    year: 2017
+    task: cross-domain
+    domain: physical
+    pillar: generation
+    code: null
+    paper: "https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351"
+    dataset: []

@@ -1,0 +1,26 @@
+# CamoGED — leaderboard (single source of truth for /leaderboard)
+#
+# POLICY (read CONTRIBUTING.md):
+#   - Every number MUST cite a `source` and the training protocol.
+#   - `status` is either "reported" (from the original paper) or "reproduced" (by us).
+#   - DO NOT invent or estimate numbers. Leave as null until verified.
+#
+# Metrics: Sm (S-measure, higher better), Fw (weighted F-measure, higher),
+#          Em (E-measure, higher), MAE (mean absolute error, lower better).
+
+leaderboard:
+  - method: "ZoomNeXt"
+    dataset: "COD10K"
+    task: "image-cod"
+    metrics: { Sm: null, Fw: null, Em: null, MAE: null }   # TODO: fill from TPAMI 2024
+    params_M: null
+    source: "https://doi.org/10.1109/TPAMI.2024.3417329"
+    status: "reported"
+
+  - method: "coder (ours)"
+    dataset: "COD10K"
+    task: "image-cod"
+    metrics: { Sm: null, Fw: null, Em: null, MAE: null }   # TODO: fill from our runs
+    params_M: null
+    source: "projects/coder"
+    status: "reproduced"
