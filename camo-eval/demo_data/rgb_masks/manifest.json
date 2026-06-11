@@ -1,0 +1,13 @@
+{
+  "name": "rgb_masks_demo",
+  "observer": "model",
+  "channel": "rgb",
+  "task": "image-cod",
+  "protocol": "repository demo bundle",
+  "notes": "Synthetic two-sample mask set for CLI, Colab, and Hugging Face Space demos.",
+  "pred_dir": "pred",
+  "gt_dir": "gt",
+  "pred_source": "demo_data/rgb_masks/pred",
+  "gt_source": "demo_data/rgb_masks/gt",
+  "metrics": ["mae", "fw", "sm", "em", "f", "iou", "dice", "boundary_iou", "ssim", "ms_ssim"]
+}

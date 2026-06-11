@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from pathlib import Path
 
 
 ALLOWED_OBSERVERS = {"human", "model", "operator", "hybrid"}
@@ -95,3 +96,66 @@ class EvaluationReport:
             else:
                 lines.append(f"| {name} | {value} |")
         return "\n".join(lines)
+
+
+def build_protocol_manifest(
+    context: EvaluationContext,
+    pred_dir: str,
+    gt_dir: str,
+    metrics: list[str],
+    *,
+    name: str | None = None,
+    pred_source: str | None = None,
+    gt_source: str | None = None,
+) -> dict[str, object]:
+    """Build an executable evaluation manifest from protocol metadata."""
+
+    if not pred_dir:
+        raise ValueError("pred_dir must be a non-empty string.")
+    if not gt_dir:
+        raise ValueError("gt_dir must be a non-empty string.")
+    if not metrics or not all(isinstance(metric, str) and metric for metric in metrics):
+        raise ValueError("metrics must be a non-empty list of metric names.")
+
+    manifest: dict[str, object] = {
+        **context.to_dict(),
+        "pred_dir": pred_dir,
+        "gt_dir": gt_dir,
+        "metrics": metrics,
+    }
+    if name:
+        manifest["name"] = name
+    if pred_source:
+        manifest["pred_source"] = pred_source
+    if gt_source:
+        manifest["gt_source"] = gt_source
+    return manifest
+
+
+def load_protocol_manifest(manifest_path: str | Path) -> dict[str, object]:
+    """Load a protocol manifest from JSON."""
+
+    path = Path(manifest_path)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    required = {
+        "observer",
+        "channel",
+        "task",
+        "protocol",
+        "pred_dir",
+        "gt_dir",
+        "metrics",
+    }
+    missing = sorted(required - set(payload))
+    if missing:
+        raise ValueError(f"Manifest missing required keys: {missing}")
+    if not isinstance(payload["metrics"], list) or not payload["metrics"]:
+        raise ValueError("Manifest field 'metrics' must be a non-empty list.")
+    if not all(isinstance(metric, str) and metric for metric in payload["metrics"]):
+        raise ValueError(
+            "Manifest field 'metrics' must contain only non-empty strings."
+        )
+    for key in ("pred_dir", "gt_dir", "protocol", "observer", "channel", "task"):
+        if not isinstance(payload[key], str) or not payload[key]:
+            raise ValueError(f"Manifest field {key!r} must be a non-empty string.")
+    return payload
