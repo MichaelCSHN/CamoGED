@@ -9,5 +9,5 @@
   "gt_dir": "gt",
   "pred_source": "demo_data/rgb_masks/pred",
   "gt_source": "demo_data/rgb_masks/gt",
-  "metrics": ["mae", "fw", "sm", "em", "f", "iou", "dice", "boundary_iou", "ssim", "ms_ssim"]
+  "metrics": ["mae", "fw", "sm", "em", "f", "precision", "recall", "iou", "dice", "boundary_iou", "ssim", "ms_ssim"]
 }

@@ -16,6 +16,7 @@ from camo_eval import (
     signal_to_clutter_ratio,
     spectral_angle_mapper,
     ssim,
+    target_background_similarity,
     temporal_stability,
     thermal_contrast,
 )
@@ -43,6 +44,33 @@ def test_signature_metrics_basic_behavior():
     assert spectral_angle_mapper(
         np.array([1.0, 0.0]), np.array([1.0, 0.0])
     ) == pytest.approx(0.0)
+
+
+def test_target_background_similarity_all_and_near_modes():
+    image = np.array(
+        [
+            [0.2, 0.2, 0.3, 0.4],
+            [0.2, 0.8, 0.8, 0.4],
+            [0.3, 0.8, 0.7, 0.4],
+            [0.2, 0.3, 0.3, 0.4],
+        ]
+    )
+    mask = np.array(
+        [
+            [0, 0, 0, 0],
+            [0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [0, 0, 0, 0],
+        ]
+    )
+
+    all_background = target_background_similarity(image, mask, mode="all")
+    near_background = target_background_similarity(image, mask, mode="near")
+
+    assert all_background["mean_abs_diff"] > 0
+    assert near_background["mean_abs_diff"] > 0
+    assert 0 <= all_background["histogram_intersection"] <= 1
+    assert 0 <= near_background["histogram_intersection"] <= 1
 
 
 def test_video_metrics_basic_behavior():
