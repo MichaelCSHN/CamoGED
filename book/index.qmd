@@ -1,0 +1,25 @@
+# Preface {.unnumbered}
+
+This book is part of [**CamoGED**](https://github.com/MichaelCSHN/CamoGED) — an open platform
+covering camouflage **generation, detection, and evaluation** across the natural-science,
+military, and humanities/art perspectives and the physical, digital, and intelligent domains.
+
+Its organizing idea is a single thesis:
+
+> **Camouflage is a co-evolutionary arms race between a *hider* and a *seeker*.**
+> Generation is the hider's move, detection is the seeker's, and evaluation is the referee.
+
+The book is written in Quarto: prose, math, citations, and *executable* code live together,
+so every figure and table can be regenerated from source.
+
+::: {.callout-note}
+## Living document
+This is an online-first monograph (`v0.x`) that will be versioned and assigned a DOI on release,
+then submitted for formal publication. See the [project plan](https://github.com/MichaelCSHN/CamoGED/blob/main/docs/PROJECT_PLAN.md).
+:::
+
+::: {.callout-warning}
+## Responsible use
+Military-camouflage and adversarial-attack material is presented for understanding and defense.
+See the project's [ethics policy](https://github.com/MichaelCSHN/CamoGED/blob/main/ETHICS.md).
+:::

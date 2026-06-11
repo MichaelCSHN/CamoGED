@@ -1,0 +1,22 @@
+leaderboard:
+  - method: "ZoomNeXt"
+    dataset: "cod10k"
+    task: "image-cod"
+    metrics: { Sm: null, Fw: null, Em: null, MAE: null }
+    params_M: null
+    status: "reported"
+    source: "https://doi.org/10.1109/TPAMI.2024.3417329"
+    verified: false
+    protocol: "COD10K+CAMO train"
+    notes: null
+
+  - method: "coder (ours)"
+    dataset: "cod10k"
+    task: "image-cod"
+    metrics: { Sm: null, Fw: null, Em: null, MAE: null }
+    params_M: null
+    status: "reproduced"
+    source: "projects/coder"
+    verified: false
+    protocol: "COD10K+CAMO train"
+    notes: null

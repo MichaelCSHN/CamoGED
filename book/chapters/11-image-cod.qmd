@@ -1,0 +1,178 @@
+---
+title: "图像伪装目标检测"
+subtitle: "Image Camouflaged Object Detection: Methods & Advances"
+bibliography: ../references.bib
+---
+
+::: {.callout-tip}
+## 本章导读
+图像伪装目标检测（Image COD）是智能域识别的核心，也是当前方法最密集、数据集最完备的子领域。本章以**思想脉络**而非方法列举为导向：先厘清传统方法的局限（11.1），再沿"搜索-识别"（11.2）→ 结构建模（11.3）→ 频域线索（11.4）→ 图与序列（11.5）→ 弱/半监督（11.6）的演进逻辑展开，每一步都指向同一问题：**如何在目标与背景统计近乎一致的条件下，捕捉那一点点结构性差异**；最后详述原创方法 **coder** （11.7）。
+:::
+
+## 11.1 传统方法：有洞见但无语义 {#sec-traditional}
+
+深度学习之前，图像 COD 主要依赖手工线索，其直觉来自第 2 章的生物机制逆运算。
+
+**频率线索**：伪装目标与背景的差异往往在视觉系统中等频率通道上最显著——背景匹配消除了大尺度的颜色对比，而瓦解色在边界处制造了特定频率的高对比边缘[@stevens2006edge]。频率分析因此能在某些场景下捕捉到目标留下的统计痕迹。
+
+**显著性与对比度量**：基于局部颜色对比、纹理稀有度的显著性方法，可以发现"局部不寻常"的区域。但对 COD 而言，这些方法恰好反向失效——伪装目标的定义就是"局部统计与背景一致"，因此它是显著性方法的**死角**。
+
+**纹理与梯度特征**：手工设计的纹理描述子（LBP、HOG 等）在区分纹理类别上有一定能力，但在COD的关键难题（轮廓被瓦解色切断）上无能为力——它们的感受野太小，无法捕捉跨越目标边界的结构关系。
+
+这三类方法共同的局限：**缺乏语义**。一棵树后面的蛙，手工特征看到的是一堆颜色/梯度值，它不知道"这是一条边界"还是"这是背景内的纹理变化"。深度学习正是在语义理解这一关键能力上突破了传统方法的天花板。
+
+不过传统方法并非一无是处：它们的**可解释性**和**轻量计算**在某些部署场景仍有价值，且它们对"哪类线索有效"的分析，直接启发了深度方法对频域模块、边缘模块与对比度量的设计。从这个意义上说，传统方法是 COD 算法的"理论先祖"，而非被遗弃的死路。
+
+## 11.2 CNN 时代：搜索-识别范式 {#sec-cnn}
+
+深度 COD 方法的奠基之作是 **SINet**，它做了两件重要的事：其一，**系统定义了 COD 任务**，把它区别于一般显著目标检测与医学图像分割，提出了专门的数据集（COD10K）和基准[@fan2020sinet]；其二，提出了**搜索-识别（Search-Identification）** 两阶段框架——受捕食者视觉搜索启发（见第 2.8 节），先在粗分辨率下搜索目标可能所在区域，再在细分辨率下对目标进行精细识别。这一范式揭示了 COD 方法设计的一个关键直觉：**伪装目标的察觉与识别在特征尺度上是可分离的**——大感受野有助于建立目标存在的全局假设，小感受野有助于确定精确边界。
+
+**SINetV2**（隐藏目标检测，Concealed Object Detection）把 COD 推进为一类更广泛的任务——任何"融入背景的目标"都在其覆盖范围内，并引入了关联特征转换（Receptive Field Block）与并行部分解码器，在四个数据集上大幅提升了基线[@fan2021sinetv2]。
+
+CNN 时代的后续方法，各自针对 SINet 遗留的具体问题提出改进。**PFNet** 引入"禁止因素（prohibition）"机制——在解码路径上显式抑制背景的激活，防止背景特征通过 skip connection "污染"目标分割；**ZoomNet** 针对目标尺度多变的问题，以多分辨率 zoom-in/zoom-out 网络捕捉从微小细节到大尺度上下文的特征层次；**SegMaR** 以迭代细化逐步减少漏检与误分割，每轮迭代把上一轮的错误区域作为下一轮的"困难样本"重点处理。这些改进围绕同一核心困难——**目标在尺度、形状与背景复杂度上的巨大变化**——在不同维度逐一展开攻破。
+
+值得强调的是 CNN 时代对 COD 的一个根本性贡献：**确立了"双重损失"的训练范式**。早期方法只用二值交叉熵监督前景/背景；COD 的后续工作发现，额外引入**边界损失**（对目标轮廓区域给予更高权重）能显著提升边界精度，而这恰好对应了第 2.3.2 节"瓦解色冲着边界而来"的生物学洞见。检测器必须对边界特别敏感，才能抵抗瓦解色的干扰——这是从生物机制到算法设计的一次精准迁移，也是 Boundary IoU[@cheng2021boundary] 作为专用评价指标被引入的背景。
+
+## 11.3 Transformer 时代：全局结构建模 {#sec-transformer}
+
+Transformer 为何契合 COD？因为伪装目标与背景的区别，往往不在某一局部像素，而在**全局结构**：一片看起来像树皮的纹理，其实是一条蛇身上的鳞片——这个"其实"需要整张图的上下文才能判断。卷积的平移等变性、有限感受野对此心有余而力不足；Transformer 的**全局自注意力**则天然可以把图像中任意两处像素关联起来，哪怕它们之间隔着复杂的背景纹理。
+
+**FSPNet**（特征收缩金字塔网络）以 Transformer 骨干结合特征"收缩"机制：在多尺度金字塔中主动把特征图中的高响应区域"压缩"到最具判别性的位置，减少背景特征的干扰，从而更准确地定位隐蔽目标[@fspnet2023]。
+
+**ZoomNeXt** 把 ZoomNet 的多尺度思想升级为"统一协同金字塔网络"：以 Transformer 作为各尺度特征的协同提取骨干，在金字塔的不同层之间双向传递信息，同时保持从极细到极粗的多尺度特征层次[@pang2024zoomnext]。它是目前图像 COD 中最具竞争力的基线之一。
+
+**HGINet** 的思路有别于上述基于尺度的方法：它把目标的不同部位视为**图（graph）**上的节点，通过层次图交互捕捉目标各部分之间的结构关系[@hginet2024]。其出发点是：伪装目标的难点之一是"局部像素与背景相似，但整体结构关系是目标独有的"——找不到的是局部线索，但目标部件之间的关系（例如"头部-躯干-尾部"的拓扑）是存在的。把这一结构关系显式建模为图节点间的交互，是一条与像素级特征学习并行的路线。
+
+## 11.4 频域方法：挖掘统计痕迹 {#sec-frequency}
+
+把传统频率直觉与深度网络结合，近年形成了一条独特路线。其核心洞察是：**伪装目标在图像频域中往往留有可检测的统计痕迹**——尽管背景匹配消除了空间域的颜色对比，但目标表面纹理的频率分布未必能与背景的自然 1/f 统计完全一致。特别是边界区域：瓦解色在目标真实边界处制造了局部高频能量的跳变，而这一跳变在背景内部的"假边界"处可能不存在或表现不同[@stevens2006edge]。
+
+频率引导的 COD 方法通常把特征提取分解为低频（捕捉大结构/整体形状）和高频（捕捉边缘/纹理细节）两路，再以自适应方式融合，从而同时利用目标的整体形状信息和边界细节。频域增强可以和任何骨干结合，因此常以插件模块的形式嵌入到已有框架（SINet、ZoomNeXt 等）中。
+
+下面的示例演示了频域分析的核心思想——在不同频段，伪装目标与背景的"分离性"不同，且某些中高频段比直接的空间域比较更能凸显目标区域：
+
+```{python}
+#| label: fig-freq
+#| fig-cap: "频域线索示意：伪装目标（与背景统计相近）在空间域几乎不可辨（上左），但通过带通滤波提取特定频段后，目标区域的局部统计与背景的差异变得更显著（上右）。这正是频域 COD 方法利用的依据。"
+#| code-fold: true
+import numpy as np, matplotlib.pyplot as plt
+from scipy.ndimage import gaussian_filter
+
+rng = np.random.default_rng(11)
+H, W = 96, 96
+
+# Background: smooth 1/f texture
+def make_1f(H, W, rng, alpha=1.3):
+    n = rng.standard_normal((H, W))
+    f = np.fft.fft2(n)
+    fy = np.fft.fftfreq(H)[:,None]; fx = np.fft.fftfreq(W)[None,:]
+    fr = np.sqrt(fy**2 + fx**2); fr[0,0] = 1e-6
+    f *= fr**(-alpha)
+    out = np.real(np.fft.ifft2(f))
+    return (out - out.min()) / (out.max() - out.min())
+
+bg = make_1f(H, W, rng)
+
+# Target region: similar 1/f but slightly different alpha (harder to see)
+tgt_patch = make_1f(H, W, rng, alpha=1.1)
+mask = np.zeros((H, W)); mask[32:64, 32:64] = 1
+scene = bg * (1 - mask) + tgt_patch * mask
+
+# Bandpass filter: highlight mid-high frequencies (edge of target region)
+smooth_lo = gaussian_filter(scene, sigma=3)
+smooth_hi = gaussian_filter(scene, sigma=1)
+bandpass = np.abs(smooth_hi - smooth_lo)   # mid-freq band
+
+# Compute target vs background statistics in bandpass domain
+tgt_energy  = bandpass[mask == 1].mean()
+bg_energy   = bandpass[mask == 0].mean()
+
+fig, axes = plt.subplots(1, 3, figsize=(10, 3.5))
+axes[0].imshow(scene, cmap='gray', vmin=0, vmax=1)
+axes[0].set_title('scene (camouflaged target\nhidden in centre)', fontsize=9)
+axes[0].axhline(32, color='r', lw=0.8, ls='--'); axes[0].axhline(64, color='r', lw=0.8, ls='--')
+axes[0].axvline(32, color='r', lw=0.8, ls='--'); axes[0].axvline(64, color='r', lw=0.8, ls='--')
+
+axes[1].imshow(bandpass, cmap='hot')
+axes[1].set_title(f'bandpass response\ntgt={tgt_energy:.3f}  bg={bg_energy:.3f}', fontsize=9)
+
+# Profile through centre row
+axes[2].plot(bandpass[H//2, :], color='#B6542E', label='bandpass profile')
+axes[2].axvspan(32, 64, alpha=.15, color='#2E8B7A', label='target region')
+axes[2].set_title('centre-row profile', fontsize=9); axes[2].legend(fontsize=8)
+axes[2].grid(alpha=.3)
+
+for ax in axes[:2]: ax.axis('off')
+plt.suptitle('Frequency-domain cues: target slightly elevated in mid-freq band', fontsize=9)
+plt.tight_layout()
+```
+
+## 11.5 图网络与 Mamba：关系建模的新路线 {#sec-graph-mamba}
+
+除卷积与注意力之外，近年出现了两条利用**不同计算范式**建模结构关系的路线。
+
+**图神经网络（GNN）**：如 HGINet 所示[@hginet2024]，COD 中的目标可以被理解为"具有部件关系的结构体"，其部件之间的连接关系比每个部件的局部外观更稳定、更不易被伪装混淆。GNN 把图像特征表示为图节点，通过消息传递捕捉部件间的关系，并以层次结构从局部到全局地组织这些关系。这一方法论的深层来源，恰是第 4 章格式塔心理学的"整体不等于部分之和"——目标的可识别性来自其**结构关系**，而非每个局部像素。
+
+**状态空间模型（SSM）/Mamba**：Transformer 的全局建模代价是 $O(N^2)$ 的计算复杂度，对高分辨率图像有实际负担。Mamba 类方法以**线性复杂度**的选择性状态空间模型，在建模长程依赖时更高效——这对需要把整张图扫一遍才能判断某处是否是目标的 COD 任务尤为吸引。在选择性扫描策略（空间 serpentine 路径、局部 U 型路径等）的设计上，现有工作还处于探索阶段，但效率与精度的平衡潜力已被初步验证。
+
+**胶囊网络（CapsNet）**：胶囊以显式的"部分-整体"路由机制（dynamic routing）建模目标结构，理论上对视角变换更鲁棒——在 COD 中，同一种伪装目标可能以完全不同的姿态出现，若结构表达能对此不变，检测器的泛化性将得到提升。但目前胶囊网络在大规模任务上的扩展性仍是挑战。
+
+## 11.6 弱监督、半监督与数据高效学习 {#sec-weak}
+
+像素级标注昂贵（第 10.5.1 节），数据高效的学习方法因此成为重要研究方向。
+
+**弱监督**：用粗粒度标注替代像素掩膜——涂鸦（scribble）只标几条线、边界框只标矩形、图像级标签只说"有无目标"。方法需要在弱监督信号下推断出精确边界，通常结合 CRF、超像素传播或激活图来弥补标注的缺失。弱监督的 COD 精度一般低于全监督 5–15 个点（因数据集和方法而异），但标注成本可降低一个数量级。
+
+**半监督与伪标签**：只对部分样本做精细标注，其余用半监督方法（自训练、一致性正则化）利用无标注数据。特别地，**SAM（Segment Anything Model）** 的出现使"用 SAM 为无标注图像生成伪标签、再以 COD 专用监督精调"成为可行路线——SAM 在自然场景下的通用性提供了可靠的初始伪标签，而 COD 专用的损失函数修正了 SAM 在高相似度场景下的偏差[@dualstream2025]。
+
+**合成增强**：CamDiff 等生成方法（第 8 章）制造可控难度的训练样本，缓解标注瓶颈[@camdiff2023]。合成样本对真实分布的覆盖质量，直接决定增强的效果上限。
+
+**自监督预训练**：以大规模自监督（MAE、DINO 等）预训练骨干，在 COD 上微调，可在骨干参数相同的条件下获得比 ImageNet 监督预训练更强的泛化特征。这是近年把基础模型能力迁移到 COD 的主要渠道，与第 14 章的基础模型主题深度交叉。
+
+## 11.7 [原创] coder：图像 COD 原创方法 {#sec-coder}
+
+::: {.callout-note}
+## 原创项目占位说明
+本节为原创项目 **coder** 的占位章节。遵循项目无杜撰政策：架构细节、消融与定量结果待论文正式发表后填入；当前记录定位、设计意图与待补结构，SOTA 对比表模板留空待核实填入。代码与模型权重见 `projects/coder`。
+:::
+
+**定位**：coder 是 CamoGED 平台在图像 COD 赛道上的原创锚点——既是本章方法演进的延续，也是网站 `/demo` 的图像推理入口与 `/leaderboard` 的自评方法。
+
+**设计出发点**：前述方法在 11.1–11.6 节暴露了若干共性局限：边界建模与全局语义的权衡（很多方法偏一侧）、在目标尺度极端（极大或极小）时性能退化、以及在高度重叠的多目标场景中的漏检。coder 的设计针对其中的一个或多个核心局限展开，具体参见 `projects/coder/README.md`。
+
+**待补结构**（论文定稿后填入）：
+1. **动机**：针对现有方法的哪一类具体失败模式；失败样例可视化。
+2. **架构**：核心模块与设计理由；必要时附架构示意图（Quarto 可插入 SVG 或 Python 生成的图）。
+3. **训练细节**：严守第 10.3.1 节标准协议（COD10K+CAMO 训练，COD10K-Test/CAMO-Test/NC4K 测试）；骨干与超参报告。
+4. **消融**：各模块对性能的独立贡献；移除某模块时的性能下降量。
+5. **定量对比**：见 @tbl-sota，数值取自 `data/leaderboard.yaml`（核实后标注 `verified:true`，区分原文/复现）。
+6. **复现入口**：`camo-eval evaluate --pred projects/coder/results --gt data/cod10k` 一键复现。
+
+@tbl-sota 为 SOTA 对比模板，数值全部留空待核实后填入，杜绝杜撰。
+
+| 方法 | 骨干 | COD10K $S_\alpha$ ↑ | COD10K $F_\beta^w$ ↑ | COD10K MAE ↓ | NC4K $S_\alpha$ ↑ | NC4K MAE ↓ |
+|------|------|:---:|:---:|:---:|:---:|:---:|
+| SINet [@fan2020sinet] | ResNet-50 | — | — | — | — | — |
+| SINetV2 [@fan2021sinetv2] | Res2Net | — | — | — | — | — |
+| ZoomNeXt [@pang2024zoomnext] | MSCAN | — | — | — | — | — |
+| HGINet [@hginet2024] | Swin-B | — | — | — | — | — |
+| **coder（本平台复现）** | — | — | — | — | — | — |
+
+: 图像 COD SOTA 对比模板（数值见 `data/leaderboard.yaml`，核实后填入） {#tbl-sota}
+
+## 11.8 方法演进的主线 {#sec-thread}
+
+本章的七节方法，可以用一条主线贯穿：**图像 COD 方法演进的本质，是在越来越大的感受野和越来越丰富的关系建模能力中，逐步逼近"从全局结构判断局部归属"的推理逻辑**。
+
+传统方法止步于局部统计，无法建立全局推理；CNN 的搜索-识别范式迈出了多尺度的第一步；Transformer 把感受野从局部扩展到全局，但代价是失去了空间精度；GNN 把结构关系显式化，弥补了 Transformer 的空间精度损失；Mamba 在效率和长程依赖之间寻求平衡；弱/半监督与合成增强则从数据维度扩展方法的能力边界。
+
+下一章把问题从单帧扩展到视频序列——运动既是新的揭示线索，也是新的挑战来源。
+
+## 延伸阅读 {#sec-further}
+
+- **方法**：SINet[@fan2020sinet]；SINetV2[@fan2021sinetv2]；FSPNet[@fspnet2023]；ZoomNeXt[@pang2024zoomnext]；HGINet[@hginet2024]；双流适配 SAM[@dualstream2025]。
+- **综述与协议**：CAAI 综述[@xiao2024survey]；第 10 章数据集与协议。
+- **频域线索根源**：Stevens & Cuthill[@stevens2006edge]；Stevens & Merilaita[@stevens2011]。
+- **合成数据增强**：CamDiff[@camdiff2023]。
+- **评价**：MAE / $F_\beta^w$[@margolin2014]；$S_\alpha$[@fan2017smeasure]；$E_\phi$[@fan2018emeasure]；Boundary IoU[@cheng2021boundary]；第 15 章 `camo-eval`。
+- **原创项目**：`projects/coder`。
