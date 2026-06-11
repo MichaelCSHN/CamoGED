@@ -1,48 +1,222 @@
 ---
 title: "智能域识别总览与数据集"
-subtitle: "Intelligent Detection: Overview & Datasets"
+subtitle: "Intelligent Detection: Overview, Protocols & Datasets"
 bibliography: ../references.bib
 ---
 
 ::: {.callout-tip}
 ## 本章导读
-本章为智能域识别（第 11–14 章）搭建公共底座：任务定义与挑战（10.1）、训练协议与跨数据集泛化约定（10.2），以及数据集全景（10.3）。数据集表与仓库的 `data/datasets.yaml` **同源**，可自动生成、统一维护。
+本章是第 11–14 章的公共底座：先在 10.1 节精确定义 COD 任务并溯源其挑战；10.2 节展开任务谱系（从图像到视频到开放词汇）；10.3 节建立训练协议与可比性约定——这是后续任何定量比较的合法性基础；10.4 节给出标准评价指标概览；10.5 节呈现数据集全景，分模态/任务逐一描述；10.6 节讨论跨领域应用；10.7 节识别当前数据集的系统性局限；10.8 节回扣全书主线。数据集表与仓库的 `data/datasets.yaml` **同源**，可自动生成、统一维护。
 :::
 
-## 10.1 任务定义与挑战 {#sec-task}
+## 10.1 COD 任务：定义、动机与挑战 {#sec-task}
 
-**伪装目标检测（Camouflaged Object Detection, COD）** 要从与背景高度相似的场景中分割出目标[@fan2020sinet; @xiao2024survey]。其难点是第 2 章生物机制的直接后果：目标与背景在颜色、纹理、亮度上高度相似（背景匹配），轮廓被瓦解色切断（边界模糊），尺度多变、背景杂乱。按第 1 章框架，COD 同时对抗"察觉"（要把目标分割出来）与"识别"（要正确判定类别/实例）。
+### 10.1.1 精确定义 {#sec-definition}
 
-## 10.2 训练协议与泛化约定 {#sec-protocol}
+**伪装目标检测（Camouflaged Object Detection, COD）** 要求给定一张图像（或视频序列），输出场景中所有伪装目标的**像素级分割掩膜**[@fan2020sinet; @xiao2024survey]。与通用目标检测（给出边界框）或语义分割（区分类别）不同，COD 的定义对象是**一种感知困难**：目标与背景在颜色、纹理、亮度上高度相似，使察觉极度困难——这是生物机制（第 2 章）直接作用在算法层面的体现。
 
-为保证可比性，COD 领域形成了相对统一的协议：通常以 COD10K 与 CAMO 的训练集合并（约 4,040 张）训练，在 COD10K-Test、CAMO-Test、NC4K 上评测，其中 NC4K 作为**仅测试**集衡量跨数据集泛化[@fan2020sinet]。**严守协议、标注训练数据来源**，是避免第 15 章所述"不可比"陷阱的前提。本平台的排行榜对每条结果标注训练协议与"原文报告/本平台复现"。
+COD 与"显著目标检测（SOD）"互为极端：SOD 找最醒目的，COD 找最难发现的。它们并非毫无关联——对一个对象的"显著性"的精确理解，有助于检测其反面（"伪装性"）；VSCode 等工作试图把二者统一在同一框架下[@vscode2024]。
 
-## 10.3 数据集全景 {#sec-datasets}
+### 10.1.2 挑战的根源 {#sec-challenges}
 
-@tbl-datasets 概览主要数据集（与 `data/datasets.yaml` 同源；规模/划分以原文为准，部分待核实）。它们覆盖图像、视频、多光谱、多模态等模态，以及指代、协同等扩展任务。
+COD 的难点不是偶然的，而是第 2 章每一种生物伪装机制在算法层面的精确映射（@tbl-challenge）：
 
-| 数据集 | 任务/模态 | 规模 | 用途 |
-|--------|-----------|------|------|
-| CHAMELEON | 图像 COD | 76 | 仅测试（早期） |
-| CAMO | 图像 COD | 1,250 | 1,000 训 / 250 测 |
-| COD10K | 图像 COD | 5,066 伪装 | 3,040 训 / 2,026 测，78 子类 |
-| NC4K | 图像 COD | 4,121 | 仅测试（泛化） |
-| CoCOD8K | 协同 COD | 8K | 协同伪装 |
-| R2C7K | 指代 COD | 7K | Referring |
-| MHCD2022 | 军事 COD | 3,000 | 5 类 |
-| MCOD | 多光谱 | — | 多光谱基准 |
-| MM-CamObj | 多模态 | — | MLLM 评测 |
-| MoCA-Mask | 视频 COD | 141 序列 | 移动伪装动物 |
-| CamoVid60K | 视频 COD | 60K 帧 | 大规模视频 |
-| MSVCOD | 视频 COD | — | 多场景 |
+| 生物机制（第 2 章） | 算法挑战 | 失效的检测线索 |
+|---------------------|----------|----------------|
+| 背景匹配 | 目标-背景统计近似 | 颜色/亮度对比、频率分析 |
+| 瓦解色 | 轮廓不连续、边界模糊 | 边缘检测、完形填充 |
+| 伪装性拟态 | 语义上与无关物体混淆 | 形状先验、类别识别 |
+| 消影 | 立体感消失 | 光照与深度线索 |
+| 多尺度/多视角 | 尺度多变、背景杂乱 | 单尺度特征、简单感受野 |
 
-: 伪装数据集全景（与 data/datasets.yaml 同源，详见附录 A） {#tbl-datasets}
+: COD 算法挑战与生物机制的对应 {#tbl-challenge}
 
-## 10.4 小结 {#sec-summary}
+用第 1 章框架说：COD 中的揭示方 $S$ 要同时克服所有这些机制的联合效果。这解释了为何通用检测器在 COD 上失效——它们是为"目标显眼"而设计的，而非为"目标刻意隐藏"而设计的。
 
-任务、协议、数据集是检测研究的"游戏规则"。统一这套规则，后续各章的方法才可比、可复现。下一章进入图像伪装目标检测的方法演进，并详解本项目的 coder。
+从算法层面具体说，COD 难在三个**结构性层次**叠加：
+
+**感知层**：目标与背景的局部颜色、纹理、频率统计高度重叠，使基于特征对比的传统显著性方法失效。统计分析显示，COD10K 中许多样本的目标—背景均值色差（$\Delta E$）低于普通目标检测数据集的中位数，是可见光下"最难"的一类视觉任务[@fan2020sinet]。
+
+**结构层**：目标轮廓被瓦解色切断，使"找到完整前景边界"这一所有分割方法的基础假设失效——检测器能找到一些局部响应，却无法把它们组织成完整的目标掩膜。Boundary IoU 等边界质量指标在 COD 上的得分，普遍低于同等架构在一般分割任务上的表现[@cheng2021boundary]。
+
+**语义层**：伪装性拟态（masquerade）使目标被语义误分类为枯枝、树皮、石块等，即使目标被"察觉"，也可能被"识别"为错误类别——这是开放词汇与指代 COD 任务特别难的根本原因（见 10.2 节任务谱系）[@xiao2024survey]。
+
+## 10.2 任务谱系：从图像到开放词汇 {#sec-taxonomy}
+
+COD 领域已经从最初的"图像二值分割"扩展为一个多层次的任务谱系。理解这一谱系，是把第 11–14 章各章定位到正确位置的基础（@tbl-tasks）。
+
+| 任务 | 输入额外信息 | 输出 | 典型数据集 | 难点所在 |
+|------|-------------|------|------------|----------|
+| 图像 COD | 无 | 二值掩膜 | COD10K, CAMO, NC4K | 目标-背景统计相似 |
+| 视频 COD（VCOD） | 时序帧 | 时序掩膜 | MoCA-Mask, CAD | 运动线索 vs 背景动态 |
+| 伪装实例分割（CIS） | 无 | 实例级掩膜 | COD10K（实例） | 多目标区分、遮挡 |
+| 指代 COD（R-COD） | 自然语言表达式 | 单目标掩膜 | R2C7K | 语言-视觉对齐 |
+| 协同 COD（Co-COD） | 相关图像组 | 多图共有掩膜 | CoCOD8K | 跨图一致性 |
+| 开放词汇 COS | 文本类别描述 | 未见类别掩膜 | — | 泛化到无标注类别 |
+
+: COD 任务谱系（按复杂度递增） {#tbl-tasks}
+
+任务谱系的每一级，都在向揭示方 $S$ 增加一类新的约束或能力：从"找到所有伪装目标"→"区分每一个"→"按语言指令找特定一个"→"在一组图里找共同的"→"找从未见过类别的"。每一级都需要不同的数据集与评价指标，这是本章余下各节的索引。
+
+## 10.3 训练协议与可比性约定 {#sec-protocol}
+
+### 10.3.1 标准图像 COD 协议 {#sec-std-protocol}
+
+COD 社区形成了相对统一的训练/测试协议：以 **COD10K 训练集**（3,040 张）与 **CAMO 训练集**（1,000 张）合并，共约 4,040 张带像素标注的伪装图像作为训练集；在三个独立测试集上评测：**COD10K-Test**（2,026 张）、**CAMO-Test**（250 张）、**NC4K**（4,121 张）。其中 NC4K 仅作为测试集、**不参与训练**，用于衡量跨数据集泛化能力[@fan2020sinet]。
+
+这一协议已成为事实标准，其合理性在于：（1）训练集规模足够训练深度网络；（2）三个测试集来源不同，难度各异，综合评测更全面；（3）NC4K 的"仅测试"保证了跨分布评测的干净性。但该协议也有局限——它只覆盖图像 COD，视频与其他任务有各自的协议（见 10.3.2 节）。
+
+**严守协议的重要性**不是形式要求，而是与 $S$ 的对应验证方式：如果方法 A 用了额外的分割预训练、更大的骨干、或额外的训练数据，而方法 B 没有，二者的直接对比毫无意义。本平台的排行榜（`data/leaderboard.yaml`）对每条结果**逐一标注训练协议、骨干网络与数据来源**，区分"原文报告"与"本平台复现"，以保证可比性。
+
+**为什么是这 4,040 张**，而不是更多？一个常见的误解是"训练集越大越好"，但 COD 的标注成本极高（1 张图的精细标注可能需要 10–30 分钟），且背景场景的多样性比数量更关键。COD10K+CAMO 的组合提供了自然水域（CAMO）与野外多类（COD10K）的互补覆盖，是目前质量与规模平衡最好的可用组合。与此同时，近年越来越多的工作引入合成增强（如 CamDiff，第 8 章[@camdiff2023]）来突破标注瓶颈，但合成样本通常以额外标注说明的形式报告，而非混入"标准训练集"。
+
+**NC4K 作为仅测试集**的意义不在于它比 COD10K-Test 更难，而在于它**来源于网络爬取**而非专门标注——这使它与训练集有更大的分布差异，是真正意义上的"分布外"泛化评测。凡在 NC4K 上提升而在 COD10K-Test 上没有相应提升的方法，很可能过拟合于 COD10K 的数据分布，而 NC4K 的差距则暴露了这一问题。
+
+### 10.3.2 视频 COD 协议 {#sec-vcod-protocol}
+
+视频 COD 尚无统一到 COD10K 程度的单一协议，但常见的基准组合包括：MoCA-Mask、CAD（Camouflaged Animals Dataset）与 MSVCOD 等；评测除像素级指标外，还需加入时序一致性指标（$\mathcal{J}\&\mathcal{F}$，来自 DAVIS 基准[@perazzi2016davis]）。第 12 章详述视频 COD 的具体协议。
+
+### 10.3.3 泄漏陷阱与防范 {#sec-leakage}
+
+数据泄漏是 COD 评测中最常被忽视的风险，其形态多样：**同源变体**（同一场景的不同帧或不同裁剪出现在训练/测试两侧）、**预训练重叠**（骨干网络的预训练数据与 COD 测试集存在重叠）、**增强泄漏**（TTA 或测试时增强使模型"见到"了测试集图像的变体）。这些泄漏来源在论文中几乎从不报告，但它们可能贡献 1–5% 的虚假性能提升，足以制造错误的方法排名。本平台要求方法提交时申报骨干预训练来源，并建议使用不与 COD 数据集来源重叠的预训练集（如 ImageNet-22K 而非 COCO 预训练）。
+
+## 10.4 标准评价指标概览 {#sec-metrics}
+
+本节只做快速索引；完整推导与论据在第 15 章。图像 COD 的四个事实标准指标为：
+
+- **MAE（↓）**：逐像素平均绝对误差，刻画整体预测偏差[@margolin2014]。
+- **加权 F-measure $F_\beta^w$（↑）**：修正了传统 F-measure 对空间分布不敏感的问题，更强调"错在关键位置"[@margolin2014]。
+- **S-measure $S_\alpha$（↑）**：结构相似度，联合区域感知与目标感知结构[@fan2017smeasure]。
+- **E-measure $E_\phi$（↑）**：增强对齐度量，联合全局统计与局部匹配[@fan2018emeasure]。
+
+视频 COD 还需加入 $\mathcal{J}\&\mathcal{F}$（区域精度与边界精度的联合，来自 DAVIS 基准[@perazzi2016davis]）；实例级任务需加入 Boundary IoU[@cheng2021boundary] 与 AP/AR。**不应只报一个指标**——每个指标刻画的是不同的失败模式，全组报告才能真正反映方法的能力边界。
+
+下面的示例说明为何 S-measure 和 MAE 会给出不一致的排名——这是 COD 评价不能"只看 MAE"的典型案例：
+
+```{python}
+#| label: fig-metrics-demo
+#| fig-cap: "COD 评价指标互补性示意：两个预测的 MAE 相近，但预测 A 在边界区域错误集中（结构性差），预测 B 误差均匀分散。S-measure 会对 A 给出更低评分——这说明多指标联合评价的必要性。"
+#| code-fold: true
+import numpy as np, matplotlib.pyplot as plt
+
+rng = np.random.default_rng(3)
+H, W = 64, 64
+
+# Ground truth: circular mask
+y, x = np.mgrid[-H//2:H//2, -W//2:W//2]
+gt = ((x**2 + y**2) < 20**2).astype(float)
+
+# Prediction A: boundary-concentrated error (misses edges, captures interior)
+pred_a = ((x**2 + y**2) < 14**2).astype(float)   # too small → boundary errors
+
+# Prediction B: uniformly diffuse error (slight overall haze)
+noise = rng.random((H, W)) * 0.35
+pred_b = np.clip(gt * 0.65 + noise, 0, 1)
+
+mae_a = float(np.mean(np.abs(pred_a - gt)))
+mae_b = float(np.mean(np.abs(pred_b - gt)))
+
+# Simple proxy for S-measure: mean of object-region IoU and edge-region F1
+def simple_sm(pred, gt, thresh=0.5):
+    p = (pred > thresh).astype(float)
+    g = gt.astype(bool)
+    # region term: IoU
+    inter = float(np.logical_and(p > 0, g).sum())
+    union = float(np.logical_or(p > 0, g).sum()) + 1e-8
+    region = inter / union
+    # edge term: boundary IoU proxy (erode gt, check border)
+    from scipy.ndimage import binary_erosion
+    border_gt = g & ~binary_erosion(g)
+    border_p = (p > 0) & ~binary_erosion(p > 0)
+    edge_hit = float(np.logical_and(border_gt, binary_erosion.__class__ and
+                                    border_p).sum() if False else
+                     (np.logical_and(border_gt, border_p).sum()))
+    edge_prec = edge_hit / (border_p.sum() + 1e-8)
+    edge_rec  = edge_hit / (border_gt.sum() + 1e-8)
+    edge = 2*edge_prec*edge_rec / (edge_prec+edge_rec+1e-8)
+    return 0.5 * region + 0.5 * edge
+
+sm_a = simple_sm(pred_a, gt)
+sm_b = simple_sm(pred_b, gt)
+
+fig, axes = plt.subplots(1, 3, figsize=(9, 3))
+for ax, img, title in zip(axes,
+        [gt, pred_a, pred_b],
+        ['Ground truth',
+         f'Pred A (boundary miss)\nMAE={mae_a:.3f}  Sm≈{sm_a:.3f}',
+         f'Pred B (diffuse noise)\nMAE={mae_b:.3f}  Sm≈{sm_b:.3f}']):
+    ax.imshow(img, cmap='gray', vmin=0, vmax=1)
+    ax.set_title(title, fontsize=9); ax.axis('off')
+plt.suptitle('Multiple metrics needed: MAE≈same but Sm differs (boundary quality matters)',
+             fontsize=9)
+plt.tight_layout()
+```
+
+## 10.5 数据集全景 {#sec-datasets}
+
+@tbl-datasets 给出主要数据集的综合概览，按任务/模态组织，与 `data/datasets.yaml` 同源。规模与划分以原始论文为准，部分数字待平台核实后更新。
+
+**图像 COD**
+
+| 数据集 | 规模（伪装图） | 划分 | 注 |
+|--------|--------------|------|-----|
+| CHAMELEON | 76 | 仅测试 | 早期小集，常见偏差 |
+| CAMO | 1,250 | 1,000 训 / 250 测 | 首批全标注 COD，含遮挡 |
+| COD10K | 5,066 伪装（~10K 总） | 3,040 训 / 2,026 测 | 78 子类；当前最大图像基准 |
+| NC4K | 4,121 | 仅测试 | 跨数据集泛化评测标准 |
+
+**扩展/专项图像任务**
+
+| 数据集 | 任务 | 规模 | 注 |
+|--------|------|------|----|
+| CoCOD8K | 协同 COD | ~8K | 多图共有目标 |
+| R2C7K | 指代 COD | ~7K | 自然语言引导 |
+| MHCD2022 | 军事 COD | ~3,000 | 5 类军事目标 |
+| MCOD | 多光谱 COD | — | 首个多光谱伪装基准[@mcod2025] |
+| MM-CamObj | 多模态 | — | MLLM 问答评测[@mmcamobj2024] |
+| PlantCamo | 农业/植物 | — | 植物伪装，跨域应用 |
+| ACOD-12K | 农业 COD | ~12K | 大规模跨域基准 |
+
+**视频 COD**
+
+| 数据集 | 规模 | 注 |
+|--------|------|----|
+| MoCA-Mask | 141 序列 | 移动伪装动物；最常用视频基准 |
+| CAD | — | 伪装动物视频，较小 |
+| CamoVid60K | ~60K 帧 | 大规模；用于预训练/增强 |
+| MSVCOD | — | 多场景视频，难度多样 |
+
+: COD 数据集全景（与 data/datasets.yaml 同源；— 表示规模待核实；详见附录 A） {#tbl-datasets}
+
+### 10.5.1 数据集构建方法论 {#sec-annotation}
+
+COD 数据集的标注代价远高于通用数据集：找到伪装目标本身就需要专业知识（标注者需先"发现"目标），像素级标注极为费时，而质量参差不齐的标注会直接污染评测结果。COD10K 采用了多轮标注与交叉验证，并由生物学专家辅助确认部分类别，是目前标注质量最高的图像 COD 基准之一[@fan2020sinet]。
+
+标注质量的问题在 COD 中有特殊的意义：若某个目标在标注者眼中勉强可见（边界处标注主观误差大），那么即使检测器把这个目标的边界偏移了 2–3 个像素，也很难说是"检测失误"还是"标注误差"。这意味着指标的提升在接近标注误差的量级时，已经难以从方法差异中剥离——一个往往被论文忽视、但对排行榜解读至关重要的限制。
+
+## 10.6 跨领域应用：伪装的同构结构 {#sec-crossdomain}
+
+"目标-背景高度相似"这一数学结构，并非 COD 特有，它在许多领域复现，构成 COD 方法的天然应用空间[@xiao2024survey]：
+
+- **医学影像**：肠镜下的息肉、眼底血管分割、皮肤病灶——病灶与健康组织的视觉相似度极高；
+- **工业质检**：金属表面细微裂缝、晶圆缺陷——缺陷与正常背景统计接近；
+- **农业**：PlantCamo（叶片上的虫卵/病斑）、作物病害——自然场景下的高度融合。
+
+这些应用的存在印证了第 1 章的论点："伪装不是某个领域的专题，而是一种跨域同构的结构"。COD 方法的泛化能力，因此也是衡量其理解"高相似度场景"能力的指标，而非仅仅是动物-树皮场景的专项能力。
+
+## 10.7 当前数据集的系统性局限 {#sec-limitations}
+
+诚实评价现有数据集的局限，是第 15 章"统一标尺"的前提：
+
+**规模与多样性不足**：COD10K 的 78 子类相对有限，缺乏工业场景与更大比例的稀有类；视频基准规模远小于图像，训练信号弱。**标注一致性**：不同数据集的标注规范不统一（边界是否包含透明体、局部遮挡如何处理），使跨数据集对比引入系统误差。**难度标定缺失**：现有数据集对每张图的伪装"程度"没有量化标注，无法支持按难度分级的评测（难例 vs 易例分析），也无法为第 8 章"可控难度的合成增强"提供监督信号。**生物学与感知验证缺失**：没有任何主要 COD 数据集附有人类视觉搜索实验（反应时、命中率），无法校验"机器指标好"是否对应"人类确实更难发现"——这正是第 15.4 节人因评价的缺口所在。
+
+## 10.8 小结 {#sec-summary}
+
+任务、谱系、协议、数据集是第 11–14 章方法研究的"游戏规则"。COD 的挑战根植于第 2 章的生物机制，任务谱系从图像 COD 延伸到开放词汇，训练协议的统一是定量比较的合法性基础，而数据集的局限则是未来工作的直接指向。带着这套规则，下一章进入方法演进的核心：图像 COD 的方法全景与原创方法 coder。
 
 ## 延伸阅读 {#sec-further}
 
-- 综述与任务：CAAI 综述[@xiao2024survey]；SINet[@fan2020sinet]。
-- 数据集明细：附录 A 与 `data/datasets.yaml`。
+- **任务奠基与综述**：SINet[@fan2020sinet]；SINetV2[@fan2021sinetv2]；CAAI 综述[@xiao2024survey]。
+- **数据集**：数据集表（附录 A，`data/datasets.yaml`）；MCOD[@mcod2025]；MM-CamObj[@mmcamobj2024]。
+- **评价指标**：MAE/加权 F[@margolin2014]；S-measure[@fan2017smeasure]；E-measure[@fan2018emeasure]；DAVIS/J&F[@perazzi2016davis]；Boundary IoU[@cheng2021boundary]。
+- **生物学背景**：机制综述[@stevens2011]；感知评价[@cuthill2019]；折中型隐蔽[@merilaita1999]。

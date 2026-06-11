@@ -16,14 +16,19 @@ dependencies = [
     "scipy>=1.7",
 ]
 
+[project.scripts]
+camo-eval = "camo_eval.cli:main"
+
 [project.optional-dependencies]
 full = [
     "scipy>=1.7",
+    "gradio>=4.0",
     "pillow>=9.0",
     "matplotlib>=3.5",
 ]
 dev = [
     "pytest>=7.0",
+    "pytest-cov>=7.0",
     "ruff>=0.1",
 ]
 
