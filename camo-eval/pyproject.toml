@@ -13,6 +13,7 @@ authors = [{ name = "CamoGED Authors" }]
 keywords = ["camouflage", "evaluation", "metrics", "computer-vision", "benchmark"]
 dependencies = [
     "numpy>=1.21",
+    "scipy>=1.7",
 ]
 
 [project.optional-dependencies]

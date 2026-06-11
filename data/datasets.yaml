@@ -1,139 +1,180 @@
-# CamoGED — datasets registry (single source of truth)
-# Consumed by both awesome/README.md and the website /datasets page.
-# Add new datasets here. Fields marked TODO need verification before release.
-
 datasets:
-  - name: CHAMELEON
-    task: image-cod
-    modality: rgb
+  - id: "chameleon"
+    name: "CHAMELEON"
+    task: "image-cod"
+    modality: "rgb"
     size: "76 images"
     split: "test-only"
-    note: "Early small-scale set; often dropped due to bias"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Early small-scale set; often dropped due to bias."
 
-  - name: CAMO
-    task: image-cod
-    modality: rgb
+  - id: "camo"
+    name: "CAMO"
+    task: "image-cod"
+    modality: "rgb"
     size: "1,250 camouflaged (+1,250 non-camouflaged)"
     split: "1,000 train / 250 test"
-    note: "First fully annotated COD dataset"
+    year: 2019
     link: null
-    cite: "Le et al., 2019"
+    license: null
+    bibtex_key: null
+    notes: "First fully annotated COD dataset."
 
-  - name: COD10K
-    task: image-cod
-    modality: rgb
+  - id: "cod10k"
+    name: "COD10K"
+    task: "image-cod"
+    modality: "rgb"
     size: "5,066 camouflaged (~10K total)"
     split: "3,040 train / 2,026 test; 78 sub-classes"
-    note: "Largest image COD benchmark"
+    year: 2020
     link: null
-    cite: "Fan et al., 2020/2022"
+    license: null
+    bibtex_key: "fan2020sinet"
+    notes: "Largest image COD benchmark."
 
-  - name: NC4K
-    task: image-cod
-    modality: rgb
+  - id: "nc4k"
+    name: "NC4K"
+    task: "image-cod"
+    modality: "rgb"
     size: "4,121 images"
     split: "test-only (generalization)"
-    note: "Includes ranking annotations"
+    year: 2021
     link: null
-    cite: "Lv et al., 2021"
+    license: null
+    bibtex_key: null
+    notes: "Includes ranking annotations."
 
-  - name: CoCOD8K
-    task: collaborative-cod
-    modality: rgb
+  - id: "cocod8k"
+    name: "CoCOD8K"
+    task: "collaborative-cod"
+    modality: "rgb"
     size: "8K images"
     split: "train/test"
-    note: "Collaborative camouflage"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Collaborative camouflage."
 
-  - name: R2C7K
-    task: referring-cod
-    modality: rgb
+  - id: "r2c7k"
+    name: "R2C7K"
+    task: "referring-cod"
+    modality: "rgb"
     size: "7K images"
     split: "train/test"
-    note: "Referring COD"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Referring COD."
 
-  - name: PlantCamo
-    task: image-cod
-    modality: rgb
-    size: "TODO"
+  - id: "plantcamo"
+    name: "PlantCamo"
+    task: "image-cod"
+    modality: "rgb"
+    size: null
     split: "train/test"
-    note: "Plant camouflage"
+    year: 2024
     link: null
-    cite: "Yang et al., 2024"
+    license: null
+    bibtex_key: null
+    notes: "Plant camouflage benchmark."
 
-  - name: ACOD-12K
-    task: image-cod
-    modality: rgb
+  - id: "acod-12k"
+    name: "ACOD-12K"
+    task: "image-cod"
+    modality: "rgb"
     size: "12K images"
     split: "train/test"
-    note: "Dense agricultural scenes"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Dense agricultural scenes."
 
-  - name: MHCD2022
-    task: military-cod
-    modality: rgb
+  - id: "mhcd2022"
+    name: "MHCD2022"
+    task: "image-cod"
+    modality: "rgb"
     size: "3,000 images"
     split: "5 categories"
-    note: "Military high-level camouflage"
+    year: 2022
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Military high-level camouflage dataset."
 
-  - name: MCOD
-    task: multispectral-cod
-    modality: multispectral
-    size: "TODO"
+  - id: "mcod"
+    name: "MCOD"
+    task: "image-cod"
+    modality: "multispectral"
+    size: null
     split: "benchmark"
-    note: "First multispectral COD benchmark"
+    year: 2025
     link: null
-    cite: "Li et al., 2025"
+    license: null
+    bibtex_key: null
+    notes: "First multispectral COD benchmark."
 
-  - name: MM-CamObj
-    task: multimodal
-    modality: multimodal
-    size: "TODO"
+  - id: "mm-camobj"
+    name: "MM-CamObj"
+    task: "dataset"
+    modality: "multimodal"
+    size: null
     split: "QA/detection"
-    note: "MLLM evaluation for camouflage"
+    year: 2024
     link: null
-    cite: "Ruan et al., 2024"
+    license: null
+    bibtex_key: null
+    notes: "Multimodal MLLM evaluation set for camouflage."
 
-  - name: MoCA-Mask
-    task: video-cod
-    modality: rgb-video
+  - id: "moca-mask"
+    name: "MoCA-Mask"
+    task: "video-cod"
+    modality: "video"
     size: "141 sequences"
     split: "train/test"
-    note: "Moving camouflaged animals, mask annotations"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Moving camouflaged animals with mask annotations."
 
-  - name: CAD
-    task: video-cod
-    modality: rgb-video
-    size: "TODO"
+  - id: "cad"
+    name: "CAD"
+    task: "video-cod"
+    modality: "video"
+    size: null
     split: "test"
-    note: "Early video camouflage dataset"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Early video camouflage dataset."
 
-  - name: CamoVid60K
-    task: video-cod
-    modality: rgb-video
+  - id: "camovid60k"
+    name: "CamoVid60K"
+    task: "video-cod"
+    modality: "video"
     size: "60K frames"
     split: "train/test"
-    note: "Large-scale video"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Large-scale video camouflage benchmark."
 
-  - name: MSVCOD
-    task: video-cod
-    modality: rgb-video
-    size: "TODO"
+  - id: "msvcod"
+    name: "MSVCOD"
+    task: "video-cod"
+    modality: "video"
+    size: null
     split: "train/test"
-    note: "Multi-scene video"
+    year: null
     link: null
-    cite: null
+    license: null
+    bibtex_key: null
+    notes: "Multi-scene video COD benchmark."
