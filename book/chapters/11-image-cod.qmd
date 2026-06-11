@@ -1,7 +1,73 @@
-# Image Camouflaged Object Detection
+---
+title: "图像伪装目标检测"
+subtitle: "Image Camouflaged Object Detection"
+bibliography: ../references.bib
+---
 
-::: {.callout-note}
-Chapter stub. Outline lives in the project plan (docs/PROJECT_PLAN.md). Contributions welcome — see CONTRIBUTING.md.
+::: {.callout-tip}
+## 本章导读
+本章是识别篇的主干：图像伪装目标检测（COD）的方法演进。我们沿传统方法（11.1）、CNN 时代（11.2）、Transformer 时代（11.3）、频域与图/Mamba 方法（11.4–11.5）、弱/半监督（11.6）一路梳理，最后详解本项目的原创方法 **coder**（11.7）。
 :::
 
-<!-- TODO: write this chapter. Keep the hide-seek game as the connecting thread. -->
+## 11.1 传统方法 {#sec-traditional}
+
+深度学习之前，COD 依赖手工线索：**频域分析**（伪装目标常在某些频带与背景存在细微差异）、**显著性/对比**度量、纹理与梯度特征。这些方法计算轻量、可解释，但在复杂背景下鲁棒性有限——它们对应第 2 章机制的"逆运算"，却缺乏对语义的理解。
+
+## 11.2 CNN 时代 {#sec-cnn}
+
+深度学习把 COD 推上新台阶。**SINet** 首次系统定义 COD 任务并提出"搜索—识别"两阶段框架，受捕食者视觉搜索启发[@fan2020sinet]；其升级版 **SINetV2**（隐藏目标检测）进一步统一了相关任务[@fan2021sinetv2]。此后 PFNet、SegMaR、ZoomNet 等引入注意力、迭代细化、多尺度缩放等机制，持续刷新基准。
+
+## 11.3 Transformer 时代 {#sec-transformer}
+
+Transformer 的全局建模能力很契合 COD——因为"目标 vs 背景"的差异往往是**全局结构性**的，而非局部像素的。**FSPNet** 以特征收缩金字塔结合 Transformer[@fspnet2023]；**ZoomNeXt** 提出统一的协同金字塔网络，是近年的强基线[@pang2024zoomnext]；**HGINet** 引入层次图交互，以"结构关系"而非"像素相似度"发现目标[@hginet2024]。
+
+## 11.4 频域方法 {#sec-frequency}
+
+把第 11.1 节的频域直觉与深度网络结合，是近年一条富有成效的路线：在频域中，伪装目标与背景的细微差异更易被放大，频率引导的特征自适应能提升对"以假乱真"纹理的判别力。
+
+## 11.5 图网络与 Mamba {#sec-gnn-mamba}
+
+除卷积与注意力，**图神经网络**把特征建模为节点关系（如 HGINet[@hginet2024]）；**Mamba/状态空间模型**与胶囊路由则尝试以线性复杂度建模长程依赖与"部分—整体"关系。它们都在回答同一问题：如何在高相似度场景中捕捉那一点点结构性差异。
+
+## 11.6 弱监督、半监督与噪声标签 {#sec-weak}
+
+像素级标注昂贵，弱/半监督成为重要方向：用涂鸦（scribble）、点、边界框等弱标注，或借 SAM 生成伪标签、自训练，乃至从噪声伪标签中学习。它们在标注成本与精度间取舍，是 COD 走向规模化的关键。
+
+## 11.7 [原创] coder：方法详解 {#sec-coder}
+
+::: {.callout-note}
+## 关于原创项目章节
+本节为 CamoGED 原创项目 **coder** 的占位章节。方法架构、消融与 SOTA 对比待论文/代码定稿后填入；本平台排行榜中 coder 的数值标注为"本平台复现"，并附协议与出处，**不预填未经核实的数字**。
+:::
+
+**定位**：coder 是智能域**图像 COD** 的原创核心方法，既是本书第 11 章的重点案例，也是网站 `/demo` 的图像推理模型与 `/leaderboard` 的参评方法。
+
+待补结构：
+
+1. **动机**——针对前述方法的何种局限（如边界模糊、全局-局部权衡、效率）；
+2. **架构**——核心模块与设计理由（配架构图，代码现场生成）；
+3. **实现**——训练协议（严守第 10.2 节约定）、超参；
+4. **消融**——各模块贡献；
+5. **对比**——在 COD10K/CAMO/NC4K 上与 SINet、ZoomNeXt、HGINet 等对比（数值取自 `data/leaderboard.yaml`，区分原文/复现）；
+6. **复现**——`camo-eval` 一键评测脚本，`projects/coder` 代码与权重指引。
+
+@tbl-sota 给出对比表的**模板**（数值留空，待核实填入，杜绝杜撰）。
+
+| 方法 | 数据集 | $S_\alpha\uparrow$ | $F_\beta^w\uparrow$ | $E_\phi\uparrow$ | $M\downarrow$ |
+|------|--------|------|------|------|------|
+| SINet | COD10K | — | — | — | — |
+| ZoomNeXt | COD10K | — | — | — | — |
+| HGINet | COD10K | — | — | — | — |
+| **coder（本平台复现）** | COD10K | — | — | — | — |
+
+: 图像 COD SOTA 对比模板（数值见 data/leaderboard.yaml，核实后填入） {#tbl-sota}
+
+## 11.8 小结 {#sec-summary}
+
+图像 COD 从手工线索一路演进到 Transformer、图与状态空间模型，主线始终是"如何在高相似度中捕捉结构性差异"。coder 作为本项目的图像 COD 锚点，参与这一对比并提供可复现实证。下一章把战场从单帧扩展到视频。
+
+## 延伸阅读 {#sec-further}
+
+- 任务与基线：SINet[@fan2020sinet]、SINetV2[@fan2021sinetv2]、FSPNet[@fspnet2023]、ZoomNeXt[@pang2024zoomnext]、HGINet[@hginet2024]；综述[@xiao2024survey]。
+- 评价：第 15 章 `camo-eval`；数值：`data/leaderboard.yaml`。
+- 原创项目：`projects/coder`。

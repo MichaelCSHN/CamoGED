@@ -1,7 +1,48 @@
-# Intelligent Detection — Overview & Datasets
+---
+title: "智能域识别总览与数据集"
+subtitle: "Intelligent Detection: Overview & Datasets"
+bibliography: ../references.bib
+---
 
-::: {.callout-note}
-Chapter stub. Outline lives in the project plan (docs/PROJECT_PLAN.md). Contributions welcome — see CONTRIBUTING.md.
+::: {.callout-tip}
+## 本章导读
+本章为智能域识别（第 11–14 章）搭建公共底座：任务定义与挑战（10.1）、训练协议与跨数据集泛化约定（10.2），以及数据集全景（10.3）。数据集表与仓库的 `data/datasets.yaml` **同源**，可自动生成、统一维护。
 :::
 
-<!-- TODO: write this chapter. Keep the hide-seek game as the connecting thread. -->
+## 10.1 任务定义与挑战 {#sec-task}
+
+**伪装目标检测（Camouflaged Object Detection, COD）** 要从与背景高度相似的场景中分割出目标[@fan2020sinet; @xiao2024survey]。其难点是第 2 章生物机制的直接后果：目标与背景在颜色、纹理、亮度上高度相似（背景匹配），轮廓被瓦解色切断（边界模糊），尺度多变、背景杂乱。按第 1 章框架，COD 同时对抗"察觉"（要把目标分割出来）与"识别"（要正确判定类别/实例）。
+
+## 10.2 训练协议与泛化约定 {#sec-protocol}
+
+为保证可比性，COD 领域形成了相对统一的协议：通常以 COD10K 与 CAMO 的训练集合并（约 4,040 张）训练，在 COD10K-Test、CAMO-Test、NC4K 上评测，其中 NC4K 作为**仅测试**集衡量跨数据集泛化[@fan2020sinet]。**严守协议、标注训练数据来源**，是避免第 15 章所述"不可比"陷阱的前提。本平台的排行榜对每条结果标注训练协议与"原文报告/本平台复现"。
+
+## 10.3 数据集全景 {#sec-datasets}
+
+@tbl-datasets 概览主要数据集（与 `data/datasets.yaml` 同源；规模/划分以原文为准，部分待核实）。它们覆盖图像、视频、多光谱、多模态等模态，以及指代、协同等扩展任务。
+
+| 数据集 | 任务/模态 | 规模 | 用途 |
+|--------|-----------|------|------|
+| CHAMELEON | 图像 COD | 76 | 仅测试（早期） |
+| CAMO | 图像 COD | 1,250 | 1,000 训 / 250 测 |
+| COD10K | 图像 COD | 5,066 伪装 | 3,040 训 / 2,026 测，78 子类 |
+| NC4K | 图像 COD | 4,121 | 仅测试（泛化） |
+| CoCOD8K | 协同 COD | 8K | 协同伪装 |
+| R2C7K | 指代 COD | 7K | Referring |
+| MHCD2022 | 军事 COD | 3,000 | 5 类 |
+| MCOD | 多光谱 | — | 多光谱基准 |
+| MM-CamObj | 多模态 | — | MLLM 评测 |
+| MoCA-Mask | 视频 COD | 141 序列 | 移动伪装动物 |
+| CamoVid60K | 视频 COD | 60K 帧 | 大规模视频 |
+| MSVCOD | 视频 COD | — | 多场景 |
+
+: 伪装数据集全景（与 data/datasets.yaml 同源，详见附录 A） {#tbl-datasets}
+
+## 10.4 小结 {#sec-summary}
+
+任务、协议、数据集是检测研究的"游戏规则"。统一这套规则，后续各章的方法才可比、可复现。下一章进入图像伪装目标检测的方法演进，并详解本项目的 coder。
+
+## 延伸阅读 {#sec-further}
+
+- 综述与任务：CAAI 综述[@xiao2024survey]；SINet[@fan2020sinet]。
+- 数据集明细：附录 A 与 `data/datasets.yaml`。
