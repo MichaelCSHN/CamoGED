@@ -111,7 +111,12 @@ papers:
 
   - id: "cam3d2025"
     title: "CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction"
-    authors: "Liu et al."
+    authors:
+      - "Liu, Ziqi"
+      - "Luo, Wei"
+      - "Guo, Sixu"
+      - "Zhang, Jingnan"
+      - "Wang, Zhipan"
     venue: "Electronics"
     year: 2025
     pillar: "generation"
@@ -121,8 +126,8 @@ papers:
     paper: "https://www.mdpi.com/2079-9292/14/19/3868"
     code: null
     datasets: []
-    bibtex_key: null
-    notes: "Missing bibtex key in references.bib as of schema alignment."
+    bibtex_key: "cam3d2025"
+    notes: null
 
   - id: "talas2017military"
     title: "Cultural evolution of military camouflage"
