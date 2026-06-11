@@ -1,0 +1,180 @@
+datasets:
+  - id: "chameleon"
+    name: "CHAMELEON"
+    task: "image-cod"
+    modality: "rgb"
+    size: "76 images"
+    split: "test-only"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Early small-scale set; often dropped due to bias."
+
+  - id: "camo"
+    name: "CAMO"
+    task: "image-cod"
+    modality: "rgb"
+    size: "1,250 camouflaged (+1,250 non-camouflaged)"
+    split: "1,000 train / 250 test"
+    year: 2019
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "First fully annotated COD dataset."
+
+  - id: "cod10k"
+    name: "COD10K"
+    task: "image-cod"
+    modality: "rgb"
+    size: "5,066 camouflaged (~10K total)"
+    split: "3,040 train / 2,026 test; 78 sub-classes"
+    year: 2020
+    link: null
+    license: null
+    bibtex_key: "fan2020sinet"
+    notes: "Largest image COD benchmark."
+
+  - id: "nc4k"
+    name: "NC4K"
+    task: "image-cod"
+    modality: "rgb"
+    size: "4,121 images"
+    split: "test-only (generalization)"
+    year: 2021
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Includes ranking annotations."
+
+  - id: "cocod8k"
+    name: "CoCOD8K"
+    task: "collaborative-cod"
+    modality: "rgb"
+    size: "8K images"
+    split: "train/test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Collaborative camouflage."
+
+  - id: "r2c7k"
+    name: "R2C7K"
+    task: "referring-cod"
+    modality: "rgb"
+    size: "7K images"
+    split: "train/test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Referring COD."
+
+  - id: "plantcamo"
+    name: "PlantCamo"
+    task: "image-cod"
+    modality: "rgb"
+    size: null
+    split: "train/test"
+    year: 2024
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Plant camouflage benchmark."
+
+  - id: "acod-12k"
+    name: "ACOD-12K"
+    task: "image-cod"
+    modality: "rgb"
+    size: "12K images"
+    split: "train/test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Dense agricultural scenes."
+
+  - id: "mhcd2022"
+    name: "MHCD2022"
+    task: "image-cod"
+    modality: "rgb"
+    size: "3,000 images"
+    split: "5 categories"
+    year: 2022
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Military high-level camouflage dataset."
+
+  - id: "mcod"
+    name: "MCOD"
+    task: "image-cod"
+    modality: "multispectral"
+    size: null
+    split: "benchmark"
+    year: 2025
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "First multispectral COD benchmark."
+
+  - id: "mm-camobj"
+    name: "MM-CamObj"
+    task: "dataset"
+    modality: "multimodal"
+    size: null
+    split: "QA/detection"
+    year: 2024
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Multimodal MLLM evaluation set for camouflage."
+
+  - id: "moca-mask"
+    name: "MoCA-Mask"
+    task: "video-cod"
+    modality: "video"
+    size: "141 sequences"
+    split: "train/test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Moving camouflaged animals with mask annotations."
+
+  - id: "cad"
+    name: "CAD"
+    task: "video-cod"
+    modality: "video"
+    size: null
+    split: "test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Early video camouflage dataset."
+
+  - id: "camovid60k"
+    name: "CamoVid60K"
+    task: "video-cod"
+    modality: "video"
+    size: "60K frames"
+    split: "train/test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Large-scale video camouflage benchmark."
+
+  - id: "msvcod"
+    name: "MSVCOD"
+    task: "video-cod"
+    modality: "video"
+    size: null
+    split: "train/test"
+    year: null
+    link: null
+    license: null
+    bibtex_key: null
+    notes: "Multi-scene video COD benchmark."

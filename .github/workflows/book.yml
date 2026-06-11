@@ -1,0 +1,55 @@
+name: book
+
+# Render the Quarto book (HTML) and publish it to GitHub Pages so it can be
+# previewed online at https://<user>.github.io/<repo>/ .
+#
+# HTML only on purpose: PDF would need tinytex + a CJK-capable LaTeX engine
+# (the book is in Chinese), which is heavier and not needed for preview.
+
+on:
+  push:
+    branches: [main]
+    paths: ["book/**", ".github/workflows/book.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Needed to EXECUTE the runnable cells in ch1/ch2/ch3 during render.
+      - name: Install Python deps for code cells
+        run: pip install jupyter numpy matplotlib
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render book (HTML only)
+        run: quarto render book --to html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: book/_book
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

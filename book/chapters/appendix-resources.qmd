@@ -1,0 +1,42 @@
+---
+title: "附录：关键资源与索引"
+subtitle: "Appendix: Key References & Resources"
+bibliography: ../references.bib
+---
+
+::: {.callout-note}
+本附录与仓库的机器可读数据**同源**：数据集表来自 `data/datasets.yaml`，论文/方法来自 `data/papers.yaml`，排行榜来自 `data/leaderboard.yaml`；亦与 [Awesome 列表](../../awesome/README.md) 互链，避免重复维护。
+:::
+
+## A 数据集全景 {#sec-a}
+
+完整数据集表见第 10 章 @tbl-datasets 与 `data/datasets.yaml`，涵盖图像（COD10K、CAMO、NC4K、CHAMELEON）、视频（MoCA-Mask、CamoVid60K、MSVCOD）、多光谱（MCOD）、多模态（MM-CamObj）、协同（CoCOD8K）、指代（R2C7K）、军事（MHCD2022）、农业/植物（PlantCamo、ACOD-12K）等。每条附下载链接、许可证与 BibTeX；数据**只链接不再分发**。
+
+## B 指标速查 {#sec-b}
+
+| 指标 | 方向 | 含义 | camo-eval 函数 |
+|------|------|------|----------------|
+| MAE | ↓ | 逐像素平均绝对误差 | `mae`（已实现） |
+| $F_\beta^w$ | ↑ | 加权 F-measure | `weighted_f_measure` |
+| $S_\alpha$ | ↑ | 结构相似度 | `s_measure` |
+| $E_\phi$ | ↑ | 增强对齐度量 | `e_measure` |
+| FID / LPIPS | ↓ | 生成真实性 | `metrics/generation` |
+| 欺骗率 / ASR | — | 伪装/攻击有效性 | `metrics/generation`、`metrics/robustness` |
+
+详见第 15 章与 `camo-eval/`。
+
+## C 术语中英对照 {#sec-c}
+
+crypsis 隐蔽 · masquerade 伪装性拟态 · mimicry（信号）拟态 · disruptive coloration 瓦解色 · countershading 消影 · background matching 背景匹配 · motion dazzle 运动眩惑 · deception 欺骗 · stealth/low-observable 隐身/低可探测 · COD 伪装目标检测 · VCOD 视频伪装目标检测 · CIS 伪装实例分割 · adversarial camouflage 对抗伪装。（完整表随各章"首次出现"积累。）
+
+## D 资源与链接索引 {#sec-d}
+
+- 项目主页与平台：<https://github.com/MichaelCSHN/CamoGED>
+- Awesome 列表：`awesome/README.md`
+- 评测工具：`camo-eval/`
+- 原创项目：`projects/coder`、`projects/flowcamo`、`projects/dualvcod`
+- 相关 Awesome（致谢）：visionxiang、ChunmingHe、clelouch、GuoleiSun（见 Awesome 列表）
+
+## E 伪装大事年表（节选） {#sec-e}
+
+1909 Thayer 论消影 → 1915 法军伪装部队 → 1917– 一战船舶 dazzle → 1940 Cott《Adaptive Coloration in Animals》→ 越战 Tigerstripe → 冷战 DPM → 1990s– 数字/像素迷彩 → 2014 对抗样本（Szegedy 等）→ 2020 SINet 与 COD10K → 2024–2025 ZoomNeXt/HGINet、SAM2 适配、PhyCamo/CAM3D。

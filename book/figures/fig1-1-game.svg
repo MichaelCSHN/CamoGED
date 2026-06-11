@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 600" font-family="'Source Han Sans SC','Noto Sans CJK SC','Inter',sans-serif">
+  <defs>
+    <marker id="arrowTeal" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#2E8B7A"/>
+    </marker>
+    <marker id="arrowTerra" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#B6542E"/>
+    </marker>
+    <marker id="arrowSlate" markerWidth="9" markerHeight="9" refX="2" refY="3" orient="auto">
+      <path d="M7,0 L0,3 L7,6 Z" fill="#5B6470"/>
+    </marker>
+  </defs>
+
+  <!-- Title strip -->
+  <text x="460" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#2b2f36">协同演化博弈：隐藏 ⇄ 揭示</text>
+  <text x="460" y="56" text-anchor="middle" font-size="13" fill="#6b7280">A co-evolutionary game between a hider and a seeker, refereed by a judge</text>
+
+  <!-- ===== Central arena ===== -->
+  <!-- Channel band -->
+  <rect x="250" y="150" width="420" height="150" rx="10" fill="#f3f4f6" stroke="#d6d9de"/>
+  <text x="460" y="172" text-anchor="middle" font-size="12" fill="#9aa0a8" letter-spacing="2">感知信道　CHANNEL</text>
+  <text x="460" y="190" text-anchor="middle" font-size="11" fill="#aeb4bc">可见光 · 红外 · 雷达 · 像素 · 特征</text>
+
+  <!-- Hider box (left) -->
+  <rect x="60" y="178" width="180" height="94" rx="12" fill="#dcefe9" stroke="#2E8B7A" stroke-width="2"/>
+  <text x="150" y="206" text-anchor="middle" font-size="17" font-weight="700" fill="#1f6b5c">生成　Generation</text>
+  <text x="150" y="228" text-anchor="middle" font-size="13" fill="#2E8B7A">守方 / 猎物（the hider）</text>
+  <text x="150" y="250" text-anchor="middle" font-size="11.5" fill="#3f7a6e">制造"隐藏" · 压低可被察觉度</text>
+
+  <!-- Seeker box (right) -->
+  <rect x="680" y="178" width="180" height="94" rx="12" fill="#f4e0d6" stroke="#B6542E" stroke-width="2"/>
+  <text x="770" y="206" text-anchor="middle" font-size="17" font-weight="700" fill="#8f3f20">识别　Detection</text>
+  <text x="770" y="228" text-anchor="middle" font-size="13" fill="#B6542E">攻方 / 天敌（the seeker）</text>
+  <text x="770" y="250" text-anchor="middle" font-size="11.5" fill="#a05636">揭示"隐藏" · 抬高察觉/识别率</text>
+
+  <!-- Judge box (top center) -->
+  <rect x="360" y="80" width="200" height="56" rx="12" fill="#e6e8eb" stroke="#5B6470" stroke-width="2"/>
+  <text x="460" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#3f4651">评价　Evaluation</text>
+  <text x="460" y="124" text-anchor="middle" font-size="12.5" fill="#5B6470">裁判（the judge）· 判定胜负</text>
+
+  <!-- Hider -> channel -->
+  <line x1="240" y1="225" x2="300" y2="225" stroke="#2E8B7A" stroke-width="2.4" marker-end="url(#arrowTeal)"/>
+  <!-- Seeker -> channel -->
+  <line x1="680" y1="225" x2="620" y2="225" stroke="#B6542E" stroke-width="2.4" marker-end="url(#arrowTerra)"/>
+  <!-- Judge oversees (dashed down to arena) -->
+  <line x1="460" y1="136" x2="460" y2="150" stroke="#5B6470" stroke-width="1.8" stroke-dasharray="4 3"/>
+  <text x="472" y="148" font-size="10.5" fill="#7a818b">裁定标尺 ↓</text>
+
+  <!-- Arms-race feedback loop (curved arrows around the arena) -->
+  <path d="M150 272 C 150 360, 770 360, 770 272" fill="none" stroke="#9aa0a8" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrowTerra)"/>
+  <path d="M770 296 C 770 392, 150 392, 150 296" fill="none" stroke="#9aa0a8" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#arrowTeal)"/>
+  <text x="460" y="356" text-anchor="middle" font-size="11.5" fill="#7a818b">军备竞赛 / 迭代对抗（co-adaptation）</text>
+
+  <!-- ===== Four guises (bottom) ===== -->
+  <text x="460" y="436" text-anchor="middle" font-size="13" font-weight="600" fill="#2b2f36">同一博弈的四种化身（the same game in four guises）</text>
+
+  <!-- card template: x positions -->
+  <!-- Nature -->
+  <g>
+    <rect x="40" y="452" width="195" height="120" rx="10" fill="#ffffff" stroke="#d6d9de"/>
+    <text x="137" y="474" text-anchor="middle" font-size="13" font-weight="700" fill="#2b2f36">自然 · Nature</text>
+    <rect x="56" y="486" width="78" height="26" rx="6" fill="#dcefe9"/>
+    <text x="95" y="503" text-anchor="middle" font-size="11" fill="#1f6b5c">猎物拟态</text>
+    <rect x="141" y="486" width="78" height="26" rx="6" fill="#f4e0d6"/>
+    <text x="180" y="503" text-anchor="middle" font-size="11" fill="#8f3f20">捕食搜索</text>
+    <text x="137" y="534" text-anchor="middle" font-size="10.5" fill="#6b7280">自然选择驱动</text>
+    <text x="137" y="552" text-anchor="middle" font-size="10.5" fill="#6b7280">的军备竞赛</text>
+  </g>
+  <!-- War -->
+  <g>
+    <rect x="247" y="452" width="195" height="120" rx="10" fill="#ffffff" stroke="#d6d9de"/>
+    <text x="344" y="474" text-anchor="middle" font-size="13" font-weight="700" fill="#2b2f36">军事 · War</text>
+    <rect x="263" y="486" width="78" height="26" rx="6" fill="#dcefe9"/>
+    <text x="302" y="503" text-anchor="middle" font-size="11" fill="#1f6b5c">迷彩/隐身</text>
+    <rect x="348" y="486" width="78" height="26" rx="6" fill="#f4e0d6"/>
+    <text x="387" y="503" text-anchor="middle" font-size="11" fill="#8f3f20">侦察/探测</text>
+    <text x="344" y="534" text-anchor="middle" font-size="10.5" fill="#6b7280">措施—反措施</text>
+    <text x="344" y="552" text-anchor="middle" font-size="10.5" fill="#6b7280">循环</text>
+  </g>
+  <!-- Art -->
+  <g>
+    <rect x="454" y="452" width="195" height="120" rx="10" fill="#ffffff" stroke="#d6d9de"/>
+    <text x="551" y="474" text-anchor="middle" font-size="13" font-weight="700" fill="#2b2f36">艺术 · Art</text>
+    <rect x="470" y="486" width="78" height="26" rx="6" fill="#dcefe9"/>
+    <text x="509" y="503" text-anchor="middle" font-size="11" fill="#1f6b5c">错视/隐藏</text>
+    <rect x="555" y="486" width="78" height="26" rx="6" fill="#f4e0d6"/>
+    <text x="594" y="503" text-anchor="middle" font-size="11" fill="#8f3f20">观者知觉</text>
+    <text x="551" y="534" text-anchor="middle" font-size="10.5" fill="#6b7280">注意与预期</text>
+    <text x="551" y="552" text-anchor="middle" font-size="10.5" fill="#6b7280">的操纵</text>
+  </g>
+  <!-- AI -->
+  <g>
+    <rect x="661" y="452" width="195" height="120" rx="10" fill="#ffffff" stroke="#d6d9de"/>
+    <text x="758" y="474" text-anchor="middle" font-size="13" font-weight="700" fill="#2b2f36">AI · Machines</text>
+    <rect x="677" y="486" width="78" height="26" rx="6" fill="#dcefe9"/>
+    <text x="716" y="503" text-anchor="middle" font-size="11" fill="#1f6b5c">生成/对抗</text>
+    <rect x="762" y="486" width="78" height="26" rx="6" fill="#f4e0d6"/>
+    <text x="801" y="503" text-anchor="middle" font-size="11" fill="#8f3f20">检测/防御</text>
+    <text x="758" y="534" text-anchor="middle" font-size="10.5" fill="#6b7280">GAN · 对抗攻防</text>
+    <text x="758" y="552" text-anchor="middle" font-size="10.5" fill="#6b7280">检测—反检测</text>
+  </g>
+</svg>

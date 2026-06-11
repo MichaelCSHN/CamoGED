@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "camo-eval"
+version = "0.1.0"
+description = "Unified evaluation toolkit for camouflage: detection accuracy, generation quality, and adversarial robustness."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "CamoGED Authors" }]
+keywords = ["camouflage", "evaluation", "metrics", "computer-vision", "benchmark"]
+dependencies = [
+    "numpy>=1.21",
+    "scipy>=1.7",
+]
+
+[project.scripts]
+camo-eval = "camo_eval.cli:main"
+
+[project.optional-dependencies]
+full = [
+    "scipy>=1.7",
+    "gradio>=4.0",
+    "pillow>=9.0",
+    "matplotlib>=3.5",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=7.0",
+    "ruff>=0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/MichaelCSHN/CamoGED"
+Repository = "https://github.com/MichaelCSHN/CamoGED"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100

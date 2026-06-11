@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node / web
+node_modules/
+web/.vitepress/dist/
+web/.vitepress/cache/
+
+# Quarto / book
+book/_book/
+book/.quarto/
+book/site_libs/
+/.quarto/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Data artifacts (link, don't commit large data)
+data/raw/
+*.pth
+*.ckpt
+*.npy

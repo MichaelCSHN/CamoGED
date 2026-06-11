@@ -1,0 +1,50 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Camouflage: Generation, Detection & Evaluation"
+  subtitle: "Across Nature, War, and Machines"
+  author: "CamoGED Authors"
+  date: today
+  repo-url: https://github.com/MichaelCSHN/CamoGED
+  repo-actions: [edit, issue]
+  search: true
+  chapters:
+    - index.qmd
+    - part: "I — The Past & Present of Camouflage"
+      chapters:
+        - chapters/01-essence-and-the-game.qmd
+        - chapters/02-natural-camouflage.qmd
+        - chapters/03-military-camouflage.qmd
+        - chapters/04-camouflage-in-art.qmd
+    - part: "II — Generation · the Hider (prey / defender)"
+      chapters:
+        - chapters/05-physical-generation.qmd
+        - chapters/06-physical-adversarial.qmd
+        - chapters/07-digital-generation.qmd
+        - chapters/08-intelligent-generation.qmd
+    - part: "III — Detection · the Seeker (predator / attacker)"
+      chapters:
+        - chapters/09-physical-digital-detection.qmd
+        - chapters/10-intelligent-overview-datasets.qmd
+        - chapters/11-image-cod.qmd
+        - chapters/12-video-cod.qmd
+        - chapters/13-instance-extended.qmd
+        - chapters/14-foundation-models.qmd
+    - part: "IV — Evaluation · the Judge (referee)"
+      chapters:
+        - chapters/15-unified-evaluation.qmd
+        - chapters/16-frontiers-ethics.qmd
+  appendices:
+    - chapters/appendix-resources.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+  pdf:
+    documentclass: scrbook
+  # epub:  # uncomment for ePub output
