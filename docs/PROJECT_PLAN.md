@@ -8,12 +8,16 @@
 
 ## 〇、执行摘要（Executive Summary）
 
-本计划构建一个"四位一体"的开源平台 **Camouflage**（候选缩写见 §1.3）：
+本计划构建一个"四位一体"的开源平台 **CamoGED**（Camouflage: Generation · Evaluation · Detection），以单一仓库（monorepo）承载：
 
 - **一本专著**（在线先行、后出版）——系统梳理伪装的前世今生与理论-方法-技术-应用；
 - **一个 Awesome 列表**——跨域资源精选，比现有列表更宽、更深、更活；
 - **一个聚合网站**——论文库、模型库、动态 SOTA 排行榜、在线 Demo、数据集导航；
 - **一套评测工具包** `camo-eval`——统一生成质量、检测精度、对抗鲁棒性三类评价标准。
+
+**实施次序（稳定性优先）**：先做变化最慢、最难返工的，再做迭代最快的——**仓库骨架 → 专著 → Awesome → 网站**（详见 §十一）。
+
+**篇章次序（博弈三角色）**：全书与平台叙事按 **生成（守方/猎物）→ 识别（攻方/天敌）→ 评价（裁判）** 展开（详见 §1.4）。
 
 与现有最强的同类资源（visionxiang / ChunmingHe 的 Awesome 列表、2024 CAAI《A Survey of COD and Beyond》）相比，本项目的**增量价值**在于：① 跨四大学科领域；② 同时覆盖生成+识别+评价（现有皆只做识别）；③ 提供"活的"平台（排行榜+Demo+工具包），而非静态综述；④ 以一条"协同演化博弈"主线贯穿全局（§1.4）。
 
@@ -50,13 +54,13 @@
 
 ### 1.3 命名与品牌
 
-主名 **Camouflage**。候选缩写/副标识（择一作为组织名与域名）：
+**已定名：`CamoGED`** —— Camouflage: **G**eneration · **E**valuation · **D**etection（缩写直取三支柱）。
 
-- **CamoVerse**（伪装宇宙，强调全景与跨域，推荐）
-- **OpenCamo**（强调开源属性）
-- **CamoHub**（强调资源聚合）
+- 代码托管：单一仓库（monorepo）`github.com/MichaelCSHN/CamoGED`，内含 `book/ awesome/ web/ camo-eval/ projects/ data/` 等子目录。
+- 站点域名建议：`camoged.org` 或 `michaelcshn.github.io/CamoGED`。
+- 专著定名 **《Camouflage: Generation, Detection & Evaluation — Across Nature, War, and Machines》**（中文：《伪装：生成、识别与评价——自然、战争与机器的跨域综观》）。
 
-建议：GitHub 组织名 `CamoVerse`，主域名 `camoverse.org` 或 `camoverse.github.io`，专著定名 **《Camouflage: Generation, Recognition, and Evaluation Across Nature, War, and Machines》**（中文：《伪装：生成、识别与评价——自然、战争与机器的跨域综观》）。
+> 注：缩写顺序 G-E-D 取自项目原始命名习惯；全书与平台的**叙事/篇章顺序**仍为"生成 → 识别 → 评价"（守方 → 攻方 → 裁判，见 §1.4）。
 
 ### 1.4 学术主线（本项目的智识内核）★
 
@@ -66,12 +70,26 @@
 
 这条主线在四个领域里是同一个数学/动力学结构的不同实例：
 
-| 领域 | 隐藏方 | 揭示方 | 博弈机制 |
+| 领域 | 隐藏方（守方/猎物） | 揭示方（攻方/天敌） | 博弈机制 |
 |------|--------|--------|----------|
 | 自然 | 猎物的拟态/隐蔽 | 捕食者的视觉搜索 | 自然选择驱动的军备竞赛 |
 | 军事 | 迷彩/假目标/隐身 | 侦察/探测/识别 | 措施—反措施循环 |
 | 艺术 | 错视/隐藏图形 | 观看者的知觉 | 注意与预期的操纵 |
 | AI | 生成器 / 对抗攻击 | 判别器 / 检测器 / 防御 | GAN、对抗攻防、检测-反检测 |
+
+**三支柱 = 博弈三角色**（贯穿全书的命名与排序逻辑）：
+
+```
+        生成                评价                识别
+      (隐藏方)             (裁判)             (揭示方)
+      守方 / 猎物          裁判 / 标尺          攻方 / 天敌
+        │                   │                   │
+   制造"隐藏"          判定胜负             揭示"隐藏"
+```
+
+- **生成（守方/猎物）** 是博弈的"先手"——先有隐藏，才谈得上揭示，故置于全书之首。
+- **识别（攻方/天敌）** 是"应手"——针对既有伪装发起揭示。
+- **评价（裁判）** 在博弈结构中居于攻防"之间"，但作为篇章置于**最后**：读者须先理解攻防两端的机理，方能理解如何公正裁判这场博弈的胜负。
 
 **意义**：这一框架使"生成"（隐藏方）与"识别"（揭示方）成为同一枚硬币的两面，"评价"则是裁判这场博弈胜负的标尺。它为全书提供叙事骨架，也是区别于一切现有综述的原创学术贡献，可单独发表为一篇观点/综述论文。
 
@@ -80,33 +98,28 @@
 ## 二、整体架构：四位一体平台
 
 ```
-CamoVerse/  (GitHub Organization)
+CamoGED/  (single GitHub repo — github.com/MichaelCSHN/CamoGED)
 │
-├── 📚 camouflage-book/      专著源码（Quarto；HTML + PDF + ePub 多格式）
-│
-├── 🌟 awesome-camouflage/   跨域 Awesome 精选列表
-│
-├── 🌐 camouflage-web/       聚合网站（VitePress / Docusaurus）
-│      ├─ /papers            论文库（可检索）
-│      ├─ /models            模型库（Model Zoo + 权重）
-│      ├─ /leaderboard       动态 SOTA 排行榜
-│      ├─ /demo              在线交互 Demo
-│      └─ /datasets          数据集导航
-│
-├── 🔧 camo-eval/            评测工具包（生成/检测/鲁棒性三类指标）
-│
-└── 🔬 coder / flowcamo / dualvcod   三个原创项目（接入）
+├── 📚 book/        专著源码（Quarto；HTML + PDF + ePub 多格式）
+├── 🌟 awesome/     跨域 Awesome 精选列表
+├── 🌐 web/         聚合网站（VitePress）：papers / models / leaderboard / demo / datasets
+├── 🔧 camo-eval/   评测工具包（生成/检测/鲁棒性三类指标）
+├── 🗂️ data/        单一事实来源（papers / datasets / leaderboard 的 yaml）
+├── 🔬 projects/    三个原创项目接入：coder / flowcamo / dualvcod
+└── ⚙️ .github/     CI 工作流 + Issue/PR 模板
 ```
 
-**仓库职责划分**
+> 采用 **monorepo**（而非多仓库 Org）：四大组件共享 `data/` 单一事实来源、统一 CI 与版本，降低维护成本、便于审计。
 
-| 仓库 | 职责 | 主语言/工具 | 许可证 |
+**目录职责划分**
+
+| 目录 | 职责 | 主语言/工具 | 许可证 |
 |------|------|-------------|--------|
-| `camouflage-book` | 专著（含可执行代码） | Quarto (md+ipynb) | 内容 CC-BY-4.0 / 代码 Apache-2.0 |
-| `awesome-camouflage` | 精选资源列表 | Markdown | CC0 / CC-BY-4.0 |
-| `camouflage-web` | 聚合网站 | VitePress + JS | MIT |
-| `camo-eval` | 评测工具包 | Python | Apache-2.0 |
-| `coder/flowcamo/dualvcod` | 原创方法 | Python/PyTorch | Apache-2.0（按需） |
+| `book/` | 专著（含可执行代码） | Quarto (md+ipynb) | 内容 CC-BY-4.0 / 代码 Apache-2.0 |
+| `awesome/` | 精选资源列表 | Markdown（源自 `data/`） | CC-BY-4.0 |
+| `web/` | 聚合网站 | VitePress + JS | MIT |
+| `camo-eval/` | 评测工具包 | Python | Apache-2.0 |
+| `projects/` | 原创方法接入 | Python/PyTorch | Apache-2.0（按需） |
 
 ---
 
@@ -163,7 +176,7 @@ CamoVerse/  (GitHub Organization)
 - 4.3 隐形叙事与文化想象
 - 4.4 数字时代的伪装美学与生成艺术
 
-#### 第二篇　生成篇：如何制造"隐藏"
+#### 第二篇　生成篇 · 守方／猎物（the hider）：如何制造"隐藏"
 
 **第5章　物理域伪装生成**
 - 5.1 迷彩图案设计原理：颜色匹配、纹理频率、边界破坏、对比度
@@ -195,7 +208,7 @@ CamoVerse/  (GitHub Organization)
 - 8.5 **[原创] flowcamo 的视频伪装生成分支**
 - 8.6 生成-检测闭环：用生成数据反哺检测训练（呼应 §1.4 博弈主线）
 
-#### 第三篇　识别篇：如何揭示"隐藏"
+#### 第三篇　识别篇 · 攻方／天敌（the seeker）：如何揭示"隐藏"
 
 **第9章　物理域与数字域的伪装识别**
 - 9.1 可见光目标检测（YOLO 系列、MilDetr）
@@ -242,7 +255,7 @@ CamoVerse/  (GitHub Organization)
 - 14.5 通用显著/伪装双任务（VSCode）、提示学习
 - 14.6 跨界应用：医学（息肉/病灶）、工业缺陷、农业（PlantCamo、ACOD-12K）
 
-#### 第四篇　评价篇：如何裁判这场博弈（本书与标题对齐的重点）★
+#### 第四篇　评价篇 · 裁判（the judge）：如何裁判这场博弈（本书与标题对齐的重点）★
 
 **第15章　伪装评价的统一标尺**
 - 15.1 **识别质量评价**
@@ -492,54 +505,67 @@ camo-eval/
 
 | 维度 | 6 个月目标 | 12 个月目标 |
 |------|-----------|-------------|
-| GitHub Stars（主仓+Awesome） | 500+ | 2,000+ |
-| Awesome 收录条目 | 300+ | 600+ |
-| 专著章节（在线） | 第一篇 + 评价篇 | 全四篇 v1.0 |
-| Demo 任务数 | 图像 COD | 图像/视频/实例 |
+| 仓库与治理 | 骨架+CI+模板完成（已达成） | 稳定发布流程 + Zenodo DOI |
+| 专著章节（在线） | 第一篇 + 评价篇 + 主线章（v0.5） | 全四篇 v1.0 + 出版投稿 |
+| camo-eval | 识别指标可用 | 生成/鲁棒性指标齐备 |
+| Awesome 收录条目 | 300+（由专著文献沉淀） | 600+ + awesome.re 收录 |
+| 网站 / Demo | 站点骨架 + 数据集页 | Leaderboard + 图像/视频/实例 Demo |
+| GitHub Stars | 300+ | 1,500+ |
 | 外部贡献者 | 5+ | 20+ |
 | 学术产出 | arXiv 主线观点论文投稿 | 综述/benchmark 论文 + 专著投稿 |
-| 收录 | awesome.re 申请 | PapersWithCode 对接、被他人综述引用 |
 
 ---
 
-## 十一、分阶段路线图（含资源假设）
+## 十一、分阶段路线图（按"稳定性优先"排序）
 
-> **资源假设**：核心 1–2 人 + 若干兼职贡献者。下列时间线为"全力投入"估计；若人力有限，按 §11.5 的 MVP 优先级裁剪。
+> **实施次序原则（变化慢者先行、迭代快者殿后）：**
+> **① GitHub 仓库骨架 → ② 专著 → ③ Awesome → ④ 网站**。
+> 理由：仓库结构与治理一旦定型几乎不再变动，应最先锁定；专著为稳定的学术内容，需要长周期沉淀，宜紧随其后；Awesome 列表按月增补、变化中等；网站（排行榜/Demo）迭代最频繁、依赖前三者沉淀的内容，故置于最后。先把"地基"浇筑稳固，再承接高频"装修"，可避免反复返工。
+>
+> **资源假设**：核心 1–2 人 + 若干兼职贡献者；下列为"全力投入"估计，人力受限时按 §11.5 裁剪。
+> 注：`camo-eval` 属相对稳定的基础设施，随"评价篇"一并建设（它是评价篇的实证支撑）。
 
-### Phase 1 — 奠基（第 1–2 月）
-- [ ] 建 GitHub Org（CamoVerse）+ 各仓库骨架 + 许可证 + CITATION.cff
-- [ ] Awesome v0.5（≥150 条，含致谢与机器可读 yaml）
-- [ ] 专著工具链（Quarto）跑通；完成第1章（含主线 §1.4）+ 评价篇大纲
-- [ ] camo-eval 识别指标（Sm/Fw/Em/MAE）可用 + 单元测试
-- [ ] 网站 skeleton 上线（VitePress + Pages）
-- **产出**：README + Awesome v0.5 + 网站骨架 + camo-eval v0.1
+### Phase 0 — 仓库奠基（第 0–1 月）★最先、最稳
+- [x] 建仓库 `CamoGED`（monorepo）+ 完整目录骨架
+- [x] 许可证（Apache-2.0 + CC-BY-4.0）、`CITATION.cff`、`CONTRIBUTING`、`CODE_OF_CONDUCT`、`ETHICS`
+- [x] `.github` CI 工作流 + Issue/PR 模板
+- [x] `data/*.yaml` 单一事实来源骨架；`camo-eval` 可安装雏形（MAE + 测试）
+- **产出**：可推送、可协作的仓库地基（已完成）
 
-### Phase 2 — 扩充（第 3–4 月）
-- [ ] 专著第一篇 + 评价篇（第15章）完成
-- [ ] coder 接入 /demo 与 /leaderboard；camo-eval 注册基准
-- [ ] Leaderboard 上线（COD10K/CAMO/NC4K，数值核实填入）
-- [ ] 数据集导航页完成；Awesome v1.0（≥300 条）
-- **产出**：专著 v0.4 + Demo v1 + Leaderboard v1 + Awesome v1.0
+### Phase 1 — 专著主体（第 1–5 月）★稳定内容，长周期沉淀
+- [ ] Quarto 工具链定稿；装帧/排版/插图规范确立（见专著编纂计划）
+- [ ] 第一篇（跨域综述）+ 第1章主线 + 评价篇（第15章）优先成稿
+- [ ] `camo-eval` 补齐识别指标（Sm/Fw/Em）、生成/鲁棒性指标框架
+- [ ] 生成篇 + 识别篇逐章推进；关键图表由代码现场生成
+- [ ] 在线版 `v0.5` 发布（Quarto → HTML/PDF），Zenodo 预留 DOI
+- **产出**：专著 `v0.5`（含评价篇与主线）+ camo-eval `v0.5`
 
-### Phase 3 — 深化（第 5–6 月）
-- [ ] 生成篇 + 识别篇完成；flowcamo/dualvcod 接入
-- [ ] 视频 + 实例 Demo 上线；camo-eval 增加生成/鲁棒性指标
-- [ ] Awesome 自动更新（Actions）；中英内容对齐
-- [ ] arXiv 发布主线观点/综述论文 v1
-- **产出**：专著 v0.8 + Demo v2 + camo-eval v0.5 + Awesome v2.0
+### Phase 2 — Awesome 精选（第 4–7 月，与专著后段并行）★中频维护
+- [ ] 由专著参考文献沉淀出 `data/papers.yaml` / `datasets.yaml`（≥300 条）
+- [ ] Awesome `v1.0` 上线（机器可读、显式致谢现有列表）
+- [ ] GitHub Actions 自动抓取 arXiv 候选 → 待审 Issue（"更活"）
+- [ ] 申请 awesome.re 收录
+- **产出**：Awesome `v1.0` + 自动更新机制
 
-### Phase 4 — 出版冲刺（第 7–12 月）
-- [ ] 专著全文定稿、图表精修、双语校对
-- [ ] 投稿出版社（见 §十二）+ 配套综述/benchmark 论文投稿
-- [ ] 社区建设（Discussions、贡献者扩展）；Zenodo DOI；申请 awesome.re / PapersWithCode
-- **产出**：专著 v1.0（在线）+ 出版投稿 + 稳定社区
+### Phase 3 — 聚合网站（第 6–10 月）★最高频迭代，殿后
+- [ ] VitePress 站点上线，直接消费 `data/*.yaml`（与 Awesome 同源）
+- [ ] 数据集导航页、论文/模型库页
+- [ ] 动态 SOTA 排行榜（数值核实、标注来源/复现）
+- [ ] 在线 Demo：图像（coder）→ 视频（flowcamo）→ 实例（dualvcod）
+- **产出**：网站 `v1` + Leaderboard + 三类 Demo
 
-### 11.5 MVP 优先级（若资源受限，按此顺序保底）
-1. Awesome 列表 + 致谢（最低成本、最快见效）
-2. camo-eval 识别指标（领域刚需，易获采用）
-3. 专著"评价篇 + 主线章"（最具差异化的智识贡献）
-4. coder 的 /demo + Leaderboard（实证锚点）
-5. 其余生成/视频内容逐步补全
+### Phase 4 — 出版与社区（第 9–12 月）
+- [ ] 专著全文定稿、双语校对、图表精修；在线 `v1.0` + Zenodo DOI
+- [ ] 投稿出版社（见 §十二）+ 配套主线/综述论文
+- [ ] 社区建设（Discussions、贡献者扩展）、PapersWithCode 对接
+- **产出**：专著 `v1.0` + 出版投稿 + 稳定社区
+
+### 11.5 MVP 优先级（资源受限时，仍遵循"稳定性优先"）
+1. **仓库骨架 + 治理**（地基；已完成）
+2. **专著"主线章 + 评价篇"**（最具差异化的智识贡献，且内容稳定）
+3. **camo-eval 识别指标**（评价篇的实证支撑，领域刚需）
+4. **Awesome v1.0**（由专著参考文献沉淀而来，边际成本低）
+5. **网站 + Demo + 排行榜**（最高频，最后做；依赖前四者的内容沉淀）
 
 ---
 

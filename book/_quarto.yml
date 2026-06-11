@@ -18,13 +18,13 @@ book:
         - chapters/02-natural-camouflage.qmd
         - chapters/03-military-camouflage.qmd
         - chapters/04-camouflage-in-art.qmd
-    - part: "II — Generation (the hider)"
+    - part: "II — Generation · the Hider (prey / defender)"
       chapters:
         - chapters/05-physical-generation.qmd
         - chapters/06-physical-adversarial.qmd
         - chapters/07-digital-generation.qmd
         - chapters/08-intelligent-generation.qmd
-    - part: "III — Detection (the seeker)"
+    - part: "III — Detection · the Seeker (predator / attacker)"
       chapters:
         - chapters/09-physical-digital-detection.qmd
         - chapters/10-intelligent-overview-datasets.qmd
@@ -32,7 +32,7 @@ book:
         - chapters/12-video-cod.qmd
         - chapters/13-instance-extended.qmd
         - chapters/14-foundation-models.qmd
-    - part: "IV — Evaluation (the judge)"
+    - part: "IV — Evaluation · the Judge (referee)"
       chapters:
         - chapters/15-unified-evaluation.qmd
         - chapters/16-frontiers-ethics.qmd

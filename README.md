@@ -71,14 +71,18 @@ cd book && quarto preview
 cd web && npm install && npm run docs:dev
 ```
 
-## Roadmap (high level)
+## Roadmap (stability-first order)
 
-- **Phase 1 — Foundation:** org/repo scaffold ✅, Awesome v0.5, `camo-eval` detection metrics, website skeleton, Ch.1 + Evaluation outline.
-- **Phase 2 — Expansion:** Part I + Evaluation chapter, `coder` demo + leaderboard, datasets page.
-- **Phase 3 — Deepening:** Generation + Detection parts, `flowcamo`/`dualvcod` demos, automated Awesome updates, bilingual alignment.
-- **Phase 4 — Publication:** finalize book, submit to publisher + companion survey paper, Zenodo DOI, community.
+Build the slow-changing pieces first, the fast-iterating ones last:
+**① repo scaffold → ② monograph → ③ Awesome list → ④ website.**
 
-Full plan: [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md).
+- **Phase 0 — Repo foundation:** scaffold, governance, licenses, CI, `data/` schema, `camo-eval` skeleton ✅
+- **Phase 1 — Monograph:** Part I + Evaluation part + thesis chapter first; `camo-eval` metrics; online `v0.5`.
+- **Phase 2 — Awesome list:** distilled from the book's bibliography into `data/*.yaml`; auto-updates via Actions.
+- **Phase 3 — Website:** leaderboard + demos (image → video → instance), consuming `data/*.yaml`.
+- **Phase 4 — Publication & community:** finalize book, submit to publisher + companion paper, Zenodo DOI.
+
+Full plan: [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) · Book compilation plan: [`docs/BOOK_COMPILATION_PLAN.md`](docs/BOOK_COMPILATION_PLAN.md).
 
 ## Contributing
 
