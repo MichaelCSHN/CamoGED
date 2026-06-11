@@ -1,0 +1,39 @@
+name: Add a paper / method
+description: Propose a paper or method for the Awesome list and website.
+labels: ["resource:paper"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Title
+    validations:
+      required: true
+  - type: input
+    id: venue
+    attributes:
+      label: Venue & year
+      placeholder: "TPAMI 2024"
+  - type: dropdown
+    id: pillar
+    attributes:
+      label: Pillar
+      options:
+        - generation
+        - detection
+        - evaluation
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domain
+      options:
+        - physical
+        - digital
+        - intelligent
+  - type: input
+    id: paper
+    attributes:
+      label: Paper link
+  - type: input
+    id: code
+    attributes:
+      label: Code link (optional)

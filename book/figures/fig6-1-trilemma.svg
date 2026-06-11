@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 520" font-family="'Source Han Sans SC','Noto Sans CJK SC','Inter',sans-serif">
+  <text x="310" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#2b2f36">物理对抗伪装的"三难困境"</text>
+  <text x="310" y="56" text-anchor="middle" font-size="12.5" fill="#6b7280">The physical adversarial trilemma — pick the trade-off</text>
+
+  <!-- Triangle -->
+  <polygon points="310,90 540,470 80,470" fill="#f7f8f9" stroke="#cdd1d6" stroke-width="1.5"/>
+
+  <!-- Vertices -->
+  <circle cx="310" cy="90" r="6" fill="#B6542E"/>
+  <text x="310" y="78" text-anchor="middle" font-size="15" font-weight="700" fill="#8f3f20">有效性</text>
+  <text x="310" y="64" text-anchor="middle" font-size="11" fill="#a05636">effectiveness</text>
+
+  <circle cx="80" cy="470" r="6" fill="#2E8B7A"/>
+  <text x="80" y="494" text-anchor="middle" font-size="15" font-weight="700" fill="#1f6b5c">隐蔽性</text>
+  <text x="80" y="510" text-anchor="middle" font-size="11" fill="#3f7a6e">stealthiness</text>
+
+  <circle cx="540" cy="470" r="6" fill="#5B6470"/>
+  <text x="540" y="494" text-anchor="middle" font-size="15" font-weight="700" fill="#3f4651">鲁棒性</text>
+  <text x="540" y="510" text-anchor="middle" font-size="11" fill="#5B6470">robustness</text>
+
+  <!-- Edge labels -->
+  <text x="180" y="270" text-anchor="middle" font-size="11.5" fill="#7a818b" transform="rotate(-59 180 270)">骗过模型 vs 骗过人眼</text>
+  <text x="440" y="270" text-anchor="middle" font-size="11.5" fill="#7a818b" transform="rotate(59 440 270)">骗过模型 vs 跨场景稳定</text>
+  <text x="310" y="486" text-anchor="middle" font-size="11.5" fill="#7a818b">自然外观 vs 多视角/光照鲁棒</text>
+
+  <!-- center note -->
+  <text x="310" y="300" text-anchor="middle" font-size="12.5" fill="#2b2f36" font-weight="600">三者难以兼得</text>
+  <text x="310" y="320" text-anchor="middle" font-size="11" fill="#6b7280">现有方法多在三角形内部取折中</text>
+</svg>

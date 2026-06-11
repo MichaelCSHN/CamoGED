@@ -1,0 +1,139 @@
+# CamoGED — datasets registry (single source of truth)
+# Consumed by both awesome/README.md and the website /datasets page.
+# Add new datasets here. Fields marked TODO need verification before release.
+
+datasets:
+  - name: CHAMELEON
+    task: image-cod
+    modality: rgb
+    size: "76 images"
+    split: "test-only"
+    note: "Early small-scale set; often dropped due to bias"
+    link: null
+    cite: null
+
+  - name: CAMO
+    task: image-cod
+    modality: rgb
+    size: "1,250 camouflaged (+1,250 non-camouflaged)"
+    split: "1,000 train / 250 test"
+    note: "First fully annotated COD dataset"
+    link: null
+    cite: "Le et al., 2019"
+
+  - name: COD10K
+    task: image-cod
+    modality: rgb
+    size: "5,066 camouflaged (~10K total)"
+    split: "3,040 train / 2,026 test; 78 sub-classes"
+    note: "Largest image COD benchmark"
+    link: null
+    cite: "Fan et al., 2020/2022"
+
+  - name: NC4K
+    task: image-cod
+    modality: rgb
+    size: "4,121 images"
+    split: "test-only (generalization)"
+    note: "Includes ranking annotations"
+    link: null
+    cite: "Lv et al., 2021"
+
+  - name: CoCOD8K
+    task: collaborative-cod
+    modality: rgb
+    size: "8K images"
+    split: "train/test"
+    note: "Collaborative camouflage"
+    link: null
+    cite: null
+
+  - name: R2C7K
+    task: referring-cod
+    modality: rgb
+    size: "7K images"
+    split: "train/test"
+    note: "Referring COD"
+    link: null
+    cite: null
+
+  - name: PlantCamo
+    task: image-cod
+    modality: rgb
+    size: "TODO"
+    split: "train/test"
+    note: "Plant camouflage"
+    link: null
+    cite: "Yang et al., 2024"
+
+  - name: ACOD-12K
+    task: image-cod
+    modality: rgb
+    size: "12K images"
+    split: "train/test"
+    note: "Dense agricultural scenes"
+    link: null
+    cite: null
+
+  - name: MHCD2022
+    task: military-cod
+    modality: rgb
+    size: "3,000 images"
+    split: "5 categories"
+    note: "Military high-level camouflage"
+    link: null
+    cite: null
+
+  - name: MCOD
+    task: multispectral-cod
+    modality: multispectral
+    size: "TODO"
+    split: "benchmark"
+    note: "First multispectral COD benchmark"
+    link: null
+    cite: "Li et al., 2025"
+
+  - name: MM-CamObj
+    task: multimodal
+    modality: multimodal
+    size: "TODO"
+    split: "QA/detection"
+    note: "MLLM evaluation for camouflage"
+    link: null
+    cite: "Ruan et al., 2024"
+
+  - name: MoCA-Mask
+    task: video-cod
+    modality: rgb-video
+    size: "141 sequences"
+    split: "train/test"
+    note: "Moving camouflaged animals, mask annotations"
+    link: null
+    cite: null
+
+  - name: CAD
+    task: video-cod
+    modality: rgb-video
+    size: "TODO"
+    split: "test"
+    note: "Early video camouflage dataset"
+    link: null
+    cite: null
+
+  - name: CamoVid60K
+    task: video-cod
+    modality: rgb-video
+    size: "60K frames"
+    split: "train/test"
+    note: "Large-scale video"
+    link: null
+    cite: null
+
+  - name: MSVCOD
+    task: video-cod
+    modality: rgb-video
+    size: "TODO"
+    split: "train/test"
+    note: "Multi-scene video"
+    link: null
+    cite: null

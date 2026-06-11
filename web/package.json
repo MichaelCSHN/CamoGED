@@ -1,0 +1,14 @@
+{
+  "name": "camoged-web",
+  "version": "0.1.0",
+  "description": "CamoGED aggregator website: papers, model zoo, leaderboard, demos, datasets.",
+  "license": "MIT",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0"
+  }
+}
