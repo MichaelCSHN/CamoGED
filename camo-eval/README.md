@@ -21,7 +21,11 @@ Three public metric families are exposed today:
 
 | Family | Metrics | Status |
 |--------|---------|--------|
-| **Detection** | MAE, S-measure, weighted F-measure, E-measure, F-measure | implemented and reference-tested |
+| **Detection** | MAE, S-measure, weighted F-measure, E-measure, F-measure, Precision/Recall, PR curve | implemented; core COD/SOD scores reference-tested |
+| **Instance / boundary** | IoU, Dice, Boundary IoU, AP, AR | lightweight implementation |
+| **Video** | J, boundary F, J&F, temporal stability | lightweight implementation |
+| **Perceptual** | SSIM, MS-SSIM | lightweight implementation |
+| **Signature** | thermal contrast, signal-to-clutter ratio, spectral angle mapper | lightweight implementation |
 | **Generation** | FID, LPIPS, deception rate | API present; optional implementation pending |
 | **Robustness** | attack success rate, AP drop, transferability | lightweight helpers implemented |
 
@@ -67,6 +71,17 @@ print(mae(pred, gt))
 results = evaluate("pred_dir", "gt_dir", ["mae", "fw", "sm", "em", "f"])
 print(results)
 ```
+
+Generate visual demo outputs from the bundled sample masks:
+
+```bash
+camo-eval visualize \
+  --pred camo-eval/demo_data/rgb_masks/pred/sample1.pgm \
+  --gt camo-eval/demo_data/rgb_masks/gt/sample1.pgm \
+  --output-dir camo-eval/demo_outputs/sample1
+```
+
+This writes `mask_overlay.png`, `error_map.png`, `pr_curve.png`, and `scores.json`.
 
 ## Test
 

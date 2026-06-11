@@ -1,7 +1,17 @@
 """camo-eval: unified evaluation toolkit for camouflage research."""
 
 from .export import to_latex, to_markdown
-from .metrics.detection import e_measure, f_measure, mae, s_measure, weighted_f_measure
+from .metrics.background import target_background_similarity
+from .metrics.detection import (
+    e_measure,
+    f_measure,
+    mae,
+    precision,
+    precision_recall_curve,
+    recall,
+    s_measure,
+    weighted_f_measure,
+)
 from .metrics.generation import deception_rate, fid, lpips
 from .metrics.instance import average_precision, average_recall, boundary_iou, dice, iou
 from .metrics.perceptual import ms_ssim, ssim
@@ -40,10 +50,14 @@ __all__ = [
     "lpips",
     "mae",
     "ms_ssim",
+    "precision",
+    "precision_recall_curve",
+    "recall",
     "s_measure",
     "signal_to_clutter_ratio",
     "spectral_angle_mapper",
     "ssim",
+    "target_background_similarity",
     "temporal_stability",
     "thermal_contrast",
     "to_latex",

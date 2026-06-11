@@ -13,6 +13,8 @@ def test_cli_list_metrics_json(capsys):
     payload = json.loads(captured.out)
     assert "detection" in payload
     assert "video" in payload
+    assert "precision" in payload["detection"]
+    assert "recall" in payload["detection"]
 
 
 def test_cli_evaluate_markdown(tmp_path, capsys):
@@ -184,6 +186,11 @@ def test_demo_dataset_files_exist():
     assert (demo_root / "pred" / "sample1.pgm").exists()
     assert (demo_root / "gt" / "sample1.pgm").exists()
 
+    cod_demo_root = Path(__file__).resolve().parents[1] / "demo_data" / "cod_sota_masks"
+    assert (cod_demo_root / "manifest.json").exists()
+    assert (cod_demo_root / "pred" / "sample1.png").exists()
+    assert (cod_demo_root / "gt" / "sample1.png").exists()
+
 
 def test_cli_evaluate_protocol_from_manifest(capsys):
     demo_root = Path(__file__).resolve().parents[1] / "demo_data" / "rgb_masks"
@@ -200,3 +207,33 @@ def test_cli_evaluate_protocol_from_manifest(capsys):
     assert payload["context"]["protocol"] == "repository demo bundle"
     assert payload["artifacts"]["bundle_name"] == "rgb_masks_demo"
     assert payload["artifacts"]["pred_source"] == "demo_data/rgb_masks/pred"
+    assert "P_adaptive" in payload["metrics"]
+    assert "R_adaptive" in payload["metrics"]
+
+
+def test_cli_visualize_outputs_demo_artifacts(tmp_path, capsys):
+    demo_root = Path(__file__).resolve().parents[1] / "demo_data" / "cod_sota_masks"
+    output_dir = tmp_path / "visual"
+    exit_code = main(
+        [
+            "visualize",
+            "--pred",
+            str(demo_root / "pred" / "sample1.png"),
+            "--gt",
+            str(demo_root / "gt" / "sample1.png"),
+            "--output-dir",
+            str(output_dir),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    payload = json.loads(captured.out)
+    assert Path(payload["mask_overlay"]).exists()
+    assert Path(payload["error_map"]).exists()
+    assert Path(payload["pr_curve"]).exists()
+    assert Path(payload["scores"]).exists()
+
+    scores = json.loads(Path(payload["scores"]).read_text(encoding="utf-8"))
+    assert "MAE" in scores
+    assert "P_adaptive" in scores
+    assert "R_adaptive" in scores

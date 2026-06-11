@@ -30,6 +30,7 @@ book/site_libs/
 
 # Data artifacts (link, don't commit large data)
 data/raw/
+camo-eval/demo_outputs/
 *.pth
 *.ckpt
 *.npy

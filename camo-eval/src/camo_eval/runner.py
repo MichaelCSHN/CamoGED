@@ -6,7 +6,15 @@ from pathlib import Path
 
 import numpy as np
 
-from .metrics.detection import e_measure, f_measure, mae, s_measure, weighted_f_measure
+from .metrics.detection import (
+    e_measure,
+    f_measure,
+    mae,
+    precision,
+    recall,
+    s_measure,
+    weighted_f_measure,
+)
 from .metrics.instance import boundary_iou, dice, iou
 from .metrics.perceptual import ms_ssim, ssim
 from .metrics.video import boundary_f_score, j_and_f, jaccard_index, temporal_stability
@@ -42,6 +50,10 @@ def _metric_value(name: str, pred: np.ndarray, gt: np.ndarray) -> dict[str, floa
         return {f"Em_{subkey}": value for subkey, value in e_measure(pred, gt).items()}
     if key in {"f_measure", "f"}:
         return {f"F_{subkey}": value for subkey, value in f_measure(pred, gt).items()}
+    if key in {"precision", "p"}:
+        return {f"P_{subkey}": value for subkey, value in precision(pred, gt).items()}
+    if key in {"recall", "r"}:
+        return {f"R_{subkey}": value for subkey, value in recall(pred, gt).items()}
     if key in {"iou"}:
         return {"IoU": iou(pred, gt)}
     if key in {"dice"}:

@@ -9,9 +9,12 @@ from pathlib import Path
 from . import (
     ResultsTable,
     evaluate,
+    precision_recall_curve,
     to_latex,
     to_markdown,
 )
+from .runner import _load_array, _metric_value
+from .visualization import error_map, mask_overlay
 from .protocols import (
     EvaluationContext,
     EvaluationReport,
@@ -43,7 +46,7 @@ def _emit_text(text: str, output_path: str | None) -> None:
 
 def _available_metrics() -> dict[str, list[str]]:
     return {
-        "detection": ["mae", "fw", "sm", "em", "f"],
+        "detection": ["mae", "fw", "sm", "em", "f", "precision", "recall"],
         "instance": ["iou", "dice", "boundary_iou"],
         "video": ["j", "boundary_f", "jf", "temporal"],
         "perceptual": ["ssim", "ms_ssim"],
@@ -76,6 +79,62 @@ def _manifest_to_text(manifest: dict[str, object], output_format: str) -> str:
     if manifest.get("gt_source"):
         lines.append(f"- gt_source: {manifest['gt_source']}")
     return "\n".join(lines)
+
+
+def _save_visualization_outputs(
+    pred_path: str,
+    gt_path: str,
+    metrics: list[str],
+    output_dir: str,
+    threshold: float,
+) -> dict[str, str]:
+    try:
+        from PIL import Image
+        import matplotlib.pyplot as plt
+    except ImportError as exc:  # pragma: no cover
+        raise ImportError(
+            "Visualization requires Pillow and matplotlib. "
+            "Install with `pip install camo-eval[full]`."
+        ) from exc
+
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    pred = _load_array(Path(pred_path))
+    gt = _load_array(Path(gt_path))
+
+    scores: dict[str, float] = {}
+    for metric in metrics:
+        for name, value in _metric_value(metric, pred, gt).items():
+            scores[name] = float(value)
+
+    overlay_path = out_dir / "mask_overlay.png"
+    error_path = out_dir / "error_map.png"
+    curve_path = out_dir / "pr_curve.png"
+    scores_path = out_dir / "scores.json"
+
+    Image.fromarray(mask_overlay(pred, gt, threshold=threshold)).save(overlay_path)
+    Image.fromarray(error_map(pred, gt, threshold=threshold)).save(error_path)
+
+    curve = precision_recall_curve(pred, gt)
+    fig, ax = plt.subplots(figsize=(5, 4), dpi=140)
+    ax.plot(curve["recall"], curve["precision"], color="#1f6f8b", linewidth=2)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1.02)
+    ax.set_xlabel("Recall")
+    ax.set_ylabel("Precision")
+    ax.set_title("Precision-Recall Curve")
+    ax.grid(alpha=0.25)
+    fig.tight_layout()
+    fig.savefig(curve_path)
+    plt.close(fig)
+
+    scores_path.write_text(json.dumps(scores, indent=2), encoding="utf-8")
+    return {
+        "mask_overlay": str(overlay_path.resolve()),
+        "error_map": str(error_path.resolve()),
+        "pr_curve": str(curve_path.resolve()),
+        "scores": str(scores_path.resolve()),
+    }
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -149,6 +208,32 @@ def build_parser() -> argparse.ArgumentParser:
         "--format", choices=("markdown", "json"), default="json"
     )
     manifest_parser.add_argument("--output")
+
+    visual_parser = subparsers.add_parser(
+        "visualize",
+        help="Create COD mask visualizations and a score JSON from one pred/gt pair",
+    )
+    visual_parser.add_argument("--pred", required=True)
+    visual_parser.add_argument("--gt", required=True)
+    visual_parser.add_argument(
+        "--metrics",
+        nargs="+",
+        default=[
+            "mae",
+            "fw",
+            "sm",
+            "em",
+            "f",
+            "precision",
+            "recall",
+            "iou",
+            "dice",
+            "boundary_iou",
+        ],
+    )
+    visual_parser.add_argument("--threshold", type=float, default=0.5)
+    visual_parser.add_argument("--output-dir", required=True)
+    visual_parser.add_argument("--format", choices=("json", "text"), default="json")
     return parser
 
 
@@ -259,6 +344,21 @@ def main(argv: list[str] | None = None) -> int:
             artifacts=artifacts,
         )
         _emit_text(_report_to_text(report, args.format), args.output)
+        return 0
+
+    if args.command == "visualize":
+        outputs = _save_visualization_outputs(
+            pred_path=args.pred,
+            gt_path=args.gt,
+            metrics=list(args.metrics),
+            output_dir=args.output_dir,
+            threshold=args.threshold,
+        )
+        if args.format == "json":
+            print(json.dumps(outputs, indent=2))
+        else:
+            for name, path in outputs.items():
+                print(f"{name}: {path}")
         return 0
 
     parser.error(f"Unknown command {args.command!r}")
