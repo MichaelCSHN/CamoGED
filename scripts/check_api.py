@@ -55,6 +55,52 @@ OPTIONAL_MODULES = {
     },
 }
 
+# ---- Extension API (Claude-owned, beyond AGENTS.md §6) ----
+# Stable public functions added by the lead. Frozen here so they cannot drift
+# silently either; these are consumed by the CLI, demos, and the website.
+EXTENSION: dict[str, dict[str, list[str]]] = {
+    "camo_eval.metrics.detection": {
+        "precision": ["pred", "gt"],
+        "recall": ["pred", "gt"],
+        "precision_recall_curve": ["pred", "gt"],
+    },
+    "camo_eval.metrics.instance": {
+        "iou": ["pred", "gt"],
+        "dice": ["pred", "gt"],
+        "boundary_iou": ["pred", "gt", "dilation_ratio"],
+        "average_precision": [
+            "true_positive_flags",
+            "confidence_scores",
+            "num_ground_truth",
+        ],
+        "average_recall": ["true_positive_flags", "num_ground_truth"],
+    },
+    "camo_eval.metrics.perceptual": {
+        "ssim": ["img_a", "img_b", "sigma"],
+        "ms_ssim": ["img_a", "img_b", "levels"],
+    },
+    "camo_eval.metrics.signature": {
+        "thermal_contrast": ["target", "background"],
+        "signal_to_clutter_ratio": ["target", "background"],
+        "spectral_angle_mapper": ["signature_a", "signature_b"],
+    },
+    "camo_eval.metrics.background": {
+        "target_background_similarity": [
+            "image",
+            "target_mask",
+            "mode",
+            "bins",
+            "near_iterations",
+        ],
+    },
+    "camo_eval.metrics.video": {
+        "jaccard_index": ["pred_frames", "gt_frames"],
+        "boundary_f_score": ["pred_frames", "gt_frames", "dilation_ratio"],
+        "j_and_f": ["pred_frames", "gt_frames"],
+        "temporal_stability": ["pred_frames", "gt_frames"],
+    },
+}
+
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -96,6 +142,8 @@ def check_module(modname: str, funcs: dict[str, list[str]], optional: bool) -> N
 
 def main() -> int:
     for modname, funcs in EXPECTED.items():
+        check_module(modname, funcs, optional=False)
+    for modname, funcs in EXTENSION.items():
         check_module(modname, funcs, optional=False)
     for modname, funcs in OPTIONAL_MODULES.items():
         check_module(modname, funcs, optional=True)

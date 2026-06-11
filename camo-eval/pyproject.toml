@@ -30,6 +30,10 @@ dev = [
     "pytest>=7.0",
     "pytest-cov>=7.0",
     "ruff>=0.1",
+    "black>=24.0",
+    "pillow>=9.0",
+    "matplotlib>=3.5",
+    "scikit-image>=0.19",
 ]
 
 [project.urls]

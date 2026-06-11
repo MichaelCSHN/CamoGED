@@ -31,9 +31,9 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Needed to EXECUTE the runnable cells in ch1/ch2/ch3 during render.
+      # Needed to EXECUTE the runnable cells in the chapters during render.
       - name: Install Python deps for code cells
-        run: pip install jupyter numpy matplotlib
+        run: pip install jupyter numpy matplotlib scipy
 
       - uses: quarto-dev/quarto-actions/setup@v2
 

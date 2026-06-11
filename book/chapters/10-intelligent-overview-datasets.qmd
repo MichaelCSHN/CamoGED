@@ -117,6 +117,18 @@ mae_a = float(np.mean(np.abs(pred_a - gt)))
 mae_b = float(np.mean(np.abs(pred_b - gt)))
 
 # Simple proxy for S-measure: mean of object-region IoU and edge-region F1
+def _erode(mask):
+    # 4-neighbour binary erosion in pure numpy (outside = background),
+    # equivalent to scipy.ndimage.binary_erosion's default structure.
+    m = mask.astype(bool)
+    out = m.copy()
+    out[1:, :] &= m[:-1, :]
+    out[:-1, :] &= m[1:, :]
+    out[:, 1:] &= m[:, :-1]
+    out[:, :-1] &= m[:, 1:]
+    out[0, :] = out[-1, :] = out[:, 0] = out[:, -1] = False
+    return out
+
 def simple_sm(pred, gt, thresh=0.5):
     p = (pred > thresh).astype(float)
     g = gt.astype(bool)
@@ -124,13 +136,10 @@ def simple_sm(pred, gt, thresh=0.5):
     inter = float(np.logical_and(p > 0, g).sum())
     union = float(np.logical_or(p > 0, g).sum()) + 1e-8
     region = inter / union
-    # edge term: boundary IoU proxy (erode gt, check border)
-    from scipy.ndimage import binary_erosion
-    border_gt = g & ~binary_erosion(g)
-    border_p = (p > 0) & ~binary_erosion(p > 0)
-    edge_hit = float(np.logical_and(border_gt, binary_erosion.__class__ and
-                                    border_p).sum() if False else
-                     (np.logical_and(border_gt, border_p).sum()))
+    # edge term: boundary F1 proxy (compare 1-pixel borders of gt and pred)
+    border_gt = g & ~_erode(g)
+    border_p = (p > 0) & ~_erode(p > 0)
+    edge_hit = float(np.logical_and(border_gt, border_p).sum())
     edge_prec = edge_hit / (border_p.sum() + 1e-8)
     edge_rec  = edge_hit / (border_gt.sum() + 1e-8)
     edge = 2*edge_prec*edge_rec / (edge_prec+edge_rec+1e-8)

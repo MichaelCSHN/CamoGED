@@ -1,11 +1,20 @@
 # AGENTS.md — Instructions for AI coding agents (Codex) in this repo
 
-> You are a coding agent working on **CamoGED** on the maintainer's local machine,
-> committing under the maintainer's identity. You implement and maintain **code,
-> data, and the Awesome list**. You do **not** write the monograph.
+> **Division of labor (updated 2026-06, supersedes the original split).** This repo is
+> now developed by two agents under the maintainer's identity:
+> - **Claude (project lead)** — owns and develops the evaluation toolkit `camo-eval/`,
+>   its demo surfaces (`web/hf-space/`, `camo-eval/notebooks/`), and the API gate
+>   `scripts/check_api.py`. Also acts as overall coordinator and auditor.
+> - **Codex (you)** — author the **monograph** (`book/`: chapters, `references.bib`,
+>   figures, proofreading) **and** own the **Awesome list + data pipeline**
+>   (`awesome/`, `data/`, `scripts/build_awesome.py`, `scripts/check_data.py`) and the
+>   data-driven website pages.
+>
+> Your current, concrete assignment lives in
+> [`docs/CODEX_DIRECTIVE.md`](docs/CODEX_DIRECTIVE.md) — read it first.
 >
 > This file is the authoritative behavioral boundary. Because you commit as the
-> maintainer, GitHub access control cannot separate your work from the
+> maintainer, GitHub access control cannot separate your work from Claude's or the
 > maintainer's — so these rules + the CI gates + the maintainer's diff review are
 > what keep the boundary. Follow them strictly.
 
@@ -14,39 +23,46 @@
 ## 1. Your scope
 
 **You MAY create/modify files in:**
-- `camo-eval/` — the evaluation toolkit (Python package)
+- `book/` — the monograph: chapters `*.qmd`, `references.bib`, `figures/`. **You are now the
+  author**: expand chapters to publication level, manage citations, generate figures, proofread.
 - `awesome/` — the Awesome list (generated output)
 - `data/` — the YAML single source of truth
-- `scripts/` — generators and validators
-- `web/` — the website (later phase)
-- `.github/workflows/` — only CI related to the above
-- tests under any of the above
+- `scripts/build_awesome.py`, `scripts/check_data.py` — the awesome/data generators & validators
+- `web/` — the data-driven website pages (papers/datasets/leaderboard/models), **except**
+  `web/hf-space/` (Claude's camo-eval demo)
+- `.github/workflows/` — only CI related to the above (book render, link-check, check_data)
+- tests under `data/` and the awesome pipeline
 
-**You MUST NOT modify:**
-- `book/` — the monograph: chapters `*.qmd`, `references.bib`, `figures/`. Authored separately.
-- `docs/`, root `README.md`, `LICENSE`, `LICENSE-CONTENT`, `CITATION.cff` — unless the maintainer explicitly asks.
+**You MUST NOT modify (owned by Claude, the project lead):**
+- `camo-eval/` — the evaluation toolkit (Python package), its tests, and `camo-eval/notebooks/`
+- `scripts/check_api.py` — the camo-eval API gate
+- `web/hf-space/` — the camo-eval Hugging Face Space demo
+- root `README.md`, `LICENSE`, `LICENSE-CONTENT`, `CITATION.cff` — unless the maintainer explicitly asks
+- `AGENTS.md`, `docs/CONTRIBUTOR_WORK_PACKAGES.md`, `docs/CODEX_DIRECTIVE.md` — coordination docs maintained by the lead
 
-If a task appears to require editing `book/`, **STOP**. Do not edit it. Instead append a
-short entry to `NOTES_FOR_MAINTAINER.md` (create it if absent) describing exactly what
-change is needed and why, and continue with the parts you are allowed to do.
+If a task appears to require editing anything under `camo-eval/`, `scripts/check_api.py`,
+`web/hf-space/`, or `camo-eval/notebooks/`, **STOP**. Do not edit it. Append a short entry to
+`NOTES_FOR_MAINTAINER.md` describing exactly what change you need and why (e.g. a camo-eval bug,
+or a new metric you want surfaced in the leaderboard), and continue with the parts you own.
 
 ---
 
 ## 2. Frozen interface contracts (do NOT change without explicit maintainer approval)
 
-These are the only coupling points between your code and the monograph. Treat them as APIs.
+These are the coupling points between your work (book + data + awesome) and Claude's
+`camo-eval`. Treat them as APIs.
 
 1. **Data schema** — follow [`data/SCHEMA.md`](data/SCHEMA.md) **exactly**. Do not rename,
    add, or remove fields or controlled-vocabulary values. Aligning the existing YAML to the
    schema (task B1, see §8 of SCHEMA.md) is allowed and expected.
-2. **`camo-eval` public API** — the names and signatures in §6 below are fixed by the book
-   (Chapter 15 + Appendix B). Implement to these exact names. Do not rename public functions.
-3. **`bibtex_key` namespace** — `data/*.yaml` `bibtex_key` values should match the keys in
-   `book/references.bib`. You do **not** edit `references.bib`. If you need a key that is not
-   there, record it in `NOTES_FOR_MAINTAINER.md`; the maintainer adds it.
-
-To propose any change to the three contracts: write it in `NOTES_FOR_MAINTAINER.md` and stop;
-do not implement the change yourself.
+2. **`camo-eval` public API** — the names/signatures in §6 below are the contract you **consume**
+   when reporting metric values (leaderboard, website, Chapter 15 / Appendix B). **Claude owns
+   and evolves the implementation; you do not implement or change camo-eval.** Keep the book's
+   metric definitions (Ch.15 + Appendix B) consistent with this API; if the API needs to change,
+   coordinate via `NOTES_FOR_MAINTAINER.md`.
+3. **`bibtex_key` namespace** — `data/*.yaml` `bibtex_key` values must match the keys in
+   `book/references.bib`. **You now own both sides** (book + data), so add the key to
+   `references.bib` and align `data/*.yaml` in the same change. Keep the namespace coherent.
 
 ---
 
@@ -55,47 +71,49 @@ do not implement the change yourself.
 - **NO FABRICATION.** Never invent or estimate any of: leaderboard numbers, metric values,
   dataset sizes/splits, citations, URLs, or DOIs. Unknown → `null`. In `data/leaderboard.yaml`,
   any non-null metric requires `verified: true` **and** a resolvable `source`. If you cannot
-  verify a number against its source, leave it `null` and note it. This rule is absolute.
-- **Determinism.** Same input → same output. Seed any randomness (e.g. FID feature sampling).
-- **Keep the core light.** Core detection metrics (`mae`, `s_measure`, `e_measure`,
-  `weighted_f_measure`) must work **without** torch. Put FID/LPIPS behind an optional extra
-  (`pip install camo-eval[generation]`).
-- **Numerical correctness is paramount.** Validate metrics against a reference implementation
-  (e.g. `PySODMetrics`, `pip install pysodmetrics`) to tolerance `1e-4` and freeze the
-  comparison in `tests/`.
-- **Don't add dependencies casually.** Justify each new dependency in the PR/commit message.
+  verify a number against its source, leave it `null` and note it. This rule is absolute — it
+  applies equally to facts, dates, and citations in the **monograph**.
+- **Determinism.** Same input → same output: `scripts/build_awesome.py` must regenerate
+  `awesome/README.md` byte-for-byte.
+- **Don't add dependencies casually.** Justify each new dependency in the commit message.
 
 ---
 
 ## 4. Definition of done (self-check before reporting a task complete)
 
-Run and pass all of these; do not claim completion otherwise:
+Run and pass the gates **for the area you touched**; do not claim completion otherwise.
+
+For **data / awesome** changes:
 
 ```bash
-pytest -q                              # all green; coverage >= 85% for camo-eval
 python scripts/check_data.py           # data schema + no-fabrication + consistency
-python scripts/check_api.py            # camo-eval signatures match Appendix B (see §6)
-ruff check . && black --check .        # style
 python scripts/build_awesome.py        # regenerate; then `git diff --exit-code awesome/README.md`
+# link-check workflow green (all URLs resolve)
 ```
 
-And confirm: **you did not modify anything under `book/`** (`git diff --name-only | grep '^book/'`
-must be empty).
+For **book** changes:
+
+```bash
+quarto render                          # the book builds without errors
+# citations resolve; figures generate; no broken cross-references
+```
+
+And confirm: **you did not modify anything Claude owns** —
+`git diff --name-only | grep -E '^(camo-eval/|scripts/check_api\.py|web/hf-space/)'` must be empty.
 
 ---
 
 ## 5. Where to read before starting
 
-- [`docs/CONTRIBUTOR_WORK_PACKAGES.md`](docs/CONTRIBUTOR_WORK_PACKAGES.md) — your work packages,
-  task breakdown, milestones, and audit requirements. (Where it says "collaborator", that is you,
-  Codex; where it describes PR review by "both owners", read it as: CI gates + the maintainer's
-  review, since you commit as the maintainer.)
+- [`docs/CODEX_DIRECTIVE.md`](docs/CODEX_DIRECTIVE.md) — **your current assignment** (start here).
+- [`docs/CONTRIBUTOR_WORK_PACKAGES.md`](docs/CONTRIBUTOR_WORK_PACKAGES.md) — work packages,
+  task breakdown, milestones, and audit requirements.
 - [`data/SCHEMA.md`](data/SCHEMA.md) — the data contract.
-- §6 below — the camo-eval API you must implement.
+- §6 below — the camo-eval API you **consume** when reporting metric values (Claude implements it).
 
 ---
 
-## 6. `camo-eval` public API (authoritative — implement to these names)
+## 6. `camo-eval` public API (authoritative — consume these names; Claude implements)
 
 ```python
 # camo_eval/metrics/detection.py
