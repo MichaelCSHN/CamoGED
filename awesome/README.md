@@ -11,7 +11,7 @@
 
 ### Generation
 
-- **CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction** — Liu et al., *Electronics* 2025 · `physical-adversarial` · `physical` · `ai` [paper](https://www.mdpi.com/2079-9292/14/19/3868)
+- **CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction** — Liu, Ziqi, Luo, Wei, Guo, Sixu, Zhang, Jingnan, Wang, Zhipan, *Electronics* 2025 · `physical-adversarial` · `physical` · `ai` [paper](https://www.mdpi.com/2079-9292/14/19/3868)
 - **PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack** — Zhang et al., *AAAI* 2025 · `physical-adversarial` · `physical` · `ai` [paper](https://doi.org/10.1609/aaai.v39i10.33110)
 - **CamDiff: Camouflage Image Augmentation via Diffusion** — Luo et al., *CAAI AIR* 2023 · `generation` · `intelligent` · `ai` [paper](https://www.sciopen.com/article/10.26599/AIR.2023.9150021)
 - **Cultural evolution of military camouflage** — Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C., *Phil. Trans. R. Soc. B* 2017 · `application` · `physical` · `war` [paper](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351)
