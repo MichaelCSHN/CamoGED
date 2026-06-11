@@ -1,4 +1,8 @@
-# CODEX 开工指令 · Sprint 1
+# CODEX 开工指令 · Sprint 1（历史归档）
+
+> ⚠️ **分工已于 2026-06 调整，本文件的分工部分已废止。** 以
+> [`docs/CODEX_DIRECTIVE.md`](CODEX_DIRECTIVE.md) 为准：camo-eval 现由 Claude 开发，
+> Codex 转为专著作者 + Awesome 模块。下文仅作历史记录保留（Sprint 1 的检测指标对标方法仍有参考价值）。
 
 > 致 Codex：你负责本仓库的**代码 / 数据 / Awesome / 网站**；专著（`book/`）由维护者与 Claude 负责，你不参与其写作。
 > **开工前必读**（仓库内，按顺序）：`AGENTS.md` → `docs/CONTRIBUTOR_WORK_PACKAGES.md` → `data/SCHEMA.md`。

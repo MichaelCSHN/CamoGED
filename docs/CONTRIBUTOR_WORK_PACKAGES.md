@@ -11,18 +11,26 @@
 
 ### 0.1 目录所有权（硬边界）
 
-| 区域 | 所有者 | 协作者可否改 |
-|------|--------|--------------|
-| `book/`（章节 `.qmd`、`references.bib`、`figures/`） | 专著作者 | **否**（只读引用） |
-| `camo-eval/` | 协作者 | 是 |
-| `awesome/` | 协作者 | 是 |
-| `data/`（`papers/datasets/leaderboard.yaml`） | 协作者 | 是 |
-| `scripts/`（生成器、校验脚本） | 协作者 | 是 |
-| `web/`（后续，见 WP-C） | 协作者 | 是 |
-| `.github/workflows/`（CI） | 共同（分文件） | 是（仅其负责的工作流） |
-| `docs/`、`README.md` 根级 | 专著作者 | 经评审 |
+> **分工调整（2026-06，取代最初分工）**：项目改为双代理协作——
+> **Claude = 项目主管**，统揽全局并独占开发 `camo-eval/` 评测工具包及其 demo 面（HF Space、notebooks）；
+> **Codex = 专著作者 + Awesome 模块**，负责 `book/` 写作/配图/审校与 `awesome/`+`data/` 流水线。
+> 下表以此为准；最初"协作者改 camo-eval、专著作者写 book"的分工**已废止**。
 
-**原则**：协作者**不编辑 `book/` 任何文件**。专著只通过下面三个契约消费协作者的产出。
+| 区域 | 所有者 | Codex 可否改 |
+|------|--------|--------------|
+| `book/`（章节 `.qmd`、`references.bib`、`figures/`） | **Codex（专著作者）** | **是**（写作/配图/审校） |
+| `awesome/` | **Codex** | 是 |
+| `data/`（`papers/datasets/leaderboard.yaml`） | **Codex** | 是 |
+| `scripts/build_awesome.py`、`scripts/check_data.py` | **Codex** | 是 |
+| `web/`（数据驱动页面：papers/datasets/leaderboard/models） | **Codex** | 是（除 `web/hf-space/`） |
+| `camo-eval/`（含 `tests/`、`notebooks/`） | **Claude（主管）** | **否**（只读消费 API） |
+| `scripts/check_api.py`（camo-eval API 门禁） | **Claude** | **否** |
+| `web/hf-space/`（camo-eval 演示） | **Claude** | **否** |
+| `.github/workflows/`（CI） | 共同（分文件） | 是（仅其负责的工作流） |
+| `AGENTS.md`、本文件、`docs/CODEX_DIRECTIVE.md` | **Claude（主管维护）** | 否 |
+| 根级 `README.md`、`LICENSE`、`CITATION.cff` | 维护者 | 经评审 |
+
+**原则**：Codex **不编辑 `camo-eval/`、`scripts/check_api.py`、`web/hf-space/`**；camo-eval 只通过下面冻结契约把产出（指标值）供 Codex 在排行榜/网站/专著中消费。需要 camo-eval 改动时写入 `NOTES_FOR_MAINTAINER.md`，由 Claude 处理。
 
 ### 0.2 三个冻结接口契约（两侧唯一的耦合点）
 

@@ -3,20 +3,20 @@
 from __future__ import annotations
 
 
-def _missing_extra(metric: str) -> ImportError:
-    return ImportError(
-        f"{metric} requires the optional generation extra. "
-        "Install with `pip install camo-eval[generation]`."
+def _not_implemented(metric: str) -> NotImplementedError:
+    return NotImplementedError(
+        f"{metric} is not implemented yet. The generation cluster "
+        "(FID/KID/LPIPS/DISTS) is tracked in camo-eval/ROADMAP.md (P2)."
     )
 
 
 def fid(real_dir: str, fake_dir: str) -> float:
-    raise _missing_extra("fid")
+    raise _not_implemented("fid")
 
 
 def lpips(img_a, img_b) -> float:
-    raise _missing_extra("lpips")
+    raise _not_implemented("lpips")
 
 
 def deception_rate(detector, images, targets) -> float:
-    raise _missing_extra("deception_rate")
+    raise _not_implemented("deception_rate")

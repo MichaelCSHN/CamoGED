@@ -6,7 +6,6 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-
 ALLOWED_OBSERVERS = {"human", "model", "operator", "hybrid"}
 ALLOWED_CHANNELS = {
     "rgb",

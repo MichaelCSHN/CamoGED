@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from camo_eval.cli import main
 
@@ -193,6 +194,7 @@ def test_demo_dataset_files_exist():
 
 
 def test_cli_evaluate_protocol_from_manifest(capsys):
+    pytest.importorskip("PIL")
     demo_root = Path(__file__).resolve().parents[1] / "demo_data" / "rgb_masks"
     exit_code = main(
         [
@@ -212,6 +214,8 @@ def test_cli_evaluate_protocol_from_manifest(capsys):
 
 
 def test_cli_visualize_outputs_demo_artifacts(tmp_path, capsys):
+    pytest.importorskip("PIL")
+    pytest.importorskip("matplotlib")
     demo_root = Path(__file__).resolve().parents[1] / "demo_data" / "cod_sota_masks"
     output_dir = tmp_path / "visual"
     exit_code = main(
