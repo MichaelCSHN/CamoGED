@@ -65,8 +65,13 @@ bg = make_bg(0)
 def scene(bg, tx, ty, tsize=12):
     """Target patch placed at (tx,ty), blends with background."""
     s = bg.copy()
+<<<<<<< HEAD
     target = (make_bg(1)[ty:ty+tsize, tx:tx+tsize] * 0.9
               + bg[ty:ty+tsize, tx:tx+tsize] * 0.1)
+=======
+    target_texture = make_bg(1)[ty:ty+tsize, tx:tx+tsize]
+    target = target_texture * 0.9 + bg[ty:ty+tsize, tx:tx+tsize] * 0.1
+>>>>>>> b02e544 (book: fix chapter 12 render code)
     s[ty:ty+tsize, tx:tx+tsize] = target
     return s
 
