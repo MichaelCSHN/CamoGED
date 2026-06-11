@@ -134,6 +134,23 @@ def test_precision_recall_curve_shapes_and_bounds():
     assert np.all(curve["recall"] <= 1.0)
 
 
+@pytest.mark.parametrize(("pred", "gt"), FIXTURES)
+def test_precision_recall_curve_matches_pysodmetrics(pred, gt):
+    """The 256-point precision/recall curve must match PySODMetrics' Fmeasure.
+
+    Reference source: `PySODMetrics` 1.6.2 (`Fmeasure.get_results()["pr"]`).
+    """
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        fm = py_sod_metrics.Fmeasure()
+        fm.step(pred, gt)
+        expected = fm.get_results()["pr"]
+
+    curve = precision_recall_curve(pred, gt)
+    assert curve["precision"] == pytest.approx(expected["p"], abs=1e-4)
+    assert curve["recall"] == pytest.approx(expected["r"], abs=1e-4)
+
+
 def test_weighted_f_measure_all_background_matches_reference_behavior():
     pred = np.zeros((3, 3), dtype=np.uint8)
     gt = np.zeros((3, 3), dtype=np.uint8)
