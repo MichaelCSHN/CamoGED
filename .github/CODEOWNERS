@@ -1,0 +1,33 @@
+# CamoGED — Code Owners
+# ---------------------------------------------------------------------------
+# NOTE ON ENFORCEMENT (single-identity setup):
+#   The "helper" here is the Codex coding agent running locally and committing
+#   under the maintainer's identity (@MichaelCSHN). With a single identity,
+#   CODEOWNERS cannot separate agent-authored from maintainer-authored work and
+#   cannot enforce dual sign-off. The REAL boundary is enforced by:
+#     1) AGENTS.md   — behavioral rules the agent follows (do-not-touch book/, etc.)
+#     2) CI gates    — tests, scripts/check_data.py, scripts/check_api.py, link-check,
+#                      build-diff (all identity-agnostic)
+#     3) maintainer's diff review before pushing
+#   This file is therefore mostly DOCUMENTATION of ownership. It becomes active
+#   for access control only if real external collaborators are added later and
+#   branch protection enables "Require review from Code Owners".
+# ---------------------------------------------------------------------------
+
+# Everything is owned by the maintainer (single identity for now).
+*                                   @MichaelCSHN
+
+# Documented sub-ownership (for clarity / future external collaborators):
+#   Monograph (authored with Claude; agent must not edit — see AGENTS.md):
+/book/                              @MichaelCSHN
+#   Code / data / list / site (implemented by the Codex agent):
+/camo-eval/                         @MichaelCSHN
+/awesome/                           @MichaelCSHN
+/data/                              @MichaelCSHN
+/scripts/                           @MichaelCSHN
+/web/                               @MichaelCSHN
+
+# Frozen interface contracts (change via the interface-change process):
+/data/SCHEMA.md                     @MichaelCSHN
+/AGENTS.md                          @MichaelCSHN
+/docs/CONTRIBUTOR_WORK_PACKAGES.md  @MichaelCSHN
