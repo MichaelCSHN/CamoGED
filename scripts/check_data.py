@@ -24,16 +24,35 @@ except ImportError:
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 BIB = ROOT / "book" / "references.bib"
+AWESOME = ROOT / "awesome" / "README.md"
 
 # ---- Controlled vocabularies (mirror SCHEMA.md §3) ----
 PILLAR = {"generation", "detection", "evaluation"}
 DOMAIN = {"physical", "digital", "intelligent"}
 PERSPECTIVE = {"nature", "war", "art", "ai"}
-MODALITY = {"rgb", "video", "multispectral", "multimodal", "thermal", "polarization", "depth"}
+MODALITY = {
+    "rgb",
+    "video",
+    "multispectral",
+    "multimodal",
+    "thermal",
+    "polarization",
+    "depth",
+}
 TASK = {
-    "image-cod", "video-cod", "instance-cod", "referring-cod", "collaborative-cod",
-    "open-vocab-cos", "survey", "generation", "physical-adversarial", "digital-adversarial",
-    "foundation-model", "dataset", "application",
+    "image-cod",
+    "video-cod",
+    "instance-cod",
+    "referring-cod",
+    "collaborative-cod",
+    "open-vocab-cos",
+    "survey",
+    "generation",
+    "physical-adversarial",
+    "digital-adversarial",
+    "foundation-model",
+    "dataset",
+    "application",
 }
 STATUS = {"reported", "reproduced"}
 METRIC_KEYS = {"Sm", "Fw", "Em", "MAE", "maxF", "meanF", "AP", "AR", "JF", "temporal"}
@@ -98,7 +117,7 @@ def bib_keys() -> set[str]:
 # ---------------------------------------------------------------------------
 # Validation
 # ---------------------------------------------------------------------------
-seen_ids: dict[str, str] = {}        # id -> file (global uniqueness across papers+datasets)
+seen_ids: dict[str, str] = {}  # id -> file (global uniqueness across papers+datasets)
 dataset_ids: set[str] = set()
 dataset_names: set[str] = set()
 data_bibkeys: set[str] = set()
@@ -129,10 +148,24 @@ def check_papers(doc) -> None:
     for i, e in enumerate(items):
         where = f"papers[{i}] ({e.get('id', e.get('title', '?'))})"
         if not isinstance(e, dict):
-            err(f"{where}: entry is not a mapping"); continue
+            err(f"{where}: entry is not a mapping")
+            continue
         check_id(e, where)
-        require(e, ["title", "authors", "venue", "year", "pillar", "domain",
-                    "perspective", "task", "paper"], where)
+        require(
+            e,
+            [
+                "title",
+                "authors",
+                "venue",
+                "year",
+                "pillar",
+                "domain",
+                "perspective",
+                "task",
+                "paper",
+            ],
+            where,
+        )
         enum(e, "pillar", PILLAR, where)
         enum(e, "domain", DOMAIN, where)
         enum(e, "perspective", PERSPECTIVE, where)
@@ -165,7 +198,8 @@ def check_datasets(doc) -> None:
     for i, e in enumerate(items):
         where = f"datasets[{i}] ({e.get('id', e.get('name', '?'))})"
         if not isinstance(e, dict):
-            err(f"{where}: entry is not a mapping"); continue
+            err(f"{where}: entry is not a mapping")
+            continue
         _id = check_id(e, where)
         require(e, ["name", "task", "modality"], where)
         enum(e, "task", TASK, where)
@@ -192,8 +226,13 @@ def check_leaderboard(doc) -> None:
     for i, e in enumerate(items):
         where = f"leaderboard[{i}] ({e.get('method', '?')} on {e.get('dataset', '?')})"
         if not isinstance(e, dict):
-            err(f"{where}: entry is not a mapping"); continue
-        require(e, ["method", "dataset", "task", "metrics", "status", "source", "verified"], where)
+            err(f"{where}: entry is not a mapping")
+            continue
+        require(
+            e,
+            ["method", "dataset", "task", "metrics", "status", "source", "verified"],
+            where,
+        )
         enum(e, "task", TASK, where)
         enum(e, "status", STATUS, where)
         if "verified" in e and not isinstance(e["verified"], bool):
@@ -212,11 +251,15 @@ def check_leaderboard(doc) -> None:
                 err(f"{where}: metric key '{k}' not in {sorted(METRIC_KEYS)}")
             if v is not None:
                 if e.get("verified") is not True:
-                    err(f"{where}: metric '{k}'={v} is non-null but verified is not true "
-                        f"(NO-FABRICATION rule)")
+                    err(
+                        f"{where}: metric '{k}'={v} is non-null but verified is not true "
+                        f"(NO-FABRICATION rule)"
+                    )
                 if not is_source_resolvable(e.get("source", "")):
-                    err(f"{where}: metric '{k}'={v} is non-null but 'source' is not "
-                        f"resolvable (need URL or existing repo path)")
+                    err(
+                        f"{where}: metric '{k}'={v} is non-null but 'source' is not "
+                        f"resolvable (need URL or existing repo path)"
+                    )
 
 
 def resolve_refs(papers_doc) -> None:
@@ -253,8 +296,16 @@ def main() -> int:
         for k in sorted(data_bibkeys - bk):
             warn(f"bibtex_key '{k}' used in data/ but not found in references.bib")
 
-    # Note: rule 7 (awesome/README.md == build_awesome.py output) is enforced in CI
-    # via the build-diff step, not here.
+    try:
+        from build_awesome import render
+    except ImportError as exc:
+        err(f"scripts/build_awesome.py is not importable: {exc}")
+    else:
+        expected = render().rstrip() + "\n"
+        if not AWESOME.exists():
+            err("awesome/README.md is missing")
+        elif AWESOME.read_text(encoding="utf-8") != expected:
+            err("awesome/README.md is out of sync with scripts/build_awesome.py")
 
     print("=" * 60)
     for w in warnings:

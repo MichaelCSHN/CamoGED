@@ -1,15 +1,28 @@
-"""camo-eval: unified evaluation toolkit for camouflage research.
+"""camo-eval: unified evaluation toolkit for camouflage research."""
 
-Three families of metrics:
-  - detection : Sm, Fw, Em, MAE (image/video camouflaged object detection)
-  - generation: FID, LPIPS, deception_rate (camouflage / adversarial synthesis quality)
-  - robustness: attack success rate, AP drop, transferability
-
-Only MAE ships as a fully working reference implementation in v0.1.0; the rest are
-scaffolded with clear TODOs and consistent signatures so contributors can fill them in.
-"""
-
-from .metrics.detection.mae import mae
+from .export import to_latex, to_markdown
+from .metrics.detection import e_measure, f_measure, mae, s_measure, weighted_f_measure
+from .metrics.generation import deception_rate, fid, lpips
+from .metrics.robustness import ap_drop, attack_success_rate, transferability
+from .results import ResultsTable
+from .runner import evaluate
 
 __version__ = "0.1.0"
-__all__ = ["mae", "__version__"]
+__all__ = [
+    "ResultsTable",
+    "__version__",
+    "ap_drop",
+    "attack_success_rate",
+    "deception_rate",
+    "e_measure",
+    "evaluate",
+    "f_measure",
+    "fid",
+    "lpips",
+    "mae",
+    "s_measure",
+    "to_latex",
+    "to_markdown",
+    "transferability",
+    "weighted_f_measure",
+]

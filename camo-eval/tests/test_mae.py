@@ -15,7 +15,7 @@ def test_mae_opposite_is_one():
 
 def test_mae_uint8_autoscale():
     pred = np.full((2, 2), 255, dtype=np.uint8)  # -> 1.0
-    gt = np.zeros((2, 2), dtype=np.uint8)         # -> 0.0
+    gt = np.zeros((2, 2), dtype=np.uint8)  # -> 0.0
     assert mae(pred, gt) == 1.0
 
 
@@ -27,5 +27,6 @@ def test_mae_half():
 
 def test_shape_mismatch_raises():
     import pytest
+
     with pytest.raises(ValueError):
         mae(np.zeros((2, 2)), np.zeros((3, 3)))

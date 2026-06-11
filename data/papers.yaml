@@ -1,108 +1,143 @@
-# CamoGED — papers / methods registry (single source of truth)
-# Consumed by awesome/README.md and the website /papers page.
-# Seed entries below; verify metrics/links before release. Add via PR or issue template.
-
 papers:
-  # ---- Surveys ----
-  - title: "A Survey of Camouflaged Object Detection and Beyond"
+  - id: "xiao2024survey"
+    title: "A Survey of Camouflaged Object Detection and Beyond"
     authors: "Xiao et al."
     venue: "CAAI AIR"
     year: 2024
-    task: survey
-    domain: intelligent
-    pillar: detection
-    code: "https://github.com/ChunmingHe/awesome-concealed-object-segmentation"
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "survey"
     paper: "https://arxiv.org/abs/2408.14562"
-    dataset: []
+    code: "https://github.com/ChunmingHe/awesome-concealed-object-segmentation"
+    datasets: []
+    bibtex_key: "xiao2024survey"
+    notes: null
 
-  # ---- Image COD ----
-  - title: "ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection"
+  - id: "pang2024zoomnext"
+    title: "ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection"
     authors: "Pang et al."
     venue: "TPAMI"
     year: 2024
-    task: image-cod
-    domain: intelligent
-    pillar: detection
-    code: null
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
     paper: "https://doi.org/10.1109/TPAMI.2024.3417329"
-    dataset: ["COD10K", "CAMO", "NC4K"]
+    code: null
+    datasets: ["cod10k", "camo", "nc4k"]
+    bibtex_key: "pang2024zoomnext"
+    notes: null
 
-  - title: "HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection"
-    authors: "—"
+  - id: "hginet2024"
+    title: "HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection"
+    authors:
+      - "Yao, Siyuan"
+      - "Sun, Hao"
+      - "Xiang, Tian-Zhu"
+      - "Wang, Xiao"
+      - "Cao, Xiaochun"
     venue: "IEEE TIP"
     year: 2024
-    task: image-cod
-    domain: intelligent
-    pillar: detection
-    code: null
-    paper: null
-    dataset: ["COD10K", "CAMO", "NC4K"]
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://doi.org/10.1109/TIP.2024.3475219"
+    code: "https://github.com/Garyson1204/HGINet"
+    datasets: ["cod10k", "camo", "nc4k", "chameleon"]
+    bibtex_key: "hginet2024"
+    notes: null
 
-  # ---- Video COD ----
-  - title: "When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation"
+  - id: "samvcos2025"
+    title: "When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation"
     authors: "Zhou et al."
     venue: "Visual Intelligence"
     year: 2025
-    task: video-cod
-    domain: intelligent
-    pillar: detection
-    code: "https://github.com/"
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "video-cod"
     paper: "https://arxiv.org/abs/2409.18653"
-    dataset: ["MoCA-Mask"]
+    code: null
+    datasets: ["moca-mask"]
+    bibtex_key: "samvcos2025"
+    notes: null
 
-  - title: "CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection"
+  - id: "camosam2-2025"
+    title: "CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection"
     authors: "Zhang et al."
     venue: "arXiv"
     year: 2025
-    task: video-cod
-    domain: intelligent
-    pillar: detection
-    code: null
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "video-cod"
     paper: "https://arxiv.org/abs/2504.00375"
-    dataset: ["MoCA-Mask"]
+    code: null
+    datasets: ["moca-mask"]
+    bibtex_key: "camosam2_2025"
+    notes: null
 
-  # ---- Generation / Adversarial ----
-  - title: "CamDiff: Camouflage Image Augmentation via Diffusion"
+  - id: "camdiff2023"
+    title: "CamDiff: Camouflage Image Augmentation via Diffusion"
     authors: "Luo et al."
     venue: "CAAI AIR"
     year: 2023
-    task: generation
-    domain: intelligent
-    pillar: generation
-    code: null
+    pillar: "generation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "generation"
     paper: "https://www.sciopen.com/article/10.26599/AIR.2023.9150021"
-    dataset: ["COD10K"]
+    code: null
+    datasets: ["cod10k"]
+    bibtex_key: "camdiff2023"
+    notes: null
 
-  - title: "PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack"
+  - id: "phycamo2025"
+    title: "PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack"
     authors: "Zhang et al."
     venue: "AAAI"
     year: 2025
-    task: adversarial
-    domain: physical
-    pillar: generation
-    code: null
+    pillar: "generation"
+    domain: "physical"
+    perspective: "ai"
+    task: "physical-adversarial"
     paper: "https://doi.org/10.1609/aaai.v39i10.33110"
-    dataset: []
-
-  - title: "CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction"
-    authors: "—"
-    venue: "Electronics (MDPI)"
-    year: 2025
-    task: adversarial
-    domain: physical
-    pillar: generation
     code: null
-    paper: "https://www.mdpi.com/2079-9292/14/19/3868"
-    dataset: []
+    datasets: []
+    bibtex_key: "phycamo2025"
+    notes: null
 
-  # ---- Cross-domain reference (military/biology) ----
-  - title: "Cultural evolution of military camouflage"
-    authors: "—"
+  - id: "cam3d2025"
+    title: "CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction"
+    authors: "Liu et al."
+    venue: "Electronics"
+    year: 2025
+    pillar: "generation"
+    domain: "physical"
+    perspective: "ai"
+    task: "physical-adversarial"
+    paper: "https://www.mdpi.com/2079-9292/14/19/3868"
+    code: null
+    datasets: []
+    bibtex_key: null
+    notes: "Missing bibtex key in references.bib as of schema alignment."
+
+  - id: "talas2017military"
+    title: "Cultural evolution of military camouflage"
+    authors:
+      - "Talas, Laszlo"
+      - "Baddeley, Roland J."
+      - "Cuthill, Innes C."
     venue: "Phil. Trans. R. Soc. B"
     year: 2017
-    task: cross-domain
-    domain: physical
-    pillar: generation
-    code: null
+    pillar: "generation"
+    domain: "physical"
+    perspective: "war"
+    task: "application"
     paper: "https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351"
-    dataset: []
+    code: null
+    datasets: []
+    bibtex_key: "talas2017military"
+    notes: null
