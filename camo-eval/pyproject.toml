@@ -33,6 +33,7 @@ dev = [
     "black>=24.0",
     "pillow>=9.0",
     "matplotlib>=3.5",
+    "scikit-image>=0.19",
 ]
 
 [project.urls]

@@ -10,11 +10,11 @@
 - [ ] **`[generation]` extra 仍不存在**：`metrics/generation/fid.py` 报错信息让用户 `pip install camo-eval[generation]`，但 `pyproject.toml` 只有 `full`/`dev`。补 `generation` extra（torch/clean-fid/lpips 等）或修正报错信息。
 - [ ] **冻结清单未覆盖新公开函数**：`scripts/check_api.py` 的 EXPECTED 未含 `iou/dice/boundary_iou/ssim/ms_ssim/precision/recall/precision_recall_curve/video.*/signature.*/background.*`。把新稳定 API 纳入清单以防漂移。
 
-## P1 — 新指标的数值对标（DoD 要求 ≤1e-4，目前缺）
-新指标仅有"完美重合"健全性测试，缺权威参照对标：
-- [ ] `ssim`/`ms_ssim` 对标 `skimage.metrics`/`torchmetrics`（注意 `ms_ssim` 当前是简化近似，需替换为标准实现或在文档显式标注偏差）。
-- [ ] `iou`/`dice` 对标 `torchmetrics`/`sklearn`。
-- [ ] `boundary_iou`：当前实现是"边界像素带匹配"，**与 Cheng 2021 的 Boundary IoU（带内区域 IoU）语义不同**。要么对齐标准定义，要么改名避免误导，并固化参照值。
+## P1 — 新指标的数值对标（DoD 要求 ≤1e-4）
+- [x] `ssim` 对标 `skimage.metrics`（已对齐高斯加权 + 边界裁剪约定，≤1e-4，见 `tests/test_reference_metrics.py`）。
+- [x] `iou`/`dice` 在二值掩码上对精确集合定义（`tests/test_reference_metrics.py`）。
+- [~] `ms_ssim`：当前仍是简化近似（逐尺度全图 SSIM 连乘，缺逐尺度 cs/亮度分离），暂以恒等+单调性回归测试守住；标准实现（对标 `torchmetrics`，需 torch）留待 P2。
+- [~] `boundary_iou`：已固化已知用例并在文档/测试中明确**这是带容差的边界像素匹配，非 Cheng 2021 区域带 Boundary IoU**。后续考虑新增独立的标准实现（不改现有公开名以免破坏 API）。
 - [ ] `video.j_and_f`/`boundary_f` 对标 DAVIS 官方评测脚本。
 
 ## P2 — 补齐缺失的指标簇（按"务实分层"，见 EVAL_SUITE 规划）
