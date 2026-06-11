@@ -8,7 +8,7 @@
 ## P0 — 门禁与一致性（立即）
 - [ ] **black 失败**：`src/camo_eval/protocols/schema.py` 未格式化（`black --check .` 红）。运行 `black` 修复。
 - [ ] **`[generation]` extra 仍不存在**：`metrics/generation/fid.py` 报错信息让用户 `pip install camo-eval[generation]`，但 `pyproject.toml` 只有 `full`/`dev`。补 `generation` extra（torch/clean-fid/lpips 等）或修正报错信息。
-- [ ] **冻结清单未覆盖新公开函数**：`scripts/check_api.py` 的 EXPECTED 未含 `iou/dice/boundary_iou/ssim/ms_ssim/precision/recall/precision_recall_curve/video.*/signature.*/background.*`。把新稳定 API 纳入清单以防漂移。
+- [x] **冻结清单覆盖新公开函数**：`scripts/check_api.py` 新增 `EXTENSION` 段，冻结 `precision/recall/precision_recall_curve/iou/dice/boundary_iou/average_precision/average_recall/ssim/ms_ssim/signature.*/background.*/video.*` 的签名，防漂移。
 
 ## P1 — 新指标的数值对标（DoD 要求 ≤1e-4）
 - [x] `ssim` 对标 `skimage.metrics`（已对齐高斯加权 + 边界裁剪约定，≤1e-4，见 `tests/test_reference_metrics.py`）。
