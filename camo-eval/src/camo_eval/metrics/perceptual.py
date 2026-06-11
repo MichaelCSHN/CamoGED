@@ -5,8 +5,6 @@ from __future__ import annotations
 import numpy as np
 from scipy.ndimage import gaussian_filter
 
-from .detection._common import EPS
-
 
 def _prepare_image_pair(
     img_a: np.ndarray, img_b: np.ndarray
@@ -31,26 +29,52 @@ def _prepare_image_pair(
     return np.clip(a, 0.0, 1.0), np.clip(b, 0.0, 1.0)
 
 
-def ssim(img_a: np.ndarray, img_b: np.ndarray, sigma: float = 1.5) -> float:
-    """Compute structural similarity for grayscale or multichannel images."""
-
-    a, b = _prepare_image_pair(img_a, img_b)
+def _ssim_single_channel(
+    a: np.ndarray, b: np.ndarray, sigma: float, truncate: float = 3.5
+) -> float:
     c1 = 0.01**2
     c2 = 0.03**2
+    args = {"sigma": sigma, "truncate": truncate}
 
-    mu_a = gaussian_filter(a, sigma=sigma)
-    mu_b = gaussian_filter(b, sigma=sigma)
+    mu_a = gaussian_filter(a, **args)
+    mu_b = gaussian_filter(b, **args)
     mu_a_sq = mu_a * mu_a
     mu_b_sq = mu_b * mu_b
     mu_ab = mu_a * mu_b
 
-    sigma_a_sq = gaussian_filter(a * a, sigma=sigma) - mu_a_sq
-    sigma_b_sq = gaussian_filter(b * b, sigma=sigma) - mu_b_sq
-    sigma_ab = gaussian_filter(a * b, sigma=sigma) - mu_ab
+    sigma_a_sq = gaussian_filter(a * a, **args) - mu_a_sq
+    sigma_b_sq = gaussian_filter(b * b, **args) - mu_b_sq
+    sigma_ab = gaussian_filter(a * b, **args) - mu_ab
 
     numerator = (2 * mu_ab + c1) * (2 * sigma_ab + c2)
     denominator = (mu_a_sq + mu_b_sq + c1) * (sigma_a_sq + sigma_b_sq + c2)
-    return float(np.mean(numerator / (denominator + EPS)))
+    ssim_map = numerator / denominator
+
+    # Match skimage's convention: average over the valid interior, dropping the
+    # ``int(truncate*sigma + 0.5)`` border where the Gaussian window runs off the
+    # edge. Fall back to the full map for images too small to crop.
+    pad = int(truncate * sigma + 0.5)
+    if ssim_map.shape[0] > 2 * pad and ssim_map.shape[1] > 2 * pad:
+        ssim_map = ssim_map[pad:-pad, pad:-pad]
+    return float(ssim_map.mean())
+
+
+def ssim(img_a: np.ndarray, img_b: np.ndarray, sigma: float = 1.5) -> float:
+    """Compute structural similarity (Wang et al. 2004) for grayscale or RGB images.
+
+    Matches ``skimage.metrics.structural_similarity`` with
+    ``gaussian_weights=True, sigma=1.5, use_sample_covariance=False`` to ~1e-6.
+    Multichannel input is scored per channel and averaged.
+    """
+
+    a, b = _prepare_image_pair(img_a, img_b)
+    if a.ndim == 3:
+        channels = [
+            _ssim_single_channel(a[..., c], b[..., c], sigma)
+            for c in range(a.shape[-1])
+        ]
+        return float(np.mean(channels))
+    return _ssim_single_channel(a, b, sigma)
 
 
 def _downsample(image: np.ndarray) -> np.ndarray:
