@@ -314,7 +314,7 @@ OV-COS 还需要处理语言层级。用户可能输入具体物种、上位类�
 
 并重塑边界。
 
-## 延伸阅读 {#sec-further}
+## 延伸阅读 {#sec-13-further}
 
 - **图像/视频 COD 基础**：SINet[@fan2020sinet]；ZoomNeXt[@pang2024zoomnext]；综述[@xiao2024survey]。
 - **评价指标**：MAE/加权F[@margolin2014]；S-measure[@fan2017smeasure]；E-measure[@fan2018emeasure]；Boundary IoU[@cheng2021boundary]；J&F[@perazzi2016davis]。
