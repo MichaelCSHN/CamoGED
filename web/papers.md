@@ -2,7 +2,7 @@
 
 > Generated from `data/papers.yaml`.
 
-- Total entries: **23**
+- Total entries: **26**
 
 ## Generation
 
@@ -24,13 +24,16 @@
 | Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes | 2024 | `intelligent` | `image-cod` | [paper](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html) [code](https://github.com/Kki2Eve/RISNet) |
 | HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection | 2024 | `intelligent` | `image-cod` | [paper](https://doi.org/10.1109/TIP.2024.3475219) [code](https://github.com/Garyson1204/HGINet) |
 | ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection | 2024 | `intelligent` | `image-cod` | [paper](https://doi.org/10.1109/TPAMI.2024.3417329) |
+| Collaborative Camouflaged Object Detection: A Large-Scale Dataset and Benchmark | 2023 | `intelligent` | `collaborative-cod` | [paper](https://doi.org/10.1109/TNNLS.2023.3317091) [code](https://github.com/zc199823/BBNet--CoCOD) |
 | Referring Camouflaged Object Detection | 2023 | `intelligent` | `referring-cod` | [paper](https://arxiv.org/abs/2306.07532) [code](https://github.com/zhangxuying1004/RefCOD) |
+| Implicit Motion Handling for Video Camouflaged Object Detection | 2022 | `intelligent` | `video-cod` | [paper](https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html) [code](https://github.com/XuelianCheng/SLT-Net) |
 | Simultaneously Localize, Segment and Rank the Camouflaged Objects | 2021 | `intelligent` | `image-cod` | [paper](https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html) [code](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment) |
 
 ## Evaluation
 
 | Title | Year | Domain | Task | Links |
 | --- | --- | --- | --- | --- |
+| MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection | 2025 | `intelligent` | `dataset` | [paper](https://arxiv.org/abs/2509.15753) [code](https://github.com/yl2900260-bit/MCOD) |
 | MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios | 2024 | `intelligent` | `dataset` | [paper](https://arxiv.org/abs/2409.16084) [code](https://github.com/JCruan519/MM-CamObj) |
 | Review of camouflage assessment techniques | 2020 | `physical` | `application` | [paper](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short) |
 | Enhanced-alignment Measure for Binary Foreground Map Evaluation | 2018 | `intelligent` | `image-cod` | [paper](https://www.ijcai.org/proceedings/2018/97) [code](https://github.com/DengPingFan/E-measure) |

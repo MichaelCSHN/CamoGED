@@ -3,7 +3,7 @@
 > A generated, schema-backed list of camouflage resources maintained by CamoGED.
 > Edit `data/*.yaml`; do not hand-edit this file.
 
-- Papers/methods: **23**
+- Papers/methods: **26**
 - Datasets: **15**
 - Verified leaderboard rows: **0**
 
@@ -25,11 +25,14 @@
 - **Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes** -- Wang, Liqiong, Yang, Jinyu, Zhang, Yanfu, Wang, Fangyi, Zheng, Feng, *CVPR* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html) [code](https://github.com/Kki2Eve/RISNet)
 - **HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection** -- Yao, Siyuan, Sun, Hao, Xiang, Tian-Zhu, Wang, Xiao, Cao, Xiaochun, *IEEE TIP* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TIP.2024.3475219) [code](https://github.com/Garyson1204/HGINet)
 - **ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection** -- Pang et al., *TPAMI* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TPAMI.2024.3417329)
+- **Collaborative Camouflaged Object Detection: A Large-Scale Dataset and Benchmark** -- Zhang, Cong, Bi, Hongbo, Xiang, Tian-Zhu, Wu, Ranwan, Tong, Jinghui, Wang, Xiufang, *IEEE TNNLS* 2023 | `collaborative-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TNNLS.2023.3317091) [code](https://github.com/zc199823/BBNet--CoCOD)
 - **Referring Camouflaged Object Detection** -- Zhang, Xuying, Yin, Bowen, Lin, Zheng, Hou, Qibin, Fan, Deng-Ping, Cheng, Ming-Ming, *arXiv* 2023 | `referring-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2306.07532) [code](https://github.com/zhangxuying1004/RefCOD)
+- **Implicit Motion Handling for Video Camouflaged Object Detection** -- Cheng, Xuelian, Xiong, Huan, Fan, Deng-Ping, Zhong, Yiran, Harandi, Mehrtash, Drummond, Tom, Ge, Zongyuan, *CVPR* 2022 | `video-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html) [code](https://github.com/XuelianCheng/SLT-Net)
 - **Simultaneously Localize, Segment and Rank the Camouflaged Objects** -- Lyu, Yunqiu, Zhang, Jing, Dai, Yuchao, Li, Aixuan, Liu, Bowen, Barnes, Nick, Fan, Deng-Ping, *CVPR* 2021 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html) [code](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment)
 
 ### Evaluation
 
+- **MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection** -- Li, Yang, Xu, Tingfa, Bai, ShuYan, Liu, Peifu, Li, Jianan, *arXiv* 2025 | `dataset` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2509.15753) [code](https://github.com/yl2900260-bit/MCOD)
 - **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** -- Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *arXiv* 2024 | `dataset` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2409.16084) [code](https://github.com/JCruan519/MM-CamObj)
 - **Review of camouflage assessment techniques** -- Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* 2020 | `application` | `physical` | `war` [paper](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
 - **Enhanced-alignment Measure for Binary Foreground Map Evaluation** -- Fan, Deng-Ping, Gong, Cheng, Cao, Yang, Ren, Bo, Cheng, Ming-Ming, Borji, Ali, *IJCAI* 2018 | `image-cod` | `intelligent` | `ai` [paper](https://www.ijcai.org/proceedings/2018/97) [code](https://github.com/DengPingFan/E-measure)
@@ -50,12 +53,12 @@
 | CAMO | `camo` | `image-cod` | `rgb` | 2019 | First fully annotated COD dataset. |
 | CamoVid60K | `camovid60k` | `video-cod` | `video` |  | Large-scale video camouflage benchmark. |
 | CHAMELEON | `chameleon` | `image-cod` | `rgb` |  | Early small-scale set; often dropped due to bias. |
-| CoCOD8K | `cocod8k` | `collaborative-cod` | `rgb` |  | Collaborative camouflage. |
+| CoCOD8K | `cocod8k` | `collaborative-cod` | `rgb` | 2023 | Collaborative camouflage benchmark regrouped from multiple COD sources. |
 | COD10K | `cod10k` | `image-cod` | `rgb` | 2020 | Largest image COD benchmark. |
 | MCOD | `mcod` | `image-cod` | `multispectral` | 2025 | First multispectral COD benchmark. |
 | MHCD2022 | `mhcd2022` | `image-cod` | `rgb` | 2022 | Military high-level camouflage dataset. |
 | MM-CamObj | `mm-camobj` | `dataset` | `multimodal` | 2024 | Multimodal MLLM evaluation set for camouflage. |
-| MoCA-Mask | `moca-mask` | `video-cod` | `video` |  | Moving camouflaged animals with mask annotations. |
+| MoCA-Mask | `moca-mask` | `video-cod` | `video` | 2022 | Moving camouflaged animals with mask annotations. |
 | MSVCOD | `msvcod` | `video-cod` | `video` |  | Multi-scene video COD benchmark. |
 | NC4K | `nc4k` | `image-cod` | `rgb` | 2021 | Includes ranking annotations. |
 | PlantCamo | `plantcamo` | `image-cod` | `rgb` | 2024 | Plant camouflage benchmark. |
