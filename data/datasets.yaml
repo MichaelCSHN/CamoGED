@@ -5,10 +5,10 @@ datasets:
     modality: "rgb"
     size: "76 images"
     split: "test-only"
-    year: null
-    link: null
+    year: 2017
+    link: "https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/"
     license: null
-    bibtex_key: null
+    bibtex_key: "skurowski2018animal"
     notes: "Early small-scale set; often dropped due to bias."
 
   - id: "camo"
@@ -20,7 +20,7 @@ datasets:
     year: 2019
     link: "https://sites.google.com/view/ltnghia/research/camo"
     license: null
-    bibtex_key: null
+    bibtex_key: "le2019anet"
     notes: "First fully annotated COD dataset."
 
   - id: "cod10k"
@@ -102,9 +102,9 @@ datasets:
     size: "3,000 images"
     split: "5 categories"
     year: 2022
-    link: null
+    link: "https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022"
     license: null
-    bibtex_key: null
+    bibtex_key: "liu2023mhnet"
     notes: "Military high-level camouflage dataset."
 
   - id: "mcod"
@@ -147,34 +147,34 @@ datasets:
     name: "CAD"
     task: "video-cod"
     modality: "video"
-    size: null
+    size: "9 sequences; 191 annotated frames"
     split: "test"
-    year: null
-    link: null
+    year: 2016
+    link: "https://arxiv.org/abs/1604.00136"
     license: null
-    bibtex_key: null
+    bibtex_key: "bideau2016moving"
     notes: "Early video camouflage dataset."
 
   - id: "camovid60k"
     name: "CamoVid60K"
     task: "video-cod"
     modality: "video"
-    size: "60K frames"
+    size: "218 videos; 62,774 annotated frames"
     split: "train/test"
-    year: null
-    link: null
-    license: null
-    bibtex_key: null
-    notes: "Large-scale video camouflage benchmark."
+    year: 2026
+    link: "https://camovid60k.hkustvgd.com/"
+    license: "CC BY 4.0"
+    bibtex_key: "vu2026camovid"
+    notes: "Large-scale camouflaged animal video understanding benchmark."
 
   - id: "msvcod"
     name: "MSVCOD"
     task: "video-cod"
     modality: "video"
-    size: null
+    size: "162 clips; 9,486 frames"
     split: "train/test"
-    year: null
-    link: null
+    year: 2025
+    link: "https://arxiv.org/abs/2502.13859"
     license: null
-    bibtex_key: null
-    notes: "Multi-scene video COD benchmark."
+    bibtex_key: "gao2025msvcod"
+    notes: "Multi-scene video COD benchmark; no separate dataset release link found during audit."

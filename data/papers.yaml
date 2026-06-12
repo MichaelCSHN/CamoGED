@@ -14,6 +14,47 @@ papers:
     bibtex_key: "xiao2024survey"
     notes: null
 
+  - id: "le2019anet"
+    title: "Anabranch Network for Camouflaged Object Segmentation"
+    authors:
+      - "Le, Trung-Nghia"
+      - "Nguyen, Tam V."
+      - "Nie, Zhongliang"
+      - "Tran, Minh-Triet"
+      - "Sugimoto, Akihiro"
+    venue: "CVIU"
+    year: 2019
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://doi.org/10.1016/j.cviu.2019.04.006"
+    code: "https://github.com/ltnghia/CAMO"
+    datasets: ["camo"]
+    bibtex_key: "le2019anet"
+    notes: "Introduces the CAMO benchmark for camouflaged object segmentation."
+
+  - id: "skurowski2018animal"
+    title: "Animal Camouflage Analysis: CHAMELEON Database"
+    authors:
+      - "Skurowski, Przemyslaw"
+      - "Abdulameer, Hassan"
+      - "Blaszczyk, Jakub"
+      - "Depta, Tomasz"
+      - "Kornacki, Adam"
+      - "Koziel, Przemyslaw"
+    venue: "Unpublished manuscript"
+    year: 2018
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "nature"
+    task: "dataset"
+    paper: "https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/"
+    code: null
+    datasets: ["chameleon"]
+    bibtex_key: "skurowski2018animal"
+    notes: "Documents the CHAMELEON camouflaged animal image database."
+
   - id: "pang2024zoomnext"
     title: "ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection"
     authors: "Pang et al."
@@ -85,6 +126,27 @@ papers:
     datasets: ["moca-mask"]
     bibtex_key: "samvcos2025"
     notes: null
+
+  - id: "vu2026camovid"
+    title: "CamoVid60K: A Large-Scale Video Dataset for Moving Camouflaged Animals Understanding"
+    authors:
+      - "Vu, Tuan-Anh"
+      - "Zheng, Ziqiang"
+      - "Song, Chengyang"
+      - "Guo, Qing"
+      - "Tsang, Ivor W."
+      - "Yeung, Sai-Kit"
+    venue: "IJCV"
+    year: 2026
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "nature"
+    task: "dataset"
+    paper: "https://link.springer.com/article/10.1007/s11263-026-02765-8"
+    code: "https://camovid60k.hkustvgd.com/"
+    datasets: ["camovid60k"]
+    bibtex_key: "vu2026camovid"
+    notes: "Introduces the CamoVid60K camouflaged animal video benchmark."
 
   - id: "zhang2023refcod"
     title: "Referring Camouflaged Object Detection"
@@ -164,6 +226,23 @@ papers:
     datasets: ["moca-mask"]
     bibtex_key: "cheng2022implicit"
     notes: "Introduces the MoCA-Mask benchmark for video camouflage detection."
+
+  - id: "bideau2016moving"
+    title: "It's Moving! A Probabilistic Model for Causal Motion Segmentation in Moving Camera Videos"
+    authors:
+      - "Bideau, Pia"
+      - "Learned-Miller, Erik"
+    venue: "ECCV"
+    year: 2016
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "nature"
+    task: "video-cod"
+    paper: "https://arxiv.org/abs/1604.00136"
+    code: null
+    datasets: ["cad"]
+    bibtex_key: "bideau2016moving"
+    notes: "Source paper for the small CAD camouflaged animal video benchmark."
 
   - id: "camdiff2023"
     title: "CamDiff: Camouflage Image Augmentation via Diffusion"
@@ -298,6 +377,46 @@ papers:
     datasets: ["mcod"]
     bibtex_key: "mcod2025"
     notes: "Introduces the first multispectral COD benchmark."
+
+  - id: "gao2025msvcod"
+    title: "MSVCOD: A Large-Scale Multi-Scene Dataset for Video Camouflage Object Detection"
+    authors:
+      - "Gao, Shuyong"
+      - "Feng, Yu'ang"
+      - "Wang, Qishan"
+      - "Hong, Lingyi"
+      - "Zhou, Xinyu"
+      - "Fei, Liu"
+      - "Wang, Yan"
+      - "Zhang, Wenqiang"
+    venue: "arXiv"
+    year: 2025
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "dataset"
+    paper: "https://arxiv.org/abs/2502.13859"
+    code: null
+    datasets: ["msvcod"]
+    bibtex_key: "gao2025msvcod"
+    notes: "Introduces MSVCOD; dataset/code release is stated as future work in the arXiv paper."
+
+  - id: "liu2023mhnet"
+    title: "Extraordinary MHNet: Military High-Level Camouflage Object Detection Network and Dataset"
+    authors:
+      - "Liu, Maozhen"
+      - "Di, Xiaoguang"
+    venue: "Neurocomputing"
+    year: 2023
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "war"
+    task: "image-cod"
+    paper: "https://doi.org/10.1016/j.neucom.2023.126466"
+    code: "https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022"
+    datasets: ["mhcd2022"]
+    bibtex_key: "liu2023mhnet"
+    notes: "Introduces the MHCD2022 military high-level camouflage benchmark."
 
   - id: "talas2017military"
     title: "Cultural evolution of military camouflage"
