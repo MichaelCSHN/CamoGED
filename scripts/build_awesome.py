@@ -12,7 +12,7 @@ DATA = ROOT / "data"
 AWESOME_OUT = ROOT / "awesome" / "README.md"
 WEB = ROOT / "web"
 
-PILLAR_ORDER = ["generation", "detection", "evaluation"]
+PILLAR_ORDER = ["generation", "evaluation", "detection"]
 PILLAR_TITLES = {
     "generation": "Generation",
     "detection": "Detection",

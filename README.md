@@ -19,10 +19,10 @@ spanning **Nature · War · Machines** and the **Physical · Digital · Intellig
 > **Thesis.** Camouflage is a *co-evolutionary arms race* between a **hider** and a **seeker**.
 > The same structure recurs across biology (prey vs. predator), the military (measure vs. counter‑measure),
 > art (image vs. perception), and AI (generator vs. discriminator / attacker vs. detector).
-> CamoGED treats **generation** (hiding), **detection** (seeking), and **evaluation** (judging) as the three
+> CamoGED treats **generation** (hiding), **evaluation** (judging), and **detection** (seeking) as the three
 > faces of this single game — and unifies them into one living research platform.
 
-CamoGED is the first open resource to **simultaneously** cover camouflage **generation, detection, and evaluation**,
+CamoGED is the first open resource to **simultaneously** cover camouflage **generation, evaluation, and detection**,
 across the **natural-science, military, and humanities/art** perspectives, and the **physical, digital, and
 intelligent** technical domains. Existing resources cover only detection and are static lists; CamoGED adds the
 missing generation and evaluation pillars, the cross-domain narrative, and a *living* platform (leaderboard +
@@ -32,7 +32,7 @@ demos + a unified evaluation toolkit).
 
 | Component | Path | Description |
 |-----------|------|-------------|
-| 📚 **Monograph** | [`book/`](book/) | The book *Camouflage: Generation, Detection & Evaluation* (Quarto → HTML/PDF/ePub) |
+| 📚 **Monograph** | [`book/`](book/) | The book *Camouflage: Generation · Evaluation · Detection* (Quarto → HTML/PDF/ePub) |
 | 🌟 **Awesome list** | [`awesome/`](awesome/README.md) | Curated cross-domain resources (machine-readable) |
 | 🌐 **Website** | [`web/`](web/) | Aggregator: papers, model zoo, leaderboard, demos, datasets |
 | 🔧 **camo-eval** | [`camo-eval/`](camo-eval/) | Unified toolkit: detection accuracy · generation quality · adversarial robustness |
@@ -48,8 +48,8 @@ demos + a unified evaluation toolkit).
    └──────────────────────────┼──────────────────────────┘
                 Physical ── Digital ── Intelligent                   ← three domains
    ┌──────────────────────────┼──────────────────────────┐
- Generation                Detection                 Evaluation      ← three pillars
-  (the hider)              (the seeker)               (the judge)
+ Generation                Evaluation                Detection      ← three pillars
+  (the hider)              (the judge)                (the seeker)
       │                        │                          │
    flowcamo                 coder                     camo-eval
                             dualvcod
