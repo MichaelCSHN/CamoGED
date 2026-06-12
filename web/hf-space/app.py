@@ -18,15 +18,21 @@ from camo_eval import (  # noqa: E402
     EvaluationContext,
     EvaluationReport,
     boundary_iou,
+    camouflage_difficulty,
     dice,
+    dists,
     e_measure,
+    edge_density,
+    feature_congestion,
     iou,
+    lpips,
     mae,
     ms_ssim,
     precision,
     recall,
     s_measure,
     ssim,
+    subband_entropy,
     target_background_similarity,
     weighted_f_measure,
 )
@@ -38,7 +44,13 @@ METRIC_GROUPS = {
     "COD core": ["mae", "fw", "sm", "em", "f"],
     "PR diagnostics": ["precision", "recall"],
     "Region and boundary": ["iou", "dice", "boundary_iou"],
-    "Mask similarity": ["ssim", "ms_ssim"],
+    "Mask similarity": ["ssim", "ms_ssim", "lpips_lite", "dists_lite"],
+    "Clutter and difficulty": [
+        "edge_density",
+        "subband_entropy",
+        "feature_congestion",
+        "camouflage_difficulty",
+    ],
     "Target-background similarity": [
         "tb_all",
         "tb_near",
@@ -107,7 +119,24 @@ def _compute_grouped_metrics(
         metrics["Mask similarity"] = {
             "SSIM": ssim(pred, gt),
             "MS_SSIM": ms_ssim(pred, gt),
+            "LPIPS_lite": lpips(pred, gt),
+            "DISTS_lite": dists(pred, gt),
         }
+    if "Clutter and difficulty" in selected:
+        analysis_image = scene if scene is not None else gt
+        metrics["Clutter and difficulty"] = {
+            "edge_density": edge_density(analysis_image),
+            "subband_entropy": subband_entropy(analysis_image),
+            "feature_congestion": feature_congestion(analysis_image),
+        }
+        if scene is None:
+            metrics["Clutter and difficulty"]["status"] = (
+                "Upload a scene image to compute camouflage_difficulty."
+            )
+        else:
+            metrics["Clutter and difficulty"]["camouflage_difficulty"] = (
+                camouflage_difficulty(scene, gt)
+            )
     if "Target-background similarity" in selected:
         if scene is None:
             metrics["Target-background similarity"] = {
@@ -168,6 +197,8 @@ def evaluate_demo_dataset() -> tuple[str, str]:
             "boundary_iou",
             "ssim",
             "ms_ssim",
+            "lpips_lite",
+            "dists_lite",
         ],
     )
     context = EvaluationContext(
@@ -191,7 +222,9 @@ def evaluate_demo_dataset() -> tuple[str, str]:
 with gr.Blocks(title="camo-eval Space") as demo:
     gr.Markdown("# camo-eval")
     gr.Markdown(
-        "Upload a prediction and a ground-truth mask, or run the bundled repository demo dataset."
+        "Upload a scene, prediction, and ground-truth mask, or run the bundled "
+        "repository demo dataset. This Space only computes lightweight metrics "
+        "that do not require large datasets or model weights."
     )
 
     with gr.Tab("Single Pair"):

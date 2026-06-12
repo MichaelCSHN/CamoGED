@@ -8,14 +8,23 @@ from camo_eval import (
     EvaluationReport,
     boundary_f_score,
     boundary_iou,
+    camouflage_difficulty,
+    deception_rate,
     dice,
+    dists,
+    edge_density,
+    feature_congestion,
+    fid,
     iou,
     j_and_f,
     jaccard_index,
+    kid,
+    lpips,
     ms_ssim,
     signal_to_clutter_ratio,
     spectral_angle_mapper,
     ssim,
+    subband_entropy,
     target_background_similarity,
     temporal_stability,
     thermal_contrast,
@@ -36,14 +45,61 @@ def test_perceptual_metrics_perfect_match():
     assert ms_ssim(img, img) == pytest.approx(1.0)
 
 
+def test_lightweight_generation_pair_metrics_perfect_match():
+    img = np.tile(np.linspace(0.0, 1.0, 16), (16, 1))
+    changed = np.fliplr(img)
+    assert lpips(img, img) == pytest.approx(0.0)
+    assert dists(img, img) == pytest.approx(0.0)
+    assert lpips(img, changed) > 0
+    assert dists(img, changed) > 0
+
+
+def test_lightweight_generation_directory_metrics(tmp_path):
+    real_dir = tmp_path / "real"
+    fake_dir = tmp_path / "fake"
+    real_dir.mkdir()
+    fake_dir.mkdir()
+
+    base = np.tile(np.linspace(0.0, 1.0, 16), (16, 1))
+    alt = np.flipud(base)
+    np.save(real_dir / "a.npy", base)
+    np.save(real_dir / "b.npy", alt)
+    np.save(fake_dir / "a.npy", base)
+    np.save(fake_dir / "b.npy", np.clip(alt + 0.1, 0.0, 1.0))
+
+    assert fid(str(real_dir), str(real_dir)) == pytest.approx(0.0)
+    assert fid(str(real_dir), str(fake_dir)) >= 0
+    assert np.isfinite(kid(str(real_dir), str(fake_dir)))
+
+
+def test_deception_rate_sequence_and_callable_targets():
+    def detector(item):
+        return {"label": item, "score": 0.2 if item == "hidden" else 0.9}
+
+    assert deception_rate(detector, ["hidden", "visible"], ["hidden", "hidden"]) == 0.5
+    assert deception_rate(detector, ["hidden", "visible"], lambda out: out["score"] < 0.5) == 0.5
+
+
+def test_clutter_and_camouflage_difficulty_metrics():
+    image = np.tile(np.linspace(0.0, 1.0, 16), (16, 1))
+    mask = np.zeros((16, 16), dtype=np.uint8)
+    mask[5:11, 5:11] = 1
+
+    assert 0 <= edge_density(image) <= 1
+    assert 0 <= subband_entropy(image) <= 1
+    assert feature_congestion(image) >= 0
+
+    difficulty = camouflage_difficulty(image, mask)
+    assert 0 <= difficulty["difficulty"] <= 1
+    assert "near_histogram_intersection" in difficulty
+
+
 def test_signature_metrics_basic_behavior():
     target = np.array([10.0, 12.0, 14.0])
     background = np.array([4.0, 5.0, 6.0])
     assert thermal_contrast(target, background) == pytest.approx(7.0)
     assert signal_to_clutter_ratio(target, background) > 0
-    assert spectral_angle_mapper(
-        np.array([1.0, 0.0]), np.array([1.0, 0.0])
-    ) == pytest.approx(0.0)
+    assert spectral_angle_mapper(np.array([1.0, 0.0]), np.array([1.0, 0.0])) == pytest.approx(0.0)
 
 
 def test_target_background_similarity_all_and_near_modes():

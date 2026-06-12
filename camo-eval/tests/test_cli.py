@@ -14,8 +14,12 @@ def test_cli_list_metrics_json(capsys):
     payload = json.loads(captured.out)
     assert "detection" in payload
     assert "video" in payload
+    assert "generation" in payload
+    assert "clutter" in payload
     assert "precision" in payload["detection"]
     assert "recall" in payload["detection"]
+    assert "fid_lite" in payload["generation"]
+    assert "camouflage_difficulty" in payload["clutter"]
 
 
 def test_cli_evaluate_markdown(tmp_path, capsys):
@@ -38,6 +42,7 @@ def test_cli_evaluate_markdown(tmp_path, capsys):
             "mae",
             "iou",
             "ssim",
+            "lpips_lite",
             "--format",
             "markdown",
         ]
@@ -46,6 +51,61 @@ def test_cli_evaluate_markdown(tmp_path, capsys):
     assert exit_code == 0
     assert "| MAE |" in captured.out
     assert "IoU" in captured.out
+    assert "LPIPS_lite" in captured.out
+
+
+def test_cli_generation_distance_json(tmp_path, capsys):
+    real_dir = tmp_path / "real"
+    fake_dir = tmp_path / "fake"
+    real_dir.mkdir()
+    fake_dir.mkdir()
+
+    base = np.tile(np.linspace(0.0, 1.0, 16), (16, 1))
+    alt = np.flipud(base)
+    np.save(real_dir / "a.npy", base)
+    np.save(real_dir / "b.npy", alt)
+    np.save(fake_dir / "a.npy", base)
+    np.save(fake_dir / "b.npy", np.clip(alt + 0.1, 0.0, 1.0))
+
+    exit_code = main(
+        [
+            "generation-distance",
+            "--real-dir",
+            str(real_dir),
+            "--fake-dir",
+            str(fake_dir),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    payload = json.loads(captured.out)
+    assert "FID_lite" in payload
+    assert "KID_lite" in payload
+
+
+def test_cli_image_diagnostics_json(tmp_path, capsys):
+    image_path = tmp_path / "image.npy"
+    mask_path = tmp_path / "mask.npy"
+    image = np.tile(np.linspace(0.0, 1.0, 16), (16, 1))
+    mask = np.zeros((16, 16), dtype=np.uint8)
+    mask[5:11, 5:11] = 1
+    np.save(image_path, image)
+    np.save(mask_path, mask)
+
+    exit_code = main(
+        [
+            "image-diagnostics",
+            "--image",
+            str(image_path),
+            "--mask",
+            str(mask_path),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    payload = json.loads(captured.out)
+    assert "edge_density" in payload
+    assert "camouflage_difficulty" in payload
 
 
 def test_cli_protocol_template_json(capsys):

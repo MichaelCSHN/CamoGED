@@ -8,8 +8,14 @@ from pathlib import Path
 
 from . import (
     ResultsTable,
+    camouflage_difficulty,
+    edge_density,
     evaluate,
+    feature_congestion,
+    fid,
+    kid,
     precision_recall_curve,
+    subband_entropy,
     to_latex,
     to_markdown,
 )
@@ -44,12 +50,33 @@ def _emit_text(text: str, output_path: str | None) -> None:
         print(text)
 
 
+def _scores_to_text(scores: dict[str, object], output_format: str) -> str:
+    if output_format == "json":
+        return json.dumps(scores, indent=2)
+    lines = []
+    for key, value in scores.items():
+        if isinstance(value, dict):
+            lines.append(f"{key}:")
+            for subkey, subvalue in value.items():
+                lines.append(f"  {subkey}: {subvalue}")
+        else:
+            lines.append(f"{key}: {value}")
+    return "\n".join(lines)
+
+
 def _available_metrics() -> dict[str, list[str]]:
     return {
         "detection": ["mae", "fw", "sm", "em", "f", "precision", "recall"],
         "instance": ["iou", "dice", "boundary_iou"],
         "video": ["j", "boundary_f", "jf", "temporal"],
-        "perceptual": ["ssim", "ms_ssim"],
+        "perceptual": ["ssim", "ms_ssim", "lpips_lite", "dists_lite"],
+        "generation": ["fid_lite", "kid_lite", "lpips_lite", "dists_lite"],
+        "clutter": [
+            "edge_density",
+            "subband_entropy",
+            "feature_congestion",
+            "camouflage_difficulty",
+        ],
         "signature": [
             "thermal_contrast",
             "signal_to_clutter_ratio",
@@ -154,9 +181,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     evaluate_parser.add_argument("--output")
 
-    list_parser = subparsers.add_parser(
-        "list-metrics", help="List built-in metric groups"
-    )
+    list_parser = subparsers.add_parser("list-metrics", help="List built-in metric groups")
     list_parser.add_argument("--format", choices=("text", "json"), default="text")
 
     protocol_parser = subparsers.add_parser(
@@ -173,9 +198,7 @@ def build_parser() -> argparse.ArgumentParser:
     protocol_parser.add_argument("--metrics", nargs="+")
     protocol_parser.add_argument("--pred-source")
     protocol_parser.add_argument("--gt-source")
-    protocol_parser.add_argument(
-        "--format", choices=("markdown", "json"), default="json"
-    )
+    protocol_parser.add_argument("--format", choices=("markdown", "json"), default="json")
     protocol_parser.add_argument("--output")
 
     report_parser = subparsers.add_parser(
@@ -204,9 +227,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--root",
         help="Optional root directory used to resolve relative pred/gt directories from the manifest",
     )
-    manifest_parser.add_argument(
-        "--format", choices=("markdown", "json"), default="json"
-    )
+    manifest_parser.add_argument("--format", choices=("markdown", "json"), default="json")
     manifest_parser.add_argument("--output")
 
     visual_parser = subparsers.add_parser(
@@ -229,11 +250,36 @@ def build_parser() -> argparse.ArgumentParser:
             "iou",
             "dice",
             "boundary_iou",
+            "lpips_lite",
+            "dists_lite",
         ],
     )
     visual_parser.add_argument("--threshold", type=float, default=0.5)
     visual_parser.add_argument("--output-dir", required=True)
     visual_parser.add_argument("--format", choices=("json", "text"), default="json")
+
+    generation_parser = subparsers.add_parser(
+        "generation-distance",
+        help=(
+            "Compute lightweight directory-level generation distances without "
+            "model weights or large datasets"
+        ),
+    )
+    generation_parser.add_argument("--real-dir", required=True)
+    generation_parser.add_argument("--fake-dir", required=True)
+    generation_parser.add_argument("--metrics", nargs="+", default=["fid_lite", "kid_lite"])
+    generation_parser.add_argument("--format", choices=("json", "text"), default="json")
+    generation_parser.add_argument("--output")
+
+    diagnostics_parser = subparsers.add_parser(
+        "image-diagnostics",
+        help="Compute lightweight clutter and camouflage-difficulty diagnostics",
+    )
+    diagnostics_parser.add_argument("--image", required=True)
+    diagnostics_parser.add_argument("--mask")
+    diagnostics_parser.add_argument("--edge-threshold", type=float)
+    diagnostics_parser.add_argument("--format", choices=("json", "text"), default="json")
+    diagnostics_parser.add_argument("--output")
     return parser
 
 
@@ -361,5 +407,37 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"{name}: {path}")
         return 0
 
+    if args.command == "generation-distance":
+        scores: dict[str, float] = {}
+        for metric in args.metrics:
+            key = metric.lower()
+            if key in {"fid", "fid_lite"}:
+                scores["FID_lite"] = fid(args.real_dir, args.fake_dir)
+            elif key in {"kid", "kid_lite"}:
+                scores["KID_lite"] = kid(args.real_dir, args.fake_dir)
+            elif key in {"lpips", "lpips_lite", "dists", "dists_lite"}:
+                parser.error(f"{metric!r} is pairwise; use `evaluate` or `visualize` for it.")
+            else:
+                parser.error(f"Unsupported generation-distance metric {metric!r}.")
+        _emit_text(_scores_to_text(scores, args.format), args.output)
+        return 0
+
+    if args.command == "image-diagnostics":
+        image = _load_array(Path(args.image))
+        scores: dict[str, object] = {
+            "edge_density": edge_density(image, threshold=args.edge_threshold),
+            "subband_entropy": subband_entropy(image),
+            "feature_congestion": feature_congestion(image),
+        }
+        if args.mask:
+            mask = _load_array(Path(args.mask))
+            scores["camouflage_difficulty"] = camouflage_difficulty(image, mask)
+        _emit_text(_scores_to_text(scores, args.format), args.output)
+        return 0
+
     parser.error(f"Unknown command {args.command!r}")
     return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

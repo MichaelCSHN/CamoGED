@@ -11,6 +11,7 @@ Exit 0 if all REQUIRED functions exist with the expected parameter names; 1
 otherwise. Functions in OPTIONAL modules (generation extras that need heavy deps
 like torch) are downgraded to warnings if the module cannot be imported.
 """
+
 from __future__ import annotations
 
 import importlib
@@ -20,7 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 # Allow importing the package whether or not it is pip-installed.
-sys.path.insert(0, str(ROOT / "camo-eval"))
+sys.path.insert(0, str(ROOT / "camo-eval" / "src"))
 
 # ---- Authoritative contract (mirrors AGENTS.md §6) ----
 # module -> {function: [expected positional/keyword parameter names in order]}
@@ -50,7 +51,9 @@ EXPECTED: dict[str, dict[str, list[str]]] = {
 OPTIONAL_MODULES = {
     "camo_eval.metrics.generation": {
         "fid": ["real_dir", "fake_dir"],
+        "kid": ["real_dir", "fake_dir", "degree", "gamma", "coef0"],
         "lpips": ["img_a", "img_b"],
+        "dists": ["img_a", "img_b"],
         "deception_rate": ["detector", "images", "targets"],
     },
 }
@@ -92,6 +95,12 @@ EXTENSION: dict[str, dict[str, list[str]]] = {
             "bins",
             "near_iterations",
         ],
+    },
+    "camo_eval.metrics.clutter": {
+        "edge_density": ["image", "threshold"],
+        "subband_entropy": ["image", "bins"],
+        "feature_congestion": ["image"],
+        "camouflage_difficulty": ["image", "target_mask"],
     },
     "camo_eval.metrics.video": {
         "jaccard_index": ["pred_frames", "gt_frames"],
