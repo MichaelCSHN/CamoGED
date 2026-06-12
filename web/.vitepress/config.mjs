@@ -4,11 +4,12 @@ export default {
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
+      { text: "Awesome", link: "/awesome" },
       { text: "Papers", link: "/papers" },
       { text: "Models", link: "/models" },
       { text: "Leaderboard", link: "/leaderboard" },
       { text: "Datasets", link: "/datasets" },
-      { text: "Demos", link: "/demo" },
+      { text: "Demo", link: "/demo" },
       { text: "Book", link: "https://github.com/MichaelCSHN/CamoGED/tree/main/book" }
     ],
     socialLinks: [

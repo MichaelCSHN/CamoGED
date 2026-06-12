@@ -18,7 +18,7 @@ datasets:
     size: "1,250 camouflaged (+1,250 non-camouflaged)"
     split: "1,000 train / 250 test"
     year: 2019
-    link: null
+    link: "https://sites.google.com/view/ltnghia/research/camo"
     license: null
     bibtex_key: null
     notes: "First fully annotated COD dataset."
@@ -30,7 +30,7 @@ datasets:
     size: "5,066 camouflaged (~10K total)"
     split: "3,040 train / 2,026 test; 78 sub-classes"
     year: 2020
-    link: null
+    link: "https://dengpingfan.github.io/pages/COD.html"
     license: null
     bibtex_key: "fan2020sinet"
     notes: "Largest image COD benchmark."
@@ -126,9 +126,9 @@ datasets:
     size: null
     split: "QA/detection"
     year: 2024
-    link: null
+    link: "https://github.com/JCruan519/MM-CamObj"
     license: null
-    bibtex_key: null
+    bibtex_key: "mmcamobj2024"
     notes: "Multimodal MLLM evaluation set for camouflage."
 
   - id: "moca-mask"

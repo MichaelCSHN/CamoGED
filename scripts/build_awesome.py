@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build `awesome/README.md` from `data/*.yaml`."""
+"""Build generated Markdown surfaces from ``data/*.yaml``."""
 
 from __future__ import annotations
 
@@ -9,7 +9,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
-OUT = ROOT / "awesome" / "README.md"
+AWESOME_OUT = ROOT / "awesome" / "README.md"
+WEB = ROOT / "web"
 
 PILLAR_ORDER = ["generation", "detection", "evaluation"]
 PILLAR_TITLES = {
@@ -23,7 +24,14 @@ def load_yaml(name: str) -> dict:
     return yaml.safe_load((DATA / name).read_text(encoding="utf-8"))
 
 
-def format_authors(authors) -> str:
+def load_data() -> tuple[list[dict], list[dict], list[dict]]:
+    papers = load_yaml("papers.yaml")["papers"]
+    datasets = load_yaml("datasets.yaml")["datasets"]
+    leaderboard = load_yaml("leaderboard.yaml")["leaderboard"]
+    return papers, datasets, leaderboard
+
+
+def format_authors(authors: str | list[str]) -> str:
     if isinstance(authors, list):
         return ", ".join(authors)
     return str(authors)
@@ -35,31 +43,53 @@ def format_link(label: str, url: str | None) -> str:
     return f" [{label}]({url})"
 
 
-def render_paper(entry: dict) -> str:
-    suffix = []
-    suffix.append(
-        f"{format_authors(entry['authors'])}, *{entry['venue']}* {entry['year']}"
-    )
-    suffix.append(f"`{entry['task']}`")
-    suffix.append(f"`{entry['domain']}`")
-    suffix.append(f"`{entry['perspective']}`")
-    text = f"- **{entry['title']}** — " + " · ".join(suffix)
+def format_optional_url(url: str | None, label: str) -> str:
+    if not url:
+        return ""
+    return f"[{label}]({url})"
+
+
+def format_reference_url(entry: dict) -> str:
+    return format_optional_url(entry.get("paper"), "paper")
+
+
+def format_dataset_link(entry: dict) -> str:
+    return format_optional_url(entry.get("link"), "link")
+
+
+def render_paper_bullet(entry: dict) -> str:
+    suffix = [
+        f"{format_authors(entry['authors'])}, *{entry['venue']}* {entry['year']}",
+        f"`{entry['task']}`",
+        f"`{entry['domain']}`",
+        f"`{entry['perspective']}`",
+    ]
+    text = f"- **{entry['title']}** -- " + " | ".join(suffix)
     text += format_link("paper", entry["paper"])
     text += format_link("code", entry.get("code"))
     return text
 
 
-def render() -> str:
-    papers = load_yaml("papers.yaml")["papers"]
-    datasets = load_yaml("datasets.yaml")["datasets"]
-    leaderboard = load_yaml("leaderboard.yaml")["leaderboard"]
+def sort_papers(papers: list[dict]) -> list[dict]:
+    return sorted(papers, key=lambda item: (-item["year"], item["title"].lower()))
 
-    papers_sorted = sorted(papers, key=lambda item: (-item["year"], item["title"]))
-    datasets_sorted = sorted(datasets, key=lambda item: item["name"].lower())
-    verified_rows = sorted(
+
+def sort_datasets(datasets: list[dict]) -> list[dict]:
+    return sorted(datasets, key=lambda item: item["name"].lower())
+
+
+def sort_verified_rows(leaderboard: list[dict]) -> list[dict]:
+    return sorted(
         [row for row in leaderboard if row["verified"]],
         key=lambda item: (item["dataset"], item["method"].lower()),
     )
+
+
+def render_awesome() -> str:
+    papers, datasets, leaderboard = load_data()
+    papers_sorted = sort_papers(papers)
+    datasets_sorted = sort_datasets(datasets)
+    verified_rows = sort_verified_rows(leaderboard)
 
     lines = [
         "# Awesome Camouflage",
@@ -79,13 +109,11 @@ def render() -> str:
         lines.append(f"### {PILLAR_TITLES[pillar]}")
         pillar_entries = [entry for entry in papers_sorted if entry["pillar"] == pillar]
         if not pillar_entries:
-            lines.append("")
-            lines.append("_No entries yet._")
-            lines.append("")
+            lines.extend(["", "_No entries yet._", ""])
             continue
         lines.append("")
         for entry in pillar_entries:
-            lines.append(render_paper(entry))
+            lines.append(render_paper_bullet(entry))
         lines.append("")
 
     lines.extend(
@@ -104,8 +132,7 @@ def render() -> str:
         )
     lines.append("")
 
-    lines.append("## Leaderboard")
-    lines.append("")
+    lines.extend(["## Leaderboard", ""])
     if verified_rows:
         lines.extend(
             [
@@ -115,9 +142,7 @@ def render() -> str:
         )
         for row in verified_rows:
             metrics = ", ".join(
-                f"{key}={value}"
-                for key, value in row["metrics"].items()
-                if value is not None
+                f"{key}={value}" for key, value in row["metrics"].items() if value is not None
             )
             lines.append(
                 f"| {row['method']} | `{row['dataset']}` | `{row['task']}` | {metrics} | {row['source']} |"
@@ -140,9 +165,198 @@ def render() -> str:
     return "\n".join(lines)
 
 
+def render_papers_page(papers: list[dict]) -> str:
+    papers_sorted = sort_papers(papers)
+    lines = [
+        "# Papers",
+        "",
+        "> Generated from `data/papers.yaml`.",
+        "",
+        f"- Total entries: **{len(papers_sorted)}**",
+        "",
+    ]
+    for pillar in PILLAR_ORDER:
+        lines.append(f"## {PILLAR_TITLES[pillar]}")
+        lines.append("")
+        entries = [entry for entry in papers_sorted if entry["pillar"] == pillar]
+        if not entries:
+            lines.extend(["_No entries yet._", ""])
+            continue
+        lines.extend(
+            [
+                "| Title | Year | Domain | Task | Links |",
+                "| --- | --- | --- | --- | --- |",
+            ]
+        )
+        for entry in entries:
+            links = " ".join(
+                filter(
+                    None,
+                    [
+                        format_reference_url(entry),
+                        format_optional_url(entry.get("code"), "code"),
+                    ],
+                )
+            )
+            lines.append(
+                f"| {entry['title']} | {entry['year']} | `{entry['domain']}` | `{entry['task']}` | {links} |"
+            )
+        lines.append("")
+    return "\n".join(lines) + "\n"
+
+
+def render_models_page(papers: list[dict]) -> str:
+    model_entries = [entry for entry in sort_papers(papers) if entry.get("code")]
+    lines = [
+        "# Models",
+        "",
+        "> Code-linked methods derived from `data/papers.yaml`.",
+        "",
+        f"- Methods with code: **{len(model_entries)}**",
+        "",
+    ]
+    if not model_entries:
+        lines.extend(["_No code-linked methods yet._", ""])
+        return "\n".join(lines) + "\n"
+
+    lines.extend(
+        [
+            "| Method | Year | Pillar | Task | Code | Paper |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    for entry in model_entries:
+        lines.append(
+            f"| {entry['title']} | {entry['year']} | `{entry['pillar']}` | `{entry['task']}` | "
+            f"{format_optional_url(entry['code'], 'repo')} | {format_reference_url(entry)} |"
+        )
+    lines.append("")
+    return "\n".join(lines) + "\n"
+
+
+def render_datasets_page(datasets: list[dict]) -> str:
+    datasets_sorted = sort_datasets(datasets)
+    lines = [
+        "# Datasets",
+        "",
+        "> Generated from `data/datasets.yaml`.",
+        "",
+        f"- Total datasets: **{len(datasets_sorted)}**",
+        "",
+        "| Name | Task | Modality | Size | Split | Year | Link | License | Reference |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for entry in datasets_sorted:
+        lines.append(
+            f"| {entry['name']} | `{entry['task']}` | `{entry['modality']}` | {entry.get('size') or ''} | "
+            f"{entry.get('split') or ''} | {entry.get('year') or ''} | {format_dataset_link(entry)} | "
+            f"{entry.get('license') or ''} | `{entry.get('bibtex_key') or ''}` |"
+        )
+    lines.append("")
+    return "\n".join(lines) + "\n"
+
+
+def render_leaderboard_page(leaderboard: list[dict]) -> str:
+    verified_rows = sort_verified_rows(leaderboard)
+    tracked_rows = sorted(
+        leaderboard, key=lambda item: (item["dataset"], item["method"].lower())
+    )
+    lines = [
+        "# Leaderboard",
+        "",
+        "> Generated from `data/leaderboard.yaml`.",
+        "",
+        f"- Tracked rows: **{len(tracked_rows)}**",
+        f"- Verified rows: **{len(verified_rows)}**",
+        "",
+        "## Verified results",
+        "",
+    ]
+    if verified_rows:
+        lines.extend(
+            [
+                "| Method | Dataset | Task | Metrics | Protocol | Source |",
+                "| --- | --- | --- | --- | --- | --- |",
+            ]
+        )
+        for row in verified_rows:
+            metrics = ", ".join(
+                f"{key}={value}" for key, value in row["metrics"].items() if value is not None
+            )
+            lines.append(
+                f"| {row['method']} | `{row['dataset']}` | `{row['task']}` | {metrics} | "
+                f"{row.get('protocol') or ''} | {row['source']} |"
+            )
+    else:
+        lines.append("_No verified leaderboard rows yet. Unverified metrics stay null by policy._")
+    lines.extend(
+        [
+            "",
+            "## Tracked methods awaiting verification",
+            "",
+            "| Method | Dataset | Status | Source |",
+            "| --- | --- | --- | --- |",
+        ]
+    )
+    for row in tracked_rows:
+        lines.append(
+            f"| {row['method']} | `{row['dataset']}` | `{row['status']}` | {row['source']} |"
+        )
+    lines.append("")
+    return "\n".join(lines) + "\n"
+
+
+def render_demo_page() -> str:
+    lines = [
+        "# Demo",
+        "",
+        "Current demo surfaces in this repository:",
+        "",
+        "- `camo-eval` CLI visualization: `camo-eval visualize --pred ... --gt ... --output-dir ...`",
+        "- Monograph render: `quarto render` in `book/`",
+        "- Hugging Face Space source: [web/hf-space/README.md](https://github.com/MichaelCSHN/CamoGED/tree/main/web/hf-space)",
+        "",
+        "This page is intentionally lightweight until the website starts consuming live experiment artifacts.",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def render_awesome_page() -> str:
+    awesome_body = render_awesome().splitlines()
+    lines = [
+        "# Awesome",
+        "",
+        "> Mirror of the generated Awesome index.",
+        "",
+    ]
+    lines.extend(awesome_body[1:])
+    return "\n".join(lines) + "\n"
+
+
+def write_text(path: Path, content: str) -> None:
+    path.write_text(content.rstrip() + "\n", encoding="utf-8")
+
+
+def write_outputs() -> None:
+    papers, datasets, leaderboard = load_data()
+    write_text(AWESOME_OUT, render_awesome())
+    write_text(WEB / "papers.md", render_papers_page(papers))
+    write_text(WEB / "models.md", render_models_page(papers))
+    write_text(WEB / "datasets.md", render_datasets_page(datasets))
+    write_text(WEB / "leaderboard.md", render_leaderboard_page(leaderboard))
+    write_text(WEB / "demo.md", render_demo_page())
+    write_text(WEB / "awesome.md", render_awesome_page())
+
+
+def render() -> str:
+    """Backward-compatible helper used by ``check_data.py``."""
+
+    return render_awesome()
+
+
 def main() -> int:
-    content = render().rstrip() + "\n"
-    OUT.write_text(content, encoding="utf-8")
+    write_outputs()
     return 0
 
 

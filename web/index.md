@@ -9,11 +9,11 @@ hero:
       text: Awesome List
       link: /awesome
     - theme: alt
+      text: Papers
+      link: /papers
+    - theme: alt
       text: Leaderboard
       link: /leaderboard
-    - theme: alt
-      text: Datasets
-      link: /datasets
 features:
   - title: ✍️ Generation
     details: Physical, digital, and intelligent-domain camouflage synthesis and adversarial attacks.
