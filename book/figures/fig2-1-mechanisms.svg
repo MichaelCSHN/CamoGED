@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'Source Han Sans SC','Noto Sans CJK SC','Inter',sans-serif">
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#2b2f36">生物伪装机制与算法对策的跨域同构</text>
+  <text x="440" y="48" text-anchor="middle" font-size="11.5" fill="#6b7280">Biological camouflage mechanisms ↔ Algorithm countermeasures (Chapter 2 ↔ Chapters 9–14)</text>
+
+  <!-- Column headers -->
+  <rect x="20" y="60" width="240" height="32" rx="8" fill="#e9f3f0"/>
+  <text x="140" y="81" text-anchor="middle" font-size="13" font-weight="700" fill="#1f6b5c">生物机制（守方）</text>
+  <rect x="330" y="60" width="200" height="32" rx="8" fill="#f7f8f9"/>
+  <text x="430" y="81" text-anchor="middle" font-size="13" font-weight="700" fill="#5B6470">攻击的感知环节</text>
+  <rect x="600" y="60" width="260" height="32" rx="8" fill="#fbf1ec"/>
+  <text x="730" y="81" text-anchor="middle" font-size="13" font-weight="700" fill="#8f3f20">算法对策（揭示方）</text>
+
+  <!-- Row definitions -->
+  <!-- Row data: y_center, mechanism, channel, algorithm -->
+  <!-- 1. Background matching -->
+  <g transform="translate(0,110)">
+    <rect x="20" y="-22" width="240" height="44" rx="8" fill="#e9f3f0" stroke="#2E8B7A" stroke-width="1.2"/>
+    <text x="140" y="-5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f6b5c">背景匹配</text>
+    <text x="140" y="13" text-anchor="middle" font-size="11" fill="#3f7a6e">background matching</text>
+    <text x="430" y="2" text-anchor="middle" font-size="11.5" fill="#3f4651">颜色/纹理统计</text>
+    <rect x="600" y="-22" width="260" height="44" rx="8" fill="#fbf1ec" stroke="#B6542E" stroke-width="1.2"/>
+    <text x="730" y="-4" text-anchor="middle" font-size="12" fill="#5b2b10">频域分析、显著性对比</text>
+    <text x="730" y="14" text-anchor="middle" font-size="11" fill="#8f3f20">→ ch11 频域方法</text>
+    <line x1="262" y1="0" x2="328" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="532" y1="0" x2="598" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- 2. Disruptive coloration -->
+  <g transform="translate(0,180)">
+    <rect x="20" y="-22" width="240" height="44" rx="8" fill="#e9f3f0" stroke="#2E8B7A" stroke-width="1.2"/>
+    <text x="140" y="-5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f6b5c">瓦解色</text>
+    <text x="140" y="13" text-anchor="middle" font-size="11" fill="#3f7a6e">disruptive coloration</text>
+    <text x="430" y="2" text-anchor="middle" font-size="11.5" fill="#3f4651">轮廓/完形知觉</text>
+    <rect x="600" y="-22" width="260" height="44" rx="8" fill="#fbf1ec" stroke="#B6542E" stroke-width="1.2"/>
+    <text x="730" y="-4" text-anchor="middle" font-size="12" fill="#5b2b10">边界建模、边缘竞争</text>
+    <text x="730" y="14" text-anchor="middle" font-size="11" fill="#8f3f20">→ ch11 CNN/Transformer</text>
+    <line x1="262" y1="0" x2="328" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="532" y1="0" x2="598" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- 3. Countershading -->
+  <g transform="translate(0,250)">
+    <rect x="20" y="-22" width="240" height="44" rx="8" fill="#e9f3f0" stroke="#2E8B7A" stroke-width="1.2"/>
+    <text x="140" y="-5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f6b5c">消影</text>
+    <text x="140" y="13" text-anchor="middle" font-size="11" fill="#3f7a6e">countershading</text>
+    <text x="430" y="2" text-anchor="middle" font-size="11.5" fill="#3f4651">立体/阴影线索</text>
+    <rect x="600" y="-22" width="260" height="44" rx="8" fill="#fbf1ec" stroke="#B6542E" stroke-width="1.2"/>
+    <text x="730" y="-4" text-anchor="middle" font-size="12" fill="#5b2b10">光照归一化、深度估计</text>
+    <text x="730" y="14" text-anchor="middle" font-size="11" fill="#8f3f20">→ ch9/ch14 多模态</text>
+    <line x1="262" y1="0" x2="328" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="532" y1="0" x2="598" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- 4. Masquerade -->
+  <g transform="translate(0,320)">
+    <rect x="20" y="-22" width="240" height="44" rx="8" fill="#e9f3f0" stroke="#2E8B7A" stroke-width="1.2"/>
+    <text x="140" y="-5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f6b5c">伪装性拟态</text>
+    <text x="140" y="13" text-anchor="middle" font-size="11" fill="#3f7a6e">masquerade</text>
+    <text x="430" y="2" text-anchor="middle" font-size="11.5" fill="#3f4651">类别识别/语义</text>
+    <rect x="600" y="-22" width="260" height="44" rx="8" fill="#fbf1ec" stroke="#B6542E" stroke-width="1.2"/>
+    <text x="730" y="-4" text-anchor="middle" font-size="12" fill="#5b2b10">语义分割、开放词汇</text>
+    <text x="730" y="14" text-anchor="middle" font-size="11" fill="#8f3f20">→ ch13 R-COD/OV-COS</text>
+    <line x1="262" y1="0" x2="328" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="532" y1="0" x2="598" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- 5. Motion dazzle -->
+  <g transform="translate(0,390)">
+    <rect x="20" y="-22" width="240" height="44" rx="8" fill="#e9f3f0" stroke="#2E8B7A" stroke-width="1.2"/>
+    <text x="140" y="-5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f6b5c">运动眩惑</text>
+    <text x="140" y="13" text-anchor="middle" font-size="11" fill="#3f7a6e">motion dazzle/camouflage</text>
+    <text x="430" y="2" text-anchor="middle" font-size="11.5" fill="#3f4651">运动/速度估计</text>
+    <rect x="600" y="-22" width="260" height="44" rx="8" fill="#fbf1ec" stroke="#B6542E" stroke-width="1.2"/>
+    <text x="730" y="-4" text-anchor="middle" font-size="12" fill="#5b2b10">光流、时序一致性</text>
+    <text x="730" y="14" text-anchor="middle" font-size="11" fill="#8f3f20">→ ch12 VCOD / flowcamo</text>
+    <line x1="262" y1="0" x2="328" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="532" y1="0" x2="598" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- 6. Multi-channel -->
+  <g transform="translate(0,460)">
+    <rect x="20" y="-22" width="240" height="44" rx="8" fill="#e9f3f0" stroke="#2E8B7A" stroke-width="1.2"/>
+    <text x="140" y="-5" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f6b5c">多信道伪装</text>
+    <text x="140" y="13" text-anchor="middle" font-size="11" fill="#3f7a6e">UV / IR / polarization</text>
+    <text x="430" y="2" text-anchor="middle" font-size="11.5" fill="#3f4651">跨信道感知/特征管理</text>
+    <rect x="600" y="-22" width="260" height="44" rx="8" fill="#fbf1ec" stroke="#B6542E" stroke-width="1.2"/>
+    <text x="730" y="-4" text-anchor="middle" font-size="12" fill="#5b2b10">多光谱融合、偏振检测</text>
+    <text x="730" y="14" text-anchor="middle" font-size="11" fill="#8f3f20">→ ch9 多光谱/偏振</text>
+    <line x1="262" y1="0" x2="328" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="532" y1="0" x2="598" y2="0" stroke="#cdd1d6" stroke-width="1.5" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#9aa0a8"/>
+    </marker>
+  </defs>
+
+  <!-- Center column labels (channel types) -->
+  <rect x="328" y="88" width="204" height="380" rx="6" fill="#f7f8f9" stroke="#e4e6e9" stroke-width="1"/>
+  <text x="430" y="107" text-anchor="middle" font-size="11" fill="#9aa0a8">攻击的感知环节</text>
+</svg>
