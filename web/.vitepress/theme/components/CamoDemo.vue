@@ -584,6 +584,76 @@ onMounted(async () => {
       <a href="https://github.com/facebookresearch/sam3" target="_blank" rel="noreferrer">SAM3 code</a>
     </section>
 
+    <section class="execution-ladder">
+      <div class="section-title">
+        <p class="eyebrow">Execution ladder</p>
+        <h2>Choose the surface by compute cost</h2>
+        <p>
+          The browser handles annotation and lightweight metrics. Anything that needs
+          model weights, GPUs, videos, or larger datasets should move to a hosted
+          notebook, Codespace, Kaggle runtime, or a dedicated project implementation.
+        </p>
+      </div>
+
+      <div class="route-grid">
+        <article class="route-card">
+          <span>01 · Browser</span>
+          <h3>Manual and lightweight auto segmentation</h3>
+          <p>
+            Upload an image, click a seed, paint target/background regions, and compute
+            target-background measurements immediately on GitHub Pages.
+          </p>
+          <ul>
+            <li>No login, no backend, no model weights.</li>
+            <li>Best for quick camouflage-difficulty inspection.</li>
+          </ul>
+        </article>
+
+        <article class="route-card">
+          <span>02 · HF Space</span>
+          <h3>SAM3-assisted masks</h3>
+          <p>
+            Use SAM3 for text/click/exemplar segmentation, then bring the mask back to
+            CamoGED metrics or run a future CamoGED Space with both segmentation and
+            measurement in one backend.
+          </p>
+          <div class="route-links">
+            <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">SAM3 Demo</a>
+            <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noreferrer">Model card</a>
+          </div>
+        </article>
+
+        <article class="route-card">
+          <span>03 · Notebook runtimes</span>
+          <h3>Colab, Codespaces, Kaggle</h3>
+          <p>
+            Use these when the user needs Python, persistent files, GPU/CPU runtime, or
+            batch evaluation beyond what a static page can safely run.
+          </p>
+          <div class="route-links">
+            <a href="https://colab.research.google.com/github/MichaelCSHN/CamoGED/blob/main/camo-eval/notebooks/camo_eval_colab_demo.ipynb" target="_blank" rel="noreferrer">Open Colab</a>
+            <a href="https://codespaces.new/MichaelCSHN/CamoGED" target="_blank" rel="noreferrer">Open Codespace</a>
+            <a href="https://www.kaggle.com/code" target="_blank" rel="noreferrer">Kaggle notebooks</a>
+          </div>
+        </article>
+
+        <article class="route-card">
+          <span>04 · Research implementations</span>
+          <h3>Complex segmentation and benchmark work</h3>
+          <p>
+            Full SAM3 inference, video tracking, promptable concept segmentation, and
+            heavyweight benchmark claims should point to the corresponding paper,
+            model, and code rather than being hidden behind a fragile static demo.
+          </p>
+          <div class="route-links">
+            <a href="https://ai.meta.com/research/sam3/" target="_blank" rel="noreferrer">Meta SAM3</a>
+            <a href="https://arxiv.org/abs/2511.16719" target="_blank" rel="noreferrer">SAM3 paper</a>
+            <a href="https://github.com/facebookresearch/sam3" target="_blank" rel="noreferrer">Official repo</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <div class="sample-tabs" aria-label="Bundled demo samples">
       <button
         v-for="sample in samples"
@@ -1062,19 +1132,85 @@ figcaption {
   gap: 16px;
 }
 
+.execution-ladder {
+  display: grid;
+  gap: 18px;
+}
+
+.section-title p:last-child {
+  max-width: 820px;
+  margin: 10px 0 0;
+  color: #5f6b62;
+}
+
 .group-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
-.group-card {
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.group-card,
+.route-card {
   padding: 18px;
 }
 
-.group-card h3 {
+.route-card {
+  border: 1px solid rgba(39, 59, 49, 0.14);
+  border-radius: 24px;
+  background: #fffdf7;
+  box-shadow: 0 18px 60px rgba(28, 48, 38, 0.08);
+}
+
+.route-card span {
+  color: #58715b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.group-card h3,
+.route-card h3 {
   margin: 0 0 14px;
   color: #17251f;
+}
+
+.route-card h3 {
+  margin-top: 8px;
+}
+
+.route-card p,
+.route-card li {
+  color: #5d685f;
+  line-height: 1.55;
+}
+
+.route-card ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.route-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.route-links a {
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #e8efe2;
+  color: #1d3529;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
 }
 
 dl {
@@ -1135,6 +1271,7 @@ dd {
   }
 
   .group-grid,
+  .route-grid,
   .interactive-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1153,6 +1290,7 @@ dd {
 
   .image-grid,
   .group-grid,
+  .route-grid,
   .interactive-metrics {
     grid-template-columns: 1fr;
   }
