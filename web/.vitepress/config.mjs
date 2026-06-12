@@ -5,13 +5,18 @@ export default {
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
-      { text: "Awesome", link: "/awesome" },
-      { text: "Papers", link: "/papers" },
-      { text: "Code", link: "/models" },
-      { text: "Leaderboard", link: "/leaderboard" },
-      { text: "Datasets", link: "/datasets" },
+      { text: "Book", link: "/book/" },
       { text: "Demo", link: "/demo" },
-      { text: "Book", link: "/book/" }
+      {
+        text: "Awesome",
+        items: [
+          { text: "Overview", link: "/awesome" },
+          { text: "Papers", link: "/papers" },
+          { text: "Code", link: "/models" },
+          { text: "Leaderboard", link: "/leaderboard" },
+          { text: "Datasets", link: "/datasets" }
+        ]
+      }
     ],
     socialLinks: [
       { icon: "github", link: "https://github.com/MichaelCSHN/CamoGED" }

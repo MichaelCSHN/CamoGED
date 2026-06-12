@@ -6,14 +6,14 @@ hero:
   tagline: A cross-domain open platform — Nature, War, and Machines.
   actions:
     - theme: brand
-      text: Awesome List
+      text: Book
+      link: /book/
+    - theme: alt
+      text: Demo
+      link: /demo
+    - theme: alt
+      text: Awesome
       link: /awesome
-    - theme: alt
-      text: Papers
-      link: /papers
-    - theme: alt
-      text: Leaderboard
-      link: /leaderboard
 features:
   - title: ✍️ Generation
     details: Physical, digital, and intelligent-domain camouflage synthesis and adversarial attacks.
