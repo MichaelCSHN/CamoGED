@@ -290,9 +290,8 @@ def render_datasets_page(datasets: list[dict]) -> str:
 
 def render_leaderboard_page(leaderboard: list[dict]) -> str:
     verified_rows = sort_verified_rows(leaderboard)
-    tracked_rows = sorted(
-        leaderboard, key=lambda item: (item["dataset"], item["method"].lower())
-    )
+    tracked_rows = sorted(leaderboard, key=lambda item: (item["dataset"], item["method"].lower()))
+    unverified_rows = [row for row in tracked_rows if not row["verified"]]
     lines = [
         "# Leaderboard",
         "",
@@ -326,14 +325,21 @@ def render_leaderboard_page(leaderboard: list[dict]) -> str:
             "",
             "## Tracked methods awaiting verification",
             "",
-            "| Method | Dataset | Status | Source |",
-            "| --- | --- | --- | --- |",
         ]
     )
-    for row in tracked_rows:
-        lines.append(
-            f"| {row['method']} | `{row['dataset']}` | `{row['status']}` | {row['source']} |"
+    if unverified_rows:
+        lines.extend(
+            [
+                "| Method | Dataset | Status | Source |",
+                "| --- | --- | --- | --- |",
+            ]
         )
+        for row in unverified_rows:
+            lines.append(
+                f"| {row['method']} | `{row['dataset']}` | `{row['status']}` | {row['source']} |"
+            )
+    else:
+        lines.append("_No unverified tracked rows._")
     lines.append("")
     return "\n".join(lines) + "\n"
 
