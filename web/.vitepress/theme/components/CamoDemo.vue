@@ -4,65 +4,65 @@ import { withBase } from "vitepress";
 
 const samples = [
   {
-    id: "cod-sample1",
-    label: "COD sample 1",
-    caption: "Low-contrast target with compact local clutter.",
+    id: "cod10k-batfish",
+    label: "Aquatic: BatFish",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "cod-sample2",
-    label: "COD sample 2",
-    caption: "Second bundled scene for comparing masks and background difficulty.",
+    id: "cod10k-seadragon",
+    label: "Aquatic: LeafySeaDragon",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "animal-moth",
-    label: "Animal: moth",
-    caption: "Synthetic bark camouflage with a moth-like target.",
+    id: "cod10k-octopus",
+    label: "Aquatic: Octopus",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "animal-frog",
-    label: "Animal: frog",
-    caption: "Synthetic leaf-litter camouflage with a frog-like target.",
+    id: "cod10k-chameleon",
+    label: "Terrestrial: Chameleon",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "animal-fish",
-    label: "Animal: fish",
-    caption: "Synthetic reef/sand camouflage with a fish-like target.",
+    id: "cod10k-cheetah",
+    label: "Terrestrial: Cheetah",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "military-vehicle",
-    label: "Military: vehicle",
-    caption: "Synthetic desert scene with a low-contrast vehicle silhouette.",
+    id: "cod10k-moth",
+    label: "Flying: Moth",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "military-drone",
-    label: "Military: drone",
-    caption: "Synthetic concrete/urban scene with an aircraft-like target.",
+    id: "cod10k-frog",
+    label: "Aquatic: FrogFish",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
-    id: "military-ship",
-    label: "Military: ship",
-    caption: "Synthetic coastal scene with a ship-like silhouette.",
+    id: "cod10k-human",
+    label: "Terrestrial: Human",
+    caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
@@ -75,7 +75,7 @@ const diagnosticsBySample = ref({});
 const generationScores = ref({});
 
 const editorCanvas = ref(null);
-const imageName = ref("COD sample 1");
+const imageName = ref("Aquatic: BatFish");
 const imageWidth = ref(0);
 const imageHeight = ref(0);
 const sourcePixels = ref(null);
@@ -542,10 +542,7 @@ onMounted(async () => {
           </p>
         </div>
         <div class="lab-actions">
-          <label class="upload-button">
-            Upload image
-            <input type="file" accept="image/*" @change="onFileUpload" />
-          </label>
+          <input class="file-picker" type="file" accept="image/*" @change="onFileUpload" />
           <button
             v-for="sample in samples.slice(0, 2)"
             :key="`quick-${sample.id}`"
@@ -710,7 +707,19 @@ onMounted(async () => {
       </div>
     </section>
 
-    <div class="sample-tabs" aria-label="Bundled demo samples">
+    <section class="sample-gallery">
+      <div class="section-title">
+        <p class="eyebrow">Real COD10K samples</p>
+        <h2>Choose a bundled benchmark image</h2>
+        <p>
+          These thumbnails are sampled from `D:\ML\COD_datasets\COD10K-v3`.
+          COD10K is an animal/human camouflage dataset and does not provide
+          military target classes, so the previous synthetic military examples
+          have been removed.
+        </p>
+      </div>
+
+      <div class="sample-tabs" aria-label="Bundled demo samples">
       <button
         v-for="sample in samples"
         :key="sample.id"
@@ -721,7 +730,8 @@ onMounted(async () => {
         <img :src="asset(`${sample.id}/${sample.scene}`)" :alt="`${sample.label} thumbnail`" />
         <span>{{ sample.label }}</span>
       </button>
-    </div>
+      </div>
+    </section>
 
     <div class="demo-layout">
       <article class="visual-card">
@@ -925,12 +935,7 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
   gap: 10px;
 }
 
-.lab-actions input {
-  display: none;
-}
-
 button,
-.upload-button,
 .lab-actions a,
 .run-strip a {
   border: 0;
@@ -944,18 +949,31 @@ button,
   text-decoration: none;
 }
 
-.upload-button {
-  display: inline-flex;
-  align-items: center;
-}
-
-.upload-button input {
-  display: none;
-}
-
 .lab-actions button {
   background: #e8efe2;
   color: #1d3529;
+}
+
+.file-picker {
+  max-width: 260px;
+  border: 1px solid rgba(29, 53, 41, 0.22);
+  border-radius: 999px;
+  padding: 8px;
+  background: #fffdf7;
+  color: #1d3529;
+  font-weight: 800;
+}
+
+.file-picker::file-selector-button {
+  margin-right: 10px;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #1d3529;
+  color: #fff9e8;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
 }
 
 .lab-grid {
@@ -1066,6 +1084,11 @@ canvas {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
+}
+
+.sample-gallery {
+  display: grid;
+  gap: 16px;
 }
 
 .sample-tabs button {
