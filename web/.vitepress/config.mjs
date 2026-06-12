@@ -11,7 +11,7 @@ export default {
       { text: "Leaderboard", link: "/leaderboard" },
       { text: "Datasets", link: "/datasets" },
       { text: "Demo", link: "/demo" },
-      { text: "Book", link: "https://michaelcshn.github.io/CamoGED/" }
+      { text: "Book", link: "/book/" }
     ],
     socialLinks: [
       { icon: "github", link: "https://github.com/MichaelCSHN/CamoGED" }
