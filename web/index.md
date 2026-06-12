@@ -7,7 +7,7 @@ hero:
   actions:
     - theme: brand
       text: Book
-      link: /book/
+      link: https://michaelcshn.github.io/CamoGED/book/
     - theme: alt
       text: Demo
       link: /demo

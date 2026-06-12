@@ -5,7 +5,7 @@ export default {
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
-      { text: "Book", link: "/book/" },
+      { text: "Book", link: "https://michaelcshn.github.io/CamoGED/book/" },
       { text: "Demo", link: "/demo" },
       {
         text: "Awesome",
