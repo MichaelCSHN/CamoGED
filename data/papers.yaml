@@ -107,6 +107,27 @@ papers:
     bibtex_key: "zhang2023refcod"
     notes: "Defines the Ref-COD task and introduces R2C7K."
 
+  - id: "zhang2023collaborative"
+    title: "Collaborative Camouflaged Object Detection: A Large-Scale Dataset and Benchmark"
+    authors:
+      - "Zhang, Cong"
+      - "Bi, Hongbo"
+      - "Xiang, Tian-Zhu"
+      - "Wu, Ranwan"
+      - "Tong, Jinghui"
+      - "Wang, Xiufang"
+    venue: "IEEE TNNLS"
+    year: 2023
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "collaborative-cod"
+    paper: "https://doi.org/10.1109/TNNLS.2023.3317091"
+    code: "https://github.com/zc199823/BBNet--CoCOD"
+    datasets: ["cocod8k"]
+    bibtex_key: "zhang2023collaborative"
+    notes: "Introduces the CoCOD8K collaborative camouflage benchmark."
+
   - id: "camosam2-2025"
     title: "CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection"
     authors: "Zhang et al."
@@ -121,6 +142,28 @@ papers:
     datasets: ["moca-mask"]
     bibtex_key: "camosam2_2025"
     notes: null
+
+  - id: "cheng2022implicit"
+    title: "Implicit Motion Handling for Video Camouflaged Object Detection"
+    authors:
+      - "Cheng, Xuelian"
+      - "Xiong, Huan"
+      - "Fan, Deng-Ping"
+      - "Zhong, Yiran"
+      - "Harandi, Mehrtash"
+      - "Drummond, Tom"
+      - "Ge, Zongyuan"
+    venue: "CVPR"
+    year: 2022
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "video-cod"
+    paper: "https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html"
+    code: "https://github.com/XuelianCheng/SLT-Net"
+    datasets: ["moca-mask"]
+    bibtex_key: "cheng2022implicit"
+    notes: "Introduces the MoCA-Mask benchmark for video camouflage detection."
 
   - id: "camdiff2023"
     title: "CamDiff: Camouflage Image Augmentation via Diffusion"
@@ -235,6 +278,26 @@ papers:
     datasets: ["mm-camobj"]
     bibtex_key: "mmcamobj2024"
     notes: "Multimodal camouflage dataset and benchmark for LVLM evaluation."
+
+  - id: "mcod2025"
+    title: "MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection"
+    authors:
+      - "Li, Yang"
+      - "Xu, Tingfa"
+      - "Bai, ShuYan"
+      - "Liu, Peifu"
+      - "Li, Jianan"
+    venue: "arXiv"
+    year: 2025
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "dataset"
+    paper: "https://arxiv.org/abs/2509.15753"
+    code: "https://github.com/yl2900260-bit/MCOD"
+    datasets: ["mcod"]
+    bibtex_key: "mcod2025"
+    notes: "Introduces the first multispectral COD benchmark."
 
   - id: "talas2017military"
     title: "Cultural evolution of military camouflage"

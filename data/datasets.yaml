@@ -51,13 +51,13 @@ datasets:
     name: "CoCOD8K"
     task: "collaborative-cod"
     modality: "rgb"
-    size: "8K images"
+    size: "8,528 images"
     split: "train/test"
-    year: null
-    link: null
+    year: 2023
+    link: "https://github.com/zc199823/BBNet--CoCOD"
     license: null
-    bibtex_key: null
-    notes: "Collaborative camouflage."
+    bibtex_key: "zhang2023collaborative"
+    notes: "Collaborative camouflage benchmark regrouped from multiple COD sources."
 
   - id: "r2c7k"
     name: "R2C7K"
@@ -114,9 +114,9 @@ datasets:
     size: null
     split: "benchmark"
     year: 2025
-    link: null
-    license: null
-    bibtex_key: null
+    link: "https://github.com/yl2900260-bit/MCOD"
+    license: "CC BY-NC-ND 4.0"
+    bibtex_key: "mcod2025"
     notes: "First multispectral COD benchmark."
 
   - id: "mm-camobj"
@@ -135,12 +135,12 @@ datasets:
     name: "MoCA-Mask"
     task: "video-cod"
     modality: "video"
-    size: "141 sequences"
+    size: "87 sequences; 22,939 frames"
     split: "train/test"
-    year: null
-    link: null
+    year: 2022
+    link: "https://xueliancheng.github.io/SLT-Net-project/"
     license: null
-    bibtex_key: null
+    bibtex_key: "cheng2022implicit"
     notes: "Moving camouflaged animals with mask annotations."
 
   - id: "cad"
