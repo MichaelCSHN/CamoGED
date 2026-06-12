@@ -1,12 +1,12 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { withBase } from "vitepress";
 
 const samples = [
   {
     id: "cod-sample1",
     label: "COD sample 1",
-    caption: "Low-contrast target with a compact mask and local clutter.",
+    caption: "Low-contrast target with compact local clutter.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
@@ -14,7 +14,7 @@ const samples = [
   {
     id: "cod-sample2",
     label: "COD sample 2",
-    caption: "Second bundled scene for comparing mask and clutter behavior.",
+    caption: "Second bundled scene for comparing masks and background difficulty.",
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
@@ -26,35 +26,29 @@ const scoresBySample = ref({});
 const diagnosticsBySample = ref({});
 const generationScores = ref({});
 
+const editorCanvas = ref(null);
+const fileInput = ref(null);
+const imageName = ref("COD sample 1");
+const imageWidth = ref(0);
+const imageHeight = ref(0);
+const sourcePixels = ref(null);
+const targetMask = ref(null);
+const manualBackgroundMask = ref(null);
+const maskVersion = ref(0);
+const activeTool = ref("seed");
+const brushSize = ref(18);
+const tolerance = ref(42);
+const backgroundMode = ref("near");
+const lastSeed = ref(null);
+
 const selectedSample = computed(
   () => samples.find((sample) => sample.id === selectedId.value) || samples[0]
 );
-
 const score = computed(() => scoresBySample.value[selectedSample.value.id] || {});
 const diagnostics = computed(
   () => diagnosticsBySample.value[selectedSample.value.id] || {}
 );
 const difficulty = computed(() => diagnostics.value.camouflage_difficulty || {});
-
-function asset(path) {
-  return withBase(`/demo-artifacts/${path}`);
-}
-
-async function fetchJson(path) {
-  const response = await fetch(asset(path));
-  if (!response.ok) {
-    throw new Error(`Failed to load ${path}`);
-  }
-  return response.json();
-}
-
-function formatValue(value) {
-  if (value === undefined || value === null) return "n/a";
-  if (typeof value !== "number") return String(value);
-  if (Math.abs(value) >= 100) return value.toFixed(1);
-  if (Math.abs(value) >= 10) return value.toFixed(2);
-  return value.toFixed(3);
-}
 
 const headlineMetrics = computed(() => [
   { label: "MAE", value: score.value.MAE, hint: "lower is better" },
@@ -107,6 +101,351 @@ const metricGroups = computed(() => [
   }
 ]);
 
+function asset(path) {
+  return withBase(`/demo-artifacts/${path}`);
+}
+
+async function fetchJson(path) {
+  const response = await fetch(asset(path));
+  if (!response.ok) throw new Error(`Failed to load ${path}`);
+  return response.json();
+}
+
+function formatValue(value) {
+  if (value === undefined || value === null || Number.isNaN(value)) return "n/a";
+  if (typeof value !== "number") return String(value);
+  if (Math.abs(value) >= 100) return value.toFixed(1);
+  if (Math.abs(value) >= 10) return value.toFixed(2);
+  return value.toFixed(3);
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function scaledSize(width, height, maxSide = 640) {
+  const scale = Math.min(1, maxSide / Math.max(width, height));
+  return {
+    width: Math.max(1, Math.round(width * scale)),
+    height: Math.max(1, Math.round(height * scale))
+  };
+}
+
+async function setEditorImage(img, name) {
+  const size = scaledSize(img.naturalWidth || img.width, img.naturalHeight || img.height);
+  imageWidth.value = size.width;
+  imageHeight.value = size.height;
+  imageName.value = name;
+  await nextTick();
+
+  const canvas = document.createElement("canvas");
+  canvas.width = size.width;
+  canvas.height = size.height;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.drawImage(img, 0, 0, size.width, size.height);
+  sourcePixels.value = ctx.getImageData(0, 0, size.width, size.height);
+  targetMask.value = new Uint8Array(size.width * size.height);
+  manualBackgroundMask.value = new Uint8Array(size.width * size.height);
+  maskVersion.value += 1;
+  lastSeed.value = null;
+  drawEditor();
+}
+
+async function loadBundledIntoEditor(sample = samples[0]) {
+  const img = await loadImage(asset(`${sample.id}/${sample.scene}`));
+  await setEditorImage(img, sample.label);
+}
+
+async function onFileUpload(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImage(url);
+    await setEditorImage(img, file.name);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function drawEditor() {
+  const canvas = editorCanvas.value;
+  if (!canvas || !sourcePixels.value) return;
+  canvas.width = imageWidth.value;
+  canvas.height = imageHeight.value;
+  const ctx = canvas.getContext("2d");
+  const rendered = new ImageData(
+    new Uint8ClampedArray(sourcePixels.value.data),
+    imageWidth.value,
+    imageHeight.value
+  );
+  const bg = currentBackgroundMask();
+  for (let i = 0; i < targetMask.value.length; i += 1) {
+    const offset = i * 4;
+    if (bg[i]) {
+      rendered.data[offset] = Math.round(rendered.data[offset] * 0.55 + 40 * 0.45);
+      rendered.data[offset + 1] = Math.round(rendered.data[offset + 1] * 0.55 + 110 * 0.45);
+      rendered.data[offset + 2] = Math.round(rendered.data[offset + 2] * 0.55 + 210 * 0.45);
+    }
+    if (targetMask.value[i]) {
+      rendered.data[offset] = Math.round(rendered.data[offset] * 0.45 + 248 * 0.55);
+      rendered.data[offset + 1] = Math.round(rendered.data[offset + 1] * 0.45 + 176 * 0.55);
+      rendered.data[offset + 2] = Math.round(rendered.data[offset + 2] * 0.45 + 35 * 0.55);
+    }
+  }
+  ctx.putImageData(rendered, 0, 0);
+}
+
+function pointFromEvent(event) {
+  const rect = editorCanvas.value.getBoundingClientRect();
+  return {
+    x: Math.max(0, Math.min(imageWidth.value - 1, Math.floor((event.clientX - rect.left) * imageWidth.value / rect.width))),
+    y: Math.max(0, Math.min(imageHeight.value - 1, Math.floor((event.clientY - rect.top) * imageHeight.value / rect.height)))
+  };
+}
+
+function paintAt(x, y) {
+  if (!targetMask.value) return;
+  const radius = Math.max(1, Math.round(brushSize.value / 2));
+  for (let yy = y - radius; yy <= y + radius; yy += 1) {
+    if (yy < 0 || yy >= imageHeight.value) continue;
+    for (let xx = x - radius; xx <= x + radius; xx += 1) {
+      if (xx < 0 || xx >= imageWidth.value) continue;
+      if ((xx - x) ** 2 + (yy - y) ** 2 > radius ** 2) continue;
+      const index = yy * imageWidth.value + xx;
+      if (activeTool.value === "target") {
+        targetMask.value[index] = 1;
+        manualBackgroundMask.value[index] = 0;
+      } else if (activeTool.value === "background") {
+        manualBackgroundMask.value[index] = 1;
+        targetMask.value[index] = 0;
+      } else if (activeTool.value === "erase") {
+        targetMask.value[index] = 0;
+        manualBackgroundMask.value[index] = 0;
+      }
+    }
+  }
+  maskVersion.value += 1;
+  drawEditor();
+}
+
+let pointerDown = false;
+
+function onPointerDown(event) {
+  if (!sourcePixels.value) return;
+  const point = pointFromEvent(event);
+  if (activeTool.value === "seed") {
+    autoSegment(point.x, point.y);
+    return;
+  }
+  pointerDown = true;
+  editorCanvas.value.setPointerCapture?.(event.pointerId);
+  paintAt(point.x, point.y);
+}
+
+function onPointerMove(event) {
+  if (!pointerDown || activeTool.value === "seed") return;
+  const point = pointFromEvent(event);
+  paintAt(point.x, point.y);
+}
+
+function onPointerUp() {
+  pointerDown = false;
+}
+
+function colorDistance(index, seed) {
+  const data = sourcePixels.value.data;
+  const offset = index * 4;
+  const dr = data[offset] - seed[0];
+  const dg = data[offset + 1] - seed[1];
+  const db = data[offset + 2] - seed[2];
+  return Math.sqrt(dr * dr + dg * dg + db * db);
+}
+
+function autoSegment(x = Math.floor(imageWidth.value / 2), y = Math.floor(imageHeight.value / 2)) {
+  if (!sourcePixels.value) return;
+  const width = imageWidth.value;
+  const height = imageHeight.value;
+  const seedIndex = y * width + x;
+  const offset = seedIndex * 4;
+  const seed = [
+    sourcePixels.value.data[offset],
+    sourcePixels.value.data[offset + 1],
+    sourcePixels.value.data[offset + 2]
+  ];
+  const visited = new Uint8Array(width * height);
+  const proposed = new Uint8Array(width * height);
+  const queue = [seedIndex];
+  visited[seedIndex] = 1;
+  const limit = Number(tolerance.value);
+
+  for (let head = 0; head < queue.length; head += 1) {
+    const index = queue[head];
+    if (colorDistance(index, seed) > limit) continue;
+    proposed[index] = 1;
+    const px = index % width;
+    const py = Math.floor(index / width);
+    const neighbors = [
+      [px - 1, py],
+      [px + 1, py],
+      [px, py - 1],
+      [px, py + 1]
+    ];
+    for (const [nx, ny] of neighbors) {
+      if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+      const next = ny * width + nx;
+      if (!visited[next]) {
+        visited[next] = 1;
+        queue.push(next);
+      }
+    }
+  }
+
+  targetMask.value = proposed;
+  manualBackgroundMask.value = new Uint8Array(width * height);
+  maskVersion.value += 1;
+  lastSeed.value = { x, y };
+  drawEditor();
+}
+
+function clearMasks() {
+  if (!sourcePixels.value) return;
+  targetMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
+  manualBackgroundMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
+  maskVersion.value += 1;
+  lastSeed.value = null;
+  drawEditor();
+}
+
+function dilate(mask, iterations = 5) {
+  let current = mask;
+  const width = imageWidth.value;
+  const height = imageHeight.value;
+  for (let iter = 0; iter < iterations; iter += 1) {
+    const next = new Uint8Array(current);
+    for (let y = 0; y < height; y += 1) {
+      for (let x = 0; x < width; x += 1) {
+        const index = y * width + x;
+        if (current[index]) continue;
+        let hit = false;
+        for (let dy = -1; dy <= 1; dy += 1) {
+          for (let dx = -1; dx <= 1; dx += 1) {
+            const nx = x + dx;
+            const ny = y + dy;
+            if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+            if (current[ny * width + nx]) hit = true;
+          }
+        }
+        if (hit) next[index] = 1;
+      }
+    }
+    current = next;
+  }
+  return current;
+}
+
+function currentBackgroundMask() {
+  const total = imageWidth.value * imageHeight.value;
+  const bg = new Uint8Array(total);
+  if (!targetMask.value) return bg;
+  if (backgroundMode.value === "manual") {
+    return manualBackgroundMask.value || bg;
+  }
+  if (backgroundMode.value === "all") {
+    for (let i = 0; i < total; i += 1) bg[i] = targetMask.value[i] ? 0 : 1;
+    return bg;
+  }
+  const dilated = dilate(targetMask.value, 5);
+  for (let i = 0; i < total; i += 1) bg[i] = dilated[i] && !targetMask.value[i] ? 1 : 0;
+  return bg;
+}
+
+function grayAt(index) {
+  const offset = index * 4;
+  const data = sourcePixels.value.data;
+  return (0.299 * data[offset] + 0.587 * data[offset + 1] + 0.114 * data[offset + 2]) / 255;
+}
+
+function stats(values) {
+  if (!values.length) return { mean: NaN, std: NaN };
+  const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+  const variance = values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length;
+  return { mean, std: Math.sqrt(variance) };
+}
+
+function histogram(values, bins = 32) {
+  const hist = new Array(bins).fill(0);
+  for (const value of values) {
+    const bin = Math.max(0, Math.min(bins - 1, Math.floor(value * bins)));
+    hist[bin] += 1;
+  }
+  const denom = Math.max(1, values.length);
+  return hist.map((value) => value / denom);
+}
+
+function sobelMagnitude(index) {
+  const width = imageWidth.value;
+  const height = imageHeight.value;
+  const x = index % width;
+  const y = Math.floor(index / width);
+  if (x === 0 || y === 0 || x === width - 1 || y === height - 1) return 0;
+  const g = (xx, yy) => grayAt(yy * width + xx);
+  const gx =
+    -g(x - 1, y - 1) - 2 * g(x - 1, y) - g(x - 1, y + 1) +
+    g(x + 1, y - 1) + 2 * g(x + 1, y) + g(x + 1, y + 1);
+  const gy =
+    -g(x - 1, y - 1) - 2 * g(x, y - 1) - g(x + 1, y - 1) +
+    g(x - 1, y + 1) + 2 * g(x, y + 1) + g(x + 1, y + 1);
+  return Math.sqrt(gx * gx + gy * gy);
+}
+
+const interactiveMetrics = computed(() => {
+  maskVersion.value;
+  if (!sourcePixels.value || !targetMask.value) return [];
+  const bgMask = currentBackgroundMask();
+  const target = [];
+  const background = [];
+  const gradients = [];
+  for (let i = 0; i < targetMask.value.length; i += 1) {
+    const gray = grayAt(i);
+    gradients.push(sobelMagnitude(i));
+    if (targetMask.value[i]) target.push(gray);
+    if (bgMask[i]) background.push(gray);
+  }
+  const targetStats = stats(target);
+  const backgroundStats = stats(background);
+  const targetHist = histogram(target);
+  const backgroundHist = histogram(background);
+  const histIntersection = targetHist.reduce(
+    (sum, value, index) => sum + Math.min(value, backgroundHist[index]),
+    0
+  );
+  const gradStats = stats(gradients);
+  const edgeThreshold = gradStats.mean + gradStats.std;
+  const edgeDensity = gradients.filter((value) => value > edgeThreshold).length / gradients.length;
+  const meanAbsDiff = Math.abs(targetStats.mean - backgroundStats.mean);
+  const contrastAbsDiff = Math.abs(targetStats.std - backgroundStats.std);
+  const difficultyScore = Math.max(
+    0,
+    Math.min(1, 0.5 * histIntersection + 0.3 * (1 - meanAbsDiff) + 0.2 * edgeDensity)
+  );
+  return [
+    ["Target pixels", target.length],
+    ["Background pixels", background.length],
+    ["Target area", target.length / targetMask.value.length],
+    ["Mean abs diff", meanAbsDiff],
+    ["Contrast abs diff", contrastAbsDiff],
+    ["Histogram overlap", histIntersection],
+    ["Edge density", edgeDensity],
+    ["Camouflage difficulty", difficultyScore]
+  ];
+});
+
 onMounted(async () => {
   const scoreEntries = await Promise.all(
     samples.map(async (sample) => [sample.id, await fetchJson(`${sample.id}/scores.json`)])
@@ -121,6 +460,7 @@ onMounted(async () => {
   );
   diagnosticsBySample.value = Object.fromEntries(diagnosticEntries);
   generationScores.value = await fetchJson("cod-demo-generation.json");
+  await loadBundledIntoEditor(samples[0]);
 });
 </script>
 
@@ -128,22 +468,123 @@ onMounted(async () => {
   <section class="camo-demo">
     <div class="demo-hero">
       <div>
-        <p class="eyebrow">Browser demo</p>
-        <h1>Camouflage metric workbench</h1>
+        <p class="eyebrow">Interactive browser demo</p>
+        <h1>Upload. Segment. Choose background. Measure camouflage.</h1>
         <p class="hero-copy">
-          Inspect bundled camouflaged-object samples, compare prediction masks, view
-          PR curves, and read lightweight metric outputs without downloading large
-          datasets or model weights.
+          This demo runs entirely in the browser for lightweight measurement. Use
+          seed-based auto segmentation, manual mask/background brushes, or send the
+          image to a SAM3 Space for model-assisted segmentation.
         </p>
       </div>
       <div class="hero-panel">
-        <strong>29</strong>
-        <span>browser-visible scalar outputs</span>
-        <small>plus overlay, error map, and PR visualizations</small>
+        <strong>4</strong>
+        <span>workflow steps</span>
+        <small>image → mask → background → metrics</small>
       </div>
     </div>
 
-    <div class="sample-tabs" aria-label="Demo samples">
+    <section class="lab-card">
+      <div class="lab-header">
+        <div>
+          <p class="eyebrow">Try your own image</p>
+          <h2>Segmentation and metric lab</h2>
+          <p>
+            Click the object with Seed auto, refine with brushes, select a background
+            rule, then read the target/background metrics immediately.
+          </p>
+        </div>
+        <div class="lab-actions">
+          <button type="button" @click="fileInput?.click()">Upload image</button>
+          <button type="button" @click="loadBundledIntoEditor(samples[0])">Sample 1</button>
+          <button type="button" @click="loadBundledIntoEditor(samples[1])">Sample 2</button>
+          <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">Open SAM3</a>
+          <input ref="fileInput" type="file" accept="image/*" @change="onFileUpload" />
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        <div class="editor-wrap">
+          <div class="canvas-shell">
+            <canvas
+              ref="editorCanvas"
+              aria-label="Interactive segmentation canvas"
+              @pointerdown="onPointerDown"
+              @pointermove="onPointerMove"
+              @pointerup="onPointerUp"
+              @pointerleave="onPointerUp"
+            />
+          </div>
+          <div class="legend">
+            <span><i class="target-dot"></i>target mask</span>
+            <span><i class="background-dot"></i>background</span>
+            <span>{{ imageName }} · {{ imageWidth }}×{{ imageHeight }}</span>
+          </div>
+        </div>
+
+        <aside class="controls-card">
+          <p class="eyebrow">Controls</p>
+          <div class="tool-grid">
+            <button type="button" :class="{ active: activeTool === 'seed' }" @click="activeTool = 'seed'">Seed auto</button>
+            <button type="button" :class="{ active: activeTool === 'target' }" @click="activeTool = 'target'">Paint target</button>
+            <button type="button" :class="{ active: activeTool === 'background' }" @click="activeTool = 'background'; backgroundMode = 'manual'">Paint background</button>
+            <button type="button" :class="{ active: activeTool === 'erase' }" @click="activeTool = 'erase'">Erase</button>
+          </div>
+
+          <label>
+            Auto tolerance
+            <input v-model.number="tolerance" type="range" min="8" max="150" />
+            <span>{{ tolerance }}</span>
+          </label>
+          <label>
+            Brush size
+            <input v-model.number="brushSize" type="range" min="4" max="80" />
+            <span>{{ brushSize }}</span>
+          </label>
+          <label>
+            Background mode
+            <select v-model="backgroundMode" @change="drawEditor">
+              <option value="near">Auto near ring</option>
+              <option value="all">Auto all non-target</option>
+              <option value="manual">Manual background</option>
+            </select>
+          </label>
+
+          <div class="control-buttons">
+            <button type="button" @click="autoSegment(lastSeed?.x, lastSeed?.y)">Re-run auto</button>
+            <button type="button" @click="clearMasks">Clear masks</button>
+          </div>
+
+          <p class="control-note">
+            Browser auto segmentation is color-connected region growing, not SAM3.
+            Use the SAM3 Space link when a model-assisted mask is needed.
+          </p>
+        </aside>
+      </div>
+
+      <div class="interactive-metrics">
+        <article v-for="[name, value] in interactiveMetrics" :key="name" class="metric-card">
+          <span>{{ name }}</span>
+          <strong>{{ formatValue(value) }}</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="run-strip sam-strip">
+      <div>
+        <p class="eyebrow">Model-assisted route</p>
+        <h2>SAM3 belongs in a backend Space, not static Pages</h2>
+        <p>
+          GitHub Pages cannot host GPU inference or SAM3 weights. The browser lab
+          computes lightweight metrics locally; SAM3 can supply masks through the
+          linked Hugging Face Space or a future dedicated CamoGED Space.
+        </p>
+      </div>
+      <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">SAM3 Demo</a>
+      <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noreferrer">facebook/sam3</a>
+      <a href="https://github.com/facebookresearch/sam3" target="_blank" rel="noreferrer">SAM3 code</a>
+    </section>
+
+    <div class="sample-tabs" aria-label="Bundled demo samples">
       <button
         v-for="sample in samples"
         :key="sample.id"
@@ -159,7 +600,7 @@ onMounted(async () => {
       <article class="visual-card">
         <div class="card-heading">
           <div>
-            <p class="eyebrow">Selected bundle</p>
+            <p class="eyebrow">Bundled benchmark-style example</p>
             <h2>{{ selectedSample.label }}</h2>
           </div>
           <p>{{ selectedSample.caption }}</p>
@@ -171,31 +612,19 @@ onMounted(async () => {
             <figcaption>Scene</figcaption>
           </figure>
           <figure>
-            <img
-              :src="asset(`${selectedSample.id}/${selectedSample.pred}`)"
-              alt="Prediction mask"
-            />
+            <img :src="asset(`${selectedSample.id}/${selectedSample.pred}`)" alt="Prediction mask" />
             <figcaption>Prediction</figcaption>
           </figure>
           <figure>
-            <img
-              :src="asset(`${selectedSample.id}/${selectedSample.gt}`)"
-              alt="Ground-truth mask"
-            />
+            <img :src="asset(`${selectedSample.id}/${selectedSample.gt}`)" alt="Ground-truth mask" />
             <figcaption>Ground truth</figcaption>
           </figure>
           <figure>
-            <img
-              :src="asset(`${selectedSample.id}/mask_overlay.png`)"
-              alt="Mask overlay visualization"
-            />
+            <img :src="asset(`${selectedSample.id}/mask_overlay.png`)" alt="Mask overlay visualization" />
             <figcaption>Overlay</figcaption>
           </figure>
           <figure>
-            <img
-              :src="asset(`${selectedSample.id}/error_map.png`)"
-              alt="Error map visualization"
-            />
+            <img :src="asset(`${selectedSample.id}/error_map.png`)" alt="Error map visualization" />
             <figcaption>Error map</figcaption>
           </figure>
           <figure class="wide">
@@ -227,8 +656,8 @@ onMounted(async () => {
 
     <section class="metric-browser">
       <div class="section-title">
-        <p class="eyebrow">Metric browser</p>
-        <h2>What this demo computes now</h2>
+        <p class="eyebrow">Bundled metric browser</p>
+        <h2>What the repository sample computes</h2>
       </div>
       <div class="group-grid">
         <article v-for="group in metricGroups" :key="group.title" class="group-card">
@@ -241,16 +670,6 @@ onMounted(async () => {
           </dl>
         </article>
       </div>
-    </section>
-
-    <section class="run-strip">
-      <div>
-        <p class="eyebrow">Run it yourself</p>
-        <h2>Same metrics, three execution surfaces</h2>
-      </div>
-      <a href="https://colab.research.google.com/github/MichaelCSHN/CamoGED/blob/main/camo-eval/notebooks/camo_eval_colab_demo.ipynb">Open Colab</a>
-      <a href="https://github.com/MichaelCSHN/CamoGED/tree/main/web/hf-space">HF Space source</a>
-      <a href="https://github.com/MichaelCSHN/CamoGED/tree/main/camo-eval">CLI source</a>
     </section>
 
     <section class="command-card">
@@ -293,6 +712,7 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 }
 
 .demo-hero h1,
+.lab-header h2,
 .section-title h2,
 .run-strip h2,
 .visual-card h2 {
@@ -302,13 +722,13 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 }
 
 .demo-hero h1 {
-  max-width: 720px;
+  max-width: 780px;
   font-size: clamp(38px, 6vw, 72px);
   letter-spacing: -0.06em;
 }
 
 .hero-copy {
-  max-width: 720px;
+  max-width: 760px;
   margin: 18px 0 0;
   color: #39483f;
   font-size: 18px;
@@ -341,6 +761,170 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
   color: #5d6d61;
 }
 
+.lab-card,
+.visual-card,
+.metric-panel,
+.group-card,
+.run-strip,
+.command-card {
+  border: 1px solid rgba(39, 59, 49, 0.14);
+  border-radius: 24px;
+  background: #fffdf7;
+  box-shadow: 0 18px 60px rgba(28, 48, 38, 0.08);
+}
+
+.lab-card {
+  padding: 24px;
+}
+
+.lab-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.lab-header p {
+  max-width: 760px;
+  margin: 10px 0 0;
+  color: #5d685f;
+}
+
+.lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.lab-actions input {
+  display: none;
+}
+
+button,
+.lab-actions a,
+.run-strip a {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: #1d3529;
+  color: #fff9e8;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.lab-actions button:nth-child(n + 2) {
+  background: #e8efe2;
+  color: #1d3529;
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+}
+
+.canvas-shell {
+  overflow: hidden;
+  border: 1px solid rgba(39, 59, 49, 0.14);
+  border-radius: 22px;
+  background: #e7ece0;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  color: #5f6b62;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 999px;
+}
+
+.target-dot {
+  background: #f8b023;
+}
+
+.background-dot {
+  background: #286ed2;
+}
+
+.controls-card {
+  padding: 18px;
+  border-radius: 22px;
+  background: #eef3e7;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tool-grid button,
+.control-buttons button {
+  background: #fffdf7;
+  color: #23362d;
+}
+
+.tool-grid button.active {
+  background: #1d3529;
+  color: #fff9e8;
+}
+
+.controls-card label {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  color: #3f5047;
+  font-weight: 800;
+}
+
+.controls-card input,
+.controls-card select {
+  width: 100%;
+}
+
+.control-buttons {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.control-note {
+  margin: 14px 0 0;
+  color: #687268;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.interactive-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
 .sample-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -349,12 +933,8 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 
 .sample-tabs button {
   border: 1px solid rgba(72, 91, 79, 0.22);
-  border-radius: 999px;
-  padding: 10px 18px;
   background: #f6f3ea;
   color: #26362e;
-  cursor: pointer;
-  font-weight: 800;
 }
 
 .sample-tabs button.active {
@@ -370,17 +950,7 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 }
 
 .visual-card,
-.metric-panel,
-.group-card,
-.run-strip,
-.command-card {
-  border: 1px solid rgba(39, 59, 49, 0.14);
-  border-radius: 24px;
-  background: #fffdf7;
-  box-shadow: 0 18px 60px rgba(28, 48, 38, 0.08);
-}
-
-.visual-card {
+.metric-panel {
   padding: 22px;
 }
 
@@ -438,10 +1008,6 @@ figcaption {
   font-weight: 800;
 }
 
-.metric-panel {
-  padding: 20px;
-}
-
 .metric-cards {
   display: grid;
   gap: 12px;
@@ -466,7 +1032,7 @@ figcaption {
   display: block;
   margin-top: 3px;
   color: #15291f;
-  font-size: 30px;
+  font-size: 28px;
 }
 
 .metric-card small {
@@ -537,13 +1103,9 @@ dd {
   background: #eef3e7;
 }
 
-.run-strip a {
-  border-radius: 999px;
-  padding: 10px 16px;
-  background: #1d3529;
-  color: #fff9e8;
-  font-weight: 800;
-  text-decoration: none;
+.run-strip p {
+  margin: 8px 0 0;
+  color: #5f6b62;
 }
 
 .command-card {
@@ -561,18 +1123,26 @@ dd {
 
 @media (max-width: 980px) {
   .demo-hero,
+  .lab-header,
+  .lab-grid,
   .demo-layout,
   .run-strip {
     grid-template-columns: 1fr;
   }
 
-  .group-grid {
+  .lab-actions {
+    justify-content: flex-start;
+  }
+
+  .group-grid,
+  .interactive-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 640px) {
   .demo-hero,
+  .lab-card,
   .visual-card,
   .metric-panel,
   .run-strip,
@@ -582,7 +1152,8 @@ dd {
   }
 
   .image-grid,
-  .group-grid {
+  .group-grid,
+  .interactive-metrics {
     grid-template-columns: 1fr;
   }
 
