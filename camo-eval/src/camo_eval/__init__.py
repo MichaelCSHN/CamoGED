@@ -12,7 +12,13 @@ from .metrics.detection import (
     s_measure,
     weighted_f_measure,
 )
-from .metrics.generation import deception_rate, fid, lpips
+from .metrics.clutter import (
+    camouflage_difficulty,
+    edge_density,
+    feature_congestion,
+    subband_entropy,
+)
+from .metrics.generation import deception_rate, dists, fid, kid, lpips
 from .metrics.instance import average_precision, average_recall, boundary_iou, dice, iou
 from .metrics.perceptual import ms_ssim, ssim
 from .metrics.robustness import ap_drop, attack_success_rate, transferability
@@ -38,15 +44,20 @@ __all__ = [
     "average_recall",
     "boundary_f_score",
     "boundary_iou",
+    "camouflage_difficulty",
     "deception_rate",
     "dice",
+    "dists",
+    "edge_density",
     "e_measure",
     "evaluate",
     "f_measure",
+    "feature_congestion",
     "fid",
     "iou",
     "j_and_f",
     "jaccard_index",
+    "kid",
     "lpips",
     "mae",
     "ms_ssim",
@@ -57,6 +68,7 @@ __all__ = [
     "signal_to_clutter_ratio",
     "spectral_angle_mapper",
     "ssim",
+    "subband_entropy",
     "target_background_similarity",
     "temporal_stability",
     "thermal_contrast",

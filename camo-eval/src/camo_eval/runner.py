@@ -15,6 +15,7 @@ from .metrics.detection import (
     s_measure,
     weighted_f_measure,
 )
+from .metrics.generation import dists, lpips
 from .metrics.instance import boundary_iou, dice, iou
 from .metrics.perceptual import ms_ssim, ssim
 from .metrics.video import boundary_f_score, j_and_f, jaccard_index, temporal_stability
@@ -64,6 +65,10 @@ def _metric_value(name: str, pred: np.ndarray, gt: np.ndarray) -> dict[str, floa
         return {"SSIM": ssim(pred, gt)}
     if key in {"ms_ssim", "msssim"}:
         return {"MS_SSIM": ms_ssim(pred, gt)}
+    if key in {"lpips", "lpips_lite", "perceptual_distance"}:
+        return {"LPIPS_lite": lpips(pred, gt)}
+    if key in {"dists", "dists_lite", "structure_texture"}:
+        return {"DISTS_lite": dists(pred, gt)}
     if key in {"j", "jaccard"}:
         return {"J": jaccard_index(pred, gt)}
     if key in {"boundary_f", "f_boundary"}:

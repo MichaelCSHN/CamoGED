@@ -5,11 +5,15 @@ Hugging Face Space.
 
 ## Scope
 
-The first version is intentionally small:
+The Space covers metrics that are practical without large datasets or learned
+model weights:
 
 - upload prediction and ground-truth masks
 - ship repository-local example images and a tiny bundled demo dataset
-- compute core detection, instance, and perceptual metrics
+- compute core detection, instance, perceptual, and lightweight
+  generation-similarity metrics
+- compute scene clutter and camouflage-difficulty diagnostics when a scene
+  image is supplied
 - compute COD/SOD PR-family metrics: Precision, Recall, and PR curves via CLI
 - display mask overlay and TP/FP/FN error maps for single-pair demos
 - run a protocol-aware batch evaluation over the bundled demo dataset
@@ -38,6 +42,6 @@ The app includes:
 
 - This app is designed as the third step in the public demo route, after the
   stable Python API / CLI and the Colab notebook.
-- Heavier evaluations such as large-batch generation metrics or human-study
-  analytics should stay outside the Space and run in notebooks or dedicated
-  pipelines.
+- Heavyweight learned FID/LPIPS backends, large-dataset evaluations, model
+  weight downloads, and human-study analytics stay outside the Space and run in
+  notebooks or dedicated pipelines.
