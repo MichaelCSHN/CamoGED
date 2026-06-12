@@ -45,6 +45,7 @@ format:
   html:
     theme: cosmo
     code-fold: true
+    include-after-body: _includes/book-home-link.html
   pdf:
     documentclass: scrbook
   # epub:  # uncomment for ePub output

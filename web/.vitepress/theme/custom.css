@@ -1,0 +1,45 @@
+.VPHomeHero .name,
+.VPHomeHero .text,
+.VPHomeHero .tagline {
+  max-width: none;
+}
+
+.VPHomeHero .text,
+.VPHomeHero .tagline {
+  white-space: nowrap;
+}
+
+.VPHomeHero .text {
+  font-size: 52px;
+  line-height: 1.08;
+}
+
+.VPHomeHero .tagline {
+  font-size: 22px;
+}
+
+@media (max-width: 960px) {
+  .VPHomeHero .text {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 640px) {
+  .VPHomeHero .text {
+    font-size: 22px;
+  }
+
+  .VPHomeHero .tagline {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .VPHomeHero .text {
+    font-size: 18px;
+  }
+
+  .VPHomeHero .tagline {
+    font-size: 14px;
+  }
+}
