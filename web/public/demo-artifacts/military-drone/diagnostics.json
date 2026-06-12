@@ -1,0 +1,14 @@
+{
+  "edge_density": 0.11857096354166667,
+  "subband_entropy": 0.7012691366090886,
+  "feature_congestion": 0.05744821012730974,
+  "camouflage_difficulty": {
+    "difficulty": 0.6775888235189934,
+    "edge_density": 0.11857096354166667,
+    "subband_entropy": 0.7012691366090886,
+    "feature_congestion": 0.05744821012730974,
+    "near_mean_abs_diff": 0.0010290353026103372,
+    "near_contrast_abs_diff": 0.012619165784672565,
+    "near_histogram_intersection": 0.8536383363880569
+  }
+}

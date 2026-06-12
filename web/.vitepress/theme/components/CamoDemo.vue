@@ -18,6 +18,54 @@ const samples = [
     scene: "scene.png",
     pred: "prediction.png",
     gt: "ground-truth.png"
+  },
+  {
+    id: "animal-moth",
+    label: "Animal: moth",
+    caption: "Synthetic bark camouflage with a moth-like target.",
+    scene: "scene.png",
+    pred: "prediction.png",
+    gt: "ground-truth.png"
+  },
+  {
+    id: "animal-frog",
+    label: "Animal: frog",
+    caption: "Synthetic leaf-litter camouflage with a frog-like target.",
+    scene: "scene.png",
+    pred: "prediction.png",
+    gt: "ground-truth.png"
+  },
+  {
+    id: "animal-fish",
+    label: "Animal: fish",
+    caption: "Synthetic reef/sand camouflage with a fish-like target.",
+    scene: "scene.png",
+    pred: "prediction.png",
+    gt: "ground-truth.png"
+  },
+  {
+    id: "military-vehicle",
+    label: "Military: vehicle",
+    caption: "Synthetic desert scene with a low-contrast vehicle silhouette.",
+    scene: "scene.png",
+    pred: "prediction.png",
+    gt: "ground-truth.png"
+  },
+  {
+    id: "military-drone",
+    label: "Military: drone",
+    caption: "Synthetic concrete/urban scene with an aircraft-like target.",
+    scene: "scene.png",
+    pred: "prediction.png",
+    gt: "ground-truth.png"
+  },
+  {
+    id: "military-ship",
+    label: "Military: ship",
+    caption: "Synthetic coastal scene with a ship-like silhouette.",
+    scene: "scene.png",
+    pred: "prediction.png",
+    gt: "ground-truth.png"
   }
 ];
 
@@ -27,7 +75,6 @@ const diagnosticsBySample = ref({});
 const generationScores = ref({});
 
 const editorCanvas = ref(null);
-const fileInput = ref(null);
 const imageName = ref("COD sample 1");
 const imageWidth = ref(0);
 const imageHeight = ref(0);
@@ -170,6 +217,7 @@ async function onFileUpload(event) {
     await setEditorImage(img, file.name);
   } finally {
     URL.revokeObjectURL(url);
+    event.target.value = "";
   }
 }
 
@@ -494,11 +542,19 @@ onMounted(async () => {
           </p>
         </div>
         <div class="lab-actions">
-          <button type="button" @click="fileInput?.click()">Upload image</button>
-          <button type="button" @click="loadBundledIntoEditor(samples[0])">Sample 1</button>
-          <button type="button" @click="loadBundledIntoEditor(samples[1])">Sample 2</button>
+          <label class="upload-button">
+            Upload image
+            <input type="file" accept="image/*" @change="onFileUpload" />
+          </label>
+          <button
+            v-for="sample in samples.slice(0, 2)"
+            :key="`quick-${sample.id}`"
+            type="button"
+            @click="loadBundledIntoEditor(sample)"
+          >
+            {{ sample.label }}
+          </button>
           <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">Open SAM3</a>
-          <input ref="fileInput" type="file" accept="image/*" @change="onFileUpload" />
         </div>
       </div>
 
@@ -662,7 +718,8 @@ onMounted(async () => {
         :class="{ active: selectedId === sample.id }"
         @click="selectedId = sample.id"
       >
-        {{ sample.label }}
+        <img :src="asset(`${sample.id}/${sample.scene}`)" :alt="`${sample.label} thumbnail`" />
+        <span>{{ sample.label }}</span>
       </button>
     </div>
 
@@ -873,6 +930,7 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 }
 
 button,
+.upload-button,
 .lab-actions a,
 .run-strip a {
   border: 0;
@@ -886,7 +944,16 @@ button,
   text-decoration: none;
 }
 
-.lab-actions button:nth-child(n + 2) {
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.upload-button input {
+  display: none;
+}
+
+.lab-actions button {
   background: #e8efe2;
   color: #1d3529;
 }
@@ -996,21 +1063,40 @@ canvas {
 }
 
 .sample-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .sample-tabs button {
+  display: grid;
+  gap: 8px;
   border: 1px solid rgba(72, 91, 79, 0.22);
+  border-radius: 18px;
+  padding: 8px;
   background: #f6f3ea;
   color: #26362e;
+  text-align: left;
 }
 
 .sample-tabs button.active {
   border-color: #1d3529;
-  background: #1d3529;
-  color: #fff9e8;
+  background: #e8efe2;
+  color: #17251f;
+  box-shadow: 0 14px 32px rgba(29, 53, 41, 0.18);
+}
+
+.sample-tabs img {
+  width: 100%;
+  aspect-ratio: 1.35 / 1;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.sample-tabs span {
+  padding: 0 4px 4px;
+  font-size: 13px;
+  font-weight: 900;
 }
 
 .demo-layout {
@@ -1272,6 +1358,7 @@ dd {
 
   .group-grid,
   .route-grid,
+  .sample-tabs,
   .interactive-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1291,6 +1378,7 @@ dd {
   .image-grid,
   .group-grid,
   .route-grid,
+  .sample-tabs,
   .interactive-metrics {
     grid-template-columns: 1fr;
   }
