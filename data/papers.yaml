@@ -146,3 +146,177 @@ papers:
     datasets: []
     bibtex_key: "talas2017military"
     notes: null
+
+  - id: "margolin2014"
+    title: "How to Evaluate Foreground Maps?"
+    authors:
+      - "Margolin, Ran"
+      - "Zelnik-Manor, Lihi"
+      - "Tal, Ayellet"
+    venue: "CVPR"
+    year: 2014
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://openaccess.thecvf.com/content_cvpr_2014/html/Margolin_How_to_Evaluate_2014_CVPR_paper.html"
+    code: null
+    datasets: []
+    bibtex_key: "margolin2014"
+    notes: "Introduces weighted F-measure for foreground-map evaluation."
+
+  - id: "fan2017smeasure"
+    title: "Structure-measure: A New Way to Evaluate Foreground Maps"
+    authors:
+      - "Fan, Deng-Ping"
+      - "Cheng, Ming-Ming"
+      - "Liu, Yun"
+      - "Li, Tao"
+      - "Borji, Ali"
+    venue: "ICCV"
+    year: 2017
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://arxiv.org/abs/1708.00786"
+    code: "https://github.com/DengPingFan/S-measure"
+    datasets: []
+    bibtex_key: "fan2017smeasure"
+    notes: "Canonical structural metric used in COD benchmarks."
+
+  - id: "fan2018emeasure"
+    title: "Enhanced-alignment Measure for Binary Foreground Map Evaluation"
+    authors:
+      - "Fan, Deng-Ping"
+      - "Gong, Cheng"
+      - "Cao, Yang"
+      - "Ren, Bo"
+      - "Cheng, Ming-Ming"
+      - "Borji, Ali"
+    venue: "IJCAI"
+    year: 2018
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://www.ijcai.org/proceedings/2018/97"
+    code: "https://github.com/DengPingFan/E-measure"
+    datasets: []
+    bibtex_key: "fan2018emeasure"
+    notes: "Canonical enhanced-alignment metric used in COD benchmarks."
+
+  - id: "wang2004ssim"
+    title: "Image Quality Assessment: From Error Visibility to Structural Similarity"
+    authors:
+      - "Wang, Zhou"
+      - "Bovik, Alan C."
+      - "Sheikh, Hamid R."
+      - "Simoncelli, Eero P."
+    venue: "IEEE TIP"
+    year: 2004
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "generation"
+    paper: "https://doi.org/10.1109/TIP.2003.819861"
+    code: null
+    datasets: []
+    bibtex_key: "wang2004ssim"
+    notes: "Foundational perceptual quality metric used as a baseline in generation evaluation."
+
+  - id: "heusel2017fid"
+    title: "GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium"
+    authors:
+      - "Heusel, Martin"
+      - "Ramsauer, Hubert"
+      - "Unterthiner, Thomas"
+      - "Nessler, Bernhard"
+      - "Hochreiter, Sepp"
+    venue: "NeurIPS"
+    year: 2017
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "generation"
+    paper: "https://papers.nips.cc/paper/7240-gans-trained-by-a-two-time-scale-update-rule-converge-to-a-local-nash-equilibrium"
+    code: "https://github.com/bioinf-jku/TTUR"
+    datasets: []
+    bibtex_key: "heusel2017fid"
+    notes: "Introduces FID."
+
+  - id: "zhang2018lpips"
+    title: "The Unreasonable Effectiveness of Deep Features as a Perceptual Metric"
+    authors:
+      - "Zhang, Richard"
+      - "Isola, Phillip"
+      - "Efros, Alexei A."
+      - "Shechtman, Eli"
+      - "Wang, Oliver"
+    venue: "CVPR"
+    year: 2018
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "generation"
+    paper: "https://openaccess.thecvf.com/content_cvpr_2018/html/Zhang_The_Unreasonable_Effectiveness_CVPR_2018_paper.html"
+    code: null
+    datasets: []
+    bibtex_key: "zhang2018lpips"
+    notes: "Introduces LPIPS."
+
+  - id: "perazzi2016davis"
+    title: "A Benchmark Dataset and Evaluation Methodology for Video Object Segmentation"
+    authors:
+      - "Perazzi, Federico"
+      - "Pont-Tuset, Jordi"
+      - "McWilliams, Brian"
+      - "Van Gool, Luc"
+      - "Gross, Markus"
+      - "Sorkine-Hornung, Alexander"
+    venue: "CVPR"
+    year: 2016
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "video-cod"
+    paper: "https://openaccess.thecvf.com/content_cvpr_2016/html/Perazzi_A_Benchmark_Dataset_CVPR_2016_paper.html"
+    code: "https://github.com/fperazzi/davis"
+    datasets: []
+    bibtex_key: "perazzi2016davis"
+    notes: "Defines the DAVIS J and F evaluation protocol used by video segmentation benchmarks."
+
+  - id: "troscianko2017quantifying"
+    title: "Quantifying camouflage: how to predict detectability from appearance"
+    authors:
+      - "Troscianko, Jolyon"
+      - "Skelhorn, John"
+      - "Stevens, Martin"
+    venue: "BMC Evolutionary Biology"
+    year: 2017
+    pillar: "evaluation"
+    domain: "physical"
+    perspective: "nature"
+    task: "application"
+    paper: "https://link.springer.com/article/10.1186/s12862-016-0854-2"
+    code: null
+    datasets: []
+    bibtex_key: "troscianko2017quantifying"
+    notes: "Bridges objective appearance measures and human detectability."
+
+  - id: "toet2020review"
+    title: "Review of camouflage assessment techniques"
+    authors:
+      - "Toet, Alexander"
+      - "Hogervorst, Maarten A."
+    venue: "SPIE Target and Background Signatures VI"
+    year: 2020
+    pillar: "evaluation"
+    domain: "physical"
+    perspective: "war"
+    task: "application"
+    paper: "https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short"
+    code: null
+    datasets: []
+    bibtex_key: "toet2020review"
+    notes: "Survey of subjective and objective camouflage assessment in military settings."

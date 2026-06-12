@@ -20,6 +20,7 @@ web/.vitepress/cache/
 book/_book/
 book/.quarto/
 book/site_libs/
+book/chapters/*_files/
 /.quarto/
 
 # OS / editor
@@ -34,3 +35,5 @@ camo-eval/demo_outputs/
 *.pth
 *.ckpt
 *.npy
+
+**/*.quarto_ipynb

@@ -1,0 +1,45 @@
+name: web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "data/**"
+      - "scripts/build_awesome.py"
+      - ".github/workflows/web.yml"
+  pull_request:
+    paths:
+      - "web/**"
+      - "data/**"
+      - "scripts/build_awesome.py"
+      - ".github/workflows/web.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python deps
+        run: python -m pip install --upgrade pip pyyaml
+
+      - name: Regenerate markdown surfaces
+        run: python scripts/build_awesome.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install web dependencies
+        run: npm install
+        working-directory: web
+
+      - name: Build VitePress site
+        run: npm run docs:build
+        working-directory: web

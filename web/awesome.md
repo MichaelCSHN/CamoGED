@@ -1,4 +1,7 @@
-# Awesome Camouflage
+# Awesome
+
+> Mirror of the generated Awesome index.
+
 
 > A generated, schema-backed list of camouflage resources maintained by CamoGED.
 > Edit `data/*.yaml`; do not hand-edit this file.
