@@ -6,7 +6,7 @@ export default {
       { text: "Home", link: "/" },
       { text: "Awesome", link: "/awesome" },
       { text: "Papers", link: "/papers" },
-      { text: "Models", link: "/models" },
+      { text: "Code", link: "/models" },
       { text: "Leaderboard", link: "/leaderboard" },
       { text: "Datasets", link: "/datasets" },
       { text: "Demo", link: "/demo" },

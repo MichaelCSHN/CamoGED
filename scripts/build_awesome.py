@@ -206,30 +206,62 @@ def render_papers_page(papers: list[dict]) -> str:
 
 
 def render_models_page(papers: list[dict]) -> str:
-    model_entries = [entry for entry in sort_papers(papers) if entry.get("code")]
+    code_entries = [entry for entry in sort_papers(papers) if entry.get("code")]
+    groups = [
+        (
+            "Methods and models",
+            [
+                entry
+                for entry in code_entries
+                if entry["task"] not in {"dataset", "survey"} and entry["pillar"] != "evaluation"
+            ],
+        ),
+        (
+            "Evaluation tools",
+            [
+                entry
+                for entry in code_entries
+                if entry["pillar"] == "evaluation" and entry["task"] != "dataset"
+            ],
+        ),
+        (
+            "Dataset and project releases",
+            [entry for entry in code_entries if entry["task"] == "dataset"],
+        ),
+        (
+            "Survey and curated indexes",
+            [entry for entry in code_entries if entry["task"] == "survey"],
+        ),
+    ]
     lines = [
-        "# Models",
+        "# Code",
         "",
-        "> Code-linked methods derived from `data/papers.yaml`.",
+        "> Code, dataset, and project links derived from `data/papers.yaml`.",
         "",
-        f"- Methods with code: **{len(model_entries)}**",
+        f"- Entries with links: **{len(code_entries)}**",
         "",
     ]
-    if not model_entries:
-        lines.extend(["_No code-linked methods yet._", ""])
+    if not code_entries:
+        lines.extend(["_No code-linked entries yet._", ""])
         return "\n".join(lines) + "\n"
 
-    lines.extend(
-        [
-            "| Method | Year | Pillar | Task | Code | Paper |",
-            "| --- | --- | --- | --- | --- | --- |",
-        ]
-    )
-    for entry in model_entries:
-        lines.append(
-            f"| {entry['title']} | {entry['year']} | `{entry['pillar']}` | `{entry['task']}` | "
-            f"{format_optional_url(entry['code'], 'repo')} | {format_reference_url(entry)} |"
+    for title, entries in groups:
+        if not entries:
+            continue
+        lines.extend(
+            [
+                f"## {title}",
+                "",
+                "| Title | Year | Pillar | Task | Link | Paper |",
+                "| --- | --- | --- | --- | --- | --- |",
+            ]
         )
+        for entry in entries:
+            lines.append(
+                f"| {entry['title']} | {entry['year']} | `{entry['pillar']}` | `{entry['task']}` | "
+                f"{format_optional_url(entry['code'], 'link')} | {format_reference_url(entry)} |"
+            )
+        lines.append("")
     lines.append("")
     return "\n".join(lines) + "\n"
 
