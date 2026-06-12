@@ -1,5 +1,6 @@
 export default {
   title: "CamoGED",
+  base: "/CamoGED/",
   description: "Camouflage: Generation, Detection & Evaluation",
   themeConfig: {
     nav: [
