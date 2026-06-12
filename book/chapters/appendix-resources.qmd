@@ -1,42 +1,71 @@
 ---
 title: "附录：关键资源与索引"
-subtitle: "Appendix: Key References & Resources"
+subtitle: "Appendix: Key References, Metrics, and Resource Surfaces"
 bibliography: ../references.bib
 ---
 
 ::: {.callout-note}
-本附录与仓库的机器可读数据**同源**：数据集表来自 `data/datasets.yaml`，论文/方法来自 `data/papers.yaml`，排行榜来自 `data/leaderboard.yaml`；亦与 [Awesome 列表](../../awesome/README.md) 互链，避免重复维护。
+本附录与仓库中的机器可读资源**同源联动**。数据集目录来自 `data/datasets.yaml`，论文与方法目录来自 `data/papers.yaml`，排行榜条目来自 `data/leaderboard.yaml`；相应的可读展示面包括仓库中的 [Awesome 列表](https://github.com/MichaelCSHN/CamoGED/blob/main/awesome/README.md) 与网站页面 `web/awesome.md`、`web/papers.md`、`web/datasets.md`、`web/leaderboard.md`。这种单一事实来源（single source of truth）设计的目的，是避免书稿、列表与网站三套内容彼此漂移。
 :::
 
 ## A 数据集全景 {#sec-a}
 
-完整数据集表见第 10 章 @tbl-datasets 与 `data/datasets.yaml`，涵盖图像（COD10K、CAMO、NC4K、CHAMELEON）、视频（MoCA-Mask、CamoVid60K、MSVCOD）、多光谱（MCOD）、多模态（MM-CamObj）、协同（CoCOD8K）、指代（R2C7K）、军事（MHCD2022）、农业/植物（PlantCamo、ACOD-12K）等。每条附下载链接、许可证与 BibTeX；数据**只链接不再分发**。
+完整数据集表见第 10 章的 @tbl-datasets，以及仓库中的 `data/datasets.yaml` 与网站 `/datasets` 页面。当前覆盖的条目可按模态与任务大体分为：
+
+- 图像 COD：COD10K、CAMO、NC4K、CHAMELEON；
+- 视频 COD：MoCA-Mask、CAD、CamoVid60K、MSVCOD；
+- 扩展任务：CoCOD8K（协同）、R2C7K（指代）；
+- 跨模态与跨场景：MCOD（多光谱）、MM-CamObj（多模态）、MHCD2022（军事）、PlantCamo 与 ACOD-12K（农业/植物）。
+
+这些条目在仓库中统一记录名称、任务标签、模态、规模、划分、年份、许可证与引用键。项目坚持“**只链接，不再分发**”的原则：仓库给出官方主页或发布入口，而不镜像原始数据集。
 
 ## B 指标速查 {#sec-b}
 
-| 指标 | 方向 | 含义 | camo-eval 函数 |
-|------|------|------|----------------|
-| MAE | ↓ | 逐像素平均绝对误差 | `mae`（已实现） |
-| $F_\beta^w$ | ↑ | 加权 F-measure | `weighted_f_measure` |
-| $S_\alpha$ | ↑ | 结构相似度 | `s_measure` |
-| $E_\phi$ | ↑ | 增强对齐度量 | `e_measure` |
-| FID / LPIPS | ↓ | 生成真实性 | `metrics/generation` |
-| 欺骗率 / ASR | — | 伪装/攻击有效性 | `metrics/generation`、`metrics/robustness` |
+| 指标 | 方向 | 含义 | 书中位置 | `camo-eval` 对应 |
+|------|------|------|----------|------------------|
+| MAE | ↓ | 像素级平均绝对误差 | 第 15 章 15.1 | `mae` |
+| $F_\beta^w$ | ↑ | 加权 F-measure | 第 15 章 15.1 | `weighted_f_measure` |
+| $S_\alpha$ | ↑ | 结构相似度量 | 第 15 章 15.1 | `s_measure` |
+| $E_\phi$ | ↑ | 增强对齐度量 | 第 15 章 15.1 | `e_measure` |
+| maxF / meanF | ↑ | 阈值扫描下的 F 统计 | 第 15 章 15.1 | `f_measure` |
+| J / F / J&F | ↑ | 视频区域与边界质量 | 第 12、15 章 | 当前冻结 API 未纳入 |
+| SSIM / MS-SSIM | ↑ | 感知结构相似性 | 第 15 章 15.2 | 当前冻结 API 未纳入 |
+| FID / LPIPS | ↓ | 生成真实性与感知距离 | 第 15 章 15.2 | `fid`、`lpips` |
+| 欺骗率 / ASR | ↑ | 伪装或攻击有效性 | 第 15 章 15.2–15.3 | `deception_rate`、`attack_success_rate` |
 
-详见第 15 章与 `camo-eval/`。
+需要强调的是：**函数名与接口契约已经冻结**，并通过 `scripts/check_api.py` 审核；附录表中凡写明 `camo-eval` 对应者，均应与该冻结接口逐名一致。与此同时，生成指标族（`fid`、`lpips`、`deception_rate`）在仓库实现层面仍处于待补完状态，而视频 J/F 与 SSIM/MS-SSIM 目前仅在书稿评价框架中讨论，尚未进入当前冻结 API。换言之，附录 B 同时承担“术语索引”和“接口边界说明”两层作用，而不是对所有指标均已工程化落地的夸大宣称。
 
 ## C 术语中英对照 {#sec-c}
 
-crypsis 隐蔽 · masquerade 伪装性拟态 · mimicry（信号）拟态 · disruptive coloration 瓦解色 · countershading 消影 · background matching 背景匹配 · motion dazzle 运动眩惑 · deception 欺骗 · stealth/low-observable 隐身/低可探测 · COD 伪装目标检测 · VCOD 视频伪装目标检测 · CIS 伪装实例分割 · adversarial camouflage 对抗伪装。（完整表随各章"首次出现"积累。）
+- `crypsis`：隐蔽、背景融入；
+- `masquerade`：伪装性拟态，即“被看见但被误认”；
+- `mimicry`：拟态，强调信号层面的“像别人”；
+- `disruptive coloration`：瓦解色、破轮廓伪装；
+- `countershading`：消影，通过明暗抵消体积线索；
+- `background matching`：背景匹配；
+- `motion dazzle`：运动眩惑；
+- `deception`：欺骗；
+- `stealth / low-observable`：隐身 / 低可探测；
+- `COD`：camouflaged object detection，伪装目标检测；
+- `VCOD`：video camouflaged object detection，视频伪装目标检测；
+- `CIS`：camouflaged instance segmentation，伪装实例分割；
+- `adversarial camouflage`：对抗伪装。
+
+本书正文采用“生成（隐藏方）—识别（揭示方）—评价（裁判）”的三角色框架，因此术语的翻译也尽量保持与这一主线一致：凡涉及“让目标更难被发现”的方法，优先归入生成/隐藏；凡涉及“把隐藏目标找出来”的方法，归入识别/揭示；凡涉及“如何量化胜负”的方法，归入评价/裁判。
 
 ## D 资源与链接索引 {#sec-d}
 
-- 项目主页与平台：<https://github.com/MichaelCSHN/CamoGED>
-- Awesome 列表：`awesome/README.md`
+- 项目主页：[CamoGED GitHub 仓库](https://github.com/MichaelCSHN/CamoGED)
+- 书稿源码：`book/`
+- 机器可读数据源：`data/papers.yaml`、`data/datasets.yaml`、`data/leaderboard.yaml`
+- Awesome 列表：[awesome/README.md](https://github.com/MichaelCSHN/CamoGED/blob/main/awesome/README.md)
+- 网站镜像页：[`/awesome`](https://github.com/MichaelCSHN/CamoGED/blob/main/web/awesome.md)、[`/papers`](https://github.com/MichaelCSHN/CamoGED/blob/main/web/papers.md)、[`/datasets`](https://github.com/MichaelCSHN/CamoGED/blob/main/web/datasets.md)、[`/leaderboard`](https://github.com/MichaelCSHN/CamoGED/blob/main/web/leaderboard.md)
 - 评测工具：`camo-eval/`
-- 原创项目：`projects/coder`、`projects/flowcamo`、`projects/dualvcod`
-- 相关 Awesome（致谢）：visionxiang、ChunmingHe、clelouch、GuoleiSun（见 Awesome 列表）
+- 原创项目锚点：`projects/coder`、`projects/flowcamo`、`projects/dualvcod`
+- 相关社区资源（致谢）：visionxiang、ChunmingHe、clelouch、GuoleiSun 等 Awesome 列表
+
+对读者而言，最推荐的使用路径是：先按本书正文建立理论框架，再用 `awesome/README.md` 或网站镜像页做快速检索，最后回到 `data/*.yaml` 与 `camo-eval/` 获取结构化事实与复现实验入口。
 
 ## E 伪装大事年表（节选） {#sec-e}
 
-1909 Thayer 论消影 → 1915 法军伪装部队 → 1917– 一战船舶 dazzle → 1940 Cott《Adaptive Coloration in Animals》→ 越战 Tigerstripe → 冷战 DPM → 1990s– 数字/像素迷彩 → 2014 对抗样本（Szegedy 等）→ 2020 SINet 与 COD10K → 2024–2025 ZoomNeXt/HGINet、SAM2 适配、PhyCamo/CAM3D。
+1909 年，Thayer 系统论述动物“消影”与保护色；1890—1940 年间，Poulton、Cott 等人逐步奠定生物伪装理论。第一次世界大战促成现代军事伪装部队与 dazzle 涂装的形成，第二次世界大战及冷战时期又推动了破坏性迷彩、Tigerstripe、DPM 与多环境迷彩的发展。进入数字时代之后，伪装从物理表面扩展到数字图像、深度伪造与对抗样本。2014 年以后，对抗机器学习把“隐藏与揭示”的博弈直接推入算法层；2020 年 SINet 与 COD10K 的出现，则使 COD 成为相对稳定、可比较的学术基准。2024—2025 年，ZoomNeXt、HGINet、SAM2 适配、PhyCamo、CAM3D、MM-CamObj、MSVCOD 等工作进一步表明：伪装研究已不再是单一任务，而是一条贯穿自然、战争、艺术与机器的长期演化链。
