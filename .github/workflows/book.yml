@@ -1,10 +1,7 @@
 name: book
 
-# Render the Quarto book (HTML) and publish it to GitHub Pages so it can be
-# previewed online at https://<user>.github.io/<repo>/ .
-#
-# HTML only on purpose: PDF would need tinytex + a CJK-capable LaTeX engine
-# (the book is in Chinese), which is heavier and not needed for preview.
+# Render the Quarto book (HTML) as a CI gate. The public GitHub Pages deployment
+# is owned by web.yml so the website is not overwritten by book-only changes.
 
 on:
   push:
@@ -14,12 +11,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -40,16 +31,7 @@ jobs:
       - name: Render book (HTML only)
         run: quarto render book --to html
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: book-html
           path: book/_book
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
