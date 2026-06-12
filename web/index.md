@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: CamoGED
-  text: "Camouflage: Generation · Detection · Evaluation"
+  text: "Camouflage: Generation · Evaluation · Detection"
   tagline: A cross-domain open platform — Nature, War, and Machines.
   actions:
     - theme: brand

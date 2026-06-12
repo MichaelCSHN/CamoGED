@@ -3,7 +3,7 @@ project:
   output-dir: _book
 
 book:
-  title: "Camouflage: Generation, Detection & Evaluation"
+  title: "Camouflage: Generation · Evaluation · Detection"
   subtitle: "Across Nature, War, and Machines"
   author: "CamoGED Authors"
   date: today
