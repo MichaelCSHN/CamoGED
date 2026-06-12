@@ -2,7 +2,7 @@
 
 > Generated from `data/papers.yaml`.
 
-- Total entries: **18**
+- Total entries: **23**
 
 ## Generation
 
@@ -18,15 +18,20 @@
 | Title | Year | Domain | Task | Links |
 | --- | --- | --- | --- | --- |
 | CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection | 2025 | `intelligent` | `video-cod` | [paper](https://arxiv.org/abs/2504.00375) |
+| PlantCamo: Plant Camouflage Detection | 2025 | `intelligent` | `image-cod` | [paper](https://arxiv.org/abs/2410.17598) [code](https://github.com/yjybuaa/PlantCamo) |
 | When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation | 2025 | `intelligent` | `video-cod` | [paper](https://arxiv.org/abs/2409.18653) |
 | A Survey of Camouflaged Object Detection and Beyond | 2024 | `intelligent` | `survey` | [paper](https://arxiv.org/abs/2408.14562) [code](https://github.com/ChunmingHe/awesome-concealed-object-segmentation) |
+| Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes | 2024 | `intelligent` | `image-cod` | [paper](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html) [code](https://github.com/Kki2Eve/RISNet) |
 | HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection | 2024 | `intelligent` | `image-cod` | [paper](https://doi.org/10.1109/TIP.2024.3475219) [code](https://github.com/Garyson1204/HGINet) |
 | ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection | 2024 | `intelligent` | `image-cod` | [paper](https://doi.org/10.1109/TPAMI.2024.3417329) |
+| Referring Camouflaged Object Detection | 2023 | `intelligent` | `referring-cod` | [paper](https://arxiv.org/abs/2306.07532) [code](https://github.com/zhangxuying1004/RefCOD) |
+| Simultaneously Localize, Segment and Rank the Camouflaged Objects | 2021 | `intelligent` | `image-cod` | [paper](https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html) [code](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment) |
 
 ## Evaluation
 
 | Title | Year | Domain | Task | Links |
 | --- | --- | --- | --- | --- |
+| MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios | 2024 | `intelligent` | `dataset` | [paper](https://arxiv.org/abs/2409.16084) [code](https://github.com/JCruan519/MM-CamObj) |
 | Review of camouflage assessment techniques | 2020 | `physical` | `application` | [paper](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short) |
 | Enhanced-alignment Measure for Binary Foreground Map Evaluation | 2018 | `intelligent` | `image-cod` | [paper](https://www.ijcai.org/proceedings/2018/97) [code](https://github.com/DengPingFan/E-measure) |
 | The Unreasonable Effectiveness of Deep Features as a Perceptual Metric | 2018 | `intelligent` | `generation` | [paper](https://openaccess.thecvf.com/content_cvpr_2018/html/Zhang_The_Unreasonable_Effectiveness_CVPR_2018_paper.html) |

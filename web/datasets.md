@@ -6,7 +6,7 @@
 
 | Name | Task | Modality | Size | Split | Year | Link | License | Reference |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ACOD-12K | `image-cod` | `rgb` | 12K images | train/test |  |  |  | `` |
+| ACOD-12K | `image-cod` | `depth` | 12K RGB-D images | train/test | 2024 | [link](https://github.com/Kki2Eve/RISNet) |  | `wang2024depth` |
 | CAD | `video-cod` | `video` |  | test |  |  |  | `` |
 | CAMO | `image-cod` | `rgb` | 1,250 camouflaged (+1,250 non-camouflaged) | 1,000 train / 250 test | 2019 | [link](https://sites.google.com/view/ltnghia/research/camo) |  | `` |
 | CamoVid60K | `video-cod` | `video` | 60K frames | train/test |  |  |  | `` |
@@ -18,6 +18,6 @@
 | MM-CamObj | `dataset` | `multimodal` |  | QA/detection | 2024 | [link](https://github.com/JCruan519/MM-CamObj) |  | `mmcamobj2024` |
 | MoCA-Mask | `video-cod` | `video` | 141 sequences | train/test |  |  |  | `` |
 | MSVCOD | `video-cod` | `video` |  | train/test |  |  |  | `` |
-| NC4K | `image-cod` | `rgb` | 4,121 images | test-only (generalization) | 2021 |  |  | `` |
-| PlantCamo | `image-cod` | `rgb` |  | train/test | 2024 |  |  | `` |
-| R2C7K | `referring-cod` | `rgb` | 7K images | train/test |  |  |  | `` |
+| NC4K | `image-cod` | `rgb` | 4,121 images | test-only (generalization) | 2021 | [link](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment) |  | `lyu2021ranknet` |
+| PlantCamo | `image-cod` | `rgb` | 1,250 images; 58 categories | train/test | 2024 | [link](https://github.com/yjybuaa/PlantCamo) |  | `plantcamo2025` |
+| R2C7K | `referring-cod` | `rgb` | 7K images | train/test | 2023 | [link](https://github.com/zhangxuying1004/RefCOD) |  | `zhang2023refcod` |

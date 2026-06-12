@@ -29,6 +29,28 @@ papers:
     bibtex_key: "pang2024zoomnext"
     notes: null
 
+  - id: "lyu2021ranknet"
+    title: "Simultaneously Localize, Segment and Rank the Camouflaged Objects"
+    authors:
+      - "Lyu, Yunqiu"
+      - "Zhang, Jing"
+      - "Dai, Yuchao"
+      - "Li, Aixuan"
+      - "Liu, Bowen"
+      - "Barnes, Nick"
+      - "Fan, Deng-Ping"
+    venue: "CVPR"
+    year: 2021
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html"
+    code: "https://github.com/JingZhang617/COD-Rank-Localize-and-Segment"
+    datasets: ["nc4k"]
+    bibtex_key: "lyu2021ranknet"
+    notes: "Introduces the NC4K generalization benchmark and ranking-based COD."
+
   - id: "hginet2024"
     title: "HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection"
     authors:
@@ -64,6 +86,27 @@ papers:
     bibtex_key: "samvcos2025"
     notes: null
 
+  - id: "zhang2023refcod"
+    title: "Referring Camouflaged Object Detection"
+    authors:
+      - "Zhang, Xuying"
+      - "Yin, Bowen"
+      - "Lin, Zheng"
+      - "Hou, Qibin"
+      - "Fan, Deng-Ping"
+      - "Cheng, Ming-Ming"
+    venue: "arXiv"
+    year: 2023
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "referring-cod"
+    paper: "https://arxiv.org/abs/2306.07532"
+    code: "https://github.com/zhangxuying1004/RefCOD"
+    datasets: ["r2c7k"]
+    bibtex_key: "zhang2023refcod"
+    notes: "Defines the Ref-COD task and introduces R2C7K."
+
   - id: "camosam2-2025"
     title: "CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection"
     authors: "Zhang et al."
@@ -93,6 +136,27 @@ papers:
     datasets: ["cod10k"]
     bibtex_key: "camdiff2023"
     notes: null
+
+  - id: "plantcamo2025"
+    title: "PlantCamo: Plant Camouflage Detection"
+    authors:
+      - "Yang, Jinyu"
+      - "Wang, Qingwei"
+      - "Zheng, Feng"
+      - "Chen, Peng"
+      - "Leonardis, Aleš"
+      - "Fan, Deng-Ping"
+    venue: "CAAI AIR"
+    year: 2025
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://arxiv.org/abs/2410.17598"
+    code: "https://github.com/yjybuaa/PlantCamo"
+    datasets: ["plantcamo"]
+    bibtex_key: "plantcamo2025"
+    notes: "Introduces a plant-focused camouflage benchmark with 58 categories."
 
   - id: "phycamo2025"
     title: "PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack"
@@ -128,6 +192,49 @@ papers:
     datasets: []
     bibtex_key: "cam3d2025"
     notes: null
+
+  - id: "wang2024depth"
+    title: "Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes"
+    authors:
+      - "Wang, Liqiong"
+      - "Yang, Jinyu"
+      - "Zhang, Yanfu"
+      - "Wang, Fangyi"
+      - "Zheng, Feng"
+    venue: "CVPR"
+    year: 2024
+    pillar: "detection"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "image-cod"
+    paper: "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html"
+    code: "https://github.com/Kki2Eve/RISNet"
+    datasets: ["acod-12k"]
+    bibtex_key: "wang2024depth"
+    notes: "Introduces the ACOD-12K RGB-D concealed crop benchmark."
+
+  - id: "mmcamobj2024"
+    title: "MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios"
+    authors:
+      - "Ruan, Jiacheng"
+      - "Yuan, Wenzhen"
+      - "Lin, Zehao"
+      - "Liao, Ning"
+      - "Li, Zhiyu"
+      - "Xiong, Feiyu"
+      - "Liu, Ting"
+      - "Fu, Yuzhuo"
+    venue: "arXiv"
+    year: 2024
+    pillar: "evaluation"
+    domain: "intelligent"
+    perspective: "ai"
+    task: "dataset"
+    paper: "https://arxiv.org/abs/2409.16084"
+    code: "https://github.com/JCruan519/MM-CamObj"
+    datasets: ["mm-camobj"]
+    bibtex_key: "mmcamobj2024"
+    notes: "Multimodal camouflage dataset and benchmark for LVLM evaluation."
 
   - id: "talas2017military"
     title: "Cultural evolution of military camouflage"

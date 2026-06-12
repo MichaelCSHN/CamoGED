@@ -42,9 +42,9 @@ datasets:
     size: "4,121 images"
     split: "test-only (generalization)"
     year: 2021
-    link: null
+    link: "https://github.com/JingZhang617/COD-Rank-Localize-and-Segment"
     license: null
-    bibtex_key: null
+    bibtex_key: "lyu2021ranknet"
     notes: "Includes ranking annotations."
 
   - id: "cocod8k"
@@ -65,35 +65,35 @@ datasets:
     modality: "rgb"
     size: "7K images"
     split: "train/test"
-    year: null
-    link: null
+    year: 2023
+    link: "https://github.com/zhangxuying1004/RefCOD"
     license: null
-    bibtex_key: null
+    bibtex_key: "zhang2023refcod"
     notes: "Referring COD."
 
   - id: "plantcamo"
     name: "PlantCamo"
     task: "image-cod"
     modality: "rgb"
-    size: null
+    size: "1,250 images; 58 categories"
     split: "train/test"
     year: 2024
-    link: null
+    link: "https://github.com/yjybuaa/PlantCamo"
     license: null
-    bibtex_key: null
+    bibtex_key: "plantcamo2025"
     notes: "Plant camouflage benchmark."
 
   - id: "acod-12k"
     name: "ACOD-12K"
     task: "image-cod"
-    modality: "rgb"
-    size: "12K images"
+    modality: "depth"
+    size: "12K RGB-D images"
     split: "train/test"
-    year: null
-    link: null
+    year: 2024
+    link: "https://github.com/Kki2Eve/RISNet"
     license: null
-    bibtex_key: null
-    notes: "Dense agricultural scenes."
+    bibtex_key: "wang2024depth"
+    notes: "Dense agricultural concealed crop benchmark with depth maps."
 
   - id: "mhcd2022"
     name: "MHCD2022"

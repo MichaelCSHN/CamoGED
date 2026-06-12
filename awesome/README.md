@@ -3,7 +3,7 @@
 > A generated, schema-backed list of camouflage resources maintained by CamoGED.
 > Edit `data/*.yaml`; do not hand-edit this file.
 
-- Papers/methods: **18**
+- Papers/methods: **23**
 - Datasets: **15**
 - Verified leaderboard rows: **0**
 
@@ -19,13 +19,18 @@
 ### Detection
 
 - **CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection** -- Zhang et al., *arXiv* 2025 | `video-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2504.00375)
+- **PlantCamo: Plant Camouflage Detection** -- Yang, Jinyu, Wang, Qingwei, Zheng, Feng, Chen, Peng, Leonardis, Aleš, Fan, Deng-Ping, *CAAI AIR* 2025 | `image-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2410.17598) [code](https://github.com/yjybuaa/PlantCamo)
 - **When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation** -- Zhou et al., *Visual Intelligence* 2025 | `video-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2409.18653)
 - **A Survey of Camouflaged Object Detection and Beyond** -- Xiao et al., *CAAI AIR* 2024 | `survey` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2408.14562) [code](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes** -- Wang, Liqiong, Yang, Jinyu, Zhang, Yanfu, Wang, Fangyi, Zheng, Feng, *CVPR* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html) [code](https://github.com/Kki2Eve/RISNet)
 - **HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection** -- Yao, Siyuan, Sun, Hao, Xiang, Tian-Zhu, Wang, Xiao, Cao, Xiaochun, *IEEE TIP* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TIP.2024.3475219) [code](https://github.com/Garyson1204/HGINet)
 - **ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection** -- Pang et al., *TPAMI* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TPAMI.2024.3417329)
+- **Referring Camouflaged Object Detection** -- Zhang, Xuying, Yin, Bowen, Lin, Zheng, Hou, Qibin, Fan, Deng-Ping, Cheng, Ming-Ming, *arXiv* 2023 | `referring-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2306.07532) [code](https://github.com/zhangxuying1004/RefCOD)
+- **Simultaneously Localize, Segment and Rank the Camouflaged Objects** -- Lyu, Yunqiu, Zhang, Jing, Dai, Yuchao, Li, Aixuan, Liu, Bowen, Barnes, Nick, Fan, Deng-Ping, *CVPR* 2021 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html) [code](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment)
 
 ### Evaluation
 
+- **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** -- Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *arXiv* 2024 | `dataset` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2409.16084) [code](https://github.com/JCruan519/MM-CamObj)
 - **Review of camouflage assessment techniques** -- Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* 2020 | `application` | `physical` | `war` [paper](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
 - **Enhanced-alignment Measure for Binary Foreground Map Evaluation** -- Fan, Deng-Ping, Gong, Cheng, Cao, Yang, Ren, Bo, Cheng, Ming-Ming, Borji, Ali, *IJCAI* 2018 | `image-cod` | `intelligent` | `ai` [paper](https://www.ijcai.org/proceedings/2018/97) [code](https://github.com/DengPingFan/E-measure)
 - **The Unreasonable Effectiveness of Deep Features as a Perceptual Metric** -- Zhang, Richard, Isola, Phillip, Efros, Alexei A., Shechtman, Eli, Wang, Oliver, *CVPR* 2018 | `generation` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content_cvpr_2018/html/Zhang_The_Unreasonable_Effectiveness_CVPR_2018_paper.html)
@@ -40,7 +45,7 @@
 
 | Name | ID | Task | Modality | Year | Notes |
 | --- | --- | --- | --- | --- | --- |
-| ACOD-12K | `acod-12k` | `image-cod` | `rgb` |  | Dense agricultural scenes. |
+| ACOD-12K | `acod-12k` | `image-cod` | `depth` | 2024 | Dense agricultural concealed crop benchmark with depth maps. |
 | CAD | `cad` | `video-cod` | `video` |  | Early video camouflage dataset. |
 | CAMO | `camo` | `image-cod` | `rgb` | 2019 | First fully annotated COD dataset. |
 | CamoVid60K | `camovid60k` | `video-cod` | `video` |  | Large-scale video camouflage benchmark. |
@@ -54,7 +59,7 @@
 | MSVCOD | `msvcod` | `video-cod` | `video` |  | Multi-scene video COD benchmark. |
 | NC4K | `nc4k` | `image-cod` | `rgb` | 2021 | Includes ranking annotations. |
 | PlantCamo | `plantcamo` | `image-cod` | `rgb` | 2024 | Plant camouflage benchmark. |
-| R2C7K | `r2c7k` | `referring-cod` | `rgb` |  | Referring COD. |
+| R2C7K | `r2c7k` | `referring-cod` | `rgb` | 2023 | Referring COD. |
 
 ## Leaderboard
 
