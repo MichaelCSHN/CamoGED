@@ -5,12 +5,14 @@ on:
     branches: [main]
     paths:
       - "web/**"
+      - "book/**"
       - "data/**"
       - "scripts/build_awesome.py"
       - ".github/workflows/web.yml"
   pull_request:
     paths:
       - "web/**"
+      - "book/**"
       - "data/**"
       - "scripts/build_awesome.py"
       - ".github/workflows/web.yml"
@@ -36,10 +38,12 @@ jobs:
           python-version: "3.11"
 
       - name: Install Python deps
-        run: python -m pip install --upgrade pip pyyaml
+        run: python -m pip install --upgrade pip pyyaml jupyter numpy matplotlib scipy
 
       - name: Regenerate markdown surfaces
         run: python scripts/build_awesome.py
+
+      - uses: quarto-dev/quarto-actions/setup@v2
 
       - uses: actions/setup-node@v4
         with:
@@ -52,6 +56,12 @@ jobs:
       - name: Build VitePress site
         run: npm run docs:build
         working-directory: web
+
+      - name: Render book into website artifact
+        run: |
+          quarto render book --to html
+          mkdir -p web/.vitepress/dist/book
+          cp -R book/_book/. web/.vitepress/dist/book/
 
       - uses: actions/upload-pages-artifact@v3
         with:
