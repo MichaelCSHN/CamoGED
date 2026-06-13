@@ -117,10 +117,6 @@ const interactiveMetricInfo = {
 };
 
 const selectedId = ref(samples[0].id);
-const scoresBySample = ref({});
-const diagnosticsBySample = ref({});
-const generationScores = ref({});
-
 const editorCanvas = ref(null);
 const imageName = ref("Aquatic: BatFish");
 const imageWidth = ref(0);
@@ -137,74 +133,8 @@ const lastSeed = ref(null);
 const currentSampleId = ref(samples[0].id);
 const autoSegMessage = ref("COD10K sample loaded with its bundled object mask.");
 
-const selectedSample = computed(
-  () => samples.find((sample) => sample.id === selectedId.value) || samples[0]
-);
-const score = computed(() => scoresBySample.value[selectedSample.value.id] || {});
-const diagnostics = computed(
-  () => diagnosticsBySample.value[selectedSample.value.id] || {}
-);
-const difficulty = computed(() => diagnostics.value.camouflage_difficulty || {});
-
-const headlineMetrics = computed(() => [
-  { label: "MAE", value: score.value.MAE, hint: "mask error; lower is better" },
-  { label: "S-measure", value: score.value.Sm, hint: "structure match; higher is better" },
-  { label: "F adaptive", value: score.value.F_adaptive, hint: "precision/recall balance" },
-  { label: "IoU", value: score.value.IoU, hint: "region overlap; higher is better" },
-  { label: "Boundary IoU", value: score.value.BoundaryIoU, hint: "edge alignment" },
-  { label: "Difficulty", value: difficulty.value.difficulty, hint: "visual hiding; higher is harder" }
-]);
-
-const metricGroups = computed(() => [
-  {
-    title: "Detection",
-    items: [
-      ["MAE", score.value.MAE],
-      ["Fw", score.value.Fw],
-      ["Sm", score.value.Sm],
-      ["Em max", score.value.Em_max],
-      ["F max", score.value.F_max]
-    ]
-  },
-  {
-    title: "Precision/Recall",
-    items: [
-      ["P max", score.value.P_max],
-      ["P adaptive", score.value.P_adaptive],
-      ["R max", score.value.R_max],
-      ["R adaptive", score.value.R_adaptive]
-    ]
-  },
-  {
-    title: "Region, Boundary, Perceptual",
-    items: [
-      ["IoU", score.value.IoU],
-      ["Dice", score.value.Dice],
-      ["Boundary IoU", score.value.BoundaryIoU],
-      ["LPIPS lite", score.value.LPIPS_lite],
-      ["DISTS lite", score.value.DISTS_lite]
-    ]
-  },
-  {
-    title: "Clutter and Difficulty",
-    items: [
-      ["Edge density", diagnostics.value.edge_density],
-      ["Subband entropy", diagnostics.value.subband_entropy],
-      ["Feature congestion", diagnostics.value.feature_congestion],
-      ["Near mean diff", difficulty.value.near_mean_abs_diff],
-      ["Near histogram overlap", difficulty.value.near_histogram_intersection]
-    ]
-  }
-]);
-
 function asset(path) {
   return withBase(`/demo-artifacts/${path}`);
-}
-
-async function fetchJson(path) {
-  const response = await fetch(asset(path));
-  if (!response.ok) throw new Error(`Failed to load ${path}`);
-  return response.json();
 }
 
 function formatValue(value) {
@@ -292,7 +222,11 @@ async function onFileUpload(event) {
   try {
     const img = await loadImage(url);
     await setEditorImage(img, file.name);
-    autoSegMessage.value = "Uploaded image has no bundled mask. Click the object to set a seed, then run Auto Seg; use SAM3 for SOTA model-assisted masks.";
+    lastSeed.value = {
+      x: Math.floor(imageWidth.value / 2),
+      y: Math.floor(imageHeight.value / 2)
+    };
+    autoSegMessage.value = "Uploaded image has no bundled mask. Auto Seg will run a browser fallback from the image center; click the object to set a better seed, or use SAM3 for SOTA masks.";
   } finally {
     URL.revokeObjectURL(url);
     event.target.value = "";
@@ -628,19 +562,6 @@ const interactiveMetrics = computed(() => {
 });
 
 onMounted(async () => {
-  const scoreEntries = await Promise.all(
-    samples.map(async (sample) => [sample.id, await fetchJson(`${sample.id}/scores.json`)])
-  );
-  scoresBySample.value = Object.fromEntries(scoreEntries);
-
-  const diagnosticEntries = await Promise.all(
-    samples.map(async (sample) => [
-      sample.id,
-      await fetchJson(`${sample.id}/diagnostics.json`)
-    ])
-  );
-  diagnosticsBySample.value = Object.fromEntries(diagnosticEntries);
-  generationScores.value = await fetchJson("cod-demo-generation.json");
   await loadBundledIntoEditor(samples[0]);
 });
 </script>
@@ -679,10 +600,23 @@ onMounted(async () => {
         <p class="eyebrow">Start here</p>
         <h2>Use a real COD10K sample, or upload your own image</h2>
         <p>
-          Click a thumbnail to load the image plus its COD10K object mask into
-          the lab. These examples are real COD10K Test images from
-          `D:\ML\COD_datasets\COD10K-v3`; no synthetic sample is mixed into the demo.
+          Uploads enter the same lab as bundled samples. COD10K samples include
+          a real object mask; user images use the browser Auto Seg fallback unless
+          you open SAM3 for model-assisted segmentation.
         </p>
+      </div>
+
+      <div class="upload-card">
+        <div>
+          <p class="eyebrow">Upload user image</p>
+          <h3>Your image -> Auto Seg -> metrics</h3>
+          <p>
+            Choose a local image. The lab will load it immediately, set an initial
+            center seed, and make the Auto Seg button available for browser-side
+            fallback segmentation.
+          </p>
+        </div>
+        <input class="file-picker big-file-picker" type="file" accept="image/*" @change="onFileUpload" />
       </div>
 
       <div class="sample-tabs" aria-label="Bundled demo samples">
@@ -712,7 +646,6 @@ onMounted(async () => {
           </p>
         </div>
         <div class="lab-actions">
-          <input class="file-picker" type="file" accept="image/*" @change="onFileUpload" />
           <button
             v-for="sample in samples.slice(0, 2)"
             :key="`quick-${sample.id}`"
@@ -908,87 +841,6 @@ onMounted(async () => {
       </div>
     </section>
 
-    <div class="demo-layout">
-      <article class="visual-card">
-        <div class="card-heading">
-          <div>
-            <p class="eyebrow">Bundled benchmark-style example</p>
-            <h2>{{ selectedSample.label }}</h2>
-          </div>
-          <p>{{ selectedSample.caption }}</p>
-        </div>
-
-        <div class="image-grid">
-          <figure>
-            <img :src="asset(`${selectedSample.id}/${selectedSample.scene}`)" alt="Scene image" />
-            <figcaption>Scene</figcaption>
-          </figure>
-          <figure>
-            <img :src="asset(`${selectedSample.id}/${selectedSample.pred}`)" alt="Prediction mask" />
-            <figcaption>Prediction</figcaption>
-          </figure>
-          <figure>
-            <img :src="asset(`${selectedSample.id}/${selectedSample.gt}`)" alt="Ground-truth mask" />
-            <figcaption>Ground truth</figcaption>
-          </figure>
-          <figure>
-            <img :src="asset(`${selectedSample.id}/mask_overlay.png`)" alt="Mask overlay visualization" />
-            <figcaption>Overlay</figcaption>
-          </figure>
-          <figure>
-            <img :src="asset(`${selectedSample.id}/error_map.png`)" alt="Error map visualization" />
-            <figcaption>Error map</figcaption>
-          </figure>
-          <figure class="wide">
-            <img :src="asset(`${selectedSample.id}/pr_curve.png`)" alt="Precision-recall curve" />
-            <figcaption>Precision-Recall curve</figcaption>
-          </figure>
-        </div>
-      </article>
-
-      <aside class="metric-panel">
-        <p class="eyebrow">Metric snapshot</p>
-        <p class="panel-note">
-          These are precomputed mask-vs-ground-truth scores for the selected COD10K
-          sample. They judge segmentation quality, not whether your hand-painted
-          lab mask is good.
-        </p>
-        <div class="metric-cards">
-          <div v-for="metric in headlineMetrics" :key="metric.label" class="metric-card">
-            <span>{{ metric.label }}</span>
-            <strong>{{ formatValue(metric.value) }}</strong>
-            <small>{{ metric.hint }}</small>
-          </div>
-        </div>
-
-        <div class="generation-card">
-          <span>Demo-set generation surrogate</span>
-          <div>
-            <strong>FID_lite {{ formatValue(generationScores.FID_lite) }}</strong>
-            <strong>KID_lite {{ formatValue(generationScores.KID_lite) }}</strong>
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <section class="metric-browser">
-      <div class="section-title">
-        <p class="eyebrow">Bundled metric browser</p>
-        <h2>What the repository sample computes</h2>
-      </div>
-      <div class="group-grid">
-        <article v-for="group in metricGroups" :key="group.title" class="group-card">
-          <h3>{{ group.title }}</h3>
-          <dl>
-            <template v-for="[name, value] in group.items" :key="name">
-              <dt>{{ name }}</dt>
-              <dd>{{ formatValue(value) }}</dd>
-            </template>
-          </dl>
-        </article>
-      </div>
-    </section>
-
     <section class="command-card">
       <p class="eyebrow">CLI equivalent</p>
       <pre><code>camo-eval visualize --pred camo-eval/demo_data/cod_sota_masks/pred/sample1.png --gt camo-eval/demo_data/cod_sota_masks/gt/sample1.png --output-dir demo-output
@@ -1014,7 +866,6 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 .demo-hero > *,
 .lab-header > *,
 .lab-grid > *,
-.demo-layout > *,
 .interactive-metrics > *,
 .sample-tabs > *,
 .image-grid > *,
@@ -1100,6 +951,7 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 .visual-card,
 .metric-panel,
 .group-card,
+.upload-card,
 .workflow-step,
 .metric-explainer,
 .run-strip,
@@ -1240,6 +1092,11 @@ button,
   cursor: pointer;
   font: inherit;
   font-weight: 800;
+}
+
+.big-file-picker {
+  width: min(100%, 360px);
+  max-width: 360px;
 }
 
 .lab-grid {
@@ -1386,6 +1243,29 @@ canvas {
   gap: 16px;
 }
 
+.upload-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 20px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 247, 0.95), rgba(232, 239, 226, 0.95)),
+    radial-gradient(circle at 95% 10%, rgba(248, 176, 35, 0.22), transparent 32%);
+}
+
+.upload-card h3 {
+  margin: 0;
+  color: #17251f;
+  font-size: 22px;
+}
+
+.upload-card p:last-child {
+  margin: 8px 0 0;
+  color: #5d685f;
+  line-height: 1.55;
+}
+
 .sample-tabs button {
   display: grid;
   gap: 8px;
@@ -1422,12 +1302,6 @@ canvas {
   color: #637066;
   font-size: 12px;
   font-weight: 700;
-}
-
-.demo-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 22px;
 }
 
 .visual-card,
@@ -1573,11 +1447,6 @@ figcaption {
   margin-top: 10px;
 }
 
-.metric-browser {
-  display: grid;
-  gap: 16px;
-}
-
 .execution-ladder {
   display: grid;
   gap: 18px;
@@ -1708,7 +1577,7 @@ dd {
   .demo-hero,
   .lab-header,
   .lab-grid,
-  .demo-layout,
+  .upload-card,
   .run-strip {
     grid-template-columns: 1fr;
   }
@@ -1729,6 +1598,7 @@ dd {
 @media (max-width: 640px) {
   .demo-hero,
   .lab-card,
+  .upload-card,
   .visual-card,
   .metric-panel,
   .run-strip,
