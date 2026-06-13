@@ -825,6 +825,24 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
   margin-top: 10px;
 }
 
+.camo-demo,
+.camo-demo * {
+  box-sizing: border-box;
+}
+
+.camo-demo > *,
+.demo-hero > *,
+.lab-header > *,
+.lab-grid > *,
+.demo-layout > *,
+.interactive-metrics > *,
+.sample-tabs > *,
+.image-grid > *,
+.group-grid > *,
+.route-grid > * {
+  min-width: 0;
+}
+
 .demo-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 240px;
@@ -1359,6 +1377,7 @@ dd {
 
 .command-card pre {
   overflow-x: auto;
+  max-width: 100%;
   margin: 0;
   padding: 18px;
   border-radius: 16px;
