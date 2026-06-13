@@ -2,7 +2,7 @@
   "name": "camoged-web",
   "version": "0.1.0",
   "description": "CamoGED aggregator website: papers, model zoo, leaderboard, demos, datasets.",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",

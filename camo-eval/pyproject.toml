@@ -21,7 +21,6 @@ camo-eval = "camo_eval.cli:main"
 
 [project.optional-dependencies]
 full = [
-    "scipy>=1.7",
     "gradio>=4.0",
     "pillow>=9.0",
     "matplotlib>=3.5",

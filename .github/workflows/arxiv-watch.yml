@@ -1,6 +1,8 @@
 name: arXiv watch (resource candidates)
+# Not yet implemented — run manually only. The weekly schedule is intentionally
+# disabled so this placeholder does not run (and do nothing) every week. Re-enable
+# the cron trigger once the arXiv query + triage-issue step below is built.
 on:
-  schedule: [{ cron: "0 7 * * 1" }]   # weekly
   workflow_dispatch:
 jobs:
   watch:

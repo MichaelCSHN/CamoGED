@@ -61,7 +61,7 @@ demos + a unified evaluation toolkit).
 # Clone
 git clone https://github.com/MichaelCSHN/CamoGED.git && cd CamoGED
 
-# Evaluation toolkit (one working metric ships now: MAE; others scaffolded)
+# Evaluation toolkit (unified metric suite: detection · generation · robustness)
 cd camo-eval && pip install -e . && pytest -q
 
 # Book (requires Quarto: https://quarto.org)

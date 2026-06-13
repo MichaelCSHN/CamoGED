@@ -135,7 +135,9 @@ def fid(real_dir: str, fake_dir: str) -> float:
     mu_fake, cov_fake = _mean_and_cov(fake)
     diff = mu_real - mu_fake
     eps_eye = np.eye(cov_real.shape[0], dtype=np.float64) * 1e-9
-    covmean, _ = linalg.sqrtm((cov_real + eps_eye) @ (cov_fake + eps_eye), disp=False)
+    covmean = linalg.sqrtm((cov_real + eps_eye) @ (cov_fake + eps_eye))
+    if isinstance(covmean, tuple):  # SciPy < 1.18 returned (sqrtm, errest)
+        covmean = covmean[0]
     if np.iscomplexobj(covmean):
         covmean = covmean.real
     if np.isfinite(covmean).all():
