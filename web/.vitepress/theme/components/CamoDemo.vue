@@ -78,7 +78,7 @@ const workflowSteps = [
   {
     number: "2",
     title: "Mark the target",
-    body: "Click Seed auto first, then correct the mask with paint and erase."
+    body: "Use Auto Seg first, then correct the mask with paint and erase."
   },
   {
     number: "3",
@@ -93,7 +93,7 @@ const workflowSteps = [
 ];
 
 const toolHelp = {
-  seed: "Click once on the object. The browser grows a connected color region from that point.",
+  auto: "Load the bundled object mask when available. For uploaded images, click the object once to set a seed, then run the lightweight browser fallback.",
   target: "Paint pixels that belong to the camouflaged object. This is the orange overlay.",
   background: "Paint comparison background pixels. This switches background mode to Manual.",
   erase: "Remove target or manual-background paint where the mask is wrong."
@@ -129,11 +129,13 @@ const sourcePixels = ref(null);
 const targetMask = ref(null);
 const manualBackgroundMask = ref(null);
 const maskVersion = ref(0);
-const activeTool = ref("seed");
+const activeTool = ref("auto");
 const brushSize = ref(18);
 const tolerance = ref(42);
 const backgroundMode = ref("near");
 const lastSeed = ref(null);
+const currentSampleId = ref(samples[0].id);
+const autoSegMessage = ref("COD10K sample loaded with its bundled object mask.");
 
 const selectedSample = computed(
   () => samples.find((sample) => sample.id === selectedId.value) || samples[0]
@@ -265,11 +267,13 @@ async function loadBundledMask(sample) {
   targetMask.value = mask;
   manualBackgroundMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
   maskVersion.value += 1;
+  autoSegMessage.value = "Auto Seg loaded the bundled COD10K object mask for this sample.";
   drawEditor();
 }
 
 async function loadBundledIntoEditor(sample = samples[0]) {
   selectedId.value = sample.id;
+  currentSampleId.value = sample.id;
   const img = await loadImage(asset(`${sample.id}/${sample.scene}`));
   await setEditorImage(img, sample.label);
   await loadBundledMask(sample);
@@ -282,10 +286,13 @@ async function selectSample(sample) {
 async function onFileUpload(event) {
   const file = event.target.files?.[0];
   if (!file) return;
+  currentSampleId.value = null;
+  selectedId.value = null;
   const url = URL.createObjectURL(file);
   try {
     const img = await loadImage(url);
     await setEditorImage(img, file.name);
+    autoSegMessage.value = "Uploaded image has no bundled mask. Click the object to set a seed, then run Auto Seg; use SAM3 for SOTA model-assisted masks.";
   } finally {
     URL.revokeObjectURL(url);
     event.target.value = "";
@@ -358,8 +365,11 @@ let pointerDown = false;
 function onPointerDown(event) {
   if (!sourcePixels.value) return;
   const point = pointFromEvent(event);
-  if (activeTool.value === "seed") {
-    autoSegment(point.x, point.y);
+  if (activeTool.value === "auto") {
+    lastSeed.value = point;
+    autoSegMessage.value = currentSampleId.value
+      ? "Seed noted. Press Auto Seg to restore the bundled COD10K mask, or switch tools to edit manually."
+      : "Seed noted. Press Auto Seg to run the browser fallback from this point, or open SAM3 for model-assisted segmentation.";
     return;
   }
   pointerDown = true;
@@ -368,7 +378,7 @@ function onPointerDown(event) {
 }
 
 function onPointerMove(event) {
-  if (!pointerDown || activeTool.value === "seed") return;
+  if (!pointerDown || activeTool.value === "auto") return;
   const point = pointFromEvent(event);
   paintAt(point.x, point.y);
 }
@@ -429,7 +439,24 @@ function autoSegment(x = Math.floor(imageWidth.value / 2), y = Math.floor(imageH
   manualBackgroundMask.value = new Uint8Array(width * height);
   maskVersion.value += 1;
   lastSeed.value = { x, y };
+  autoSegMessage.value = "Auto Seg used the browser fallback: connected color region growing from the selected seed. For SOTA segmentation, use SAM3.";
   drawEditor();
+}
+
+async function runAutoSeg() {
+  if (!sourcePixels.value) return;
+  if (currentSampleId.value) {
+    const sample = samples.find((item) => item.id === currentSampleId.value);
+    if (sample?.gt) {
+      await loadBundledMask(sample);
+      return;
+    }
+  }
+  const seed = lastSeed.value || {
+    x: Math.floor(imageWidth.value / 2),
+    y: Math.floor(imageHeight.value / 2)
+  };
+  autoSegment(seed.x, seed.y);
 }
 
 function clearMasks() {
@@ -438,6 +465,9 @@ function clearMasks() {
   manualBackgroundMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
   maskVersion.value += 1;
   lastSeed.value = null;
+  autoSegMessage.value = currentSampleId.value
+    ? "Mask cleared. Press Auto Seg to restore the bundled COD10K mask."
+    : "Mask cleared. Click the object to set a seed, then press Auto Seg for the browser fallback.";
   drawEditor();
 }
 
@@ -546,7 +576,7 @@ const maskStats = computed(() => {
 
 const labStatus = computed(() => {
   if (!sourcePixels.value) return "Choose or upload an image to start.";
-  if (!maskStats.value.hasTarget) return "Step 2 needed: click Seed auto on the object or paint the target.";
+  if (!maskStats.value.hasTarget) return "Step 2 needed: run Auto Seg, or paint the target manually.";
   if (!maskStats.value.hasBackground) return "Step 3 needed: choose Auto all non-target or paint a manual background.";
   return "Ready: metrics below update live as you refine target and background masks.";
 });
@@ -623,7 +653,7 @@ onMounted(async () => {
         <h1>Upload. Segment. Choose background. Measure camouflage.</h1>
         <p class="hero-copy">
           This demo runs entirely in the browser for lightweight measurement. Use
-          seed-based auto segmentation, manual mask/background brushes, or send the
+          bundled-mask auto segmentation, manual mask/background brushes, or send the
           image to a SAM3 Space for model-assisted segmentation.
         </p>
       </div>
@@ -726,13 +756,14 @@ onMounted(async () => {
         <aside class="controls-card">
           <p class="eyebrow">Controls</p>
           <div class="tool-grid">
-            <button type="button" :class="{ active: activeTool === 'seed' }" :title="toolHelp.seed" @click="activeTool = 'seed'">Seed auto</button>
+            <button type="button" :class="{ active: activeTool === 'auto' }" :title="toolHelp.auto" @click="activeTool = 'auto'; runAutoSeg()">Auto Seg</button>
             <button type="button" :class="{ active: activeTool === 'target' }" :title="toolHelp.target" @click="activeTool = 'target'">Paint target</button>
             <button type="button" :class="{ active: activeTool === 'background' }" :title="toolHelp.background" @click="activeTool = 'background'; backgroundMode = 'manual'">Paint background</button>
             <button type="button" :class="{ active: activeTool === 'erase' }" :title="toolHelp.erase" @click="activeTool = 'erase'">Erase</button>
           </div>
 
           <p class="tool-help">{{ toolHelp[activeTool] }}</p>
+          <p class="auto-seg-note">{{ autoSegMessage }}</p>
 
           <label>
             Auto tolerance
@@ -757,13 +788,13 @@ onMounted(async () => {
           </label>
 
           <div class="control-buttons">
-            <button type="button" @click="autoSegment(lastSeed?.x, lastSeed?.y)">Re-run auto</button>
+            <button type="button" @click="runAutoSeg">Run Auto Seg</button>
             <button type="button" @click="clearMasks">Clear masks</button>
           </div>
 
           <p class="control-note">
-            Browser auto segmentation is color-connected region growing, not SAM3.
-            Use the SAM3 Space link when a model-assisted mask is needed.
+            Auto Seg uses bundled COD10K masks for sample images. Uploaded images
+            use a lightweight browser fallback unless you open SAM3 for model-assisted masks.
           </p>
         </aside>
       </div>
@@ -820,10 +851,11 @@ onMounted(async () => {
       <div class="route-grid">
         <article class="route-card">
           <span>01 · Browser</span>
-          <h3>Manual and lightweight auto segmentation</h3>
+          <h3>Bundled-mask Auto Seg and lightweight fallback</h3>
           <p>
-            Upload an image, click a seed, paint target/background regions, and compute
-            target-background measurements immediately on GitHub Pages.
+            COD10K samples restore their bundled object mask. Uploaded images can
+            use a seed-based browser fallback, then target/background measurements
+            update immediately on GitHub Pages.
           </p>
           <ul>
             <li>No login, no backend, no model weights.</li>
@@ -1289,6 +1321,17 @@ canvas {
   color: #3f5047;
   font-size: 13px;
   font-weight: 700;
+  line-height: 1.45;
+}
+
+.auto-seg-note {
+  margin: 10px 0 0;
+  padding: 12px;
+  border-radius: 14px;
+  background: #dfeadd;
+  color: #294236;
+  font-size: 13px;
+  font-weight: 800;
   line-height: 1.45;
 }
 
