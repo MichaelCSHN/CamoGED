@@ -69,6 +69,53 @@ const samples = [
   }
 ];
 
+const workflowSteps = [
+  {
+    number: "1",
+    title: "Choose an image",
+    body: "Upload a local image or start from a real COD10K sample."
+  },
+  {
+    number: "2",
+    title: "Mark the target",
+    body: "Click Seed auto first, then correct the mask with paint and erase."
+  },
+  {
+    number: "3",
+    title: "Define background",
+    body: "Use the near ring for local camouflage, all non-target for global contrast, or paint it manually."
+  },
+  {
+    number: "4",
+    title: "Read the metrics",
+    body: "Use the explanations to decide whether the object is visually hidden or the mask needs refinement."
+  }
+];
+
+const toolHelp = {
+  seed: "Click once on the object. The browser grows a connected color region from that point.",
+  target: "Paint pixels that belong to the camouflaged object. This is the orange overlay.",
+  background: "Paint comparison background pixels. This switches background mode to Manual.",
+  erase: "Remove target or manual-background paint where the mask is wrong."
+};
+
+const backgroundHelp = {
+  near: "Compares the target with a narrow ring around it. Best for local concealment.",
+  all: "Compares the target with every non-target pixel. Useful for whole-image contrast.",
+  manual: "Compares the target only with blue pixels you paint as background."
+};
+
+const interactiveMetricInfo = {
+  "Target pixels": "Size of the current orange target mask. If this is too small or too large, fix the mask first.",
+  "Background pixels": "Number of pixels used as the comparison background. Manual mode needs blue paint.",
+  "Target area": "Fraction of the image covered by the target mask.",
+  "Mean abs diff": "Brightness difference between target and background. Lower means closer luminance.",
+  "Contrast abs diff": "Texture/contrast spread difference. Lower means the target has similar contrast.",
+  "Histogram overlap": "Grayscale distribution overlap. Higher means the target and background look more alike.",
+  "Edge density": "How cluttered the image is by local edges. Higher clutter can hide boundaries.",
+  "Camouflage difficulty": "A heuristic 0-1 score combining overlap, low brightness difference, and clutter. Higher means harder visual separation."
+};
+
 const selectedId = ref(samples[0].id);
 const scoresBySample = ref({});
 const diagnosticsBySample = ref({});
@@ -98,12 +145,12 @@ const diagnostics = computed(
 const difficulty = computed(() => diagnostics.value.camouflage_difficulty || {});
 
 const headlineMetrics = computed(() => [
-  { label: "MAE", value: score.value.MAE, hint: "lower is better" },
-  { label: "S-measure", value: score.value.Sm, hint: "higher is better" },
-  { label: "F adaptive", value: score.value.F_adaptive, hint: "higher is better" },
-  { label: "IoU", value: score.value.IoU, hint: "higher is better" },
-  { label: "Boundary IoU", value: score.value.BoundaryIoU, hint: "higher is better" },
-  { label: "Difficulty", value: difficulty.value.difficulty, hint: "higher is harder" }
+  { label: "MAE", value: score.value.MAE, hint: "mask error; lower is better" },
+  { label: "S-measure", value: score.value.Sm, hint: "structure match; higher is better" },
+  { label: "F adaptive", value: score.value.F_adaptive, hint: "precision/recall balance" },
+  { label: "IoU", value: score.value.IoU, hint: "region overlap; higher is better" },
+  { label: "Boundary IoU", value: score.value.BoundaryIoU, hint: "edge alignment" },
+  { label: "Difficulty", value: difficulty.value.difficulty, hint: "visual hiding; higher is harder" }
 ]);
 
 const metricGroups = computed(() => [
@@ -203,9 +250,33 @@ async function setEditorImage(img, name) {
   drawEditor();
 }
 
+async function loadBundledMask(sample) {
+  const maskImg = await loadImage(asset(`${sample.id}/${sample.gt}`));
+  const canvas = document.createElement("canvas");
+  canvas.width = imageWidth.value;
+  canvas.height = imageHeight.value;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.drawImage(maskImg, 0, 0, imageWidth.value, imageHeight.value);
+  const data = ctx.getImageData(0, 0, imageWidth.value, imageHeight.value).data;
+  const mask = new Uint8Array(imageWidth.value * imageHeight.value);
+  for (let i = 0; i < mask.length; i += 1) {
+    mask[i] = data[i * 4] > 127 ? 1 : 0;
+  }
+  targetMask.value = mask;
+  manualBackgroundMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
+  maskVersion.value += 1;
+  drawEditor();
+}
+
 async function loadBundledIntoEditor(sample = samples[0]) {
+  selectedId.value = sample.id;
   const img = await loadImage(asset(`${sample.id}/${sample.scene}`));
   await setEditorImage(img, sample.label);
+  await loadBundledMask(sample);
+}
+
+async function selectSample(sample) {
+  await loadBundledIntoEditor(sample);
 }
 
 async function onFileUpload(event) {
@@ -452,6 +523,34 @@ function sobelMagnitude(index) {
   return Math.sqrt(gx * gx + gy * gy);
 }
 
+const maskStats = computed(() => {
+  maskVersion.value;
+  if (!sourcePixels.value || !targetMask.value) {
+    return { total: 0, target: 0, background: 0, hasTarget: false, hasBackground: false };
+  }
+  const bgMask = currentBackgroundMask();
+  let target = 0;
+  let background = 0;
+  for (let i = 0; i < targetMask.value.length; i += 1) {
+    if (targetMask.value[i]) target += 1;
+    if (bgMask[i]) background += 1;
+  }
+  return {
+    total: targetMask.value.length,
+    target,
+    background,
+    hasTarget: target > 0,
+    hasBackground: background > 0
+  };
+});
+
+const labStatus = computed(() => {
+  if (!sourcePixels.value) return "Choose or upload an image to start.";
+  if (!maskStats.value.hasTarget) return "Step 2 needed: click Seed auto on the object or paint the target.";
+  if (!maskStats.value.hasBackground) return "Step 3 needed: choose Auto all non-target or paint a manual background.";
+  return "Ready: metrics below update live as you refine target and background masks.";
+});
+
 const interactiveMetrics = computed(() => {
   maskVersion.value;
   if (!sourcePixels.value || !targetMask.value) return [];
@@ -491,7 +590,11 @@ const interactiveMetrics = computed(() => {
     ["Histogram overlap", histIntersection],
     ["Edge density", edgeDensity],
     ["Camouflage difficulty", difficultyScore]
-  ];
+  ].map(([name, value]) => ({
+    name,
+    value,
+    info: interactiveMetricInfo[name]
+  }));
 });
 
 onMounted(async () => {
@@ -531,14 +634,51 @@ onMounted(async () => {
       </div>
     </div>
 
+    <section class="workflow-strip" aria-label="Demo workflow">
+      <article v-for="step in workflowSteps" :key="step.number" class="workflow-step">
+        <span>{{ step.number }}</span>
+        <div>
+          <h2>{{ step.title }}</h2>
+          <p>{{ step.body }}</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="sample-gallery">
+      <div class="section-title">
+        <p class="eyebrow">Start here</p>
+        <h2>Use a real COD10K sample, or upload your own image</h2>
+        <p>
+          Click a thumbnail to load the image plus its COD10K object mask into
+          the lab. These examples are real COD10K Test images from
+          `D:\ML\COD_datasets\COD10K-v3`; no synthetic sample is mixed into the demo.
+        </p>
+      </div>
+
+      <div class="sample-tabs" aria-label="Bundled demo samples">
+        <button
+          v-for="sample in samples"
+          :key="sample.id"
+          type="button"
+          :class="{ active: selectedId === sample.id }"
+          @click="selectSample(sample)"
+        >
+          <img :src="asset(`${sample.id}/${sample.scene}`)" :alt="`${sample.label} thumbnail`" />
+          <span>{{ sample.label }}</span>
+          <small>Load image + mask</small>
+        </button>
+      </div>
+    </section>
+
     <section class="lab-card">
       <div class="lab-header">
         <div>
-          <p class="eyebrow">Try your own image</p>
-          <h2>Segmentation and metric lab</h2>
+          <p class="eyebrow">Interactive lab</p>
+          <h2>Mask the object, define background, then inspect the numbers</h2>
           <p>
-            Click the object with Seed auto, refine with brushes, select a background
-            rule, then read the target/background metrics immediately.
+            The goal is not to get a pretty overlay. The goal is to create a
+            defensible target/background comparison and understand what each
+            number says about camouflage.
           </p>
         </div>
         <div class="lab-actions">
@@ -553,6 +693,15 @@ onMounted(async () => {
           </button>
           <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">Open SAM3</a>
         </div>
+      </div>
+
+      <div class="lab-status" :class="{ ready: maskStats.hasTarget && maskStats.hasBackground }">
+        <strong>{{ labStatus }}</strong>
+        <span>
+          Target {{ formatValue(maskStats.target) }} px /
+          background {{ formatValue(maskStats.background) }} px /
+          image {{ imageWidth }}x{{ imageHeight }}
+        </span>
       </div>
 
       <div class="lab-grid">
@@ -577,21 +726,25 @@ onMounted(async () => {
         <aside class="controls-card">
           <p class="eyebrow">Controls</p>
           <div class="tool-grid">
-            <button type="button" :class="{ active: activeTool === 'seed' }" @click="activeTool = 'seed'">Seed auto</button>
-            <button type="button" :class="{ active: activeTool === 'target' }" @click="activeTool = 'target'">Paint target</button>
-            <button type="button" :class="{ active: activeTool === 'background' }" @click="activeTool = 'background'; backgroundMode = 'manual'">Paint background</button>
-            <button type="button" :class="{ active: activeTool === 'erase' }" @click="activeTool = 'erase'">Erase</button>
+            <button type="button" :class="{ active: activeTool === 'seed' }" :title="toolHelp.seed" @click="activeTool = 'seed'">Seed auto</button>
+            <button type="button" :class="{ active: activeTool === 'target' }" :title="toolHelp.target" @click="activeTool = 'target'">Paint target</button>
+            <button type="button" :class="{ active: activeTool === 'background' }" :title="toolHelp.background" @click="activeTool = 'background'; backgroundMode = 'manual'">Paint background</button>
+            <button type="button" :class="{ active: activeTool === 'erase' }" :title="toolHelp.erase" @click="activeTool = 'erase'">Erase</button>
           </div>
+
+          <p class="tool-help">{{ toolHelp[activeTool] }}</p>
 
           <label>
             Auto tolerance
             <input v-model.number="tolerance" type="range" min="8" max="150" />
             <span>{{ tolerance }}</span>
+            <small>Higher values include colors farther from the clicked seed.</small>
           </label>
           <label>
             Brush size
             <input v-model.number="brushSize" type="range" min="4" max="80" />
             <span>{{ brushSize }}</span>
+            <small>Use a small brush near edges; use a large brush for coarse cleanup.</small>
           </label>
           <label>
             Background mode
@@ -600,6 +753,7 @@ onMounted(async () => {
               <option value="all">Auto all non-target</option>
               <option value="manual">Manual background</option>
             </select>
+            <small>{{ backgroundHelp[backgroundMode] }}</small>
           </label>
 
           <div class="control-buttons">
@@ -615,10 +769,25 @@ onMounted(async () => {
       </div>
 
       <div class="interactive-metrics">
-        <article v-for="[name, value] in interactiveMetrics" :key="name" class="metric-card">
-          <span>{{ name }}</span>
-          <strong>{{ formatValue(value) }}</strong>
+        <article v-for="metric in interactiveMetrics" :key="metric.name" class="metric-card" :title="metric.info">
+          <span>{{ metric.name }}</span>
+          <strong>{{ formatValue(metric.value) }}</strong>
+          <small>{{ metric.info }}</small>
         </article>
+      </div>
+
+      <div class="metric-explainer">
+        <h3>How to read this lab</h3>
+        <p>
+          These live numbers describe visual similarity between the orange target
+          and the selected background. They are not a model leaderboard score.
+          If target/background pixels are wrong, the numbers are wrong.
+        </p>
+        <ul>
+          <li>Low mean/contrast difference plus high histogram overlap means stronger appearance matching.</li>
+          <li>High edge density means the scene is cluttered, which can hide boundaries.</li>
+          <li>The difficulty score is a heuristic for quick inspection, not a published benchmark metric.</li>
+        </ul>
       </div>
     </section>
 
@@ -707,32 +876,6 @@ onMounted(async () => {
       </div>
     </section>
 
-    <section class="sample-gallery">
-      <div class="section-title">
-        <p class="eyebrow">Real COD10K samples</p>
-        <h2>Choose a bundled benchmark image</h2>
-        <p>
-          These thumbnails are sampled from `D:\ML\COD_datasets\COD10K-v3`.
-          COD10K is an animal/human camouflage dataset and does not provide
-          military target classes, so the previous synthetic military examples
-          have been removed.
-        </p>
-      </div>
-
-      <div class="sample-tabs" aria-label="Bundled demo samples">
-      <button
-        v-for="sample in samples"
-        :key="sample.id"
-        type="button"
-        :class="{ active: selectedId === sample.id }"
-        @click="selectedId = sample.id"
-      >
-        <img :src="asset(`${sample.id}/${sample.scene}`)" :alt="`${sample.label} thumbnail`" />
-        <span>{{ sample.label }}</span>
-      </button>
-      </div>
-    </section>
-
     <div class="demo-layout">
       <article class="visual-card">
         <div class="card-heading">
@@ -773,6 +916,11 @@ onMounted(async () => {
 
       <aside class="metric-panel">
         <p class="eyebrow">Metric snapshot</p>
+        <p class="panel-note">
+          These are precomputed mask-vs-ground-truth scores for the selected COD10K
+          sample. They judge segmentation quality, not whether your hand-painted
+          lab mask is good.
+        </p>
         <div class="metric-cards">
           <div v-for="metric in headlineMetrics" :key="metric.label" class="metric-card">
             <span>{{ metric.label }}</span>
@@ -920,6 +1068,8 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 .visual-card,
 .metric-panel,
 .group-card,
+.workflow-step,
+.metric-explainer,
 .run-strip,
 .command-card {
   border: 1px solid rgba(39, 59, 49, 0.14);
@@ -930,6 +1080,45 @@ camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt -
 
 .lab-card {
   padding: 24px;
+}
+
+.workflow-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.workflow-step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px;
+  align-items: start;
+}
+
+.workflow-step span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #1d3529;
+  color: #fff9e8;
+  font-weight: 900;
+}
+
+.workflow-step h2 {
+  margin: 0;
+  color: #17251f;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.workflow-step p {
+  margin: 6px 0 0;
+  color: #5d685f;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .lab-header {
@@ -970,6 +1159,33 @@ button,
 .lab-actions button {
   background: #e8efe2;
   color: #1d3529;
+}
+
+.lab-status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #fff2d5;
+  color: #4f3b11;
+}
+
+.lab-status.ready {
+  background: #e5f0df;
+  color: #183224;
+}
+
+.lab-status strong {
+  font-weight: 900;
+}
+
+.lab-status span {
+  color: inherit;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .file-picker {
@@ -1065,6 +1281,17 @@ canvas {
   color: #fff9e8;
 }
 
+.tool-help {
+  margin: 12px 0 0;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fffdf7;
+  color: #3f5047;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 .controls-card label {
   display: grid;
   gap: 6px;
@@ -1076,6 +1303,13 @@ canvas {
 .controls-card input,
 .controls-card select {
   width: 100%;
+}
+
+.controls-card small {
+  color: #69766d;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .control-buttons {
@@ -1138,6 +1372,13 @@ canvas {
   padding: 0 4px 4px;
   font-size: 13px;
   font-weight: 900;
+}
+
+.sample-tabs small {
+  padding: 0 4px 6px;
+  color: #637066;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .demo-layout {
@@ -1234,6 +1475,41 @@ figcaption {
 
 .metric-card small {
   color: #6c756d;
+  display: block;
+  margin-top: 6px;
+  line-height: 1.35;
+}
+
+.metric-explainer {
+  margin-top: 16px;
+  padding: 18px;
+  background: #f6f3ea;
+}
+
+.metric-explainer h3 {
+  margin: 0;
+  color: #17251f;
+}
+
+.metric-explainer p,
+.metric-explainer li,
+.panel-note {
+  color: #5d685f;
+  line-height: 1.55;
+}
+
+.metric-explainer p {
+  margin: 8px 0 0;
+}
+
+.metric-explainer ul {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.panel-note {
+  margin: 0 0 14px;
+  font-size: 13px;
 }
 
 .generation-card {
@@ -1400,6 +1676,7 @@ dd {
 
   .group-grid,
   .route-grid,
+  .workflow-strip,
   .sample-tabs,
   .interactive-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1420,6 +1697,7 @@ dd {
   .image-grid,
   .group-grid,
   .route-grid,
+  .workflow-strip,
   .sample-tabs,
   .interactive-metrics {
     grid-template-columns: 1fr;
