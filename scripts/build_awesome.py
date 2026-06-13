@@ -346,6 +346,10 @@ def render_leaderboard_page(leaderboard: list[dict]) -> str:
 
 def render_demo_page() -> str:
     lines = [
+        "---",
+        "pageClass: camoged-demo-page",
+        "---",
+        "",
         "<CamoDemo />",
         "",
     ]

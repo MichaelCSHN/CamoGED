@@ -18,6 +18,47 @@
   font-size: 22px;
 }
 
+.camoged-demo-page .VPDoc {
+  padding: 32px 0 72px;
+}
+
+.camoged-demo-page .VPDoc .container,
+.camoged-demo-page .VPDoc .content,
+.camoged-demo-page .VPDoc .content-container,
+.camoged-demo-page .VPDoc .main {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.camoged-demo-page .VPDoc .container {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.camoged-demo-page .VPDoc .content {
+  padding: 0 !important;
+}
+
+.camoged-demo-page .VPDoc .content-container {
+  margin: 0 !important;
+}
+
+.camoged-demo-page .VPDoc .aside {
+  display: none !important;
+}
+
+.camoged-demo-page .vp-doc._CamoGED_demo {
+  width: min(1440px, calc(100vw - 48px));
+  max-width: none !important;
+  margin: 0 auto;
+  padding: 0 !important;
+}
+
+.camoged-demo-page .vp-doc._CamoGED_demo > div {
+  width: 100%;
+}
+
 @media (max-width: 960px) {
   .VPHomeHero .text {
     font-size: 34px;
@@ -31,6 +72,14 @@
 
   .VPHomeHero .tagline {
     font-size: 16px;
+  }
+
+  .camoged-demo-page .VPDoc {
+    padding-top: 20px;
+  }
+
+  .camoged-demo-page .vp-doc._CamoGED_demo {
+    width: min(100%, calc(100vw - 28px));
   }
 }
 
