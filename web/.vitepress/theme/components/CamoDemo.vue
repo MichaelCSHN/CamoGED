@@ -96,7 +96,7 @@ const toolHelp = {
   auto: "Load the bundled object mask when available. For uploaded images, click the object once to set a seed, then run the lightweight browser fallback.",
   target: "Paint pixels that belong to the camouflaged object. This is the orange overlay.",
   background: "Paint comparison background pixels. This switches background mode to Manual.",
-  erase: "Remove target or manual-background paint where the mask is wrong."
+  erase: "Remove target or manual-background paint. Use brush/line for edges, or box erase for large wrong regions."
 };
 
 const backgroundHelp = {
@@ -127,6 +127,7 @@ const manualBackgroundMask = ref(null);
 const maskVersion = ref(0);
 const activeTool = ref("auto");
 const brushSize = ref(18);
+const eraseMode = ref("brush");
 const tolerance = ref(42);
 const backgroundMode = ref("near");
 const lastSeed = ref(null);
@@ -259,17 +260,41 @@ function drawEditor() {
     }
   }
   ctx.putImageData(rendered, 0, 0);
+  drawEraseBox(ctx);
 }
 
 function pointFromEvent(event) {
   const rect = editorCanvas.value.getBoundingClientRect();
+  const scaleX = imageWidth.value / rect.width;
+  const scaleY = imageHeight.value / rect.height;
   return {
-    x: Math.max(0, Math.min(imageWidth.value - 1, Math.floor((event.clientX - rect.left) * imageWidth.value / rect.width))),
-    y: Math.max(0, Math.min(imageHeight.value - 1, Math.floor((event.clientY - rect.top) * imageHeight.value / rect.height)))
+    x: Math.max(0, Math.min(imageWidth.value - 1, Math.floor((event.clientX - rect.left) * scaleX))),
+    y: Math.max(0, Math.min(imageHeight.value - 1, Math.floor((event.clientY - rect.top) * scaleY)))
   };
 }
 
-function paintAt(x, y) {
+let pointerDown = false;
+let lastPaintPoint = null;
+let eraseBoxStart = null;
+let eraseBoxCurrent = null;
+
+function drawEraseBox(ctx) {
+  if (!eraseBoxStart || !eraseBoxCurrent) return;
+  const left = Math.min(eraseBoxStart.x, eraseBoxCurrent.x);
+  const top = Math.min(eraseBoxStart.y, eraseBoxCurrent.y);
+  const width = Math.abs(eraseBoxCurrent.x - eraseBoxStart.x);
+  const height = Math.abs(eraseBoxCurrent.y - eraseBoxStart.y);
+  ctx.save();
+  ctx.fillStyle = "rgba(255, 68, 68, 0.16)";
+  ctx.strokeStyle = "rgba(255, 68, 68, 0.9)";
+  ctx.lineWidth = Math.max(2, Math.round(Math.min(imageWidth.value, imageHeight.value) / 240));
+  ctx.setLineDash([8, 5]);
+  ctx.fillRect(left, top, width, height);
+  ctx.strokeRect(left, top, width, height);
+  ctx.restore();
+}
+
+function paintAt(x, y, commit = true) {
   if (!targetMask.value) return;
   const radius = Math.max(1, Math.round(brushSize.value / 2));
   for (let yy = y - radius; yy <= y + radius; yy += 1) {
@@ -290,14 +315,47 @@ function paintAt(x, y) {
       }
     }
   }
+  if (commit) {
+    maskVersion.value += 1;
+    drawEditor();
+  }
+}
+
+function paintLine(from, to) {
+  const distance = Math.hypot(to.x - from.x, to.y - from.y);
+  const step = Math.max(1, Math.round(brushSize.value / 3));
+  const count = Math.max(1, Math.ceil(distance / step));
+  for (let i = 1; i <= count; i += 1) {
+    const t = i / count;
+    paintAt(
+      Math.round(from.x + (to.x - from.x) * t),
+      Math.round(from.y + (to.y - from.y) * t),
+      false
+    );
+  }
   maskVersion.value += 1;
   drawEditor();
 }
 
-let pointerDown = false;
+function applyEraseBox() {
+  if (!eraseBoxStart || !eraseBoxCurrent || !targetMask.value) return;
+  const left = Math.max(0, Math.min(eraseBoxStart.x, eraseBoxCurrent.x));
+  const right = Math.min(imageWidth.value - 1, Math.max(eraseBoxStart.x, eraseBoxCurrent.x));
+  const top = Math.max(0, Math.min(eraseBoxStart.y, eraseBoxCurrent.y));
+  const bottom = Math.min(imageHeight.value - 1, Math.max(eraseBoxStart.y, eraseBoxCurrent.y));
+  for (let y = top; y <= bottom; y += 1) {
+    for (let x = left; x <= right; x += 1) {
+      const index = y * imageWidth.value + x;
+      targetMask.value[index] = 0;
+      manualBackgroundMask.value[index] = 0;
+    }
+  }
+  maskVersion.value += 1;
+}
 
 function onPointerDown(event) {
   if (!sourcePixels.value) return;
+  event.preventDefault();
   const point = pointFromEvent(event);
   if (activeTool.value === "auto") {
     lastSeed.value = point;
@@ -307,18 +365,51 @@ function onPointerDown(event) {
     return;
   }
   pointerDown = true;
+  lastPaintPoint = point;
   editorCanvas.value.setPointerCapture?.(event.pointerId);
+  if (activeTool.value === "erase" && eraseMode.value === "box") {
+    eraseBoxStart = point;
+    eraseBoxCurrent = point;
+    drawEditor();
+    return;
+  }
   paintAt(point.x, point.y);
 }
 
 function onPointerMove(event) {
   if (!pointerDown || activeTool.value === "auto") return;
+  event.preventDefault();
   const point = pointFromEvent(event);
-  paintAt(point.x, point.y);
+  if (activeTool.value === "erase" && eraseMode.value === "box") {
+    eraseBoxCurrent = point;
+    drawEditor();
+    return;
+  }
+  if (lastPaintPoint) {
+    paintLine(lastPaintPoint, point);
+  } else {
+    paintAt(point.x, point.y);
+  }
+  lastPaintPoint = point;
 }
 
 function onPointerUp() {
+  if (activeTool.value === "erase" && eraseMode.value === "box" && eraseBoxStart && eraseBoxCurrent) {
+    applyEraseBox();
+    eraseBoxStart = null;
+    eraseBoxCurrent = null;
+    drawEditor();
+  }
   pointerDown = false;
+  lastPaintPoint = null;
+}
+
+function onPointerCancel() {
+  eraseBoxStart = null;
+  eraseBoxCurrent = null;
+  pointerDown = false;
+  lastPaintPoint = null;
+  drawEditor();
 }
 
 function colorDistance(index, seed) {
@@ -677,6 +768,7 @@ onMounted(async () => {
               @pointermove="onPointerMove"
               @pointerup="onPointerUp"
               @pointerleave="onPointerUp"
+              @pointercancel="onPointerCancel"
             />
           </div>
           <div class="legend">
@@ -705,10 +797,21 @@ onMounted(async () => {
             <small>Higher values include colors farther from the clicked seed.</small>
           </label>
           <label>
-            Brush size
+            Brush / line width
             <input v-model.number="brushSize" type="range" min="4" max="80" />
             <span>{{ brushSize }}</span>
             <small>Use a small brush near edges; use a large brush for coarse cleanup.</small>
+          </label>
+          <label v-if="activeTool === 'erase'">
+            Erase mode
+            <select v-model="eraseMode">
+              <option value="brush">Brush / line erase</option>
+              <option value="box">Box erase</option>
+            </select>
+            <small>
+              Brush/line follows the cursor with the selected width. Box erase
+              deletes every mask pixel inside the rectangle when you release.
+            </small>
           </label>
           <label>
             Background mode
@@ -761,8 +864,10 @@ onMounted(async () => {
         <h2>SAM3 belongs in a backend Space, not static Pages</h2>
         <p>
           GitHub Pages cannot host GPU inference or SAM3 weights. The browser lab
-          computes lightweight metrics locally; SAM3 can supply masks through the
-          linked Hugging Face Space or a future dedicated CamoGED Space.
+          computes lightweight metrics locally and uses only a fallback segmenter
+          for uploaded images. SOTA segmentation should run through a dedicated
+          HF Space/API backend, or a future WebGPU/ONNX model if the weight size
+          and browser support are acceptable.
         </p>
       </div>
       <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">SAM3 Demo</a>
@@ -1106,7 +1211,10 @@ button,
 }
 
 .canvas-shell {
-  overflow: hidden;
+  display: grid;
+  justify-items: center;
+  overflow: auto;
+  max-height: 70vh;
   border: 1px solid rgba(39, 59, 49, 0.14);
   border-radius: 22px;
   background: #e7ece0;
@@ -1115,8 +1223,8 @@ button,
 canvas {
   display: block;
   width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
+  height: auto;
+  max-width: 100%;
   touch-action: none;
   cursor: crosshair;
 }
