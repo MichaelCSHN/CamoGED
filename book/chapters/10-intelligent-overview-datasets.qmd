@@ -126,7 +126,7 @@ COD 社区形成了相对统一的训练/测试协议：以 **COD10K 训练集**
 
 本节只做快速索引；完整推导与论据在第 15 章。图像 COD 的四个事实标准指标为：
 
-- **MAE（↓）**：逐像素平均绝对误差，刻画整体预测偏差[@margolin2014]。
+- **MAE（↓）**：逐像素平均绝对误差，刻画整体预测偏差[@perazzi2012saliency]。
 - **加权 F-measure $F_\beta^w$（↑）**：修正了传统 F-measure 对空间分布不敏感的问题，更强调"错在关键位置"[@margolin2014]。
 - **S-measure $S_\alpha$（↑）**：结构相似度，联合区域感知与目标感知结构[@fan2017smeasure]。
 - **E-measure $E_\phi$（↑）**：增强对齐度量，联合全局统计与局部匹配[@fan2018emeasure]。
@@ -343,5 +343,5 @@ COD 数据集的标注代价远高于通用数据集：找到伪装目标本身�
 
 - **任务奠基与综述**：SINet[@fan2020sinet]；SINetV2[@fan2021sinetv2]；CAAI 综述[@xiao2024survey]。
 - **数据集**：数据集表（附录 A，`data/datasets.yaml`）；MCOD[@mcod2025]；MM-CamObj[@mmcamobj2024]。
-- **评价指标**：MAE/加权 F[@margolin2014]；S-measure[@fan2017smeasure]；E-measure[@fan2018emeasure]；DAVIS/J&F[@perazzi2016davis]；Boundary IoU[@cheng2021boundary]。
+- **评价指标**：MAE[@perazzi2012saliency]/加权 F[@margolin2014]；S-measure[@fan2017smeasure]；E-measure[@fan2018emeasure]；DAVIS/J&F[@perazzi2016davis]；Boundary IoU[@cheng2021boundary]。
 - **生物学背景**：机制综述[@stevens2011]；感知评价[@cuthill2019]；折中型隐蔽[@merilaita1999]。
