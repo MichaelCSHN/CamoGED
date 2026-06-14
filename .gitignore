@@ -36,4 +36,10 @@ camo-eval/demo_outputs/
 *.ckpt
 *.npy
 
+# Build/snapshot archives (never commit large binaries; see AGENTS.md §7)
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
 **/*.quarto_ipynb
