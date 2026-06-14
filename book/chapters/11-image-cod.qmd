@@ -419,5 +419,5 @@ coder 的消融表也应避免过度拥挤。每个消融项只回答一个问�
 - **综述与协议**：CAAI 综述[@xiao2024survey]；第 10 章数据集与协议。
 - **频域线索根源**：Stevens & Cuthill[@stevens2006edge]；Stevens & Merilaita[@stevens2011]。
 - **合成数据增强**：CamDiff[@camdiff2023]。
-- **评价**：MAE / $F_\beta^w$[@margolin2014]；$S_\alpha$[@fan2017smeasure]；$E_\phi$[@fan2018emeasure]；Boundary IoU[@cheng2021boundary]；第 15 章 `camo-eval`。
+- **评价**：MAE[@perazzi2012saliency] / $F_\beta^w$[@margolin2014]；$S_\alpha$[@fan2017smeasure]；$E_\phi$[@fan2018emeasure]；Boundary IoU[@cheng2021boundary]；第 15 章 `camo-eval`。
 - **原创项目**：`projects/coder`。
