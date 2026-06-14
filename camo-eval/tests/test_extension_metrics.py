@@ -157,3 +157,20 @@ def test_protocol_report_roundtrip():
     assert payload["context"]["observer"] == "model"
     assert payload["metrics"]["MAE"] == pytest.approx(0.1)
     assert "| MAE | 0.1 |" in report.to_markdown()
+
+
+def test_report_markdown_flattens_nested_metric_dicts():
+    """Dict-valued metrics (e.g. Em) must flatten to dotted rows, not render as
+    raw Python ``dict`` reprs in the Markdown table."""
+    context = EvaluationContext(
+        observer="model", channel="rgb", task="image-cod", protocol="demo"
+    )
+    report = EvaluationReport(
+        context=context,
+        metrics={"COD core": {"MAE": 0.1, "Em": {"mean": 0.7, "max": 0.9}}},
+    )
+    markdown = report.to_markdown()
+    assert "| COD core.MAE | 0.1 |" in markdown
+    assert "| COD core.Em.mean | 0.7 |" in markdown
+    assert "| COD core.Em.max | 0.9 |" in markdown
+    assert "{" not in markdown  # no raw dict repr leaked
