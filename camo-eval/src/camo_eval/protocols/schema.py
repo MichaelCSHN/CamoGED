@@ -58,6 +58,26 @@ class EvaluationContext:
         }
 
 
+def _flatten_metrics(
+    metrics: dict[str, object], prefix: str = ""
+) -> list[tuple[str, object]]:
+    """Flatten nested metric dicts into dotted ``(path, scalar)`` rows.
+
+    Several metrics (e.g. ``e_measure``/``precision``) return dicts, so a metric
+    group can nest two levels deep; flattening fully keeps the Markdown table
+    from rendering raw ``dict`` reprs as cell values.
+    """
+
+    rows: list[tuple[str, object]] = []
+    for key, value in metrics.items():
+        path = f"{prefix}.{key}" if prefix else str(key)
+        if isinstance(value, dict):
+            rows.extend(_flatten_metrics(value, path))
+        else:
+            rows.append((path, value))
+    return rows
+
+
 @dataclass(frozen=True)
 class EvaluationReport:
     """Bundle metric values with the protocol context that makes them comparable."""
@@ -88,12 +108,8 @@ class EvaluationReport:
         lines.append("")
         lines.append("| Metric | Value |")
         lines.append("| --- | --- |")
-        for name, value in self.metrics.items():
-            if isinstance(value, dict):
-                for sub_name, sub_value in value.items():
-                    lines.append(f"| {name}.{sub_name} | {sub_value} |")
-            else:
-                lines.append(f"| {name} | {value} |")
+        for name, value in _flatten_metrics(self.metrics):
+            lines.append(f"| {name} | {value} |")
         return "\n".join(lines)
 
 
