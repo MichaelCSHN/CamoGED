@@ -81,7 +81,10 @@ def _em_curve(pred: np.ndarray, gt: np.ndarray) -> np.ndarray:
     gt_fg_numel = int(np.count_nonzero(gt))
     gt_size = int(gt.size)
     if gt_size == 1:
-        score = float(pred.astype(np.uint8).item() == gt.astype(np.uint8).item())
+        # `pred` is a normalized float in [0, 1]; binarize at 0.5 before comparing.
+        # (The previous `pred.astype(np.uint8)` truncated e.g. 0.99 -> 0, wrongly
+        # scoring a near-correct single-pixel prediction as a total miss.)
+        score = float(bool(pred.item() >= 0.5) == bool(gt.item()))
         return np.full(256, score, dtype=np.float64)
     pred_uint8 = (pred * 255).astype(np.uint8)
     bins = np.linspace(0, 256, 257)

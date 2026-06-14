@@ -34,6 +34,11 @@ dev = [
     "pillow>=9.0",
     "matplotlib>=3.5",
     "scikit-image>=0.19",
+    # Reference implementation for the detection-metric cross-check in
+    # tests/test_detection_reference.py (PyPI package `pysodmetrics`, imported as
+    # `py_sod_metrics`). Without it that test silently `importorskip`s, so the only
+    # numerical validation against an authoritative source never runs.
+    "pysodmetrics>=1.4.2",
 ]
 
 [project.urls]
