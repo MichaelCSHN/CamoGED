@@ -4,6 +4,8 @@ on:
     paths: ["camo-eval/**"]
   pull_request:
     paths: ["camo-eval/**"]
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest

@@ -35,14 +35,21 @@ def prepare_prediction_and_gt(
 
     pred_min = float(pred_float.min())
     pred_max = float(pred_float.max())
-    if pred_max > 1.0 or pred_min < 0.0:
-        if pred_min < 0.0 or pred_max > 255.0:
-            raise ValueError("Prediction values must lie in [0, 1] or [0, 255].")
+    if pred_min < 0.0 or pred_max > 255.0:
+        raise ValueError("Prediction values must lie in [0, 1] or [0, 255].")
+    if pred_max > 1.0:
         pred_float = pred_float / 255.0
-        scaled_min = float(pred_float.min())
-        scaled_max = float(pred_float.max())
-        if scaled_max != scaled_min:
-            pred_float = (pred_float - scaled_min) / (scaled_max - scaled_min)
+
+    # Min-max normalize to [0, 1] (the PySODMetrics convention). Applying this to
+    # *both* the float-[0,1] and uint8-[0,255] paths makes the result invariant to
+    # the input scale: the same underlying saliency map yields identical metrics
+    # whether it is passed as float in [0, 1] or as uint8 in [0, 255]. Previously
+    # the stretch was applied only to the uint8 path, so `pred.astype(float) / 255`
+    # and `pred` disagreed.
+    norm_min = float(pred_float.min())
+    norm_max = float(pred_float.max())
+    if norm_max != norm_min:
+        pred_float = (pred_float - norm_min) / (norm_max - norm_min)
     pred_float = np.clip(pred_float, 0.0, 1.0)
 
     gt_bool = gt_float > 0

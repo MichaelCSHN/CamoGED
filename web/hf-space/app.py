@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -123,20 +124,20 @@ def _compute_grouped_metrics(
             "DISTS_lite": dists(pred, gt),
         }
     if "Clutter and difficulty" in selected:
-        analysis_image = scene if scene is not None else gt
-        metrics["Clutter and difficulty"] = {
-            "edge_density": edge_density(analysis_image),
-            "subband_entropy": subband_entropy(analysis_image),
-            "feature_congestion": feature_congestion(analysis_image),
-        }
+        # These are scene-clutter metrics; computing them on the binary GT mask
+        # (when no scene is uploaded) produces meaningless numbers, so gate the
+        # whole group on a scene being present.
         if scene is None:
-            metrics["Clutter and difficulty"]["status"] = (
-                "Upload a scene image to compute camouflage_difficulty."
-            )
+            metrics["Clutter and difficulty"] = {
+                "status": "Upload a scene image to compute scene-clutter metrics."
+            }
         else:
-            metrics["Clutter and difficulty"]["camouflage_difficulty"] = (
-                camouflage_difficulty(scene, gt)
-            )
+            metrics["Clutter and difficulty"] = {
+                "edge_density": edge_density(scene),
+                "subband_entropy": subband_entropy(scene),
+                "feature_congestion": feature_congestion(scene),
+                "camouflage_difficulty": camouflage_difficulty(scene, gt),
+            }
     if "Target-background similarity" in selected:
         if scene is None:
             metrics["Target-background similarity"] = {
@@ -163,7 +164,15 @@ def evaluate_demo(
     scene = None if scene_image is None else _to_gray_array(scene_image)
     pred = _to_gray_array(pred_image)
     gt = _to_gray_array(gt_image)
-    metrics = _compute_grouped_metrics(scene, pred, gt, metric_groups)
+    # Domain errors (mismatched sizes, empty/degenerate masks) raise ValueError
+    # deep in camo-eval; surface them as a clean gr.Error instead of a raw
+    # traceback.
+    try:
+        metrics = _compute_grouped_metrics(scene, pred, gt, metric_groups)
+        overlay = mask_overlay(pred, gt)
+        emap = error_map(pred, gt)
+    except ValueError as exc:
+        raise gr.Error(str(exc)) from exc
 
     context = EvaluationContext(
         observer=observer,
@@ -175,8 +184,8 @@ def evaluate_demo(
     return (
         json.dumps(report.to_dict(), indent=2),
         report.to_markdown(),
-        mask_overlay(pred, gt),
-        error_map(pred, gt),
+        overlay,
+        emap,
     )
 
 
@@ -327,4 +336,7 @@ with gr.Blocks(title="camo-eval Space") as demo:
 
 
 if __name__ == "__main__":
-    demo.launch(server_name="127.0.0.1")
+    # Hugging Face Spaces proxies to the container, so the app must bind 0.0.0.0;
+    # binding loopback would make a deployed Space unreachable. Allow a local
+    # override via GRADIO_SERVER_NAME (e.g. 127.0.0.1) when running privately.
+    demo.launch(server_name=os.environ.get("GRADIO_SERVER_NAME", "0.0.0.0"))

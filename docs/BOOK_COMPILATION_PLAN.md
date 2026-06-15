@@ -3,7 +3,7 @@
 ## 《伪装：生成、识别与评价——自然、战争与机器的跨域综观》
 ### *Camouflage: Generation, Detection & Evaluation — Across Nature, War, and Machines*
 
-> 本计划是 [CamoGED 项目计划](camouflage-project-plan.md) 的子文档，专门规划专著的编纂。
+> 本计划是 [CamoGED 项目计划](PROJECT_PLAN.md) 的子文档，专门规划专著的编纂。
 > 编纂总则：**体系完整 · 特色鲜明 · 人无我有 · 人有我新**。
 > 篇章次序遵循博弈三角色：**生成（守方/猎物）→ 识别（攻方/天敌）→ 评价（裁判）**。
 

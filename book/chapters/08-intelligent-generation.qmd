@@ -316,5 +316,5 @@ CLI、Python API、Colab 和 HF Space 在这里承担不同角色。CLI 面向�
 - **扩散增强 COD**：CamDiff[@camdiff2023]。
 - **风格化对抗（连接 ch6/ch7）**：AdvCam[@advcam2020]。
 - **COD 综述（闭环背景）**：[@xiao2024survey]；SINet[@fan2020sinet]；ZoomNeXt[@pang2024zoomnext]。
-- **评价指标（连接 ch15）**：FID[@heusel2017fid]；LPIPS[@zhang2018lpips]；MAE[@margolin2014]；$S_\alpha$[@fan2017smeasure]；$E_\phi$[@fan2018emeasure]；$\mathcal{J}\&\mathcal{F}$[@perazzi2016davis]。
+- **评价指标（连接 ch15）**：FID[@heusel2017fid]；LPIPS[@zhang2018lpips]；MAE[@perazzi2012saliency]；$S_\alpha$[@fan2017smeasure]；$E_\phi$[@fan2018emeasure]；$\mathcal{J}\&\mathcal{F}$[@perazzi2016davis]。
 - **原创项目**：`projects/flowcamo`（生成分支）；检测分支见第 12 章。
