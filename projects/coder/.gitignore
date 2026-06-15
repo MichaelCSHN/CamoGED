@@ -1,0 +1,12 @@
+# Released artifacts are linked, never committed (AGENTS.md §7).
+# Model weights
+*.pth
+*.ckpt
+*.safetensors
+weights/
+checkpoints/
+
+# Prediction / ground-truth masks fed to camo-eval (filled in at reproduce time)
+preds/
+gts/
+outputs/

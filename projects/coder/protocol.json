@@ -1,0 +1,16 @@
+{
+  "observer": "model",
+  "channel": "rgb",
+  "task": "image-cod",
+  "protocol": "COD10K+CAMO train; evaluate on COD10K-TE / CAMO-TE / CHAMELEON / NC4K",
+  "notes": "coder original image-COD method; metric values pending paper release (no fabrication).",
+  "pred_dir": "preds",
+  "gt_dir": "gts",
+  "metrics": [
+    "mae",
+    "fw",
+    "sm",
+    "em"
+  ],
+  "name": "coder-image-cod"
+}

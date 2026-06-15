@@ -1,0 +1,15 @@
+{
+  "observer": "model",
+  "channel": "video",
+  "task": "instance-cod",
+  "protocol": "Video camouflage instance segmentation; per-frame instance masks with cross-frame IDs",
+  "notes": "dualvcod dual-path video instance detection; AP/AR/ID-switch need an external tracker eval; values pending paper release (no fabrication).",
+  "pred_dir": "preds",
+  "gt_dir": "gts",
+  "metrics": [
+    "iou",
+    "dice",
+    "boundary_iou"
+  ],
+  "name": "dualvcod-instance-cod"
+}

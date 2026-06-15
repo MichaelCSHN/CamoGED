@@ -1,0 +1,17 @@
+{
+  "observer": "model",
+  "channel": "video",
+  "task": "video-cod",
+  "protocol": "MoCA-Mask / CAD train+eval; per-sequence frames",
+  "notes": "flowcamo motion-aware VCOD detection branch; values pending paper release (no fabrication).",
+  "pred_dir": "preds",
+  "gt_dir": "gts",
+  "metrics": [
+    "sm",
+    "mae",
+    "j",
+    "jf",
+    "temporal"
+  ],
+  "name": "flowcamo-video-cod"
+}
