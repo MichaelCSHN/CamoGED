@@ -8,6 +8,7 @@ const samples = [
     label: "Aquatic: BatFish",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -15,6 +16,7 @@ const samples = [
     label: "Aquatic: LeafySeaDragon",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -22,6 +24,7 @@ const samples = [
     label: "Aquatic: Octopus",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -29,6 +32,7 @@ const samples = [
     label: "Terrestrial: Chameleon",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -36,6 +40,7 @@ const samples = [
     label: "Terrestrial: Cheetah",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -43,6 +48,7 @@ const samples = [
     label: "Flying: Moth",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -50,6 +56,7 @@ const samples = [
     label: "Aquatic: FrogFish",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   },
   {
@@ -57,6 +64,7 @@ const samples = [
     label: "Terrestrial: Human",
     caption: "Real COD10K Test image with object mask.",
     scene: "scene.png",
+    pred: "prediction.png",
     gt: "ground-truth.png"
   }
 ];
@@ -846,12 +854,6 @@ onMounted(async () => {
           <li>Low mean/contrast difference plus high histogram overlap means stronger appearance matching.</li>
           <li>High edge density means the scene is cluttered, which can hide boundaries.</li>
           <li>The difficulty score is a heuristic for quick inspection, not a published benchmark metric.</li>
-          <li>
-            "Edge density", "Histogram overlap" and "Camouflage difficulty" here are
-            fast browser approximations. They are computed differently from
-            <code>camo-eval</code>'s Python metrics of the same name (different grayscale,
-            kernels and weights), so the values are not directly comparable.
-          </li>
         </ul>
       </div>
     </section>
