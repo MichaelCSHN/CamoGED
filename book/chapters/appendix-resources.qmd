@@ -28,12 +28,12 @@ bibliography: ../references.bib
 | $S_\alpha$ | ↑ | 结构相似度量 | 第 15 章 15.1 | `s_measure` |
 | $E_\phi$ | ↑ | 增强对齐度量 | 第 15 章 15.1 | `e_measure` |
 | maxF / meanF | ↑ | 阈值扫描下的 F 统计 | 第 15 章 15.1 | `f_measure` |
-| J / F / J&F | ↑ | 视频区域与边界质量 | 第 12、15 章 | 当前冻结 API 未纳入 |
-| SSIM / MS-SSIM | ↑ | 感知结构相似性 | 第 15 章 15.2 | 当前冻结 API 未纳入 |
+| J / F / J&F | ↑ | 视频区域与边界质量 | 第 12、15 章 | `jaccard_index`、`boundary_f_score`、`j_and_f`、`temporal_stability` |
+| SSIM / MS-SSIM | ↑ | 感知结构相似性 | 第 15 章 15.2 | `ssim`、`ms_ssim` |
 | FID / LPIPS | ↓ | 生成真实性与感知距离 | 第 15 章 15.2 | `fid`、`lpips` |
 | 欺骗率 / ASR | ↑ | 伪装或攻击有效性 | 第 15 章 15.2–15.3 | `deception_rate`、`attack_success_rate` |
 
-需要强调的是：**函数名与接口契约已经冻结**，并通过 `scripts/check_api.py` 审核；附录表中凡写明 `camo-eval` 对应者，均应与该冻结接口逐名一致。与此同时，生成指标族（`fid`、`lpips`、`deception_rate`）在仓库实现层面仍处于待补完状态，而视频 J/F 与 SSIM/MS-SSIM 目前仅在书稿评价框架中讨论，尚未进入当前冻结 API。换言之，附录 B 同时承担“术语索引”和“接口边界说明”两层作用，而不是对所有指标均已工程化落地的夸大宣称。
+需要强调的是：**函数名与接口契约已经冻结**，并通过 `scripts/check_api.py` 审核；附录表中凡写明 `camo-eval` 对应者，均应与该冻结接口逐名一致。与此同时，生成指标族（`fid`、`lpips`、`deception_rate`）在仓库实现层面仍依赖较重的可选依赖，处于待补完状态。换言之，附录 B 同时承担“术语索引”和“接口边界说明”两层作用，而不是对所有指标均已工程化落地的夸大宣称。
 
 ## C 术语中英对照 {#sec-c}
 
@@ -49,6 +49,7 @@ bibliography: ../references.bib
 - `COD`：camouflaged object detection，伪装目标检测；
 - `VCOD`：video camouflaged object detection，视频伪装目标检测；
 - `CIS`：camouflaged instance segmentation，伪装实例分割；
+- `ICOD`：instance-level camouflaged object detection，实例级伪装目标检测（与 CIS 密切相关，强调实例级的检测与分割）；
 - `adversarial camouflage`：对抗伪装。
 
 本书正文采用“生成（隐藏方）—识别（揭示方）—评价（裁判）”的三角色框架，因此术语的翻译也尽量保持与这一主线一致：凡涉及“让目标更难被发现”的方法，优先归入生成/隐藏；凡涉及“把隐藏目标找出来”的方法，归入识别/揭示；凡涉及“如何量化胜负”的方法，归入评价/裁判。
