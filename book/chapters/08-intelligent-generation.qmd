@@ -29,7 +29,7 @@ bibliography: ../references.bib
 
 深度生成之前，智能生成的雏形是**纹理合成**与**无缝融合**。
 
-**纹理合成**（基于样本的方法，如 Wei & Levoy 的纹理优化）从一块样本纹理出发，合成任意大小的同分布纹理。其核心假设——纹理可以由局部统计（小窗口内的像素分布）完整刻画——与第 2 章"背景匹配需在多尺度纹理功率谱上一致"的生物学逻辑高度吻合：二者都在说，"像背景"的本质是"局部统计与背景一致"。
+**纹理合成**（基于样本的方法，如 Wei & Levoy 基于邻域搜索的纹理合成）从一块样本纹理出发，合成任意大小的同分布纹理。其核心假设——纹理可以由局部统计（小窗口内的像素分布）完整刻画——与第 2 章"背景匹配需在多尺度纹理功率谱上一致"的生物学逻辑高度吻合：二者都在说，"像背景"的本质是"局部统计与背景一致"。
 
 **泊松融合（Poisson blending）**则解决了把一个前景目标"贴进"背景的边界问题：不直接复制像素，而是让融合结果的**梯度场**与前景一致、同时在边界处平滑过渡到背景。泊松融合消除了块状边界，使前景看起来像"生长在"背景里，是"背景匹配"在边界处的工程实现。
 
@@ -124,59 +124,55 @@ NST 的核心贡献，是提供了一种可微的风格距离。传统伪装评�
 
 ```{python}
 #| label: fig-gram
-#| fig-cap: "格拉姆统计与伪装质量代理示意。左列：三种纹理（背景/伪装目标/非伪装目标）。右列：对应的简化格拉姆矩阵（2通道间协方差）。伪装目标与背景的格拉姆统计接近（低风格距离），非伪装目标远离背景（高风格距离）——风格距离可作为'藏得有多好'的度量代理。"
+#| fig-cap: "格拉姆统计与伪装质量代理示意。左列：三种纹理（背景/伪装目标/非伪装目标）。右列：对应的格拉姆矩阵（基于多尺度定向滤波器组特征的协方差）。伪装目标与背景的格拉姆统计接近（低风格距离），非伪装目标远离背景（高风格距离）——风格距离可作为'藏得有多好'的度量代理。"
 #| code-fold: true
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.ndimage import gaussian_filter, sobel
 
 rng = np.random.default_rng(7)
 
 def make_texture(H, W, freq, rng):
-    """1/f textured patch with two 'channels' (two frequency bands)."""
-    out = []
-    for _ in range(2):
-        noise = rng.standard_normal((H, W))
-        fft = np.fft.fft2(noise)
-        freqs = np.fft.fftfreq(H)[:, None] ** 2 + np.fft.fftfreq(W)[None, :] ** 2
-        freqs[0, 0] = 1e-6
-        fft *= (freqs ** (-freq / 2))
-        t = np.real(np.fft.ifft2(fft))
-        out.append((t - t.mean()) / (t.std() + 1e-8))
-    return np.stack(out, axis=0)  # (2, H, W)
+    """A single-channel texture whose spatial scale is set by `freq`
+    (larger freq => finer structure)."""
+    noise = rng.standard_normal((H, W))
+    return gaussian_filter(noise, sigma=1.0 / freq)
 
-def gram(feat):
-    C, H, W = feat.shape
-    F = feat.reshape(C, -1)
-    return (F @ F.T) / (H * W)
+def feature_bank(img):
+    """Oriented multi-scale responses -> feature channels that encode
+    spatial structure (a raw 2-channel colour Gram cannot)."""
+    chans = []
+    for s in (1.0, 2.0):
+        sm = gaussian_filter(img, s)
+        gx, gy = sobel(sm, axis=0), sobel(sm, axis=1)
+        chans += [gx, gy, gx + gy, gx - gy]
+    F = np.stack([c.ravel() for c in chans], 0)
+    return F - F.mean(1, keepdims=True)   # center only; do NOT unit-normalize per channel
+
+def gram(img):
+    F = feature_bank(img)
+    G = (F @ F.T) / F.shape[1]
+    return G / (np.linalg.norm(G) + 1e-8)  # scale-invariant style descriptor
 
 def style_dist(g1, g2):
-    return float(np.mean((g1 - g2) ** 2))
+    return float(np.linalg.norm(g1 - g2))
 
-H, W = 48, 48
-bg     = make_texture(H, W, freq=1.5, rng=rng)          # background
-camo   = make_texture(H, W, freq=1.5, rng=rng)          # camouflaged: same statistics
-target = make_texture(H, W, freq=0.3, rng=rng)          # non-camo: very different freq
+H, W = 96, 96
+bg     = make_texture(H, W, freq=0.3, rng=rng)   # background: coarse texture
+camo   = make_texture(H, W, freq=0.3, rng=rng)   # camouflaged: same spatial statistics
+target = make_texture(H, W, freq=1.5, rng=rng)   # non-camo: finer structure, stands out
 
-g_bg  = gram(bg)
-g_cam = gram(camo)
-g_tgt = gram(target)
-
+g_bg, g_cam, g_tgt = gram(bg), gram(camo), gram(target)
 d_cam = style_dist(g_bg, g_cam)
 d_tgt = style_dist(g_bg, g_tgt)
 
 fig, axes = plt.subplots(3, 2, figsize=(8, 7))
 labels = ['background', f'camo target\n(style dist={d_cam:.3f})',
                          f'non-camo target\n(style dist={d_tgt:.3f})']
-textures = [bg, camo, target]
-grams    = [g_bg, g_cam, g_tgt]
-
-for i, (tex, gm, lab) in enumerate(zip(textures, grams, labels)):
-    axes[i, 0].imshow(tex[0], cmap='viridis')
-    axes[i, 0].set_title(lab, fontsize=9); axes[i, 0].axis('off')
-    im = axes[i, 1].imshow(gm, cmap='RdBu_r')
-    axes[i, 1].set_title('Gram matrix', fontsize=9)
+for i, (tex, gm, lab) in enumerate(zip([bg, camo, target], [g_bg, g_cam, g_tgt], labels)):
+    axes[i, 0].imshow(tex, cmap='viridis'); axes[i, 0].set_title(lab, fontsize=9); axes[i, 0].axis('off')
+    im = axes[i, 1].imshow(gm, cmap='RdBu_r'); axes[i, 1].set_title('Gram matrix (filter-bank)', fontsize=9)
     plt.colorbar(im, ax=axes[i, 1])
-
 plt.suptitle('Gram-matrix style distance as a camouflage quality proxy', fontsize=10)
 plt.tight_layout()
 ```
@@ -185,7 +181,7 @@ plt.tight_layout()
 
 智能域生成在 COD 领域的一个关键应用模式，是**为检测训练制造高质量、可控难度的合成样本**——这不只是"数据增强"的技术话题，而是有深层原因的。
 
-COD 数据集的核心问题是**标注稀缺与分布偏移**：像素级标注昂贵，训练集覆盖的伪装类型与背景有限。生成模型可以在三个维度上缓解这一困境：其一，**量**——合成任意多样本扩充训练集；其二，**质**——CamDiff 类方法可生成符合目标场景统计的高质量样本，比简单的裁切—贴合增强更真实[@camdiff2023]；其三，**难度可控**——通过调节风格迁移的强度、扩散模型的条件引导强度，可以系统地生成从"一眼可见"到"极难发现"的难度谱，使检测器在课程学习（curriculum learning）框架下循序渐进地学习[@xiao2024survey]。
+COD 数据集的核心问题是**标注稀缺与分布偏移**：像素级标注昂贵，训练集覆盖的伪装类型与背景有限。生成模型可以在三个维度上缓解这一困境：其一，**量**——合成任意多样本扩充训练集；其二，**质**——CamDiff 类方法可生成符合目标场景统计的高质量样本，比简单的裁切—贴合增强更真实[@camdiff2023]；其三，**难度可控**——通过调节风格迁移的强度、扩散模型的条件引导强度，可以系统地生成从"一眼可见"到"极难发现"的难度谱，使检测器在课程学习（curriculum learning）框架下循序渐进地学习。
 
 这一应用模式还有一个副产品：**生成的样本暴露了检测器的盲区**。若某类合成伪装使当前最优检测器大幅退化，则说明该类伪装揭示了检测器未覆盖的弱点——这反过来指导了生成器的迭代方向。"用更好的生成击垮检测器→用更难的样本强化检测器"的循环，正是 8.8 节闭环的工程实现。
 
