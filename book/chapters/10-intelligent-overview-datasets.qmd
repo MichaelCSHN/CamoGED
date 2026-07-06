@@ -219,7 +219,7 @@ plt.tight_layout()
 |--------|--------------|------|-----|
 | CHAMELEON[@skurowski2018animal] | 76 | 仅测试 | 早期小集，常见偏差 |
 | CAMO[@le2019anet] | 1,250 | 1,000 训 / 250 测 | 首批全标注 COD，含遮挡 |
-| COD10K | 5,066 伪装（~10K 总） | 3,040 训 / 2,026 测 | 78 子类；当前最大图像基准 |
+| COD10K[@fan2020sinet] | 5,066 伪装（~10K 总） | 3,040 训 / 2,026 测 | 69 类 / 78 子类；当前最大图像基准 |
 | NC4K[@lyu2021ranknet] | 4,121 | 仅测试 | 跨数据集泛化评测标准 |
 
 **扩展/专项图像任务**
@@ -228,7 +228,7 @@ plt.tight_layout()
 |--------|------|------|----|
 | CoCOD8K[@zhang2023collaborative] | 协同 COD | ~8K | 多图共有目标 |
 | R2C7K[@zhang2023refcod] | 指代 COD | ~7K | 自然语言引导 |
-| MHCD2022 | 军事 COD | ~3,000 | 5 类军事目标 |
+| MHCD2022[@liu2023mhnet] | 军事 COD | ~3,000 | 5 类军事目标（随 MHNet 提出） |
 | MCOD | 多光谱 COD | — | 首个多光谱伪装基准[@mcod2025] |
 | MM-CamObj | 多模态 | — | MLLM 问答评测[@mmcamobj2024] |
 | PlantCamo[@plantcamo2025] | 农业/植物 | — | 植物伪装，跨域应用 |
@@ -238,8 +238,8 @@ plt.tight_layout()
 
 | 数据集 | 规模 | 注 |
 |--------|------|----|
-| MoCA-Mask | 87 序列 (71 训 / 16 测) | 移动伪装动物；最常用视频基准 |
-| CAD | — | 伪装动物视频，较小 |
+| MoCA-Mask[@cheng2022implicit] | 87 序列 (71 训 / 16 测) | 移动伪装动物（源自 MoCA[@lamdouar2020moca]）；最常用视频基准 |
+| CAD[@bideau2016moving] | 9 序列 | 伪装动物视频，较小 |
 | CamoVid60K[@vu2026camovid] | ~60K 帧 | 大规模；用于预训练/增强 |
 | MSVCOD[@gao2025msvcod] | — | 多场景视频，难度多样 |
 
