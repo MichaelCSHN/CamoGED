@@ -1,15 +1,15 @@
-name: arXiv watch (resource candidates)
+name: arXiv watch prototype
+
 on:
-  schedule: [{ cron: "0 7 * * 1" }]   # weekly
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
-  watch:
+  explain:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Placeholder
-        run: |
-          echo "TODO: query arXiv for new camouflage papers and open a triage issue."
-          echo "Suggested query: cat:cs.CV AND (camouflage OR concealed)"
+      - run: |
+          echo "The scheduled watcher is disabled until candidate retrieval, deduplication,"
+          echo "source validation, and issue creation are implemented and reviewed."
