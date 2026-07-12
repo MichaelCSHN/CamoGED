@@ -46,14 +46,31 @@ jobs:
 
       - name: Format Python sources
         if: steps.state.outputs.needs == 'true'
+        id: format
+        continue-on-error: true
         run: |
           pip install black
-          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
+          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py > black.log 2>&1
+
+      - name: Persist formatter diagnostics
+        if: steps.state.outputs.needs == 'true' && steps.format.outcome == 'failure'
+        run: |
+          git config user.name 'CamoGED Audit Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add black.log
+          git commit -m 'chore(audit): capture formatter failure'
+          git push origin HEAD:agent/project-audit-remediation
+
+      - name: Stop after formatter failure
+        if: steps.state.outputs.needs == 'true' && steps.format.outcome == 'failure'
+        run: |
+          cat black.log
+          exit 1
 
       - name: Commit remediation sources
         if: steps.state.outputs.needs == 'true'
         run: |
-          rm -f scripts/apply_project_audit_remediation.py
+          rm -f scripts/apply_project_audit_remediation.py black.log
           git config user.name 'CamoGED Audit Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add -A
