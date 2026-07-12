@@ -83,13 +83,17 @@ jobs:
           python scripts/build_awesome.py
           git diff --exit-code -- awesome/README.md web/papers.md web/datasets.md web/leaderboard.md web/models.md
 
-      - name: Run camo-eval quality gates
-        run: |
-          ruff check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-          black --check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-          cd camo-eval
-          pytest --cov=camo_eval --cov-fail-under=80 -q
-          python -m build
+      - name: Ruff
+        run: ruff check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
+
+      - name: Black
+        run: black --check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
+
+      - name: Pytest with coverage
+        run: cd camo-eval && pytest --cov=camo_eval --cov-fail-under=80 -q
+
+      - name: Build package
+        run: cd camo-eval && python -m build
 
       - uses: actions/setup-node@v4
         with:
