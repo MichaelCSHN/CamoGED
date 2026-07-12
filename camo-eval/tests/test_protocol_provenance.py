@@ -1,8 +1,10 @@
 import json
 
 import numpy as np
+import pytest
 
 from camo_eval.cli import main
+from camo_eval.protocols import load_protocol_manifest
 
 
 def test_evaluate_protocol_preserves_provenance(tmp_path, capsys):
@@ -10,8 +12,14 @@ def test_evaluate_protocol_preserves_provenance(tmp_path, capsys):
     gt_dir = tmp_path / "gt"
     pred_dir.mkdir()
     gt_dir.mkdir()
-    np.save(pred_dir / "sample.npy", np.array([[0, 255], [255, 0]], dtype=np.uint8))
-    np.save(gt_dir / "sample.npy", np.array([[0, 255], [255, 0]], dtype=np.uint8))
+    np.save(
+        pred_dir / "sample.npy",
+        np.array([[0, 255], [255, 0]], dtype=np.uint8),
+    )
+    np.save(
+        gt_dir / "sample.npy",
+        np.array([[0, 255], [255, 0]], dtype=np.uint8),
+    )
 
     manifest = {
         "name": "provenance-test",
@@ -45,3 +53,22 @@ def test_evaluate_protocol_preserves_provenance(tmp_path, capsys):
     assert payload["context"]["seed"] == 42
     assert payload["context"]["environment"] == "pytest"
     assert payload["context"]["uncertainty"] == "not applicable"
+
+
+@pytest.mark.parametrize("field", ["observer", "channel", "task", "protocol"])
+def test_manifest_rejects_implicitly_coercible_required_fields(tmp_path, field):
+    manifest = {
+        "observer": "model",
+        "channel": "rgb",
+        "task": "image-cod",
+        "protocol": "fixed synthetic fixture",
+        "pred_dir": "pred",
+        "gt_dir": "gt",
+        "metrics": ["mae"],
+    }
+    manifest[field] = None
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(ValueError):
+        load_protocol_manifest(path)
