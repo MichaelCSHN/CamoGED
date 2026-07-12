@@ -22,97 +22,40 @@ jobs:
         with:
           ref: agent/project-audit-remediation
           fetch-depth: 0
-
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Determine migration state
-        id: state
-        run: |
-          if [ -f docs/PROJECT_AUDIT_REMEDIATION.md ]; then
-            echo 'needs=false' >> "$GITHUB_OUTPUT"
-          else
-            echo 'needs=true' >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Install migration dependencies
-        if: steps.state.outputs.needs == 'true'
-        run: pip install pyyaml
-
-      - name: Prepare remediation migration
-        if: steps.state.outputs.needs == 'true'
-        run: python scripts/prepare_project_audit_remediation.py
-
-      - name: Apply project remediation
-        if: steps.state.outputs.needs == 'true'
-        run: python scripts/apply_project_audit_remediation.py
-
-      - name: Format Python sources
-        if: steps.state.outputs.needs == 'true'
-        run: |
-          pip install black
-          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-
-      - name: Commit non-workflow remediation sources
-        if: steps.state.outputs.needs == 'true'
-        id: commit
-        continue-on-error: true
-        run: |
-          git restore --source=HEAD -- .github/workflows
-          rm -f scripts/apply_project_audit_remediation.py scripts/prepare_project_audit_remediation.py black.log docs/AUDIT_REMEDIATION_PR.md
-          git config user.name 'CamoGED Audit Bot'
-          git config user.email 'actions@users.noreply.github.com'
-          git add -A
-          git commit -m 'chore(audit): align project with publication and integrity audit'
-          git push origin HEAD:agent/project-audit-remediation
-
-      - name: Stop after source commit failure
-        if: steps.state.outputs.needs == 'true' && steps.commit.outcome == 'failure'
-        run: exit 1
-
+        with: { python-version: '3.11' }
       - name: Install project test dependencies
         run: |
           pip install pyyaml
           pip install -e 'camo-eval[dev]'
-
-      - name: Apply safe lint and format fixes
-        run: |
-          ruff check --fix camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py || true
-          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-          if ! git diff --quiet; then
-            git config user.name 'CamoGED Audit Bot'
-            git config user.email 'actions@users.noreply.github.com'
-            git add camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-            git commit -m 'style: apply audit lint fixes'
-            git push origin HEAD:agent/project-audit-remediation
-          fi
-
       - name: Validate metadata and public API
         run: |
           python scripts/check_data.py
           python scripts/check_api.py
           python scripts/build_awesome.py
           git diff --exit-code -- awesome/README.md web/papers.md web/datasets.md web/leaderboard.md web/models.md
-
       - name: Ruff
-        run: ruff check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-
+        id: ruff
+        continue-on-error: true
+        run: ruff check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py > ruff.log 2>&1
+      - name: Persist remaining Ruff diagnostics
+        if: steps.ruff.outcome == 'failure'
+        run: |
+          git config user.name 'CamoGED Audit Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add ruff.log
+          git commit -m 'chore(audit): capture remaining ruff findings'
+          git push origin HEAD:agent/project-audit-remediation
+      - name: Stop after Ruff failure
+        if: steps.ruff.outcome == 'failure'
+        run: exit 1
       - name: Black
         run: black --check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
-
       - name: Pytest with coverage
         run: cd camo-eval && pytest --cov=camo_eval --cov-fail-under=80 -q
-
       - name: Build package
         run: cd camo-eval && python -m build
-
       - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
+        with: { node-version: '20' }
       - name: Build website
-        run: |
-          cd web
-          npm ci
-          npm run docs:build
+        run: cd web && npm ci && npm run docs:build
