@@ -1,7 +1,5 @@
 name: book
 
-# Render portable publication formats as CI gates. PDF remains a release-format
-# proofing task because it requires a pinned Chinese TeX and font environment.
 on:
   push:
     branches: [main]
@@ -16,26 +14,18 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        format: [html, epub]
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install Python dependencies for executable cells
-        run: pip install jupyter numpy matplotlib scipy
-
+        with: { python-version: "3.11" }
+      - run: pip install jupyter numpy matplotlib scipy
       - uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Render book
-        run: quarto render book --to ${{ matrix.format }}
-
+      - name: Render HTML and populate execution cache
+        run: quarto render book --to html
+      - name: Render ePub from frozen results
+        run: quarto render book --to epub
       - uses: actions/upload-artifact@v4
         with:
-          name: book-${{ matrix.format }}
+          name: book-html-epub
           path: book/_book
