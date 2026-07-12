@@ -80,14 +80,15 @@ class EvaluationContext:
 
     @classmethod
     def from_mapping(cls, payload: dict[str, object]) -> "EvaluationContext":
+        implementation = payload.get("implementation_version", "0.2.0.dev0")
         return cls(
-            observer=str(payload["observer"]),
-            channel=str(payload["channel"]),
-            task=str(payload["task"]),
-            protocol=str(payload["protocol"]),
+            observer=_required_str(payload, "observer"),
+            channel=_required_str(payload, "channel"),
+            task=_required_str(payload, "task"),
+            protocol=_required_str(payload, "protocol"),
             notes=_optional_str(payload.get("notes")),
-            implementation_version=str(
-                payload.get("implementation_version") or "0.2.0.dev0"
+            implementation_version=_required_value_str(
+                implementation, "implementation_version"
             ),
             dataset_version=_optional_str(payload.get("dataset_version")),
             prediction_revision=_optional_str(payload.get("prediction_revision")),
@@ -96,6 +97,18 @@ class EvaluationContext:
             environment=_optional_str(payload.get("environment")),
             uncertainty=_optional_str(payload.get("uncertainty")),
         )
+
+
+def _required_str(payload: dict[str, object], key: str) -> str:
+    if key not in payload:
+        raise ValueError(f"missing required field {key!r}")
+    return _required_value_str(payload[key], key)
+
+
+def _required_value_str(value: object, key: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"field {key!r} must be a non-empty string")
+    return value
 
 
 def _optional_str(value: object) -> str | None:
