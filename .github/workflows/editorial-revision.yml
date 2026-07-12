@@ -1,19 +1,20 @@
 name: one-shot-book-editorial-revision
 
 on:
-  push:
-    branches: [agent/book-editorial-revision]
-    paths: [".github/workflows/editorial-revision.yml"]
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
+
+concurrency:
+  group: book-editorial-revision-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
 
 jobs:
   revise:
-    if: github.head_ref == 'agent/book-editorial-revision' || github.ref_name == 'agent/book-editorial-revision'
+    if: github.head_ref == 'agent/book-editorial-revision'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,25 +26,28 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Check whether revision is already applied
+        id: state
+        shell: bash
+        run: |
+          if grep -q 'title: "伪装：生成、识别与评价"' book/_quarto.yml; then
+            echo "needs=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Normalize exact match points
+        if: steps.state.outputs.needs == 'true'
         run: python scripts/prepare_book_editorial_revision.py
 
       - name: Apply editorial revision
+        if: steps.state.outputs.needs == 'true'
         id: apply
         continue-on-error: true
         run: python scripts/apply_book_editorial_revision.py > editorial_run.log 2>&1
 
-      - name: Persist diagnostics on failure
-        if: steps.apply.outcome == 'failure'
-        run: |
-          git config user.name "CamoGED Editorial Bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add editorial_run.log scripts/apply_book_editorial_revision.py
-          git commit -m "chore(book): capture editorial revision failure"
-          git push origin HEAD:agent/book-editorial-revision
-
       - name: Stop after failed rewrite
-        if: steps.apply.outcome == 'failure'
+        if: steps.state.outputs.needs == 'true' && steps.apply.outcome == 'failure'
         run: |
           cat editorial_run.log
           exit 1
@@ -65,11 +69,17 @@ jobs:
       - name: Render HTML proof
         run: quarto render book --to html
 
-      - name: Commit generated editorial changes
+      - name: Commit generated editorial source changes
+        if: steps.state.outputs.needs == 'true'
         run: |
+          rm -rf book/_book editorial_run.log
           git config user.name "CamoGED Editorial Bot"
           git config user.email "actions@users.noreply.github.com"
-          git add README.md CITATION.cff book docs scripts .github/workflows/book.yml
+          git add README.md CITATION.cff \
+            book/_quarto.yml book/index.qmd book/chapters book/EDITORIAL_CHANGELOG.md \
+            docs/BOOK_COMPILATION_PLAN.md docs/BOOK_STYLE_GUIDE.md \
+            docs/BOOK_SEARCH_METHODOLOGY.md docs/BOOK_FACTCHECK_REGISTER.md \
+            scripts/apply_book_editorial_revision.py scripts/prepare_book_editorial_revision.py
           git diff --cached --quiet && exit 0
           git commit -m "book: implement publication-grade editorial revision"
           git push origin HEAD:agent/book-editorial-revision
