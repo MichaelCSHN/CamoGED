@@ -1,19 +1,37 @@
-name: camo-eval tests
+name: camo-eval
+
 on:
   push:
-    paths: ["camo-eval/**"]
+    paths: ["camo-eval/**", "scripts/check_api.py", ".github/workflows/camo-eval.yml"]
   pull_request:
-    paths: ["camo-eval/**"]
+    paths: ["camo-eval/**", "scripts/check_api.py", ".github/workflows/camo-eval.yml"]
+
 permissions:
   contents: read
+
 jobs:
-  test:
+  lint-and-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - name: Install
-        run: pip install -e "camo-eval[dev]"
-      - name: Test
-        run: cd camo-eval && pytest -q
+      - run: pip install -e "camo-eval[dev]"
+      - run: ruff check camo-eval/src camo-eval/tests scripts/check_api.py
+      - run: black --check camo-eval/src camo-eval/tests scripts/check_api.py
+      - run: python -m build camo-eval
+      - run: pip install camo-eval/dist/*.whl --force-reinstall
+      - run: camo-eval list-metrics --format json
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python-version }}" }
+      - run: pip install -e "camo-eval[dev]"
+      - run: cd camo-eval && pytest --cov=camo_eval --cov-fail-under=80 -q
