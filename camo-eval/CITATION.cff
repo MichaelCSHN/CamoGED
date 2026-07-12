@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: "camo-eval"
+message: "Cite the tagged camo-eval release and report the metric implementation IDs used."
+type: software
+authors:
+  - family-names: "C"
+    given-names: "Michael"
+repository-code: "https://github.com/MichaelCSHN/CamoGED"
+license: Apache-2.0
+version: "0.2.0-dev"

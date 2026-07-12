@@ -1,4 +1,4 @@
-# Code
+# Code & Resources
 
 > Code, dataset, and project links derived from `data/papers.yaml`.
 
@@ -33,7 +33,7 @@
 | --- | --- | --- | --- | --- | --- |
 | CamoVid60K: A Large-Scale Video Dataset for Moving Camouflaged Animals Understanding | 2026 | `evaluation` | `dataset` | [link](https://camovid60k.hkustvgd.com/) | [paper](https://link.springer.com/article/10.1007/s11263-026-02765-8) |
 | MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection | 2025 | `evaluation` | `dataset` | [link](https://github.com/yl2900260-bit/MCOD) | [paper](https://arxiv.org/abs/2509.15753) |
-| MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios | 2024 | `evaluation` | `dataset` | [link](https://github.com/JCruan519/MM-CamObj) | [paper](https://arxiv.org/abs/2409.16084) |
+| MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios | 2025 | `evaluation` | `dataset` | [link](https://github.com/JCruan519/MM-CamObj) | [paper](https://doi.org/10.1609/aaai.v39i7.32723) |
 
 ## Survey and curated indexes
 

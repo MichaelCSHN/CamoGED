@@ -3,7 +3,7 @@
 Each metric with an authoritative reference is pinned here:
 - SSIM / MS-SSIM  -> ``skimage.metrics`` (gaussian-weighted convention)
 - IoU / Dice      -> exact set-operation definitions on binary masks
-- boundary_iou    -> hand-computed expectation (note: this is a boundary-pixel
+- boundary_match_score    -> hand-computed expectation (note: this is a boundary-pixel
   band-matching score, NOT the region-band Boundary IoU of Cheng et al. 2021;
   see camo-eval/ROADMAP.md).
 """
@@ -11,7 +11,7 @@ Each metric with an authoritative reference is pinned here:
 import numpy as np
 import pytest
 
-from camo_eval import boundary_iou, dice, iou, ms_ssim, ssim
+from camo_eval import boundary_match_score, dice, iou, ms_ssim_lite, ssim
 
 skimage_metrics = pytest.importorskip("skimage.metrics")
 
@@ -55,9 +55,9 @@ def test_ms_ssim_identity_and_monotonic():
     a = rng.random((64, 64))
     b = np.clip(a + rng.normal(0, 0.1, a.shape), 0.0, 1.0)
     c = np.clip(a + rng.normal(0, 0.4, a.shape), 0.0, 1.0)
-    assert ms_ssim(a, a) == pytest.approx(1.0, abs=1e-6)
+    assert ms_ssim_lite(a, a) == pytest.approx(1.0, abs=1e-6)
     # More noise -> lower MS-SSIM.
-    assert ms_ssim(a, b) > ms_ssim(a, c)
+    assert ms_ssim_lite(a, b) > ms_ssim_lite(a, c)
 
 
 def test_iou_dice_exact_on_binary_masks():
@@ -96,10 +96,10 @@ def test_boundary_iou_known_case():
     NOT Cheng et al. 2021 region-band Boundary IoU; see ROADMAP)."""
     square = np.zeros((16, 16), dtype=np.uint8)
     square[1:7, 1:7] = 255
-    assert boundary_iou(square, square) == pytest.approx(1.0)
+    assert boundary_match_score(square, square) == pytest.approx(1.0)
 
     # A single far-corner pixel: its boundary is well outside the 1px tolerance
     # band of the square's boundary, so there is no match.
     other = np.zeros((16, 16), dtype=np.uint8)
     other[15, 15] = 255
-    assert boundary_iou(square, other) == pytest.approx(0.0)
+    assert boundary_match_score(square, other) == pytest.approx(0.0)

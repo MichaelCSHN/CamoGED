@@ -12,7 +12,7 @@ DATA = ROOT / "data"
 AWESOME_OUT = ROOT / "awesome" / "README.md"
 WEB = ROOT / "web"
 
-PILLAR_ORDER = ["generation", "evaluation", "detection"]
+PILLAR_ORDER = ["generation", "detection", "evaluation"]
 PILLAR_TITLES = {
     "generation": "Generation",
     "detection": "Detection",
@@ -132,7 +132,7 @@ def render_awesome() -> str:
         )
     lines.append("")
 
-    lines.extend(["## Leaderboard", ""])
+    lines.extend(["## Verified Results Registry", ""])
     if verified_rows:
         lines.extend(
             [
@@ -234,7 +234,7 @@ def render_models_page(papers: list[dict]) -> str:
         ),
     ]
     lines = [
-        "# Code",
+        "# Code & Resources",
         "",
         "> Code, dataset, and project links derived from `data/papers.yaml`.",
         "",
@@ -290,56 +290,27 @@ def render_datasets_page(datasets: list[dict]) -> str:
 
 def render_leaderboard_page(leaderboard: list[dict]) -> str:
     verified_rows = sort_verified_rows(leaderboard)
-    tracked_rows = sorted(leaderboard, key=lambda item: (item["dataset"], item["method"].lower()))
-    unverified_rows = [row for row in tracked_rows if not row["verified"]]
     lines = [
-        "# Leaderboard",
+        "# Verified Results Registry",
         "",
-        "> Generated from `data/leaderboard.yaml`.",
+        "> Source-checked result records. This page is not a comprehensive SOTA ranking.",
         "",
-        f"- Tracked rows: **{len(tracked_rows)}**",
         f"- Verified rows: **{len(verified_rows)}**",
         "",
-        "## Verified results",
-        "",
+        "| Method | Dataset | Task | Metrics | Protocol | Implementation | Verified | Source |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
-    if verified_rows:
-        lines.extend(
-            [
-                "| Method | Dataset | Task | Metrics | Protocol | Source |",
-                "| --- | --- | --- | --- | --- | --- |",
-            ]
+    for row in verified_rows:
+        metrics = ", ".join(
+            f"{key}={value}" for key, value in row["metrics"].items() if value is not None
         )
-        for row in verified_rows:
-            metrics = ", ".join(
-                f"{key}={value}" for key, value in row["metrics"].items() if value is not None
-            )
-            lines.append(
-                f"| {row['method']} | `{row['dataset']}` | `{row['task']}` | {metrics} | "
-                f"{row.get('protocol') or ''} | {row['source']} |"
-            )
-    else:
-        lines.append("_No verified leaderboard rows yet. Unverified metrics stay null by policy._")
-    lines.extend(
-        [
-            "",
-            "## Tracked methods awaiting verification",
-            "",
-        ]
-    )
-    if unverified_rows:
-        lines.extend(
-            [
-                "| Method | Dataset | Status | Source |",
-                "| --- | --- | --- | --- |",
-            ]
+        lines.append(
+            f"| {row['method']} | `{row['dataset']}` | `{row['task']}` | {metrics} | "
+            f"{row.get('protocol') or ''} | `{row['metric_implementation']}` | "
+            f"{row['last_verified']} / {row['verified_by']} | {row['source']} |"
         )
-        for row in unverified_rows:
-            lines.append(
-                f"| {row['method']} | `{row['dataset']}` | `{row['status']}` | {row['source']} |"
-            )
-    else:
-        lines.append("_No unverified tracked rows._")
+    if not verified_rows:
+        lines.append("| _No verified results_ | | | | | | | |")
     lines.append("")
     return "\n".join(lines) + "\n"
 

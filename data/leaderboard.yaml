@@ -1,55 +1,77 @@
 leaderboard:
-  - method: "ZoomNeXt (PVTv2-B5)"
-    dataset: "camo"
-    task: "image-cod"
-    metrics: { Sm: 0.889, Fw: 0.857, Em: null, MAE: 0.041 }
-    params_M: null
-    status: "reported"
-    source: "https://github.com/lartpang/ZoomNeXt#performance"
-    verified: true
-    protocol: "COD10K+CAMO train; PVTv2-B5 backbone"
-    notes: "Official repository table reports CAMO-TE metrics."
-
-  - method: "ZoomNeXt (PVTv2-B5)"
-    dataset: "chameleon"
-    task: "image-cod"
-    metrics: { Sm: 0.924, Fw: 0.885, Em: null, MAE: 0.018 }
-    params_M: null
-    status: "reported"
-    source: "https://github.com/lartpang/ZoomNeXt#performance"
-    verified: true
-    protocol: "COD10K+CAMO train; PVTv2-B5 backbone"
-    notes: "Official repository table reports CHAMELEON metrics."
-
-  - method: "ZoomNeXt (PVTv2-B5)"
-    dataset: "cod10k"
-    task: "image-cod"
-    metrics: { Sm: 0.898, Fw: 0.827, Em: null, MAE: 0.018 }
-    params_M: null
-    status: "reported"
-    source: "https://github.com/lartpang/ZoomNeXt#performance"
-    verified: true
-    protocol: "COD10K+CAMO train; PVTv2-B5 backbone"
-    notes: "Official repository table reports COD10K-TE metrics."
-
-  - method: "ZoomNeXt (PVTv2-B5)"
-    dataset: "nc4k"
-    task: "image-cod"
-    metrics: { Sm: 0.903, Fw: 0.863, Em: null, MAE: 0.028 }
-    params_M: null
-    status: "reported"
-    source: "https://github.com/lartpang/ZoomNeXt#performance"
-    verified: true
-    protocol: "COD10K+CAMO train; PVTv2-B5 backbone"
-    notes: "Official repository table reports NC4K metrics."
-
-  - method: "coder (ours)"
-    dataset: "cod10k"
-    task: "image-cod"
-    metrics: { Sm: null, Fw: null, Em: null, MAE: null }
-    params_M: null
-    status: "reproduced"
-    source: "projects/coder"
-    verified: false
-    protocol: "COD10K+CAMO train"
-    notes: null
+- method: ZoomNeXt (PVTv2-B5)
+  dataset: camo
+  task: image-cod
+  metrics:
+    Sm: 0.889
+    Fw: 0.857
+    Em: null
+    MAE: 0.041
+  params_M: null
+  status: reported
+  source: https://github.com/lartpang/ZoomNeXt#performance
+  verified: true
+  protocol: COD10K+CAMO train; PVTv2-B5 backbone
+  notes: Official repository table reports CAMO-TE metrics.
+  id: zoomnext-pvtv2-b5-camo-1
+  verification_status: verified
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  metric_implementation: reported-by-official-source
+- method: ZoomNeXt (PVTv2-B5)
+  dataset: chameleon
+  task: image-cod
+  metrics:
+    Sm: 0.924
+    Fw: 0.885
+    Em: null
+    MAE: 0.018
+  params_M: null
+  status: reported
+  source: https://github.com/lartpang/ZoomNeXt#performance
+  verified: true
+  protocol: COD10K+CAMO train; PVTv2-B5 backbone
+  notes: Official repository table reports CHAMELEON metrics.
+  id: zoomnext-pvtv2-b5-chameleon-2
+  verification_status: verified
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  metric_implementation: reported-by-official-source
+- method: ZoomNeXt (PVTv2-B5)
+  dataset: cod10k
+  task: image-cod
+  metrics:
+    Sm: 0.898
+    Fw: 0.827
+    Em: null
+    MAE: 0.018
+  params_M: null
+  status: reported
+  source: https://github.com/lartpang/ZoomNeXt#performance
+  verified: true
+  protocol: COD10K+CAMO train; PVTv2-B5 backbone
+  notes: Official repository table reports COD10K-TE metrics.
+  id: zoomnext-pvtv2-b5-cod10k-3
+  verification_status: verified
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  metric_implementation: reported-by-official-source
+- method: ZoomNeXt (PVTv2-B5)
+  dataset: nc4k
+  task: image-cod
+  metrics:
+    Sm: 0.903
+    Fw: 0.863
+    Em: null
+    MAE: 0.028
+  params_M: null
+  status: reported
+  source: https://github.com/lartpang/ZoomNeXt#performance
+  verified: true
+  protocol: COD10K+CAMO train; PVTv2-B5 backbone
+  notes: Official repository table reports NC4K metrics.
+  id: zoomnext-pvtv2-b5-nc4k-4
+  verification_status: verified
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  metric_implementation: reported-by-official-source

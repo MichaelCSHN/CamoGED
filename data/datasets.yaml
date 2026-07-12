@@ -1,180 +1,257 @@
 datasets:
-  - id: "chameleon"
-    name: "CHAMELEON"
-    task: "image-cod"
-    modality: "rgb"
-    size: "76 images"
-    split: "test-only"
-    year: 2017
-    link: "https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/"
-    license: null
-    bibtex_key: "skurowski2018animal"
-    notes: "Early small-scale set; often dropped due to bias."
-
-  - id: "camo"
-    name: "CAMO"
-    task: "image-cod"
-    modality: "rgb"
-    size: "1,250 camouflaged (+1,250 non-camouflaged)"
-    split: "1,000 train / 250 test"
-    year: 2019
-    link: "https://sites.google.com/view/ltnghia/research/camo"
-    license: null
-    bibtex_key: "le2019anet"
-    notes: "First fully annotated COD dataset."
-
-  - id: "cod10k"
-    name: "COD10K"
-    task: "image-cod"
-    modality: "rgb"
-    size: "5,066 camouflaged (~10K total)"
-    split: "3,040 train / 2,026 test; 78 sub-classes"
-    year: 2020
-    link: "https://dengpingfan.github.io/pages/COD.html"
-    license: null
-    bibtex_key: "fan2020sinet"
-    notes: "Largest image COD benchmark."
-
-  - id: "nc4k"
-    name: "NC4K"
-    task: "image-cod"
-    modality: "rgb"
-    size: "4,121 images"
-    split: "test-only (generalization)"
-    year: 2021
-    link: "https://github.com/JingZhang617/COD-Rank-Localize-and-Segment"
-    license: null
-    bibtex_key: "lyu2021ranknet"
-    notes: "Includes ranking annotations."
-
-  - id: "cocod8k"
-    name: "CoCOD8K"
-    task: "collaborative-cod"
-    modality: "rgb"
-    size: "8,528 images"
-    split: "train/test"
-    year: 2023
-    link: "https://github.com/zc199823/BBNet--CoCOD"
-    license: null
-    bibtex_key: "zhang2023collaborative"
-    notes: "Collaborative camouflage benchmark regrouped from multiple COD sources."
-
-  - id: "r2c7k"
-    name: "R2C7K"
-    task: "referring-cod"
-    modality: "rgb"
-    size: "7K images"
-    split: "train/test"
-    year: 2023
-    link: "https://github.com/zhangxuying1004/RefCOD"
-    license: null
-    bibtex_key: "zhang2023refcod"
-    notes: "Referring COD."
-
-  - id: "plantcamo"
-    name: "PlantCamo"
-    task: "image-cod"
-    modality: "rgb"
-    size: "1,250 images; 58 categories"
-    split: "train/test"
-    year: 2024
-    link: "https://github.com/yjybuaa/PlantCamo"
-    license: null
-    bibtex_key: "plantcamo2025"
-    notes: "Plant camouflage benchmark."
-
-  - id: "acod-12k"
-    name: "ACOD-12K"
-    task: "image-cod"
-    modality: "depth"
-    size: "12K RGB-D images"
-    split: "train/test"
-    year: 2024
-    link: "https://github.com/Kki2Eve/RISNet"
-    license: null
-    bibtex_key: "wang2024depth"
-    notes: "Dense agricultural concealed crop benchmark with depth maps."
-
-  - id: "mhcd2022"
-    name: "MHCD2022"
-    task: "image-cod"
-    modality: "rgb"
-    size: "3,000 images"
-    split: "5 categories"
-    year: 2022
-    link: "https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022"
-    license: null
-    bibtex_key: "liu2023mhnet"
-    notes: "Military high-level camouflage dataset."
-
-  - id: "mcod"
-    name: "MCOD"
-    task: "image-cod"
-    modality: "multispectral"
-    size: null
-    split: "benchmark"
-    year: 2025
-    link: "https://github.com/yl2900260-bit/MCOD"
-    license: "CC BY-NC-ND 4.0"
-    bibtex_key: "mcod2025"
-    notes: "First multispectral COD benchmark."
-
-  - id: "mm-camobj"
-    name: "MM-CamObj"
-    task: "dataset"
-    modality: "multimodal"
-    size: null
-    split: "QA/detection"
-    year: 2024
-    link: "https://github.com/JCruan519/MM-CamObj"
-    license: null
-    bibtex_key: "mmcamobj2024"
-    notes: "Multimodal MLLM evaluation set for camouflage."
-
-  - id: "moca-mask"
-    name: "MoCA-Mask"
-    task: "video-cod"
-    modality: "video"
-    size: "87 sequences; 22,939 frames"
-    split: "train/test"
-    year: 2022
-    link: "https://xueliancheng.github.io/SLT-Net-project/"
-    license: null
-    bibtex_key: "cheng2022implicit"
-    notes: "Moving camouflaged animals with mask annotations."
-
-  - id: "cad"
-    name: "CAD"
-    task: "video-cod"
-    modality: "video"
-    size: "9 sequences; 191 annotated frames"
-    split: "test"
-    year: 2016
-    link: "https://arxiv.org/abs/1604.00136"
-    license: null
-    bibtex_key: "bideau2016moving"
-    notes: "Early video camouflage dataset."
-
-  - id: "camovid60k"
-    name: "CamoVid60K"
-    task: "video-cod"
-    modality: "video"
-    size: "218 videos; 62,774 annotated frames"
-    split: "train/test"
-    year: 2026
-    link: "https://camovid60k.hkustvgd.com/"
-    license: "CC BY 4.0"
-    bibtex_key: "vu2026camovid"
-    notes: "Large-scale camouflaged animal video understanding benchmark."
-
-  - id: "msvcod"
-    name: "MSVCOD"
-    task: "video-cod"
-    modality: "video"
-    size: "162 clips; 9,486 frames"
-    split: "train/test"
-    year: 2025
-    link: "https://arxiv.org/abs/2502.13859"
-    license: null
-    bibtex_key: "gao2025msvcod"
-    notes: "Multi-scene video COD benchmark; no separate dataset release link found during audit."
+- id: chameleon
+  name: CHAMELEON
+  task: image-cod
+  modality: rgb
+  size: 76 images
+  split: test-only
+  year: 2017
+  link: https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/
+  license: null
+  bibtex_key: skurowski2018animal
+  notes: Early small-scale set; often dropped due to bias.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: camo
+  name: CAMO
+  task: image-cod
+  modality: rgb
+  size: 1,250 camouflaged (+1,250 non-camouflaged)
+  split: 1,000 train / 250 test
+  year: 2019
+  link: https://sites.google.com/view/ltnghia/research/camo
+  license: null
+  bibtex_key: le2019anet
+  notes: Early fully annotated COD benchmark.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: cod10k
+  name: COD10K
+  task: image-cod
+  modality: rgb
+  size: 5,066 camouflaged (~10K total)
+  split: 3,040 train / 2,026 test; 78 sub-classes
+  year: 2020
+  link: https://dengpingfan.github.io/pages/COD.html
+  license: null
+  bibtex_key: fan2020sinet
+  notes: Large image COD benchmark; scale claim is version-dependent.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: nc4k
+  name: NC4K
+  task: image-cod
+  modality: rgb
+  size: 4,121 images
+  split: test-only (generalization)
+  year: 2021
+  link: https://github.com/JingZhang617/COD-Rank-Localize-and-Segment
+  license: null
+  bibtex_key: lyu2021ranknet
+  notes: Includes ranking annotations.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: cocod8k
+  name: CoCOD8K
+  task: collaborative-cod
+  modality: rgb
+  size: 8,528 images
+  split: train/test
+  year: 2023
+  link: https://github.com/zc199823/BBNet--CoCOD
+  license: null
+  bibtex_key: zhang2023collaborative
+  notes: Collaborative camouflage benchmark regrouped from multiple COD sources.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: grouped image masks as provided upstream
+- id: r2c7k
+  name: R2C7K
+  task: referring-cod
+  modality: rgb
+  size: 7K images
+  split: train/test
+  year: 2023
+  link: https://github.com/zhangxuying1004/RefCOD
+  license: null
+  bibtex_key: zhang2023refcod
+  notes: Referring COD.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: language expressions and target masks as provided upstream
+- id: plantcamo
+  name: PlantCamo
+  task: image-cod
+  modality: rgb
+  size: 1,250 images; 58 categories
+  split: train/test
+  year: 2024
+  link: https://github.com/yjybuaa/PlantCamo
+  license: null
+  bibtex_key: plantcamo2025
+  notes: Plant camouflage benchmark.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: acod-12k
+  name: ACOD-12K
+  task: image-cod
+  modality: depth
+  size: 12K RGB-D images
+  split: train/test
+  year: 2024
+  link: https://github.com/Kki2Eve/RISNet
+  license: null
+  bibtex_key: wang2024depth
+  notes: Dense agricultural concealed crop benchmark with depth maps.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: mhcd2022
+  name: MHCD2022
+  task: image-cod
+  modality: rgb
+  size: 3,000 images
+  split: 5 categories
+  year: 2022
+  link: https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022
+  license: null
+  bibtex_key: liu2023mhnet
+  notes: Military high-level camouflage dataset.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: mcod
+  name: MCOD
+  task: image-cod
+  modality: multispectral
+  size: null
+  split: benchmark
+  year: 2025
+  link: https://github.com/yl2900260-bit/MCOD
+  license: CC BY-NC-ND 4.0
+  bibtex_key: mcod2025
+  notes: Multispectral COD benchmark; novelty claim belongs to the cited source.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: verified
+  annotation: image-level metadata and pixel masks as provided upstream
+- id: mm-camobj
+  name: MM-CamObj
+  task: dataset
+  modality: multimodal
+  size: null
+  split: QA/detection
+  year: 2024
+  link: https://github.com/JCruan519/MM-CamObj
+  license: null
+  bibtex_key: mmcamobj2024
+  notes: Multimodal MLLM evaluation set for camouflage.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: multimodal task annotations as provided upstream
+- id: moca-mask
+  name: MoCA-Mask
+  task: video-cod
+  modality: video
+  size: 87 sequences; 22,939 frames
+  split: train/test
+  year: 2022
+  link: https://xueliancheng.github.io/SLT-Net-project/
+  license: null
+  bibtex_key: cheng2022implicit
+  notes: Moving camouflaged animals with mask annotations.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: video frames/sequences and temporal mask annotations as provided upstream
+- id: cad
+  name: CAD
+  task: video-cod
+  modality: video
+  size: 9 sequences; 191 annotated frames
+  split: test
+  year: 2016
+  link: https://arxiv.org/abs/1604.00136
+  license: null
+  bibtex_key: bideau2016moving
+  notes: Early video camouflage dataset.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: video frames/sequences and temporal mask annotations as provided upstream
+- id: camovid60k
+  name: CamoVid60K
+  task: video-cod
+  modality: video
+  size: 218 videos; 62,774 annotated frames
+  split: train/test
+  year: 2026
+  link: https://camovid60k.hkustvgd.com/
+  license: CC BY 4.0
+  bibtex_key: vu2026camovid
+  notes: Large-scale camouflaged animal video understanding benchmark.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: verified
+  annotation: video frames/sequences and temporal mask annotations as provided upstream
+- id: msvcod
+  name: MSVCOD
+  task: video-cod
+  modality: video
+  size: 162 clips; 9,486 frames
+  split: train/test
+  year: 2025
+  link: https://arxiv.org/abs/2502.13859
+  license: null
+  bibtex_key: gao2025msvcod
+  notes: Multi-scene video COD benchmark; no separate dataset release link found during
+    audit.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: video frames/sequences and temporal mask annotations as provided upstream

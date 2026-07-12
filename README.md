@@ -28,16 +28,19 @@ reproducible evaluation tools, and research demos. Claims of novelty or comprehe
 as versioned literature-search conclusions rather than permanent promotional facts; see
 [`docs/BOOK_SEARCH_METHODOLOGY.md`](docs/BOOK_SEARCH_METHODOLOGY.md).
 
-## What's inside
+## Component status
 
-| Component | Path | Description |
-|-----------|------|-------------|
-| 📚 **Monograph** | [`book/`](book/) | *Camouflage: Generation, Detection, and Evaluation*; HTML is CI-gated, while PDF/ePub require format-specific proofing |
-| 🌟 **Awesome list** | [`awesome/`](awesome/README.md) | Curated cross-domain resources backed by machine-readable metadata |
-| 🌐 **Website** | [`web/`](web/) | Aggregator for papers, datasets, leaderboard entries, and demos |
-| 🔧 **camo-eval** | [`camo-eval/`](camo-eval/) | Evaluation toolkit for detection, generation, robustness, and protocol reporting |
-| 🔬 **Research agendas** | [`projects/`](projects/) | Work-in-progress anchors: `coder`, `flowcamo`, and `dualvcod`; not presented as completed methods until verified |
-| 🗂️ **Shared data** | [`data/`](data/) | Single source of truth for papers, datasets, and leaderboard metadata |
+| Component | Current status | Trust boundary |
+|---|---|---|
+| Monograph | publication candidate | not yet rights- and format-cleared |
+| `camo-eval` COD core | validated research preview | report package version and protocol |
+| `camo-eval` extensions | experimental | use explicit `*_lite` or descriptive names |
+| Paper/dataset registry | metadata preview | coverage is selective; licenses may be unknown |
+| Results registry | minimal source-checked records | not a comprehensive ranking |
+| Browser demo | synthetic teaching tool | no model inference or standard difficulty score |
+| `coder` / `flowcamo` / `dualvcod` | research agendas | no integrated methods or verified results |
+
+Security reports use [`SECURITY.md`](SECURITY.md). Third-party asset policy is recorded in [`THIRD_PARTY_ASSETS.yml`](THIRD_PARTY_ASSETS.yml). Release state is recorded in [`RELEASE_MANIFEST.yml`](RELEASE_MANIFEST.yml).
 
 ## Analytical map
 
@@ -62,7 +65,7 @@ single solved game-theoretic model.
 git clone https://github.com/MichaelCSHN/CamoGED.git && cd CamoGED
 
 # Evaluation toolkit
-cd camo-eval && pip install -e . && pytest -q
+cd camo-eval && pip install -e ".[dev]" && pytest -q
 
 # Book (requires Quarto)
 cd book && quarto preview

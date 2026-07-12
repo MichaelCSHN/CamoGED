@@ -12,8 +12,8 @@ from . import (
     edge_density,
     evaluate,
     feature_congestion,
-    fid,
-    kid,
+    fid_lite,
+    kid_lite,
     precision_recall_curve,
     subband_entropy,
     to_latex,
@@ -67,9 +67,9 @@ def _scores_to_text(scores: dict[str, object], output_format: str) -> str:
 def _available_metrics() -> dict[str, list[str]]:
     return {
         "detection": ["mae", "fw", "sm", "em", "f", "precision", "recall"],
-        "instance": ["iou", "dice", "boundary_iou"],
-        "video": ["j", "boundary_f", "jf", "temporal"],
-        "perceptual": ["ssim", "ms_ssim", "lpips_lite", "dists_lite"],
+        "instance": ["iou", "dice", "boundary_match_score"],
+        "video": ["j", "boundary_f_lite", "jf_lite", "temporal"],
+        "perceptual": ["ssim", "ms_ssim_lite", "lpips_lite", "dists_lite"],
         "generation": ["fid_lite", "kid_lite", "lpips_lite", "dists_lite"],
         "clutter": [
             "edge_density",
@@ -181,7 +181,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     evaluate_parser.add_argument("--output")
 
-    list_parser = subparsers.add_parser("list-metrics", help="List built-in metric groups")
+    list_parser = subparsers.add_parser(
+        "list-metrics", help="List built-in metric groups"
+    )
     list_parser.add_argument("--format", choices=("text", "json"), default="text")
 
     protocol_parser = subparsers.add_parser(
@@ -198,7 +200,9 @@ def build_parser() -> argparse.ArgumentParser:
     protocol_parser.add_argument("--metrics", nargs="+")
     protocol_parser.add_argument("--pred-source")
     protocol_parser.add_argument("--gt-source")
-    protocol_parser.add_argument("--format", choices=("markdown", "json"), default="json")
+    protocol_parser.add_argument(
+        "--format", choices=("markdown", "json"), default="json"
+    )
     protocol_parser.add_argument("--output")
 
     report_parser = subparsers.add_parser(
@@ -227,7 +231,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--root",
         help="Optional root directory used to resolve relative pred/gt directories from the manifest",
     )
-    manifest_parser.add_argument("--format", choices=("markdown", "json"), default="json")
+    manifest_parser.add_argument(
+        "--format", choices=("markdown", "json"), default="json"
+    )
     manifest_parser.add_argument("--output")
 
     visual_parser = subparsers.add_parser(
@@ -249,7 +255,7 @@ def build_parser() -> argparse.ArgumentParser:
             "recall",
             "iou",
             "dice",
-            "boundary_iou",
+            "boundary_match_score",
             "lpips_lite",
             "dists_lite",
         ],
@@ -267,7 +273,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     generation_parser.add_argument("--real-dir", required=True)
     generation_parser.add_argument("--fake-dir", required=True)
-    generation_parser.add_argument("--metrics", nargs="+", default=["fid_lite", "kid_lite"])
+    generation_parser.add_argument(
+        "--metrics", nargs="+", default=["fid_lite", "kid_lite"]
+    )
     generation_parser.add_argument("--format", choices=("json", "text"), default="json")
     generation_parser.add_argument("--output")
 
@@ -278,7 +286,9 @@ def build_parser() -> argparse.ArgumentParser:
     diagnostics_parser.add_argument("--image", required=True)
     diagnostics_parser.add_argument("--mask")
     diagnostics_parser.add_argument("--edge-threshold", type=float)
-    diagnostics_parser.add_argument("--format", choices=("json", "text"), default="json")
+    diagnostics_parser.add_argument(
+        "--format", choices=("json", "text"), default="json"
+    )
     diagnostics_parser.add_argument("--output")
     return parser
 
@@ -411,12 +421,14 @@ def main(argv: list[str] | None = None) -> int:
         scores: dict[str, float] = {}
         for metric in args.metrics:
             key = metric.lower()
-            if key in {"fid", "fid_lite"}:
-                scores["FID_lite"] = fid(args.real_dir, args.fake_dir)
-            elif key in {"kid", "kid_lite"}:
-                scores["KID_lite"] = kid(args.real_dir, args.fake_dir)
-            elif key in {"lpips", "lpips_lite", "dists", "dists_lite"}:
-                parser.error(f"{metric!r} is pairwise; use `evaluate` or `visualize` for it.")
+            if key == "fid_lite":
+                scores["FID_lite"] = fid_lite(args.real_dir, args.fake_dir)
+            elif key == "kid_lite":
+                scores["KID_lite"] = kid_lite(args.real_dir, args.fake_dir)
+            elif key in {"lpips_lite", "dists_lite"}:
+                parser.error(
+                    f"{metric!r} is pairwise; use `evaluate` or `visualize` for it."
+                )
             else:
                 parser.error(f"Unsupported generation-distance metric {metric!r}.")
         _emit_text(_scores_to_text(scores, args.format), args.output)

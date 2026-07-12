@@ -6,21 +6,21 @@ import pytest
 from camo_eval import (
     EvaluationContext,
     EvaluationReport,
-    boundary_f_score,
-    boundary_iou,
+    boundary_f_score_lite,
+    boundary_match_score,
     camouflage_difficulty,
     deception_rate,
     dice,
-    dists,
+    dists_lite,
     edge_density,
     feature_congestion,
-    fid,
+    fid_lite,
     iou,
-    j_and_f,
+    j_and_f_lite,
     jaccard_index,
-    kid,
-    lpips,
-    ms_ssim,
+    kid_lite,
+    lpips_lite,
+    ms_ssim_lite,
     signal_to_clutter_ratio,
     spectral_angle_mapper,
     ssim,
@@ -36,22 +36,22 @@ def test_instance_metrics_perfect_overlap():
     gt = np.array([[0, 255], [255, 0]], dtype=np.uint8)
     assert iou(pred, gt) == pytest.approx(1.0)
     assert dice(pred, gt) == pytest.approx(1.0)
-    assert boundary_iou(pred, gt) == pytest.approx(1.0)
+    assert boundary_match_score(pred, gt) == pytest.approx(1.0)
 
 
 def test_perceptual_metrics_perfect_match():
     img = np.array([[0.0, 1.0], [1.0, 0.0]])
     assert ssim(img, img) == pytest.approx(1.0)
-    assert ms_ssim(img, img) == pytest.approx(1.0)
+    assert ms_ssim_lite(img, img) == pytest.approx(1.0)
 
 
 def test_lightweight_generation_pair_metrics_perfect_match():
     img = np.tile(np.linspace(0.0, 1.0, 16), (16, 1))
     changed = np.fliplr(img)
-    assert lpips(img, img) == pytest.approx(0.0)
-    assert dists(img, img) == pytest.approx(0.0)
-    assert lpips(img, changed) > 0
-    assert dists(img, changed) > 0
+    assert lpips_lite(img, img) == pytest.approx(0.0)
+    assert dists_lite(img, img) == pytest.approx(0.0)
+    assert lpips_lite(img, changed) > 0
+    assert dists_lite(img, changed) > 0
 
 
 def test_lightweight_generation_directory_metrics(tmp_path):
@@ -67,9 +67,9 @@ def test_lightweight_generation_directory_metrics(tmp_path):
     np.save(fake_dir / "a.npy", base)
     np.save(fake_dir / "b.npy", np.clip(alt + 0.1, 0.0, 1.0))
 
-    assert fid(str(real_dir), str(real_dir)) == pytest.approx(0.0)
-    assert fid(str(real_dir), str(fake_dir)) >= 0
-    assert np.isfinite(kid(str(real_dir), str(fake_dir)))
+    assert fid_lite(str(real_dir), str(real_dir)) == pytest.approx(0.0)
+    assert fid_lite(str(real_dir), str(fake_dir)) >= 0
+    assert np.isfinite(kid_lite(str(real_dir), str(fake_dir)))
 
 
 def test_deception_rate_sequence_and_callable_targets():
@@ -77,7 +77,10 @@ def test_deception_rate_sequence_and_callable_targets():
         return {"label": item, "score": 0.2 if item == "hidden" else 0.9}
 
     assert deception_rate(detector, ["hidden", "visible"], ["hidden", "hidden"]) == 0.5
-    assert deception_rate(detector, ["hidden", "visible"], lambda out: out["score"] < 0.5) == 0.5
+    assert (
+        deception_rate(detector, ["hidden", "visible"], lambda out: out["score"] < 0.5)
+        == 0.5
+    )
 
 
 def test_clutter_and_camouflage_difficulty_metrics():
@@ -99,7 +102,9 @@ def test_signature_metrics_basic_behavior():
     background = np.array([4.0, 5.0, 6.0])
     assert thermal_contrast(target, background) == pytest.approx(7.0)
     assert signal_to_clutter_ratio(target, background) > 0
-    assert spectral_angle_mapper(np.array([1.0, 0.0]), np.array([1.0, 0.0])) == pytest.approx(0.0)
+    assert spectral_angle_mapper(
+        np.array([1.0, 0.0]), np.array([1.0, 0.0])
+    ) == pytest.approx(0.0)
 
 
 def test_target_background_similarity_all_and_near_modes():
@@ -139,8 +144,8 @@ def test_video_metrics_basic_behavior():
     )
     gt = pred.copy()
     assert jaccard_index(pred, gt) == pytest.approx(1.0)
-    assert boundary_f_score(pred, gt) == pytest.approx(1.0)
-    assert j_and_f(pred, gt) == pytest.approx(1.0)
+    assert boundary_f_score_lite(pred, gt) == pytest.approx(1.0)
+    assert j_and_f_lite(pred, gt) == pytest.approx(1.0)
     assert temporal_stability(pred, gt) == pytest.approx(0.0)
 
 

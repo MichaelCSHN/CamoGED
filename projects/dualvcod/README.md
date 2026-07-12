@@ -1,28 +1,17 @@
-# dualvcod
+# dualvcod: research agenda
 
-**Role in CamoGED:** Detection (video instance) — instance-level baseline and /demo model.
+**Scope:** video instance and identity-preserving camouflage research.
 
-> Dual-path video camouflage instance detection
+No method is integrated in this monorepo at present. There is no vendored code, released weight, prediction archive, executable evaluation manifest, verified result, or hosted model demo. This directory exists only to define future integration gates.
 
-This is an integration placeholder. The actual code lives in (or will be vendored/submoduled from)
-the standalone `dualvcod` repository. Here we keep:
+## Entry requirements
 
-- a short description and pointers,
-- the config + commands to reproduce its CamoGED leaderboard entry,
-- a link to its online demo.
+- fixed source repository and commit;
+- explicit license and model/data provenance;
+- reproducible environment and commands;
+- weight and prediction checksums;
+- `camo-eval` protocol manifest;
+- independently reviewed report;
+- limitations and dual-use assessment.
 
-## Status
-
-- [ ] Code linked / vendored
-- [ ] Pretrained weights referenced (not committed; see .gitignore)
-- [ ] `camo-eval` benchmark registered
-- [ ] Online demo wired into the website
-
-## Reproduce
-
-```bash
-# TODO: training / inference / evaluation commands
-```
-
-See [../../docs/PROJECT_PLAN.md](../../docs/PROJECT_PLAN.md) for how the three projects fit the
-generation / detection / evaluation pillars.
+Until all requirements are met, this project must not appear in the verified results registry or be described as a CamoGED baseline.

@@ -1,11 +1,9 @@
-"""Lightweight generation and deception metrics.
+"""Generation metrics and explicitly named lightweight surrogates.
 
-The canonical FID/LPIPS implementations depend on heavy learned networks. This
-module provides deterministic, dependency-light counterparts with the same
-public API so demos, CI, and small offline audits can run without model weights.
-The values are useful for smoke tests and relative comparisons inside the same
-protocol; heavyweight Inception/LPIPS backends can be added later behind the
-same API.
+Standard FID, KID, LPIPS, and DISTS require their accepted learned feature
+backends. They are not silently approximated here. The `*_lite` functions are
+small deterministic diagnostics for smoke tests and same-protocol experiments;
+they must not be reported under standard metric names.
 """
 
 from __future__ import annotations
@@ -17,10 +15,40 @@ import numpy as np
 from scipy import linalg
 from scipy.ndimage import gaussian_filter, sobel
 
-from ..perceptual import ms_ssim, ssim
+from ..perceptual import ms_ssim_lite, ssim
 
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".pgm", ".npy"}
 EPS = np.spacing(1)
+
+
+def _standard_unavailable(name: str) -> NotImplementedError:
+    return NotImplementedError(
+        f"Standard {name} is not implemented in the core research-preview install. "
+        f"Use a validated external implementation, or call {name.lower()}_lite only for "
+        "explicitly labelled exploratory diagnostics."
+    )
+
+
+def fid(real_dir: str, fake_dir: str) -> float:
+    raise _standard_unavailable("FID")
+
+
+def kid(
+    real_dir: str,
+    fake_dir: str,
+    degree: int = 3,
+    gamma: float | None = None,
+    coef0: float = 1.0,
+) -> float:
+    raise _standard_unavailable("KID")
+
+
+def lpips(img_a, img_b) -> float:
+    raise _standard_unavailable("LPIPS")
+
+
+def dists(img_a, img_b) -> float:
+    raise _standard_unavailable("DISTS")
 
 
 def _load_image(path: Path) -> np.ndarray:
@@ -62,9 +90,7 @@ def _feature_vector(image) -> np.ndarray:
     gx = sobel(gray, axis=1)
     gy = sobel(gray, axis=0)
     grad = np.hypot(gx, gy)
-    blur = gaussian_filter(gray, sigma=1.5)
-    high = gray - blur
-
+    high = gray - gaussian_filter(gray, sigma=1.5)
     features: list[float] = []
     for channel in range(arr.shape[-1]):
         values = arr[..., channel].reshape(-1)
@@ -108,8 +134,7 @@ def _image_files(directory: Path) -> list[Path]:
 
 def _feature_matrix(directory: Path) -> np.ndarray:
     return np.stack(
-        [_feature_vector(_load_image(path)) for path in _image_files(directory)],
-        axis=0,
+        [_feature_vector(_load_image(path)) for path in _image_files(directory)]
     )
 
 
@@ -122,12 +147,8 @@ def _mean_and_cov(features: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return mean, np.atleast_2d(cov)
 
 
-def fid(real_dir: str, fake_dir: str) -> float:
-    """Compute a deterministic lightweight Frechet feature distance.
-
-    The feature extractor uses color, gradient, high-frequency, and histogram
-    statistics rather than Inception activations. Lower is better.
-    """
+def fid_lite(real_dir: str, fake_dir: str) -> float:
+    """Handcrafted-feature Fréchet diagnostic; not standard FID."""
 
     real = _feature_matrix(Path(real_dir))
     fake = _feature_matrix(Path(fake_dir))
@@ -135,31 +156,30 @@ def fid(real_dir: str, fake_dir: str) -> float:
     mu_fake, cov_fake = _mean_and_cov(fake)
     diff = mu_real - mu_fake
     eps_eye = np.eye(cov_real.shape[0], dtype=np.float64) * 1e-9
-    covmean, _ = linalg.sqrtm((cov_real + eps_eye) @ (cov_fake + eps_eye), disp=False)
+    sqrt_result = linalg.sqrtm((cov_real + eps_eye) @ (cov_fake + eps_eye))
+    covmean = sqrt_result[0] if isinstance(sqrt_result, tuple) else sqrt_result
     if np.iscomplexobj(covmean):
         covmean = covmean.real
     if np.isfinite(covmean).all():
         trace_covmean = float(np.trace(covmean))
     else:
-        # Tiny demo sets often produce singular covariance products. Fall back
-        # to the diagonal Frechet term rather than emitting NaN.
         diag_real = np.clip(np.diag(cov_real), 0.0, None)
         diag_fake = np.clip(np.diag(cov_fake), 0.0, None)
         trace_covmean = float(np.sum(np.sqrt(diag_real * diag_fake)))
     value = diff @ diff + np.trace(cov_real) + np.trace(cov_fake) - 2.0 * trace_covmean
     if not np.isfinite(value):
-        raise ValueError("FID_lite produced a non-finite value.")
+        raise ValueError("fid_lite produced a non-finite value.")
     return float(max(value, 0.0))
 
 
-def kid(
+def kid_lite(
     real_dir: str,
     fake_dir: str,
     degree: int = 3,
     gamma: float | None = None,
     coef0: float = 1.0,
 ) -> float:
-    """Compute a polynomial-kernel MMD/KID-style distance over lightweight features."""
+    """Polynomial-MMD diagnostic over handcrafted features; not standard KID."""
 
     real = _feature_matrix(Path(real_dir))
     fake = _feature_matrix(Path(fake_dir))
@@ -171,23 +191,21 @@ def kid(
     k_rr = kernel(real, real)
     k_ff = kernel(fake, fake)
     k_rf = kernel(real, fake)
-    if len(real) > 1:
-        rr = (k_rr.sum() - np.trace(k_rr)) / (len(real) * (len(real) - 1))
-    else:
-        rr = 0.0
-    if len(fake) > 1:
-        ff = (k_ff.sum() - np.trace(k_ff)) / (len(fake) * (len(fake) - 1))
-    else:
-        ff = 0.0
+    rr = (
+        (k_rr.sum() - np.trace(k_rr)) / (len(real) * (len(real) - 1))
+        if len(real) > 1
+        else 0.0
+    )
+    ff = (
+        (k_ff.sum() - np.trace(k_ff)) / (len(fake) * (len(fake) - 1))
+        if len(fake) > 1
+        else 0.0
+    )
     return float(rr + ff - 2.0 * k_rf.mean())
 
 
-def lpips(img_a, img_b) -> float:
-    """Compute a lightweight perceptual distance inspired by LPIPS.
-
-    Lower is better. The score combines multi-scale absolute error, gradient
-    difference, and SSIM/MS-SSIM disagreement.
-    """
+def lpips_lite(img_a, img_b) -> float:
+    """Handcrafted perceptual diagnostic; not standard LPIPS."""
 
     a = _normalize_image(img_a)
     b = _normalize_image(img_b)
@@ -200,12 +218,12 @@ def lpips(img_a, img_b) -> float:
     l1 = float(np.mean(np.abs(a - b)))
     grad = float(np.mean(np.abs(grad_a - grad_b)))
     structural = 1.0 - max(0.0, min(1.0, ssim(gray_a, gray_b)))
-    multiscale = 1.0 - max(0.0, min(1.0, ms_ssim(gray_a, gray_b)))
+    multiscale = 1.0 - max(0.0, min(1.0, ms_ssim_lite(gray_a, gray_b)))
     return float(0.45 * l1 + 0.25 * grad + 0.2 * structural + 0.1 * multiscale)
 
 
-def dists(img_a, img_b) -> float:
-    """Compute a lightweight DISTS-style structure/texture distance."""
+def dists_lite(img_a, img_b) -> float:
+    """Handcrafted structure/texture diagnostic; not standard DISTS."""
 
     a = _normalize_image(img_a)
     b = _normalize_image(img_b)
@@ -236,12 +254,10 @@ def _target_success(output, target) -> bool:
     return output == target
 
 
-def deception_rate(detector: Callable, images: Sequence, targets: Sequence | Callable) -> float:
-    """Compute the fraction of images for which a detector meets the target.
-
-    ``targets`` may be a callable success criterion applied to each detector
-    output, or a sequence aligned with ``images``.
-    """
+def deception_rate(
+    detector: Callable, images: Sequence, targets: Sequence | Callable
+) -> float:
+    """Fraction of images satisfying an explicitly supplied success criterion."""
 
     image_list = list(images)
     if not image_list:
@@ -254,6 +270,7 @@ def deception_rate(detector: Callable, images: Sequence, targets: Sequence | Cal
         if len(target_list) != len(image_list):
             raise ValueError("targets must have the same length as images.")
         successes = [
-            _target_success(output, target) for output, target in zip(outputs, target_list)
+            _target_success(output, target)
+            for output, target in zip(outputs, target_list)
         ]
     return float(sum(successes) / len(successes))

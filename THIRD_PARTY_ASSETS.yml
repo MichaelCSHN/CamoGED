@@ -1,0 +1,9 @@
+schema_version: "1.0"
+policy: >-
+  Third-party datasets, model weights, photographs, artwork, and historical images
+  are linked rather than redistributed unless this file records explicit permission.
+assets: []
+notes:
+  - "The browser demo uses deterministic synthetic scenes and user-local uploads only."
+  - "Repository-local camo-eval fixtures are synthetic test data unless separately recorded."
+  - "A public URL or academic-use dataset page is not, by itself, redistribution permission."

@@ -67,7 +67,9 @@ def feature_congestion(image: np.ndarray) -> float:
     return float(mag_term * orient_term)
 
 
-def camouflage_difficulty(image: np.ndarray, target_mask: np.ndarray) -> dict[str, float]:
+def camouflage_difficulty(
+    image: np.ndarray, target_mask: np.ndarray
+) -> dict[str, float]:
     """Return a compact difficulty summary for target/background camouflage."""
 
     gray = _prepare_gray(image)

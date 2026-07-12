@@ -37,6 +37,13 @@ class EvaluationContext:
     task: str
     protocol: str
     notes: str | None = None
+    implementation_version: str = "0.2.0.dev0"
+    dataset_version: str | None = None
+    prediction_revision: str | None = None
+    threshold_policy: str | None = None
+    seed: int | None = None
+    environment: str | None = None
+    uncertainty: str | None = None
 
     def __post_init__(self) -> None:
         if self.observer not in ALLOWED_OBSERVERS:
@@ -55,6 +62,13 @@ class EvaluationContext:
             "task": self.task,
             "protocol": self.protocol,
             "notes": self.notes,
+            "implementation_version": self.implementation_version,
+            "dataset_version": self.dataset_version,
+            "prediction_revision": self.prediction_revision,
+            "threshold_policy": self.threshold_policy,
+            "seed": self.seed,
+            "environment": self.environment,
+            "uncertainty": self.uncertainty,
         }
 
 
