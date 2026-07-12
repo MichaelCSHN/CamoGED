@@ -17,7 +17,7 @@ components:
     license: "CC-BY-4.0 for original metadata; upstream facts and links retain source terms"
     status: "metadata-preview"
   website:
-    version: "0.2.0-pre"
+    version: "0.1.0"
     license: "MIT for web code; CC-BY-4.0 for original prose"
     status: "teaching-preview"
 release_requirements:
