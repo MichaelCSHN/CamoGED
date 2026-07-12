@@ -1,6 +1,6 @@
 {
   "name": "camoged-web",
-  "version": "0.2.0-pre",
+  "version": "0.1.0",
   "description": "CamoGED research-preview website: monograph, verified metadata, evaluation resources, and synthetic teaching demos.",
   "license": "MIT",
   "scripts": {
