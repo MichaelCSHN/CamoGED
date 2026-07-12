@@ -18,7 +18,7 @@ components:
     status: "metadata-preview"
   website:
     version: "0.2.0-pre"
-    license: "Apache-2.0 for code; CC-BY-4.0 for original prose"
+    license: "MIT for web code; CC-BY-4.0 for original prose"
     status: "teaching-preview"
 release_requirements:
   - "all required CI checks pass"
