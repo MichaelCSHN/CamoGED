@@ -26,5 +26,20 @@ if old_subn in text:
 elif new_subn not in text:
     raise SystemExit("regex replacement implementation marker was not found")
 
+# The source chapter uses ASCII quotation marks around UCP and the framework
+# terms; accept either ASCII or Chinese quotation marks in the regex.
+old_ucp = (
+    'r"但数字迷彩史上最重要的一课，恰是一次\\*\\*失败\\*\\*。美国陆军于 2004 年前后列装的“通用迷彩图案（UCP）”.*?'
+    '这正是第 1\\.6\\.2 节“观察者依赖性”的代价，也是本书把“评价”立为独立第四篇的现实注脚（前向呼应第 15 章）。"'
+)
+new_ucp = (
+    'r\'但数字迷彩史上最重要的一课，恰是一次\\*\\*失败\\*\\*。美国陆军于 2004 年前后列装的["“]通用迷彩图案（UCP）["”].*?'
+    '这正是第 1\\.6\\.2 节["“]观察者依赖性["”]的代价，也是本书把["“]评价["”]立为独立第四篇的现实注脚（前向呼应第 15 章）。\''
+)
+if old_ucp in text:
+    text = text.replace(old_ucp, new_ucp)
+elif new_ucp not in text:
+    raise SystemExit("UCP editorial regex marker was not found")
+
 path.write_text(text, encoding="utf-8")
 print("Editorial script markers normalized and regex replacement made literal-safe.")
