@@ -1,0 +1,587 @@
+F401 `.export.to_latex` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> camo-eval/src/camo_eval/__init__.py:3:21
+  |
+1 | """camo-eval: protocol-aware evaluation tools for camouflage research."""
+2 |
+3 | from .export import to_latex, to_markdown
+  |                     ^^^^^^^^
+4 | from .metrics.background import target_background_similarity
+5 | from .metrics.clutter import (
+  |
+help: Add unused import `to_latex` to __all__
+
+F401 `.export.to_markdown` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> camo-eval/src/camo_eval/__init__.py:3:31
+  |
+1 | """camo-eval: protocol-aware evaluation tools for camouflage research."""
+2 |
+3 | from .export import to_latex, to_markdown
+  |                               ^^^^^^^^^^^
+4 | from .metrics.background import target_background_similarity
+5 | from .metrics.clutter import (
+  |
+help: Add unused import `to_markdown` to __all__
+
+F401 `.metrics.background.target_background_similarity` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> camo-eval/src/camo_eval/__init__.py:4:33
+  |
+3 | from .export import to_latex, to_markdown
+4 | from .metrics.background import target_background_similarity
+  |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 | from .metrics.clutter import (
+6 |     camouflage_difficulty,
+  |
+help: Add unused import `target_background_similarity` to __all__
+
+F401 `.metrics.clutter.camouflage_difficulty` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> camo-eval/src/camo_eval/__init__.py:6:5
+  |
+4 | from .metrics.background import target_background_similarity
+5 | from .metrics.clutter import (
+6 |     camouflage_difficulty,
+  |     ^^^^^^^^^^^^^^^^^^^^^
+7 |     edge_density,
+8 |     feature_congestion,
+  |
+help: Add unused import `camouflage_difficulty` to __all__
+
+F401 `.metrics.clutter.edge_density` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+ --> camo-eval/src/camo_eval/__init__.py:7:5
+  |
+5 | from .metrics.clutter import (
+6 |     camouflage_difficulty,
+7 |     edge_density,
+  |     ^^^^^^^^^^^^
+8 |     feature_congestion,
+9 |     subband_entropy,
+  |
+help: Add unused import `edge_density` to __all__
+
+F401 `.metrics.clutter.feature_congestion` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:8:5
+   |
+ 6 |     camouflage_difficulty,
+ 7 |     edge_density,
+ 8 |     feature_congestion,
+   |     ^^^^^^^^^^^^^^^^^^
+ 9 |     subband_entropy,
+10 | )
+   |
+help: Add unused import `feature_congestion` to __all__
+
+F401 `.metrics.clutter.subband_entropy` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:9:5
+   |
+ 7 |     edge_density,
+ 8 |     feature_congestion,
+ 9 |     subband_entropy,
+   |     ^^^^^^^^^^^^^^^
+10 | )
+11 | from .metrics.detection import (
+   |
+help: Add unused import `subband_entropy` to __all__
+
+F401 `.metrics.detection.e_measure` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:12:5
+   |
+10 | )
+11 | from .metrics.detection import (
+12 |     e_measure,
+   |     ^^^^^^^^^
+13 |     f_measure,
+14 |     mae,
+   |
+help: Add unused import `e_measure` to __all__
+
+F401 `.metrics.detection.f_measure` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:13:5
+   |
+11 | from .metrics.detection import (
+12 |     e_measure,
+13 |     f_measure,
+   |     ^^^^^^^^^
+14 |     mae,
+15 |     precision,
+   |
+help: Add unused import `f_measure` to __all__
+
+F401 `.metrics.detection.mae` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:14:5
+   |
+12 |     e_measure,
+13 |     f_measure,
+14 |     mae,
+   |     ^^^
+15 |     precision,
+16 |     precision_recall_curve,
+   |
+help: Add unused import `mae` to __all__
+
+F401 `.metrics.detection.precision` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:15:5
+   |
+13 |     f_measure,
+14 |     mae,
+15 |     precision,
+   |     ^^^^^^^^^
+16 |     precision_recall_curve,
+17 |     recall,
+   |
+help: Add unused import `precision` to __all__
+
+F401 `.metrics.detection.precision_recall_curve` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:16:5
+   |
+14 |     mae,
+15 |     precision,
+16 |     precision_recall_curve,
+   |     ^^^^^^^^^^^^^^^^^^^^^^
+17 |     recall,
+18 |     s_measure,
+   |
+help: Add unused import `precision_recall_curve` to __all__
+
+F401 `.metrics.detection.recall` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:17:5
+   |
+15 |     precision,
+16 |     precision_recall_curve,
+17 |     recall,
+   |     ^^^^^^
+18 |     s_measure,
+19 |     weighted_f_measure,
+   |
+help: Add unused import `recall` to __all__
+
+F401 `.metrics.detection.s_measure` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:18:5
+   |
+16 |     precision_recall_curve,
+17 |     recall,
+18 |     s_measure,
+   |     ^^^^^^^^^
+19 |     weighted_f_measure,
+20 | )
+   |
+help: Add unused import `s_measure` to __all__
+
+F401 `.metrics.detection.weighted_f_measure` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:19:5
+   |
+17 |     recall,
+18 |     s_measure,
+19 |     weighted_f_measure,
+   |     ^^^^^^^^^^^^^^^^^^
+20 | )
+21 | from .metrics.generation import (
+   |
+help: Add unused import `weighted_f_measure` to __all__
+
+F401 `.metrics.generation.deception_rate` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:22:5
+   |
+20 | )
+21 | from .metrics.generation import (
+22 |     deception_rate,
+   |     ^^^^^^^^^^^^^^
+23 |     dists,
+24 |     dists_lite,
+   |
+help: Add unused import `deception_rate` to __all__
+
+F401 `.metrics.generation.dists` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:23:5
+   |
+21 | from .metrics.generation import (
+22 |     deception_rate,
+23 |     dists,
+   |     ^^^^^
+24 |     dists_lite,
+25 |     fid,
+   |
+help: Add unused import `dists` to __all__
+
+F401 `.metrics.generation.dists_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:24:5
+   |
+22 |     deception_rate,
+23 |     dists,
+24 |     dists_lite,
+   |     ^^^^^^^^^^
+25 |     fid,
+26 |     fid_lite,
+   |
+help: Add unused import `dists_lite` to __all__
+
+F401 `.metrics.generation.fid` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:25:5
+   |
+23 |     dists,
+24 |     dists_lite,
+25 |     fid,
+   |     ^^^
+26 |     fid_lite,
+27 |     kid,
+   |
+help: Add unused import `fid` to __all__
+
+F401 `.metrics.generation.fid_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:26:5
+   |
+24 |     dists_lite,
+25 |     fid,
+26 |     fid_lite,
+   |     ^^^^^^^^
+27 |     kid,
+28 |     kid_lite,
+   |
+help: Add unused import `fid_lite` to __all__
+
+F401 `.metrics.generation.kid` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:27:5
+   |
+25 |     fid,
+26 |     fid_lite,
+27 |     kid,
+   |     ^^^
+28 |     kid_lite,
+29 |     lpips,
+   |
+help: Add unused import `kid` to __all__
+
+F401 `.metrics.generation.kid_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:28:5
+   |
+26 |     fid_lite,
+27 |     kid,
+28 |     kid_lite,
+   |     ^^^^^^^^
+29 |     lpips,
+30 |     lpips_lite,
+   |
+help: Add unused import `kid_lite` to __all__
+
+F401 `.metrics.generation.lpips` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:29:5
+   |
+27 |     kid,
+28 |     kid_lite,
+29 |     lpips,
+   |     ^^^^^
+30 |     lpips_lite,
+31 | )
+   |
+help: Add unused import `lpips` to __all__
+
+F401 `.metrics.generation.lpips_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:30:5
+   |
+28 |     kid_lite,
+29 |     lpips,
+30 |     lpips_lite,
+   |     ^^^^^^^^^^
+31 | )
+32 | from .metrics.instance import (
+   |
+help: Add unused import `lpips_lite` to __all__
+
+F401 `.metrics.instance.average_precision` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:33:5
+   |
+31 | )
+32 | from .metrics.instance import (
+33 |     average_precision,
+   |     ^^^^^^^^^^^^^^^^^
+34 |     average_recall,
+35 |     boundary_iou,
+   |
+help: Add unused import `average_precision` to __all__
+
+F401 `.metrics.instance.average_recall` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:34:5
+   |
+32 | from .metrics.instance import (
+33 |     average_precision,
+34 |     average_recall,
+   |     ^^^^^^^^^^^^^^
+35 |     boundary_iou,
+36 |     boundary_match_score,
+   |
+help: Add unused import `average_recall` to __all__
+
+F401 `.metrics.instance.boundary_iou` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:35:5
+   |
+33 |     average_precision,
+34 |     average_recall,
+35 |     boundary_iou,
+   |     ^^^^^^^^^^^^
+36 |     boundary_match_score,
+37 |     dice,
+   |
+help: Add unused import `boundary_iou` to __all__
+
+F401 `.metrics.instance.boundary_match_score` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:36:5
+   |
+34 |     average_recall,
+35 |     boundary_iou,
+36 |     boundary_match_score,
+   |     ^^^^^^^^^^^^^^^^^^^^
+37 |     dice,
+38 |     iou,
+   |
+help: Add unused import `boundary_match_score` to __all__
+
+F401 `.metrics.instance.dice` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:37:5
+   |
+35 |     boundary_iou,
+36 |     boundary_match_score,
+37 |     dice,
+   |     ^^^^
+38 |     iou,
+39 | )
+   |
+help: Add unused import `dice` to __all__
+
+F401 `.metrics.instance.iou` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:38:5
+   |
+36 |     boundary_match_score,
+37 |     dice,
+38 |     iou,
+   |     ^^^
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+   |
+help: Add unused import `iou` to __all__
+
+F401 `.metrics.perceptual.ms_ssim` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:40:33
+   |
+38 |     iou,
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+   |                                 ^^^^^^^
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+42 | from .metrics.signature import (
+   |
+help: Add unused import `ms_ssim` to __all__
+
+F401 `.metrics.perceptual.ms_ssim_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:40:42
+   |
+38 |     iou,
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+   |                                          ^^^^^^^^^^^^
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+42 | from .metrics.signature import (
+   |
+help: Add unused import `ms_ssim_lite` to __all__
+
+F401 `.metrics.perceptual.ssim` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:40:56
+   |
+38 |     iou,
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+   |                                                        ^^^^
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+42 | from .metrics.signature import (
+   |
+help: Add unused import `ssim` to __all__
+
+F401 `.metrics.robustness.ap_drop` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:41:33
+   |
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+   |                                 ^^^^^^^
+42 | from .metrics.signature import (
+43 |     signal_to_clutter_ratio,
+   |
+help: Add unused import `ap_drop` to __all__
+
+F401 `.metrics.robustness.attack_success_rate` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:41:42
+   |
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+   |                                          ^^^^^^^^^^^^^^^^^^^
+42 | from .metrics.signature import (
+43 |     signal_to_clutter_ratio,
+   |
+help: Add unused import `attack_success_rate` to __all__
+
+F401 `.metrics.robustness.transferability` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:41:63
+   |
+39 | )
+40 | from .metrics.perceptual import ms_ssim, ms_ssim_lite, ssim
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+   |                                                               ^^^^^^^^^^^^^^^
+42 | from .metrics.signature import (
+43 |     signal_to_clutter_ratio,
+   |
+help: Add unused import `transferability` to __all__
+
+F401 `.metrics.signature.signal_to_clutter_ratio` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:43:5
+   |
+41 | from .metrics.robustness import ap_drop, attack_success_rate, transferability
+42 | from .metrics.signature import (
+43 |     signal_to_clutter_ratio,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+44 |     spectral_angle_mapper,
+45 |     thermal_contrast,
+   |
+help: Add unused import `signal_to_clutter_ratio` to __all__
+
+F401 `.metrics.signature.spectral_angle_mapper` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:44:5
+   |
+42 | from .metrics.signature import (
+43 |     signal_to_clutter_ratio,
+44 |     spectral_angle_mapper,
+   |     ^^^^^^^^^^^^^^^^^^^^^
+45 |     thermal_contrast,
+46 | )
+   |
+help: Add unused import `spectral_angle_mapper` to __all__
+
+F401 `.metrics.signature.thermal_contrast` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:45:5
+   |
+43 |     signal_to_clutter_ratio,
+44 |     spectral_angle_mapper,
+45 |     thermal_contrast,
+   |     ^^^^^^^^^^^^^^^^
+46 | )
+47 | from .metrics.video import (
+   |
+help: Add unused import `thermal_contrast` to __all__
+
+F401 `.metrics.video.boundary_f_score` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:48:5
+   |
+46 | )
+47 | from .metrics.video import (
+48 |     boundary_f_score,
+   |     ^^^^^^^^^^^^^^^^
+49 |     boundary_f_score_lite,
+50 |     j_and_f,
+   |
+help: Add unused import `boundary_f_score` to __all__
+
+F401 `.metrics.video.boundary_f_score_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:49:5
+   |
+47 | from .metrics.video import (
+48 |     boundary_f_score,
+49 |     boundary_f_score_lite,
+   |     ^^^^^^^^^^^^^^^^^^^^^
+50 |     j_and_f,
+51 |     j_and_f_lite,
+   |
+help: Add unused import `boundary_f_score_lite` to __all__
+
+F401 `.metrics.video.j_and_f` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:50:5
+   |
+48 |     boundary_f_score,
+49 |     boundary_f_score_lite,
+50 |     j_and_f,
+   |     ^^^^^^^
+51 |     j_and_f_lite,
+52 |     jaccard_index,
+   |
+help: Add unused import `j_and_f` to __all__
+
+F401 `.metrics.video.j_and_f_lite` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:51:5
+   |
+49 |     boundary_f_score_lite,
+50 |     j_and_f,
+51 |     j_and_f_lite,
+   |     ^^^^^^^^^^^^
+52 |     jaccard_index,
+53 |     temporal_stability,
+   |
+help: Add unused import `j_and_f_lite` to __all__
+
+F401 `.metrics.video.jaccard_index` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:52:5
+   |
+50 |     j_and_f,
+51 |     j_and_f_lite,
+52 |     jaccard_index,
+   |     ^^^^^^^^^^^^^
+53 |     temporal_stability,
+54 | )
+   |
+help: Add unused import `jaccard_index` to __all__
+
+F401 `.metrics.video.temporal_stability` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:53:5
+   |
+51 |     j_and_f_lite,
+52 |     jaccard_index,
+53 |     temporal_stability,
+   |     ^^^^^^^^^^^^^^^^^^
+54 | )
+55 | from .protocols import EvaluationContext, EvaluationReport
+   |
+help: Add unused import `temporal_stability` to __all__
+
+F401 `.protocols.EvaluationContext` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:55:24
+   |
+53 |     temporal_stability,
+54 | )
+55 | from .protocols import EvaluationContext, EvaluationReport
+   |                        ^^^^^^^^^^^^^^^^^
+56 | from .results import ResultsTable
+57 | from .runner import evaluate
+   |
+help: Add unused import `EvaluationContext` to __all__
+
+F401 `.protocols.EvaluationReport` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:55:43
+   |
+53 |     temporal_stability,
+54 | )
+55 | from .protocols import EvaluationContext, EvaluationReport
+   |                                           ^^^^^^^^^^^^^^^^
+56 | from .results import ResultsTable
+57 | from .runner import evaluate
+   |
+help: Add unused import `EvaluationReport` to __all__
+
+F401 `.results.ResultsTable` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:56:22
+   |
+54 | )
+55 | from .protocols import EvaluationContext, EvaluationReport
+56 | from .results import ResultsTable
+   |                      ^^^^^^^^^^^^
+57 | from .runner import evaluate
+   |
+help: Add unused import `ResultsTable` to __all__
+
+F401 `.runner.evaluate` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  --> camo-eval/src/camo_eval/__init__.py:57:21
+   |
+55 | from .protocols import EvaluationContext, EvaluationReport
+56 | from .results import ResultsTable
+57 | from .runner import evaluate
+   |                     ^^^^^^^^
+58 |
+59 | __version__ = "0.2.0.dev0"
+   |
+help: Add unused import `evaluate` to __all__
+
+Found 49 errors.
