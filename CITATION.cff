@@ -1,29 +1,24 @@
 cff-version: 1.2.0
-title: "CamoGED: Camouflage — Generation, Evaluation, Detection"
+title: "CamoGED: Camouflage — Generation, Detection, and Evaluation"
 message: "If you use CamoGED, please cite it using these metadata."
 type: software
 authors:
-  - family-names: "MichaelCSHN"
-    given-names: ""
-    # TODO: replace with full legal name and ORCID before release
-    # orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: "C"
+    given-names: "Michael"
 repository-code: "https://github.com/MichaelCSHN/CamoGED"
-url: "https://github.com/MichaelCSHN/CamoGED"
+url: "https://michaelcshn.github.io/CamoGED/"
 abstract: >-
-  CamoGED is a cross-domain open platform covering camouflage generation,
-  detection, and evaluation across the natural-science, military, and
-  humanities/art perspectives and the physical, digital, and intelligent
-  technical domains. It comprises an online monograph, a curated Awesome list,
-  an aggregator website (papers, model zoo, leaderboard, demos, datasets), and
-  a unified evaluation toolkit (camo-eval).
+  CamoGED is a cross-domain open platform and living monograph on camouflage
+  generation, detection, and evaluation across natural, military, cultural,
+  physical, digital, and machine-perception settings. It includes the book,
+  curated datasets and papers, reproducible evaluation tools, and research demos.
 keywords:
   - camouflage
   - camouflaged object detection
   - adversarial camouflage
   - concealment
   - computer vision
-  - benchmark
-  - survey
+  - evaluation
 license: Apache-2.0
-version: "0.1.0"
-date-released: "2025-01-01"  # TODO: update on first release
+version: "0.2.0"
+date-released: "2026-07-13"

@@ -1,25 +1,28 @@
-# Preface {.unnumbered}
+# 前言 {.unnumbered}
 
-This book is part of [**CamoGED**](https://github.com/MichaelCSHN/CamoGED) — an open platform
-covering camouflage **generation, evaluation, and detection** across the natural-science,
-military, and humanities/art perspectives and the physical, digital, and intelligent domains.
+本书讨论一种跨越自然科学、军事史、视觉文化与人工智能的共同问题：**目标如何降低被观察者察觉、定位或识别的概率，观察者又如何恢复被削弱的证据。** 我们把这类相互适应的问题称为“隐藏—揭示博弈”。这里的“博弈”首先是一套分析框架，而不是已经完成均衡证明的统一博弈论。
 
-Its organizing idea is a single thesis:
+全书沿三项研究活动组织：**生成**讨论隐藏方如何改变目标的呈现；**识别**讨论揭示方如何利用传感器、算法、时间和语义恢复目标；**评价**讨论在明确观察者、信道、任务与协议的前提下，如何判断方法是否真正有效。自然、军事、艺术与机器视觉可以共享这套问题语言，但它们的历史因果、材料约束和效用函数并不相同。本书比较的是可检验的结构相似性，不主张不同领域的机制完全等同。
 
-> **Camouflage is a co-evolutionary arms race between a *hider* and a *seeker*.**
-> Generation is the hider's move, evaluation is the referee, and detection is the seeker's move.
+## 本书面向谁 {.unnumbered}
 
-The book is written in Quarto: prose, math, citations, and *executable* code live together,
-so every figure and table can be regenerated from source.
+- 生物学、视觉生态和知觉研究者，可从第一篇与第15章进入；
+- 材料、传感器和安全研究者，可重点阅读第3、5、6、9、15、16章；
+- 计算机视觉研究者，可从第10章的任务与协议开始，再进入第11—14章；
+- 研究生和工程人员，可使用代码单元、数据索引与 `camo-eval` 复现实例，但应把教学示意与真实实验严格区分。
+
+## 证据与版本约定 {.unnumbered}
+
+本书区分四类材料：一手论文、标准或档案；高质量专著与综述；项目复现结果；教学示意与研究议程。前三类可以支持不同强度的事实判断，教学示意只用于解释概念，不能替代真实数据实验。凡涉及“首个、最大、最强、当前”等时效性结论，均应给出检索范围与最后核验日期；未核实数字不进入正式比较表。
+
+本版为公开编审版，版本日期为 **2026-07-13**。书稿、数据表与软件的完成度并不相同：正文只把已发表或已核验内容写成事实；尚未发表的作者项目仅作为研究议程出现，不预填架构、消融或性能数字。
 
 ::: {.callout-note}
-## Living document
-This is an online-first monograph (`v0.x`) that will be versioned and assigned a DOI on release,
-then submitted for formal publication. See the [project plan](https://github.com/MichaelCSHN/CamoGED/blob/main/docs/PROJECT_PLAN.md).
+## 活专著与正式版本
+在线版本便于修订、执行代码和维护链接；正式发布版本将锁定正文、参考文献、图像版权、软件版本和引用信息。动态排行榜与项目路线以网站和机器可读数据为准，不在正文中手工维护易漂移的数字。
 :::
 
 ::: {.callout-warning}
-## Responsible use
-Military-camouflage and adversarial-attack material is presented for understanding and defense.
-See the project's [ethics policy](https://github.com/MichaelCSHN/CamoGED/blob/main/ETHICS.md).
+## 责任使用
+军事伪装和对抗感知材料只用于解释机制、评价与防御，不提供针对现实部署系统的即用规避方案。项目的风险分级、数据限制与责任披露原则见 `ETHICS.md` 和第16章。
 :::

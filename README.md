@@ -2,7 +2,7 @@
 
 # 🦎 CamoGED
 
-### Camouflage: **G**eneration · **E**valuation · **D**etection
+### Platform pillars: **G**eneration · **E**valuation · **D**etection
 
 *A cross-domain open platform for the science, art, and engineering of concealment —
 spanning **Nature · War · Machines** and the **Physical · Digital · Intelligent** domains.*
@@ -16,11 +16,10 @@ spanning **Nature · War · Machines** and the **Physical · Digital · Intellig
 
 ---
 
-> **Thesis.** Camouflage is a *co-evolutionary arms race* between a **hider** and a **seeker**.
-> The same structure recurs across biology (prey vs. predator), the military (measure vs. counter‑measure),
-> art (image vs. perception), and AI (generator vs. discriminator / attacker vs. detector).
-> CamoGED treats **generation** (hiding), **evaluation** (judging), and **detection** (seeking) as the three
-> faces of this single game — and unifies them into one living research platform.
+> **Working thesis.** Camouflage can be studied as an observer-, channel-, and task-dependent
+> interaction between a **hider** and a **seeker**, with evaluation defining what counts as success.
+> Biology, military engineering, visual culture, and AI share parts of this analytical structure,
+> while retaining different mechanisms, histories, constraints, and utility functions.
 
 CamoGED is the first open resource to **simultaneously** cover camouflage **generation, evaluation, and detection**,
 across the **natural-science, military, and humanities/art** perspectives, and the **physical, digital, and
@@ -32,7 +31,7 @@ demos + a unified evaluation toolkit).
 
 | Component | Path | Description |
 |-----------|------|-------------|
-| 📚 **Monograph** | [`book/`](book/) | The book *Camouflage: Generation · Evaluation · Detection* (Quarto → HTML/PDF/ePub) |
+| 📚 **Monograph** | [`book/`](book/) | *Camouflage: Generation, Detection, and Evaluation*; HTML is CI-gated, while PDF/ePub remain release outputs requiring format-specific proofing |
 | 🌟 **Awesome list** | [`awesome/`](awesome/README.md) | Curated cross-domain resources (machine-readable) |
 | 🌐 **Website** | [`web/`](web/) | Aggregator: papers, model zoo, leaderboard, demos, datasets |
 | 🔧 **camo-eval** | [`camo-eval/`](camo-eval/) | Unified toolkit: detection accuracy · generation quality · adversarial robustness |
@@ -61,7 +60,7 @@ demos + a unified evaluation toolkit).
 # Clone
 git clone https://github.com/MichaelCSHN/CamoGED.git && cd CamoGED
 
-# Evaluation toolkit (one working metric ships now: MAE; others scaffolded)
+# Evaluation toolkit (core COD, boundary, video, perceptual and signature metrics are implemented; heavy generation metrics remain optional)
 cd camo-eval && pip install -e . && pytest -q
 
 # Book (requires Quarto: https://quarto.org)
@@ -96,7 +95,7 @@ defense, and robustness evaluation**. We do **not** publish directly weaponizabl
 
 ## Citing
 
-If CamoGED helps your work, please cite it via [`CITATION.cff`](CITATION.cff) (a versioned DOI is minted on each release).
+If CamoGED helps your work, please cite it via [`CITATION.cff`](CITATION.cff). A DOI will be added when a release is archived in a DOI-minting repository.
 
 ## Acknowledgements
 

@@ -3,28 +3,33 @@ project:
   output-dir: _book
 
 book:
-  title: "Camouflage: Generation · Evaluation · Detection"
-  subtitle: "Across Nature, War, and Machines"
-  author: "CamoGED Authors"
-  date: today
+  title: "伪装：生成、识别与评价"
+  subtitle: "自然、战争与机器的跨域综观"
+  author:
+    - name: "Michael C."
+      role: "主编"
+    - name: "CamoGED contributors"
+      role: "协作者"
+  date: "2026-07-13"
+  date-format: "YYYY-MM-DD"
   repo-url: https://github.com/MichaelCSHN/CamoGED
   repo-actions: [edit, issue]
   search: true
   chapters:
     - index.qmd
-    - part: "I — The Past & Present of Camouflage"
+    - part: "第一篇　伪装的前世今生"
       chapters:
         - chapters/01-essence-and-the-game.qmd
         - chapters/02-natural-camouflage.qmd
         - chapters/03-military-camouflage.qmd
         - chapters/04-camouflage-in-art.qmd
-    - part: "II — Generation · the Hider (prey / defender)"
+    - part: "第二篇　生成：隐藏方如何出招"
       chapters:
         - chapters/05-physical-generation.qmd
         - chapters/06-physical-adversarial.qmd
         - chapters/07-digital-generation.qmd
         - chapters/08-intelligent-generation.qmd
-    - part: "III — Detection · the Seeker (predator / attacker)"
+    - part: "第三篇　识别：揭示方如何反制"
       chapters:
         - chapters/09-physical-digital-detection.qmd
         - chapters/10-intelligent-overview-datasets.qmd
@@ -32,7 +37,7 @@ book:
         - chapters/12-video-cod.qmd
         - chapters/13-instance-extended.qmd
         - chapters/14-foundation-models.qmd
-    - part: "IV — Evaluation · the Judge (referee)"
+    - part: "第四篇　评价：如何裁定胜负"
       chapters:
         - chapters/15-unified-evaluation.qmd
         - chapters/16-frontiers-ethics.qmd
@@ -41,11 +46,17 @@ book:
 
 bibliography: references.bib
 
+execute:
+  freeze: auto
+
 format:
   html:
     theme: cosmo
     code-fold: true
     include-after-body: _includes/book-home-link.html
   pdf:
-    documentclass: scrbook
-  # epub:  # uncomment for ePub output
+    documentclass: ctexbook
+    pdf-engine: xelatex
+    keep-tex: true
+  epub:
+    toc: true
