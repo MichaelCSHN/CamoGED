@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "/home/runner/work/CamoGED/CamoGED/scripts/apply_book_editorial_revision.py", line 466, in <module>
-    regex_replace(
-  File "/home/runner/work/CamoGED/CamoGED/scripts/apply_book_editorial_revision.py", line 55, in regex_replace
-    raise RuntimeError(f"Required pattern not found in {rel}: {pattern[:100]!r}")
-RuntimeError: Required pattern not found in book/chapters/03-military-camouflage.qmd: '但数字迷彩史上最重要的一课，恰是一次\\*\\*失败\\*\\*。美国陆军于 2004 年前后列装的“通用迷彩图案（UCP）”.*?这正是第 1\\.6\\.2 节“观察者依赖性”的代价，也是本书把“评价”立为独'
