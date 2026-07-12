@@ -1,3 +1,17 @@
-- `camo-eval`: expanding toward the agreed "core library + extension modules + external experiment protocols" structure will require frozen-API review. Likely additions include `metrics.instance`, `metrics.video`, `metrics.perceptual`, `metrics.signature`, `protocols`, and analyzer/reporting surfaces for human and mission-level evaluations. These are consistent with the current direction but exceed the present frozen interface contract.
-- `camo-eval`: the frozen public surface passes `scripts/check_api.py`, and the generation metrics are now implemented (no `NotImplementedError` remains): `fid`, `lpips`, `deception_rate` (plus `dists`/`kid`) are lightweight numpy/scipy approximations — the CLI labels them `*_lite`, but the Python API names match the contract. Note these are NOT the published FID/LPIPS networks, so any leaderboard/website reporting should keep the `_lite` qualifier to avoid implying parity with Inception/LPIPS metrics.
-- `camo-eval`: site/book title order is now standardized to "Camouflage: Generation · Evaluation · Detection". The package description in `camo-eval/pyproject.toml` still says "detection accuracy, generation quality, and adversarial robustness"; updating Claude-owned package metadata should be coordinated separately.
+# Notes for the maintainer
+
+## Open release blockers
+
+- Complete primary-source and license verification for dataset metadata; `license_status: unknown` means CamoGED must not redistribute files.
+- Validate standard MS-SSIM, Boundary IoU, DAVIS boundary F/J&F, FID, KID, LPIPS, and DISTS before enabling their standard API names. Current approximations are explicitly named `_lite` or `boundary_match_score`.
+- Obtain external subject-matter review and complete the monograph image-rights ledger.
+- Inspect generated ePub and PDF outputs; a successful build is not sufficient for publication approval.
+- Update `RELEASE_MANIFEST.yml` only when a reviewed tag and archive actually exist.
+- Select at most one original project for full integration; do not restore `coder`, `flowcamo`, or `dualvcod` to the results registry without code, weights, predictions, manifest, environment, and independent review.
+
+## Current stable boundaries
+
+- Image COD/SOD core metrics are validated against PySODMetrics.
+- Experimental diagnostics are not permitted to populate standard leaderboard metric fields.
+- Browser demonstrations use synthetic scenes or user-local uploads.
+- Security-sensitive reports use `SECURITY.md`, not public issues.
