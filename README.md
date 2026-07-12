@@ -21,38 +21,39 @@ spanning **Nature · War · Machines** and the **Physical · Digital · Intellig
 > Biology, military engineering, visual culture, and AI share parts of this analytical structure,
 > while retaining different mechanisms, histories, constraints, and utility functions.
 
-CamoGED is the first open resource to **simultaneously** cover camouflage **generation, evaluation, and detection**,
-across the **natural-science, military, and humanities/art** perspectives, and the **physical, digital, and
-intelligent** technical domains. Existing resources cover only detection and are static lists; CamoGED adds the
-missing generation and evaluation pillars, the cross-domain narrative, and a *living* platform (leaderboard +
-demos + a unified evaluation toolkit).
+CamoGED brings camouflage **generation, detection, and evaluation** into one open research environment,
+with natural-science, military, visual-culture, and machine-perception perspectives represented across
+physical, digital, and learning-based settings. The project combines a living monograph, curated metadata,
+reproducible evaluation tools, and research demos. Claims of novelty or comprehensive coverage are treated
+as versioned literature-search conclusions rather than permanent promotional facts; see
+[`docs/BOOK_SEARCH_METHODOLOGY.md`](docs/BOOK_SEARCH_METHODOLOGY.md).
 
 ## What's inside
 
 | Component | Path | Description |
 |-----------|------|-------------|
-| 📚 **Monograph** | [`book/`](book/) | *Camouflage: Generation, Detection, and Evaluation*; HTML is CI-gated, while PDF/ePub remain release outputs requiring format-specific proofing |
-| 🌟 **Awesome list** | [`awesome/`](awesome/README.md) | Curated cross-domain resources (machine-readable) |
-| 🌐 **Website** | [`web/`](web/) | Aggregator: papers, model zoo, leaderboard, demos, datasets |
-| 🔧 **camo-eval** | [`camo-eval/`](camo-eval/) | Unified toolkit: detection accuracy · generation quality · adversarial robustness |
-| 🔬 **Projects** | [`projects/`](projects/) | Original anchors: `coder`, `flowcamo`, `dualvcod` |
-| 🗂️ **Shared data** | [`data/`](data/) | Single source of truth (`papers.yaml`, `datasets.yaml`, `leaderboard.yaml`) consumed by both the Awesome list and the website |
+| 📚 **Monograph** | [`book/`](book/) | *Camouflage: Generation, Detection, and Evaluation*; HTML is CI-gated, while PDF/ePub require format-specific proofing |
+| 🌟 **Awesome list** | [`awesome/`](awesome/README.md) | Curated cross-domain resources backed by machine-readable metadata |
+| 🌐 **Website** | [`web/`](web/) | Aggregator for papers, datasets, leaderboard entries, and demos |
+| 🔧 **camo-eval** | [`camo-eval/`](camo-eval/) | Evaluation toolkit for detection, generation, robustness, and protocol reporting |
+| 🔬 **Research agendas** | [`projects/`](projects/) | Work-in-progress anchors: `coder`, `flowcamo`, and `dualvcod`; not presented as completed methods until verified |
+| 🗂️ **Shared data** | [`data/`](data/) | Single source of truth for papers, datasets, and leaderboard metadata |
 
-## The map
+## Analytical map
 
-```
-                  Co-evolutionary game (hide ⇄ seek)        ← unifying thesis
+```text
+                  Hide–reveal interaction                  ← working framework
    ┌──────────────────────────┼──────────────────────────┐
- Nature                      War                        Art          ← three perspectives
+ Nature                 Military systems           Visual culture
    └──────────────────────────┼──────────────────────────┘
-                Physical ── Digital ── Intelligent                   ← three domains
+             Physical ── Digital ── Learning-based       ← settings
    ┌──────────────────────────┼──────────────────────────┐
- Generation                Evaluation                Detection      ← three pillars
-  (the hider)              (the judge)                (the seeker)
-      │                        │                          │
-   flowcamo                 coder                     camo-eval
-                            dualvcod
+ Generation                 Detection                Evaluation
+  (hider)                    (seeker)              (protocol/judge)
 ```
+
+The map is an organizing framework, not a claim that all four domains share identical mechanisms or a
+single solved game-theoretic model.
 
 ## Quick start
 
@@ -60,26 +61,26 @@ demos + a unified evaluation toolkit).
 # Clone
 git clone https://github.com/MichaelCSHN/CamoGED.git && cd CamoGED
 
-# Evaluation toolkit (core COD, boundary, video, perceptual and signature metrics are implemented; heavy generation metrics remain optional)
+# Evaluation toolkit
 cd camo-eval && pip install -e . && pytest -q
 
-# Book (requires Quarto: https://quarto.org)
+# Book (requires Quarto)
 cd book && quarto preview
 
 # Website (requires Node 18+)
 cd web && npm install && npm run docs:dev
 ```
 
-## Roadmap (stability-first order)
+## Roadmap
 
 Build the slow-changing pieces first, the fast-iterating ones last:
-**① repo scaffold → ② monograph → ③ Awesome list → ④ website.**
+**① repository foundation → ② monograph and evaluation contracts → ③ curated metadata → ④ website and demos.**
 
-- **Phase 0 — Repo foundation:** scaffold, governance, licenses, CI, `data/` schema, `camo-eval` skeleton ✅
-- **Phase 1 — Monograph:** Part I + Evaluation part + thesis chapter first; `camo-eval` metrics; online `v0.5`.
-- **Phase 2 — Awesome list:** distilled from the book's bibliography into `data/*.yaml`; auto-updates via Actions.
-- **Phase 3 — Website:** leaderboard + demos (image → video → instance), consuming `data/*.yaml`.
-- **Phase 4 — Publication & community:** finalize book, submit to publisher + companion paper, Zenodo DOI.
+- **Foundation:** governance, licenses, CI, metadata schemas, and `camo-eval` core.
+- **Monograph:** editorially controlled chapters, fact-check register, executable examples, and publication proofing.
+- **Metadata:** verified papers, datasets, and protocol-aware leaderboard entries.
+- **Demos:** stable evaluation demos first; heavier generation or model demos only after reproducibility and risk review.
+- **Publication:** archive a reviewed release, then add DOI and publisher/companion-paper metadata.
 
 Full plan: [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) · Book compilation plan: [`docs/BOOK_COMPILATION_PLAN.md`](docs/BOOK_COMPILATION_PLAN.md).
 
@@ -88,14 +89,15 @@ Full plan: [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md) · Book compilation pl
 We welcome papers, datasets, methods, demos, and corrections. See [`CONTRIBUTING.md`](CONTRIBUTING.md)
 and use the structured issue templates. Please also read our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Responsible use (dual-use notice)
+## Responsible use
 
 CamoGED covers military camouflage and adversarial attacks. All such content is provided for **understanding,
 defense, and robustness evaluation**. We do **not** publish directly weaponizable recipes. See [`ETHICS.md`](ETHICS.md).
 
 ## Citing
 
-If CamoGED helps your work, please cite it via [`CITATION.cff`](CITATION.cff). A DOI will be added when a release is archived in a DOI-minting repository.
+If CamoGED helps your work, please cite it via [`CITATION.cff`](CITATION.cff). A DOI will be added only after
+a reviewed release is archived in a DOI-minting repository.
 
 ## Acknowledgements
 
