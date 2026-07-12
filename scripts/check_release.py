@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -12,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "RELEASE_MANIFEST.yml"
 PYPROJECT = ROOT / "camo-eval/pyproject.toml"
 INIT = ROOT / "camo-eval/src/camo_eval/__init__.py"
+WEB_PACKAGE = ROOT / "web/package.json"
 CITATION = ROOT / "CITATION.cff"
 
 
@@ -40,9 +42,8 @@ def main() -> int:
     else:
         errors.append(f"unsupported release_status: {status!r}")
 
-    manifest_version = (
-        document.get("components", {}).get("camo_eval", {}).get("version")
-    )
+    components = document.get("components", {})
+    camo_eval_version = components.get("camo_eval", {}).get("version")
     pyproject_version = _extract(
         r'^version\s*=\s*"([^"]+)"',
         PYPROJECT.read_text(encoding="utf-8"),
@@ -55,11 +56,24 @@ def main() -> int:
         "camo_eval/__init__.py",
         errors,
     )
-    if manifest_version != pyproject_version or manifest_version != init_version:
+    if camo_eval_version != pyproject_version or camo_eval_version != init_version:
         errors.append(
             "camo-eval version drift: "
-            f"manifest={manifest_version!r}, pyproject={pyproject_version!r}, init={init_version!r}"
+            f"manifest={camo_eval_version!r}, pyproject={pyproject_version!r}, "
+            f"init={init_version!r}"
         )
+
+    web_package = json.loads(WEB_PACKAGE.read_text(encoding="utf-8"))
+    web_manifest = components.get("website", {})
+    if web_manifest.get("version") != web_package.get("version"):
+        errors.append(
+            "website version drift: "
+            f"manifest={web_manifest.get('version')!r}, package={web_package.get('version')!r}"
+        )
+    if web_package.get("license") != "MIT" or "MIT" not in str(
+        web_manifest.get("license")
+    ):
+        errors.append("website MIT sub-license is not consistently recorded")
 
     citation = yaml.safe_load(CITATION.read_text(encoding="utf-8")) or {}
     citation_version = citation.get("version")
