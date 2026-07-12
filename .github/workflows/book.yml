@@ -1,11 +1,12 @@
 name: book
 
-# Render the Quarto book (HTML) as a CI gate. The public GitHub Pages deployment
-# is owned by web.yml so the website is not overwritten by book-only changes.
-
+# Render portable publication formats as CI gates. PDF remains a release-format
+# proofing task because it requires a pinned Chinese TeX and font environment.
 on:
   push:
     branches: [main]
+    paths: ["book/**", ".github/workflows/book.yml"]
+  pull_request:
     paths: ["book/**", ".github/workflows/book.yml"]
   workflow_dispatch:
 
@@ -15,6 +16,10 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        format: [html, epub]
     steps:
       - uses: actions/checkout@v4
 
@@ -22,16 +27,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Needed to EXECUTE the runnable cells in the chapters during render.
-      - name: Install Python deps for code cells
+      - name: Install Python dependencies for executable cells
         run: pip install jupyter numpy matplotlib scipy
 
       - uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Render book (HTML only)
-        run: quarto render book --to html
+      - name: Render book
+        run: quarto render book --to ${{ matrix.format }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: book-html
+          name: book-${{ matrix.format }}
           path: book/_book
