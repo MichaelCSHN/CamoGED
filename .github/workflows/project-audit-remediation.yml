@@ -40,6 +40,10 @@ jobs:
         if: steps.state.outputs.needs == 'true'
         run: pip install pyyaml
 
+      - name: Prepare remediation migration
+        if: steps.state.outputs.needs == 'true'
+        run: python scripts/prepare_project_audit_remediation.py
+
       - name: Apply project remediation
         if: steps.state.outputs.needs == 'true'
         run: python scripts/apply_project_audit_remediation.py
@@ -70,7 +74,7 @@ jobs:
       - name: Commit remediation sources
         if: steps.state.outputs.needs == 'true'
         run: |
-          rm -f scripts/apply_project_audit_remediation.py black.log
+          rm -f scripts/apply_project_audit_remediation.py scripts/prepare_project_audit_remediation.py black.log
           git config user.name 'CamoGED Audit Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add -A
