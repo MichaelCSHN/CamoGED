@@ -29,7 +29,24 @@ jobs:
         run: python scripts/prepare_book_editorial_revision.py
 
       - name: Apply editorial revision
-        run: python scripts/apply_book_editorial_revision.py
+        id: apply
+        continue-on-error: true
+        run: python scripts/apply_book_editorial_revision.py > editorial_run.log 2>&1
+
+      - name: Persist diagnostics on failure
+        if: steps.apply.outcome == 'failure'
+        run: |
+          git config user.name "CamoGED Editorial Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add editorial_run.log scripts/apply_book_editorial_revision.py
+          git commit -m "chore(book): capture editorial revision failure"
+          git push origin HEAD:agent/book-editorial-revision
+
+      - name: Stop after failed rewrite
+        if: steps.apply.outcome == 'failure'
+        run: |
+          cat editorial_run.log
+          exit 1
 
       - name: Validate scripts and editorial invariants
         run: |
