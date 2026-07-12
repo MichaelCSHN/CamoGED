@@ -1,0 +1,18 @@
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/__init__.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/metrics/clutter.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/metrics/instance.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/metrics/perceptual.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/metrics/video/__init__.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/metrics/generation/fid.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/cli.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/src/camo_eval/runner.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/tests/test_standard_metric_guards.py
+reformatted /home/runner/work/CamoGED/CamoGED/camo-eval/tests/test_extension_metrics.py
+reformatted scripts/check_api.py
+error: cannot format scripts/check_data.py: Cannot parse: 187:34
+        expected = render().rstrip() + "
+                                     ^
+TokenError: Failed to parse: UnterminatedString
+
+Oh no! 💥 💔 💥
+11 files reformatted, 24 files left unchanged, 1 file failed to reformat.
