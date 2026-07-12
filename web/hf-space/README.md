@@ -1,28 +1,19 @@
-# camo-eval Hugging Face Space
+# camo-eval Gradio preview
 
-This directory contains a lightweight Gradio app intended for deployment as a
-Hugging Face Space.
+This directory contains an optional local/Hugging Face Space interface for mask evaluation. It is not a hosted COD model and does not claim benchmark authority.
 
 ## Scope
 
-The Space covers metrics that are practical without large datasets or learned
-model weights:
+- upload prediction and ground-truth masks;
+- run the validated COD/SOD core metrics and IoU/Dice/SSIM;
+- optionally run diagnostics explicitly labelled `experimental` or `_lite`;
+- display mask overlays and TP/FP/FN error maps;
+- run a protocol-aware batch evaluation on synthetic repository fixtures;
+- export JSON and Markdown reports with implementation and provenance metadata.
 
-- upload prediction and ground-truth masks
-- ship repository-local example images and a tiny bundled demo dataset
-- compute core detection, instance, perceptual, and lightweight
-  generation-similarity metrics
-- compute scene clutter and camouflage-difficulty diagnostics when a scene
-  image is supplied
-- compute COD/SOD PR-family metrics: Precision, Recall, and PR curves via CLI
-- display mask overlay and TP/FP/FN error maps for single-pair demos
-- run a protocol-aware batch evaluation over the bundled demo dataset
-- attach observer/channel/task/protocol metadata
-- export a protocol-aware JSON or Markdown report
+Standard FID, KID, LPIPS, DISTS, MS-SSIM, Boundary IoU, and DAVIS boundary F/J&F are not implemented in this preview. The Space does not silently substitute heuristic values under those names.
 
-## Local Run
-
-From the repository root:
+## Local run
 
 ```bash
 pip install -e "./camo-eval[full]"
@@ -30,18 +21,8 @@ pip install -r web/hf-space/requirements.txt
 python web/hf-space/app.py
 ```
 
-The local app binds to `http://127.0.0.1:7860` by default.
+The app binds to `0.0.0.0` by default for container deployment. Set `GRADIO_SERVER_NAME=127.0.0.1` for a loopback-only local run.
 
-The app includes:
+## Data and privacy
 
-- two built-in single-pair examples
-- one bundled batch demo dataset from `camo-eval/demo_data/cod_sota_masks`
-- a batch path that mirrors `camo-eval evaluate-protocol --manifest ...`
-
-## Notes
-
-- This app is designed as the third step in the public demo route, after the
-  stable Python API / CLI and the Colab notebook.
-- Heavyweight learned FID/LPIPS backends, large-dataset evaluations, model
-  weight downloads, and human-study analytics stay outside the Space and run in
-  notebooks or dedicated pipelines.
+Bundled examples under `camo-eval/demo_data/` are synthetic fixtures. User uploads are processed by the running Gradio service; deployment operators must publish their own retention and privacy policy. The browser-only VitePress demo keeps user-selected files local to the browser.
