@@ -1,17 +1,29 @@
-name: check links
+name: link checks
+
 on:
-  schedule: [{ cron: "0 6 * * 1" }]   # weekly, Monday 06:00 UTC
+  pull_request:
+    paths: ["**/*.md", "**/*.qmd", "data/*.yaml", "web/**/*.vue", ".github/workflows/check-links.yml"]
+  schedule: [{ cron: "0 6 * * 1" }]
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
-  links:
+  internal:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Link Checker
-        uses: lycheeverse/lychee-action@v2
+      - uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --accept 200,429 "**/*.md"
-        # Non-blocking: review the report in the Actions summary.
+          args: --offline --no-progress "**/*.md" "**/*.qmd"
+
+  external-report:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --accept 200,206,429 "**/*.md" "**/*.qmd" "data/*.yaml" "web/**/*.vue"
         continue-on-error: true
