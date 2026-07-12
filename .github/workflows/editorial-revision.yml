@@ -1,0 +1,53 @@
+name: one-shot-book-editorial-revision
+
+on:
+  push:
+    branches: [agent/book-editorial-revision]
+    paths: [".github/workflows/editorial-revision.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  revise:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/book-editorial-revision
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Normalize exact match points
+        run: python scripts/prepare_book_editorial_revision.py
+
+      - name: Apply editorial revision
+        run: python scripts/apply_book_editorial_revision.py
+
+      - name: Validate scripts and editorial invariants
+        run: |
+          python -m py_compile scripts/apply_book_editorial_revision.py
+          ! grep -R "原创项目占位说明" book/chapters
+          ! grep -R "数值全部留空待核实" book/chapters
+          ! grep -R '^继续。$' book/chapters
+          grep -q '第三篇　识别：揭示方如何反制' book/_quarto.yml
+          grep -q '## G　图像版权与版本清单' book/chapters/appendix-resources.qmd
+
+      - name: Install executable-cell dependencies
+        run: pip install jupyter numpy matplotlib scipy
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render HTML proof
+        run: quarto render book --to html
+
+      - name: Commit generated editorial changes
+        run: |
+          git config user.name "CamoGED Editorial Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add README.md CITATION.cff book docs scripts .github/workflows/book.yml
+          git commit -m "book: implement publication-grade editorial revision"
+          git push origin HEAD:agent/book-editorial-revision
