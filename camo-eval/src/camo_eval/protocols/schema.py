@@ -54,7 +54,10 @@ class EvaluationContext:
             raise ValueError(f"task must be one of {sorted(ALLOWED_TASKS)}")
         if not isinstance(self.protocol, str) or not self.protocol.strip():
             raise ValueError("protocol must be a non-empty string.")
-        if not isinstance(self.implementation_version, str) or not self.implementation_version:
+        if (
+            not isinstance(self.implementation_version, str)
+            or not self.implementation_version
+        ):
             raise ValueError("implementation_version must be a non-empty string.")
         if self.seed is not None and not isinstance(self.seed, int):
             raise ValueError("seed must be an integer or null.")
@@ -83,7 +86,9 @@ class EvaluationContext:
             task=str(payload["task"]),
             protocol=str(payload["protocol"]),
             notes=_optional_str(payload.get("notes")),
-            implementation_version=str(payload.get("implementation_version") or "0.2.0.dev0"),
+            implementation_version=str(
+                payload.get("implementation_version") or "0.2.0.dev0"
+            ),
             dataset_version=_optional_str(payload.get("dataset_version")),
             prediction_revision=_optional_str(payload.get("prediction_revision")),
             threshold_policy=_optional_str(payload.get("threshold_policy")),
@@ -109,7 +114,9 @@ def _optional_int(value: object) -> int | None:
     return value
 
 
-def _flatten_metrics(metrics: dict[str, object], prefix: str = "") -> list[tuple[str, object]]:
+def _flatten_metrics(
+    metrics: dict[str, object], prefix: str = ""
+) -> list[tuple[str, object]]:
     """Flatten nested metric mappings into dotted scalar rows."""
 
     rows: list[tuple[str, object]] = []
@@ -214,6 +221,8 @@ def load_protocol_manifest(manifest_path: str | Path) -> dict[str, object]:
     if not isinstance(payload["metrics"], list) or not payload["metrics"]:
         raise ValueError("Manifest field 'metrics' must be a non-empty list.")
     if not all(isinstance(metric, str) and metric for metric in payload["metrics"]):
-        raise ValueError("Manifest field 'metrics' must contain only non-empty strings.")
+        raise ValueError(
+            "Manifest field 'metrics' must contain only non-empty strings."
+        )
     EvaluationContext.from_mapping(payload)
     return payload
