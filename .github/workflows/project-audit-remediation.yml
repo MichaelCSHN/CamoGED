@@ -7,7 +7,7 @@ on:
 
 concurrency:
   group: project-audit-remediation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -50,36 +50,26 @@ jobs:
 
       - name: Format Python sources
         if: steps.state.outputs.needs == 'true'
-        id: format
-        continue-on-error: true
         run: |
           pip install black
-          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py > black.log 2>&1
+          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
 
-      - name: Persist formatter diagnostics
-        if: steps.state.outputs.needs == 'true' && steps.format.outcome == 'failure'
-        run: |
-          git config user.name 'CamoGED Audit Bot'
-          git config user.email 'actions@users.noreply.github.com'
-          git add black.log
-          git commit -m 'chore(audit): capture formatter failure'
-          git push origin HEAD:agent/project-audit-remediation
-
-      - name: Stop after formatter failure
-        if: steps.state.outputs.needs == 'true' && steps.format.outcome == 'failure'
-        run: |
-          cat black.log
-          exit 1
-
-      - name: Commit remediation sources
+      - name: Commit non-workflow remediation sources
         if: steps.state.outputs.needs == 'true'
+        id: commit
+        continue-on-error: true
         run: |
-          rm -f scripts/apply_project_audit_remediation.py scripts/prepare_project_audit_remediation.py black.log
+          git restore --source=HEAD -- .github/workflows
+          rm -f scripts/apply_project_audit_remediation.py scripts/prepare_project_audit_remediation.py black.log docs/AUDIT_REMEDIATION_PR.md
           git config user.name 'CamoGED Audit Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add -A
           git commit -m 'chore(audit): align project with publication and integrity audit'
           git push origin HEAD:agent/project-audit-remediation
+
+      - name: Stop after source commit failure
+        if: steps.state.outputs.needs == 'true' && steps.commit.outcome == 'failure'
+        run: exit 1
 
       - name: Install project test dependencies
         run: |
