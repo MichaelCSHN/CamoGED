@@ -4,12 +4,16 @@ on:
   push:
     branches: [agent/book-editorial-revision]
     paths: [".github/workflows/editorial-revision.yml"]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   revise:
+    if: github.head_ref == 'agent/book-editorial-revision' || github.ref_name == 'agent/book-editorial-revision'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,5 +53,6 @@ jobs:
           git config user.name "CamoGED Editorial Bot"
           git config user.email "actions@users.noreply.github.com"
           git add README.md CITATION.cff book docs scripts .github/workflows/book.yml
+          git diff --cached --quiet && exit 0
           git commit -m "book: implement publication-grade editorial revision"
           git push origin HEAD:agent/book-editorial-revision
