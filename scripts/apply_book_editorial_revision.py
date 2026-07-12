@@ -596,7 +596,7 @@ replace_section(
 # Chapter 11: replace coder placeholder and empty table, then create a concise method synthesis.
 replace_section(
     "book/chapters/11-image-cod.qmd",
-    "## 11.7 [原创] coder：本平台的图像 COD 锚点 {#sec-11-coder}",
+    "## 11.7 [原创] coder：图像 COD 原创方法 {#sec-coder}",
     "## 11.8 方法演进的主线 {#sec-thread}",
     '''### 作者研究议程：可复现图像 COD 基线
 
