@@ -3,7 +3,7 @@
   "observer": "model",
   "channel": "rgb",
   "task": "image-cod",
-  "protocol": "synthetic repository demo bundle",
+  "protocol": "repository demo bundle",
   "notes": "Synthetic two-sample mask set. boundary_match_score and ms_ssim_lite are experimental diagnostics.",
   "implementation_version": "0.2.0.dev0",
   "dataset_version": "synthetic-fixture-v1",
