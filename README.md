@@ -81,7 +81,7 @@ Build the slow-changing pieces first, the fast-iterating ones last:
 
 - **Foundation:** governance, licenses, CI, metadata schemas, and `camo-eval` core.
 - **Monograph:** editorially controlled chapters, fact-check register, executable examples, and publication proofing.
-- **Metadata:** verified papers, datasets, and protocol-aware leaderboard entries.
+- **Metadata:** verified papers, datasets, and protocol-aware result records.
 - **Demos:** stable evaluation demos first; heavier generation or model demos only after reproducibility and risk review.
 - **Publication:** archive a reviewed release, then add DOI and publisher/companion-paper metadata.
 
@@ -112,5 +112,6 @@ and the 2024 survey *A Survey of Camouflaged Object Detection and Beyond*.
 
 ## License
 
-Code is licensed under [Apache-2.0](LICENSE). Prose content (book, Awesome list, docs) is licensed under
-[CC-BY-4.0](LICENSE-CONTENT). Datasets are **linked, not redistributed**; respect each dataset's upstream license.
+Repository code is Apache-2.0 unless a subdirectory states otherwise; `web/` code is MIT. Prose content
+(book, Awesome list, and documentation) is CC BY 4.0. Third-party material retains its upstream terms.
+Datasets are **linked, not redistributed** unless explicitly registered in `THIRD_PARTY_ASSETS.yml`.
