@@ -1,0 +1,91 @@
+name: one-shot-project-audit-remediation
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: project-audit-remediation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  remediate:
+    if: github.head_ref == 'agent/project-audit-remediation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/project-audit-remediation
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Determine migration state
+        id: state
+        run: |
+          if [ -f docs/PROJECT_AUDIT_REMEDIATION.md ]; then
+            echo 'needs=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'needs=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install migration dependencies
+        if: steps.state.outputs.needs == 'true'
+        run: pip install pyyaml
+
+      - name: Apply project remediation
+        if: steps.state.outputs.needs == 'true'
+        run: python scripts/apply_project_audit_remediation.py
+
+      - name: Format Python sources
+        if: steps.state.outputs.needs == 'true'
+        run: |
+          pip install black
+          black camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
+
+      - name: Commit remediation sources
+        if: steps.state.outputs.needs == 'true'
+        run: |
+          rm -f scripts/apply_project_audit_remediation.py
+          git config user.name 'CamoGED Audit Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'chore(audit): align project with publication and integrity audit'
+          git push origin HEAD:agent/project-audit-remediation
+
+      - name: Install project test dependencies
+        run: |
+          pip install pyyaml
+          pip install -e 'camo-eval[dev]'
+
+      - name: Validate metadata and public API
+        run: |
+          python scripts/check_data.py
+          python scripts/check_api.py
+          python scripts/build_awesome.py
+          git diff --exit-code -- awesome/README.md web/papers.md web/datasets.md web/leaderboard.md web/models.md
+
+      - name: Run camo-eval quality gates
+        run: |
+          ruff check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
+          black --check camo-eval/src camo-eval/tests scripts/check_api.py scripts/check_data.py
+          cd camo-eval
+          pytest --cov=camo_eval --cov-fail-under=80 -q
+          python -m build
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build website
+        run: |
+          cd web
+          npm ci
+          npm run docs:build
