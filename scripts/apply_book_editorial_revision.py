@@ -49,7 +49,7 @@ def regex_replace(
     count: int = 0,
 ) -> None:
     text = read(rel)
-    new, n = re.subn(pattern, repl, text, count=count, flags=flags)
+    new, n = re.subn(pattern, lambda _match: repl, text, count=count, flags=flags)
     if n == 0:
         if required:
             raise RuntimeError(f"Required pattern not found in {rel}: {pattern[:100]!r}")
