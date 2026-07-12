@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,7 +24,7 @@ jobs:
       - name: Render HTML and populate execution cache
         run: quarto render book --to html
       - name: Render ePub from frozen results
-        run: quarto render book --to epub
+        run: quarto render book --to epub --no-execute
       - uses: actions/upload-artifact@v4
         with:
           name: book-html-epub
