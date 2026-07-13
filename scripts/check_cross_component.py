@@ -64,9 +64,22 @@ def main() -> int:
         if token not in chapter10:
             errors.append(f"chapter 10 missing {token!r}")
     require(chapter10, "chapter 10 bbox branch", ("bbox 型 RCOD", "bbox RCOD"), errors)
-    for forbidden in ("当前最大图像基准", "跨数据集泛化评测标准"):
+    for forbidden in (
+        "当前最大图像基准",
+        "跨数据集泛化评测标准",
+        "事实标准",
+        "质量与规模平衡最好的",
+        "首批全标注 COD",
+        "最常用视频基准",
+        "目前标注质量最高",
+    ):
         if forbidden in chapter10:
             errors.append(f"chapter 10 retains unsupported wording {forbidden!r}")
+
+    if "::: {.callout-tip}\n## 本章导读" not in chapter14:
+        errors.append("chapter 14 guide callout is malformed")
+    if chapter14.count("::: {.callout-note}") < 1:
+        errors.append("chapter 14 snapshot callout is missing")
 
     chapter14_tokens = (
         "@camsam2_2025",
