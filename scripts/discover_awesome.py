@@ -28,6 +28,20 @@ USER_AGENT = "CamoGED-Awesome-Discovery/0.1 (+https://github.com/MichaelCSHN/Cam
 ATOM = {"a": "http://www.w3.org/2005/Atom"}
 ARXIV_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/(\d{4}\.\d{4,5})", re.I)
 DOI_RE = re.compile(r"(?:doi\.org/|doi:\s*)(10\.\d{4,9}/\S+)", re.I)
+CAMOUFLAGE_TERMS = {
+    "camouflage",
+    "camouflaged",
+    "concealed",
+    "concealment",
+    "crypsis",
+    "mimicry",
+    "countershading",
+    "disruptive coloration",
+    "detectability",
+    "visual ecology",
+    "adaptive coloration",
+}
+PLACEHOLDER_TITLES = {"titlepending", "untitled", "titleforthcoming"}
 
 
 def load_yaml(name: str) -> dict:
@@ -244,10 +258,21 @@ def filter_candidates(
 ) -> list[dict]:
     titles, identifiers = existing_keys(accepted)
     output: list[dict] = []
+    current_year = datetime.now(UTC).year
     for item in merge_candidates(candidates):
-        if item.get("year") and int(item["year"]) < min_year:
+        year = int(item.get("year") or 0)
+        normalized_title = normalize_title(item["title"])
+        if year and year < min_year:
             continue
-        if normalize_title(item["title"]) in titles:
+        if year > current_year + 1:
+            continue
+        if any(normalized_title.startswith(value) for value in PLACEHOLDER_TITLES):
+            continue
+        if item.get("source") == "crossref":
+            haystack = f"{item.get('title', '')} {item.get('abstract', '')}".lower()
+            if not any(term in haystack for term in CAMOUFLAGE_TERMS):
+                continue
+        if normalized_title in titles:
             continue
         external = ("doi", item["doi"].lower()) if item.get("doi") else None
         if external and external in identifiers:
@@ -320,6 +345,20 @@ def self_test() -> None:
     assert normalize_title(items[0]["title"]) == "testcamouflagepaper"
     accepted = [{"title": "Other", "canonical_url": "https://arxiv.org/abs/2501.00001"}]
     assert len(filter_candidates(items, accepted, min_year=2025)) == 1
+    noisy = [
+        {
+            "title": "Title Pending 2223",
+            "year": 2036,
+            "source": "crossref",
+            "abstract": "",
+            "doi": "10.1/noise",
+            "arxiv_id": None,
+            "updated": "",
+            "discovered_by": ["biology"],
+            "suggested_tags": ["biological-camouflage"],
+        }
+    ]
+    assert filter_candidates(noisy, accepted, min_year=2025) == []
     print("discover_awesome self-test: ok")
 
 
