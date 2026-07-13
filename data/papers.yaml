@@ -19,6 +19,30 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: survey
+  pillars:
+  - generation
+  - detection
+  - evaluation
+  tasks:
+  - survey
+  - image-cod
+  - video-cod
+  - instance-cod
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - survey
+  description: Broad modern survey of image/video COD, extended tasks, datasets, and metrics.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2408.14562
 - id: le2019anet
   title: Anabranch Network for Camouflaged Object Segmentation
   authors:
@@ -45,6 +69,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces the CAMO benchmark for camouflaged object segmentation.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1016/j.cviu.2019.04.006
 - id: skurowski2018animal
   title: 'Animal Camouflage Analysis: CHAMELEON Database'
   authors:
@@ -72,9 +115,28 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - dataset
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - biological
+  - wildlife
+  method_families:
+  - deep-learning
+  description: Documents the CHAMELEON camouflaged animal image database.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/
 - id: pang2024zoomnext
-  title: 'ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object
-    Detection'
+  title: 'ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection'
   authors: Pang et al.
   venue: TPAMI
   year: 2024
@@ -96,6 +158,26 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - transformer
+  - multi-scale
+  description: Representative unified architecture spanning image and video camouflage segmentation.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1109/TPAMI.2024.3417329
 - id: lyu2021ranknet
   title: Simultaneously Localize, Segment and Rank the Camouflaged Objects
   authors:
@@ -124,6 +206,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces the NC4K generalization benchmark and ranking-based COD.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html
 - id: hginet2024
   title: 'HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection'
   authors:
@@ -146,16 +247,36 @@ papers:
   - nc4k
   - chameleon
   bibtex_key: hginet2024
-  notes: null
+  notes: Graph-interaction transformer using dynamic token clustering for fine-grained camouflaged object
+    segmentation.
   publication_status: published
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Graph-interaction transformer using dynamic token clustering for fine-grained camouflaged
+    object segmentation.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1109/TIP.2024.3475219
 - id: samvcos2025
-  title: 'When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation
-    and Adaptation'
+  title: 'When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation'
   authors: Zhou et al.
   venue: Visual Intelligence
   year: 2025
@@ -168,13 +289,34 @@ papers:
   datasets:
   - moca-mask
   bibtex_key: samvcos2025
-  notes: null
+  notes: Systematic evaluation and adaptation study of SAM2 under video camouflaged object segmentation
+    protocols.
   publication_status: published
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Systematic evaluation and adaptation study of SAM2 under video camouflaged object segmentation
+    protocols.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2409.18653
 - id: vu2026camovid
   title: 'CamoVid60K: A Large-Scale Video Dataset for Moving Camouflaged Animals Understanding'
   authors:
@@ -202,6 +344,26 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - dataset
+  modalities:
+  - video
+  supervision:
+  - not-applicable
+  contexts:
+  - biological
+  - wildlife
+  method_families:
+  - deep-learning
+  description: Introduces the CamoVid60K camouflaged animal video benchmark.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://link.springer.com/article/10.1007/s11263-026-02765-8
 - id: zhang2023refcod
   title: Referring Camouflaged Object Detection
   authors:
@@ -229,6 +391,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - referring-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Defines the Ref-COD task and introduces R2C7K.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2306.07532
 - id: zhang2023collaborative
   title: 'Collaborative Camouflaged Object Detection: A Large-Scale Dataset and Benchmark'
   authors:
@@ -256,9 +437,27 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - collaborative-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces the CoCOD8K collaborative camouflage benchmark.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1109/TNNLS.2023.3317091
 - id: camosam2-2025
-  title: 'CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged
-    Object Detection'
+  title: 'CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection'
   authors: Zhang et al.
   venue: arXiv
   year: 2025
@@ -271,13 +470,34 @@ papers:
   datasets:
   - moca-mask
   bibtex_key: camosam2_2025
-  notes: null
+  notes: Automatic motion-appearance prompt induction and multi-prompt refinement framework built around
+    SAM2.
   publication_status: preprint
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Automatic motion-appearance prompt induction and multi-prompt refinement framework built
+    around SAM2.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2504.00375
 - id: cheng2022implicit
   title: Implicit Motion Handling for Video Camouflaged Object Detection
   authors:
@@ -306,9 +526,28 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - temporal-model
+  - motion
+  description: Introduces the MoCA-Mask benchmark for video camouflage detection.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html
 - id: bideau2016moving
-  title: It's Moving! A Probabilistic Model for Causal Motion Segmentation in Moving
-    Camera Videos
+  title: It's Moving! A Probabilistic Model for Causal Motion Segmentation in Moving Camera Videos
   authors:
   - Bideau, Pia
   - Learned-Miller, Erik
@@ -330,6 +569,26 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - not-applicable
+  contexts:
+  - biological
+  - wildlife
+  method_families:
+  - deep-learning
+  description: Source paper for the small CAD camouflaged animal video benchmark.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/1604.00136
 - id: camdiff2023
   title: 'CamDiff: Camouflage Image Augmentation via Diffusion'
   authors: Luo et al.
@@ -344,13 +603,34 @@ papers:
   datasets:
   - cod10k
   bibtex_key: camdiff2023
-  notes: null
+  notes: Diffusion-based camouflage image augmentation study evaluating synthetic data for downstream
+    COD training.
   publication_status: published
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - generation
+  tasks:
+  - generation
+  modalities:
+  - rgb
+  supervision:
+  - optimization-based
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Diffusion-based camouflage image augmentation study evaluating synthetic data for downstream
+    COD training.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://www.sciopen.com/article/10.26599/AIR.2023.9150021
 - id: plantcamo2025
   title: 'PlantCamo: Plant Camouflage Detection'
   authors:
@@ -378,9 +658,28 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces a plant-focused camouflage benchmark with 58 categories.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2410.17598
 - id: phycamo2025
-  title: 'PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View
-    Physical Adversarial Attack'
+  title: 'PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial
+    Attack'
   authors: Zhang et al.
   venue: AAAI
   year: 2025
@@ -399,9 +698,28 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - generation
+  tasks:
+  - physical-adversarial
+  modalities:
+  - rgb
+  supervision:
+  - optimization-based
+  contexts:
+  - computer-vision
+  method_families:
+  - physical-adversarial
+  - contrastive-learning
+  description: Physical Adversarial resource.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1609/aaai.v39i10.33110
 - id: cam3d2025
-  title: 'CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via
-    Mamba-Enhanced Reconstruction'
+  title: 'CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction'
   authors:
   - Liu, Ziqi
   - Luo, Wei
@@ -425,6 +743,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - generation
+  tasks:
+  - physical-adversarial
+  modalities:
+  - rgb
+  supervision:
+  - optimization-based
+  contexts:
+  - computer-vision
+  method_families:
+  - physical-system
+  description: Physical Adversarial resource.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://www.mdpi.com/2079-9292/14/19/3868
 - id: wang2024depth
   title: Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes
   authors:
@@ -451,6 +788,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - depth
+  supervision:
+  - fully-supervised
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces the ACOD-12K RGB-D concealed crop benchmark.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html
 - id: mmcamobj2024
   title: 'MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios'
   authors:
@@ -480,9 +836,30 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - dataset
+  - vision-language
+  - multimodal-evaluation
+  modalities:
+  - multimodal
+  - vision-language
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Published at AAAI 2025; multimodal camouflage benchmark for LVLM evaluation.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1609/aaai.v39i7.32723
 - id: mcod2025
-  title: 'MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object
-    Detection'
+  title: 'MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection'
   authors:
   - Li, Yang
   - Xu, Tingfa
@@ -507,6 +884,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - dataset
+  modalities:
+  - multispectral
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces the first multispectral COD benchmark.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2509.15753
 - id: gao2025msvcod
   title: 'MSVCOD: A Large-Scale Multi-Scene Dataset for Video Camouflage Object Detection'
   authors:
@@ -529,17 +925,34 @@ papers:
   datasets:
   - msvcod
   bibtex_key: gao2025msvcod
-  notes: Introduces MSVCOD; dataset/code release is stated as future work in the arXiv
-    paper.
+  notes: Introduces MSVCOD; dataset/code release is stated as future work in the arXiv paper.
   publication_status: preprint
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - dataset
+  modalities:
+  - video
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces MSVCOD; dataset/code release is stated as future work in the arXiv paper.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2502.13859
 - id: liu2023mhnet
-  title: 'Extraordinary MHNet: Military High-Level Camouflage Object Detection Network
-    and Dataset'
+  title: 'Extraordinary MHNet: Military High-Level Camouflage Object Detection Network and Dataset'
   authors:
   - Liu, Maozhen
   - Di, Xiaoguang
@@ -561,6 +974,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  contexts:
+  - military
+  method_families:
+  - deep-learning
+  description: Introduces the MHCD2022 military high-level camouflage benchmark.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1016/j.neucom.2023.126466
 - id: talas2017military
   title: Cultural evolution of military camouflage
   authors:
@@ -577,13 +1009,39 @@ papers:
   code: null
   datasets: []
   bibtex_key: talas2017military
-  notes: null
+  notes: Comparative study of how military camouflage patterns evolve under perceptual, cultural, and
+    operational pressures.
   publication_status: published
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - military-camouflage
+  - historical-analysis
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - military
+  - biological
+  - cultural-history
+  method_families:
+  - comparative-analysis
+  - visual-ecology
+  description: Comparative study of how military camouflage patterns evolve under perceptual, cultural,
+    and operational pressures.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351
 - id: margolin2014
   title: How to Evaluate Foreground Maps?
   authors:
@@ -607,6 +1065,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Introduces weighted F-measure for foreground-map evaluation.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://openaccess.thecvf.com/content_cvpr_2014/html/Margolin_How_to_Evaluate_2014_CVPR_paper.html
 - id: fan2017smeasure
   title: 'Structure-measure: A New Way to Evaluate Foreground Maps'
   authors:
@@ -632,6 +1109,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Canonical structural metric used in COD benchmarks.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/1708.00786
 - id: fan2018emeasure
   title: Enhanced-alignment Measure for Binary Foreground Map Evaluation
   authors:
@@ -658,6 +1154,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Canonical enhanced-alignment metric used in COD benchmarks.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://www.ijcai.org/proceedings/2018/97
 - id: wang2004ssim
   title: 'Image Quality Assessment: From Error Visibility to Structural Similarity'
   authors:
@@ -682,6 +1197,25 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - generation
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Foundational perceptual quality metric used as a baseline in generation evaluation.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1109/TIP.2003.819861
 - id: heusel2017fid
   title: GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium
   authors:
@@ -707,6 +1241,26 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - generation
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Foundational GAN evaluation paper introducing the Fréchet Inception Distance for distribution-level
+    comparison.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://papers.nips.cc/paper/7240-gans-trained-by-a-two-time-scale-update-rule-converge-to-a-local-nash-equilibrium
 - id: zhang2018lpips
   title: The Unreasonable Effectiveness of Deep Features as a Perceptual Metric
   authors:
@@ -732,6 +1286,26 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - generation
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Foundational learned perceptual similarity study introducing LPIPS and validating deep
+    features against human judgments.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://openaccess.thecvf.com/content_cvpr_2018/html/Zhang_The_Unreasonable_Effectiveness_CVPR_2018_paper.html
 - id: perazzi2016davis
   title: A Benchmark Dataset and Evaluation Methodology for Video Object Segmentation
   authors:
@@ -751,14 +1325,32 @@ papers:
   code: https://github.com/fperazzi/davis
   datasets: []
   bibtex_key: perazzi2016davis
-  notes: Defines the DAVIS J and F evaluation protocol used by video segmentation
-    benchmarks.
+  notes: Defines the DAVIS J and F evaluation protocol used by video segmentation benchmarks.
   publication_status: published
   source_type: primary
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - not-applicable
+  contexts:
+  - computer-vision
+  method_families:
+  - deep-learning
+  description: Defines the DAVIS J and F evaluation protocol used by video segmentation benchmarks.
+  curated: false
+  curation_tier: catalog
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://openaccess.thecvf.com/content_cvpr_2016/html/Perazzi_A_Benchmark_Dataset_CVPR_2016_paper.html
 - id: troscianko2017quantifying
   title: 'Quantifying camouflage: how to predict detectability from appearance'
   authors:
@@ -782,6 +1374,28 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - camouflage-assessment
+  - human-detection
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - biological
+  - wildlife
+  method_families:
+  - human-study
+  - appearance-model
+  description: Bridges objective appearance measures and human detectability.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://link.springer.com/article/10.1186/s12862-016-0854-2
 - id: toet2020review
   title: Review of camouflage assessment techniques
   authors:
@@ -804,3 +1418,1645 @@ papers:
   last_verified: '2026-07-13'
   verified_by: maintainer
   license: null
+  resource_type: survey
+  pillars:
+  - evaluation
+  tasks:
+  - camouflage-assessment
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  contexts:
+  - military
+  method_families:
+  - survey
+  - human-study
+  - physical-measurement
+  description: Survey of subjective and objective camouflage assessment in military settings.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short
+- id: fan2021concealed
+  title: Concealed Object Detection
+  authors: Fan, Deng-Ping; Ji, Ge-Peng; Cheng, Ming-Ming; Shao, Ling
+  venue: IEEE TPAMI
+  year: 2022
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2102.10274
+  code: https://github.com/DengPingFan/SINet
+  datasets:
+  - cod10k
+  - camo
+  bibtex_key: null
+  notes: Systematic COD study introducing COD10K and the SINet search-identification baseline.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - cnn
+  - bio-inspired
+  - coarse-to-fine
+  contexts:
+  - computer-vision
+  - wildlife
+  description: Systematic COD study introducing COD10K and the SINet search-identification baseline.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2102.10274
+- id: mei2021pfnet
+  title: Camouflaged Object Segmentation with Distraction Mining
+  authors: Mei, Haiyang; Ji, Ge-Peng; Wei, Ziqi; Yang, Xin; Wei, Xiaopeng; Fan, Deng-Ping
+  venue: CVPR
+  year: 2021
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2104.10475
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: PFNet separates global positioning from progressive focus and distraction mining.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - cnn
+  - coarse-to-fine
+  - bio-inspired
+  contexts:
+  - computer-vision
+  description: PFNet separates global positioning from progressive focus and distraction mining.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2104.10475
+- id: pang2022zoomnet
+  title: 'Zoom In and Out: A Mixed-scale Triplet Network for Camouflaged Object Detection'
+  authors: Pang, Youwei; Zhao, Xiaoqi; Xiang, Tian-Zhu; Zhang, Lihe; Lu, Huchuan
+  venue: CVPR
+  year: 2022
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2203.02688
+  code: https://github.com/lartpang/ZoomNet
+  datasets: []
+  bibtex_key: null
+  notes: Representative mixed-scale COD model with explicit zoom-in/zoom-out processing.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - cnn
+  - multi-scale
+  contexts:
+  - computer-vision
+  description: Representative mixed-scale COD model with explicit zoom-in/zoom-out processing.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2203.02688
+- id: huang2023fspnet
+  title: Feature Shrinkage Pyramid for Camouflaged Object Detection with Transformers
+  authors: Huang, Zhou; Dai, Hang; Xiang, Tian-Zhu; Wang, Shuo; Chen, Huai-Xin; Qin, Jie; Xiong, Huan
+  venue: CVPR
+  year: 2023
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2303.14816
+  code: https://github.com/ZhouHuang23/FSPNet
+  datasets: []
+  bibtex_key: null
+  notes: Transformer COD architecture combining locality enhancement and a shrinkage-pyramid decoder.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - transformer
+  - multi-scale
+  contexts:
+  - computer-vision
+  description: Transformer COD architecture combining locality enhancement and a shrinkage-pyramid decoder.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2303.14816
+- id: xiao2024hcm
+  title: Concealed Object Segmentation with Hierarchical Coherence Modeling
+  authors: Xiao, Fengyang; Zhang, Pan; He, Chunming; Hu, Runze; Liu, Yutao
+  venue: arXiv
+  year: 2024
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2401.11767
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Cross-task COS model emphasizing intra-stage and cross-stage feature coherence.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - transformer
+  - coherence-modeling
+  contexts:
+  - computer-vision
+  description: Cross-task COS model emphasizing intra-stage and cross-stage feature coherence.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2401.11767
+- id: sayem2026cod10kc
+  title: 'COD10K-C: Benchmarking Robustness of Camouflaged Object Detection Under Natural Image Corruptions'
+  authors: Sayem, Arafat Hossain
+  venue: arXiv
+  year: 2026
+  pillar: evaluation
+  domain: intelligent
+  perspective: ai
+  task: dataset
+  paper: https://arxiv.org/abs/2606.02603
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Recent corruption-robustness benchmark derived from COD10K; release status requires follow-up.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  - detection
+  tasks:
+  - robustness
+  - dataset
+  - image-cod
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - benchmark
+  - robustness
+  contexts:
+  - computer-vision
+  description: Recent corruption-robustness benchmark derived from COD10K; release status requires follow-up.
+  curated: false
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2606.02603
+- id: lamdouar2020motion
+  title: 'Betrayed by Motion: Camouflaged Object Discovery via Motion Segmentation'
+  authors: Lamdouar, Hala; Yang, Charig; Xie, Weidi; Zisserman, Andrew
+  venue: ACCV
+  year: 2020
+  pillar: detection
+  domain: intelligent
+  perspective: nature
+  task: video-cod
+  paper: https://arxiv.org/abs/2011.11630
+  code: null
+  datasets:
+  - moca-mask
+  bibtex_key: null
+  notes: Foundational motion-driven video camouflage discovery work and source of the MoCA lineage.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - self-supervised
+  method_families:
+  - motion
+  - registration
+  - memory
+  contexts:
+  - wildlife
+  - computer-vision
+  description: Foundational motion-driven video camouflage discovery work and source of the MoCA lineage.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2011.11630
+- id: zhou2025camsam2
+  title: 'CamSAM2: Segment Anything Accurately in Camouflaged Videos'
+  authors: Zhou, Yuli; Sun, Guolei; Li, Yawei; Fu, Yuqian; Benini, Luca; Konukoglu, Ender
+  venue: NeurIPS
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: video-cod
+  paper: https://arxiv.org/abs/2503.19730
+  code: https://github.com/zhoustan/CamSAM2
+  datasets:
+  - moca-mask
+  bibtex_key: null
+  notes: SAM2 adaptation for camouflaged videos using object-aware fusion and prototype memory.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  supervision:
+  - prompt-based
+  - fully-supervised
+  method_families:
+  - foundation-model
+  - memory
+  - prompting
+  contexts:
+  - computer-vision
+  description: SAM2 adaptation for camouflaged videos using object-aware fusion and prototype memory.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2503.19730
+- id: guo2025zsvcos
+  title: 'ZS-VCOS: Zero-Shot Outperforms Supervised Video Camouflaged Object Segmentation'
+  authors: Guo, Wenqi; Du, Shan
+  venue: arXiv
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: video-cod
+  paper: https://arxiv.org/abs/2505.01431
+  code: https://github.com/weathon/vcos
+  datasets:
+  - moca-mask
+  bibtex_key: null
+  notes: Zero-shot video pipeline combining optical flow, a vision-language model, and SAM2.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - video-cod
+  modalities:
+  - video
+  - vision-language
+  supervision:
+  - zero-shot
+  - training-free
+  method_families:
+  - foundation-model
+  - vision-language
+  - motion
+  contexts:
+  - computer-vision
+  description: Zero-shot video pipeline combining optical flow, a vision-language model, and SAM2.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2505.01431
+- id: guo2024cot
+  title: 'Camouflaged Object Tracking: A Benchmark'
+  authors: Guo, Xiaoyu; Zhong, Pengzhi; Zhang, Hao; Huang, Defeng; Shao, Huikai; Zhao, Qijun; Li, Shuiwang
+  venue: arXiv
+  year: 2024
+  pillar: evaluation
+  domain: intelligent
+  perspective: ai
+  task: application
+  paper: https://arxiv.org/abs/2408.13877
+  code: https://github.com/openat25/HIPTrack-MLS
+  datasets:
+  - cotd
+  bibtex_key: null
+  notes: Introduces COTD and evaluates general trackers in camouflaged-object sequences.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  - detection
+  tasks:
+  - tracking
+  - dataset
+  modalities:
+  - video
+  supervision:
+  - fully-supervised
+  method_families:
+  - tracking
+  - benchmark
+  contexts:
+  - computer-vision
+  description: Introduces COTD and evaluates general trackers in camouflaged-object sequences.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2408.13877
+- id: yao2026camotion
+  title: 'CAMotion: A High-Quality Benchmark for Camouflaged Moving Object Detection in the Wild'
+  authors: Yao, Siyuan; Sun, Hao; Yu, Ruiqi; Jiang, Xiwei; Ren, Wenqi; Cao, Xiaochun
+  venue: arXiv
+  year: 2026
+  pillar: evaluation
+  domain: intelligent
+  perspective: nature
+  task: dataset
+  paper: https://arxiv.org/abs/2604.08287
+  code: https://www.camotion.focuslab.net.cn
+  datasets:
+  - camotion
+  bibtex_key: null
+  notes: Recent wild-video benchmark with motion and boundary challenge attributes.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  - detection
+  tasks:
+  - video-cod
+  - dataset
+  modalities:
+  - video
+  supervision:
+  - not-applicable
+  method_families:
+  - benchmark
+  contexts:
+  - wildlife
+  - computer-vision
+  description: Recent wild-video benchmark with motion and boundary challenge attributes.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2604.08287
+- id: pei2022osformer
+  title: 'OSFormer: One-Stage Camouflaged Instance Segmentation with Transformers'
+  authors: Pei, Jialun; Cheng, Tianyang; Fan, Deng-Ping; Tang, He; Chen, Chuanbo; Van Gool, Luc
+  venue: ECCV
+  year: 2022
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: instance-cod
+  paper: https://arxiv.org/abs/2207.02255
+  code: https://github.com/PJLallen/OSFormer
+  datasets: []
+  bibtex_key: null
+  notes: Representative one-stage transformer framework for camouflaged instance segmentation.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - instance-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - transformer
+  - instance-segmentation
+  contexts:
+  - computer-vision
+  description: Representative one-stage transformer framework for camouflaged instance segmentation.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2207.02255
+- id: dong2023uqformer
+  title: A Unified Query-based Paradigm for Camouflaged Instance Segmentation
+  authors: Dong, Bo; Pei, Jialun; Gao, Rongrong; Xiang, Tian-Zhu; Wang, Shuo; Xiong, Huan
+  venue: arXiv
+  year: 2023
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: instance-cod
+  paper: https://arxiv.org/abs/2308.07392
+  code: https://github.com/dongbo811/UQFormer
+  datasets: []
+  bibtex_key: null
+  notes: Query-based joint instance-mask and boundary modeling for CIS.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - instance-cod
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - transformer
+  - query-based
+  - instance-segmentation
+  contexts:
+  - computer-vision
+  description: Query-based joint instance-mask and boundary modeling for CIS.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2308.07392
+- id: xin2025rcod
+  title: 'Toward Realistic Camouflaged Object Detection: Benchmarks and Method'
+  authors: Xin, Zhimeng; Wu, Tianxu; Chen, Shiming; Ye, Shuo; Xie, Zijing; Zou, Yixiong; You, Xinge; Guo,
+    Yufei
+  venue: arXiv
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: application
+  paper: https://arxiv.org/abs/2501.07297
+  code: https://github.com/zhimengXin/RCOD
+  datasets:
+  - rcod-benchmark
+  bibtex_key: null
+  notes: Defines bounding-box-oriented realistic COD and releases converted detection benchmarks.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - bbox-rcod
+  - dataset
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - foundation-model
+  - object-detection
+  contexts:
+  - computer-vision
+  description: Defines bounding-box-oriented realistic COD and releases converted detection benchmarks.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2501.07297
+- id: vu2023ovdiffcis
+  title: Leveraging Open-Vocabulary Diffusion to Camouflaged Instance Segmentation
+  authors: Vu, Tuan-Anh; Nguyen, Duc Thanh; Guo, Qing; Hua, Binh-Son; Chung, Nhat Minh; Tsang, Ivor W.;
+    Yeung, Sai-Kit
+  venue: arXiv
+  year: 2023
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: instance-cod
+  paper: https://arxiv.org/abs/2312.17505
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Explores open-vocabulary diffusion priors for camouflaged instance segmentation.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - instance-cod
+  - open-vocabulary
+  modalities:
+  - rgb
+  - vision-language
+  supervision:
+  - zero-shot
+  method_families:
+  - diffusion
+  - open-vocabulary
+  - instance-segmentation
+  contexts:
+  - computer-vision
+  description: Explores open-vocabulary diffusion priors for camouflaged instance segmentation.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2312.17505
+- id: lai2024camoteacher
+  title: 'CamoTeacher: Dual-Rotation Consistency Learning for Semi-Supervised Camouflaged Object Detection'
+  authors: Lai, Xunfa; Yang, Zhiyu; Hu, Jie; Zhang, Shengchuan; Cao, Liujuan; Jiang, Guannan; Wang, Zhiyu;
+    Zhang, Songan; Ji, Rongrong
+  venue: arXiv
+  year: 2024
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2408.08050
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Semi-supervised teacher-student COD with pixel- and instance-level rotation consistency.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - semi-supervised-cod
+  modalities:
+  - rgb
+  supervision:
+  - semi-supervised
+  method_families:
+  - teacher-student
+  - consistency-learning
+  contexts:
+  - computer-vision
+  description: Semi-supervised teacher-student COD with pixel- and instance-level rotation consistency.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2408.08050
+- id: he2025see
+  title: Segment Concealed Objects with Incomplete Supervision
+  authors: He, Chunming; Li, Kai; Zhang, Yachao; Yang, Ziyun; Pang, Youwei; Tang, Longxiang; Fang, Chengyu;
+    Zhang, Yulun; Kong, Linghe; Li, Xiu; Farsiu, Sina
+  venue: arXiv
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2506.08955
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Unified weak/semi-supervised COS framework using SAM-generated and quality-controlled pseudo-labels.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - weakly-supervised-cod
+  - semi-supervised-cod
+  modalities:
+  - rgb
+  supervision:
+  - weakly-supervised
+  - semi-supervised
+  method_families:
+  - foundation-model
+  - teacher-student
+  - pseudo-labeling
+  contexts:
+  - computer-vision
+  description: Unified weak/semi-supervised COS framework using SAM-generated and quality-controlled pseudo-labels.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2506.08955
+- id: mok2025hpgt
+  title: A Holistically Point-guided Text Framework for Weakly-Supervised Camouflaged Object Detection
+  authors: Mok, Tsui Qin; Gao, Shuyong; Xing, Haozhe; He, Miaoyang; Wang, Yan; Zhang, Wenqiang
+  venue: arXiv
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2501.06038
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Point- and text-guided weak supervision for COD.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - weakly-supervised-cod
+  - vision-language
+  modalities:
+  - rgb
+  - vision-language
+  supervision:
+  - weakly-supervised
+  - point-supervised
+  method_families:
+  - vision-language
+  - prompting
+  - weak-supervision
+  contexts:
+  - computer-vision
+  description: Point- and text-guided weak supervision for COD.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2501.06038
+- id: yan2025ucoddpl
+  title: 'UCOD-DPL: Unsupervised Camouflaged Object Detection via Dynamic Pseudo-label Learning'
+  authors: Yan, Weiqi; Chen, Lvhai; Kou, Huaijia; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan
+  venue: arXiv
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2506.07087
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Unsupervised teacher-student COD with adaptive pseudo-labeling and adversarial decoding.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - unsupervised-cod
+  modalities:
+  - rgb
+  supervision:
+  - unsupervised
+  method_families:
+  - teacher-student
+  - pseudo-labeling
+  - adversarial-learning
+  contexts:
+  - computer-vision
+  description: Unsupervised teacher-student COD with adaptive pseudo-labeling and adversarial decoding.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2506.07087
+- id: yan2025scout
+  title: 'SCOUT: Semi-supervised Camouflaged Object Detection by Utilizing Text and Adaptive Data Selection'
+  authors: Yan, Weiqi; Chen, Lvhai; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan
+  venue: arXiv
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2508.17843
+  code: https://github.com/Heartfirey/SCOUT
+  datasets:
+  - reftextcod
+  bibtex_key: null
+  notes: Semi-supervised COD with adaptive data selection and text-visual interaction.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - semi-supervised-cod
+  - vision-language
+  modalities:
+  - rgb
+  - vision-language
+  supervision:
+  - semi-supervised
+  method_families:
+  - vision-language
+  - active-data-selection
+  contexts:
+  - computer-vision
+  description: Semi-supervised COD with adaptive data selection and text-visual interaction.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2508.17843
+- id: ni2026fclcod
+  title: 'FCL-COD: Weakly Supervised Camouflaged Object Detection with Frequency-aware and Contrastive
+    Learning'
+  authors: Ni, Jingchen; Zhang, Quan; Jiang, Dan; Lv, Keyu; Zhang, Ke; Yuan, Chun
+  venue: arXiv
+  year: 2026
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2603.22969
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - weakly-supervised-cod
+  modalities:
+  - rgb
+  supervision:
+  - weakly-supervised
+  method_families:
+  - foundation-model
+  - parameter-efficient-tuning
+  - frequency-domain
+  contexts:
+  - computer-vision
+  description: Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2603.22969
+- id: lei2025camf
+  title: Towards Real Zero-Shot Camouflaged Object Segmentation without Camouflaged Annotations
+  authors: Lei, Cheng; Fan, Jie; Li, Xinran; Xiang, Tian-Zhu; Li, Ao; Zhu, Ce; Zhang, Le
+  venue: IEEE TPAMI
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: open-vocab-cos
+  paper: https://arxiv.org/abs/2410.16953
+  code: https://github.com/R-LEI360725/ZSCOS-CaMF
+  datasets: []
+  bibtex_key: null
+  notes: Real zero-shot COS framework combining masked-image pretraining, MLLM semantics, and PEFT.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - zero-shot-cod
+  - open-vocabulary
+  - image-cod
+  modalities:
+  - rgb
+  - vision-language
+  supervision:
+  - zero-shot
+  method_families:
+  - foundation-model
+  - vision-language
+  - parameter-efficient-tuning
+  contexts:
+  - computer-vision
+  description: Real zero-shot COS framework combining masked-image pretraining, MLLM semantics, and PEFT.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2410.16953
+- id: tang2023mmcpf
+  title: 'Chain of Visual Perception: Harnessing Multimodal Large Language Models for Zero-shot Camouflaged
+    Object Detection'
+  authors: Tang, Lv; Jiang, Peng-Tao; Shen, Zhihao; Zhang, Hao; Chen, Jinwei; Li, Bo
+  venue: arXiv
+  year: 2023
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: foundation-model
+  paper: https://arxiv.org/abs/2311.11273
+  code: https://github.com/luckybird1994/MMCPF
+  datasets: []
+  bibtex_key: null
+  notes: Early MLLM-centered zero-shot camouflage perception pipeline using language and visual cues.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - zero-shot-cod
+  - vision-language
+  - video-cod
+  - image-cod
+  modalities:
+  - rgb
+  - video
+  - vision-language
+  supervision:
+  - zero-shot
+  - training-free
+  method_families:
+  - vision-language
+  - foundation-model
+  - chain-of-thought
+  contexts:
+  - computer-vision
+  description: Early MLLM-centered zero-shot camouflage perception pipeline using language and visual
+    cues.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2311.11273
+- id: liang2026sddf
+  title: 'SDDF: Specificity-Driven Dynamic Focusing for Open-Vocabulary Camouflaged Object Detection'
+  authors: Liang, Jiaming; Zhan, Yifeng; Liu, Chunlin; Zheng, Weihua; Peng, Bingye; Liang, Qiwei; Cai,
+    Boyang; Mai, Xiaochun; Nie, Qiang
+  venue: arXiv
+  year: 2026
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: open-vocab-cos
+  paper: https://arxiv.org/abs/2603.26109
+  code: null
+  datasets:
+  - ovcod-d
+  bibtex_key: null
+  notes: Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.
+  publication_status: preprint
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - open-vocabulary
+  - bbox-rcod
+  - dataset
+  modalities:
+  - rgb
+  - vision-language
+  supervision:
+  - zero-shot
+  - fully-supervised
+  method_families:
+  - open-vocabulary
+  - vision-language
+  - object-detection
+  contexts:
+  - computer-vision
+  description: Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2603.26109
+- id: zhang2025mmcsbench
+  title: 'MMCSBench: A Fine-Grained Benchmark for Large Vision-Language Models in Camouflage Scenes'
+  authors: Zhang, Jin; Zhang, Ruiheng; Cao, Zhe; Chen, Kaizheng
+  venue: NeurIPS
+  year: 2025
+  pillar: evaluation
+  domain: intelligent
+  perspective: ai
+  task: dataset
+  paper: https://neurips.cc/virtual/2025/poster/121542
+  code: null
+  datasets:
+  - mmcsbench
+  bibtex_key: null
+  notes: Fine-grained benchmark for evaluating LVLM reasoning and perception in camouflage scenes.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  tasks:
+  - vision-language
+  - multimodal-evaluation
+  - dataset
+  modalities:
+  - multimodal
+  - vision-language
+  supervision:
+  - not-applicable
+  method_families:
+  - benchmark
+  - vision-language
+  contexts:
+  - computer-vision
+  description: Fine-grained benchmark for evaluating LVLM reasoning and perception in camouflage scenes.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://neurips.cc/virtual/2025/poster/121542
+- id: zhou2025uscnet
+  title: Rethinking Detecting Salient and Camouflaged Objects in Unconstrained Scenes
+  authors: Zhou, Zhangjun; Li, Yiping; Zhong, Chunlin; Huang, Jianuo; Pei, Jialun; Li, Hua; Tang, He
+  venue: ICCV
+  year: 2025
+  pillar: detection
+  domain: intelligent
+  perspective: ai
+  task: image-cod
+  paper: https://arxiv.org/abs/2412.10943
+  code: https://github.com/ssecv/USCNet
+  datasets:
+  - usc12k
+  bibtex_key: null
+  notes: Unifies salient and camouflaged object segmentation in unconstrained scenes.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - detection
+  tasks:
+  - image-cod
+  - universal-segmentation
+  - dataset
+  modalities:
+  - rgb
+  supervision:
+  - fully-supervised
+  method_families:
+  - universal-segmentation
+  - transformer
+  contexts:
+  - computer-vision
+  description: Unifies salient and camouflaged object segmentation in unconstrained scenes.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2412.10943
+- id: huang2019upc
+  title: Universal Physical Camouflage Attacks on Object Detectors
+  authors: Huang, Lifeng; Gao, Chengying; Zhou, Yuyin; Xie, Cihang; Yuille, Alan; Zou, Changqing; Liu,
+    Ning
+  venue: CVPR
+  year: 2020
+  pillar: generation
+  domain: physical
+  perspective: ai
+  task: physical-adversarial
+  paper: https://arxiv.org/abs/1909.04326
+  code: https://mesunhlf.github.io/index_physical.html
+  datasets: []
+  bibtex_key: null
+  notes: Foundational category-level physical camouflage attack and controlled AttackScenes benchmark.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - generation
+  tasks:
+  - physical-adversarial
+  - generation
+  modalities:
+  - rgb
+  supervision:
+  - optimization-based
+  method_families:
+  - physical-adversarial
+  - rendering
+  - robust-optimization
+  contexts:
+  - computer-vision
+  - physical-system
+  description: Foundational category-level physical camouflage attack and controlled AttackScenes benchmark.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/1909.04326
+- id: lamdouar2023makingbreaking
+  title: The Making and Breaking of Camouflage
+  authors: Lamdouar, Hala; Xie, Weidi; Zisserman, Andrew
+  venue: ICCV
+  year: 2023
+  pillar: evaluation
+  domain: intelligent
+  perspective: nature
+  task: generation
+  paper: https://arxiv.org/abs/2309.03899
+  code: null
+  datasets:
+  - moca-mask
+  bibtex_key: null
+  notes: Links camouflage-effectiveness scores, synthetic generation, and video segmentation.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: paper
+  pillars:
+  - evaluation
+  - generation
+  - detection
+  tasks:
+  - camouflage-assessment
+  - generation
+  - video-cod
+  modalities:
+  - rgb
+  - video
+  supervision:
+  - fully-supervised
+  - generative
+  method_families:
+  - assessment
+  - generation
+  - transformer
+  contexts:
+  - wildlife
+  - computer-vision
+  description: Links camouflage-effectiveness scores, synthetic generation, and video segmentation.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://arxiv.org/abs/2309.03899
+- id: cott1940adaptive
+  title: Adaptive Coloration in Animals
+  authors: Cott, Hugh B.
+  venue: Oxford University Press
+  year: 1940
+  pillar: generation
+  domain: physical
+  perspective: nature
+  task: application
+  paper: https://archive.org/details/adaptivecolorati00cott
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Foundational natural-history synthesis of concealment, disguise, disruption, and display.
+  publication_status: published
+  source_type: official-project
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: book
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - biological-camouflage
+  - historical-analysis
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - natural-history
+  - visual-ecology
+  contexts:
+  - biological
+  - wildlife
+  - military
+  description: Foundational natural-history synthesis of concealment, disguise, disruption, and display.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://archive.org/details/adaptivecolorati00cott
+- id: stevens2011animal
+  title: 'Animal Camouflage: Mechanisms and Function'
+  authors: Stevens, Martin; Merilaita, Sami (eds.)
+  venue: Cambridge University Press
+  year: 2011
+  pillar: evaluation
+  domain: physical
+  perspective: nature
+  task: survey
+  paper: https://www.cambridge.org/core/books/animal-camouflage/
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal
+    camouflage.
+  publication_status: published
+  source_type: official-project
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: book
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - biological-camouflage
+  - human-detection
+  - survey
+  modalities:
+  - rgb
+  - multispectral
+  supervision:
+  - not-applicable
+  method_families:
+  - visual-ecology
+  - behavioral-experiment
+  - survey
+  contexts:
+  - biological
+  - wildlife
+  description: Authoritative edited volume on mechanisms, evolution, perception, and experimental study
+    of animal camouflage.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://www.cambridge.org/core/books/animal-camouflage/
+- id: cuthill2019camouflage
+  title: Camouflage
+  authors: Cuthill, Innes C.
+  venue: Journal of Zoology
+  year: 2019
+  pillar: evaluation
+  domain: physical
+  perspective: nature
+  task: survey
+  paper: https://doi.org/10.1111/jzo.12682
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: survey
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - biological-camouflage
+  - survey
+  modalities:
+  - rgb
+  - multispectral
+  supervision:
+  - not-applicable
+  method_families:
+  - visual-ecology
+  - survey
+  contexts:
+  - biological
+  - wildlife
+  description: Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://doi.org/10.1111/jzo.12682
+- id: thayer1909concealing
+  title: Concealing-Coloration in the Animal Kingdom
+  authors: Thayer, Gerald H.; Thayer, Abbott H.
+  venue: Macmillan
+  year: 1909
+  pillar: generation
+  domain: physical
+  perspective: art
+  task: application
+  paper: https://archive.org/details/concealingcolora00thay
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Historically influential, controversial account of countershading and disruptive coloration.
+  publication_status: published
+  source_type: official-project
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: historical-source
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - biological-camouflage
+  - art-design
+  - historical-analysis
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - natural-history
+  - art-theory
+  contexts:
+  - biological
+  - art-design
+  - military
+  - cultural-history
+  description: Historically influential, controversial account of countershading and disruptive coloration.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://archive.org/details/concealingcolora00thay
+- id: forbes2009dazzled
+  title: 'Dazzled and Deceived: Mimicry and Camouflage'
+  authors: Forbes, Peter
+  venue: Yale University Press
+  year: 2009
+  pillar: evaluation
+  domain: physical
+  perspective: nature
+  task: survey
+  paper: https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.
+  publication_status: published
+  source_type: official-project
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: book
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - biological-camouflage
+  - military-camouflage
+  - historical-analysis
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - history-of-science
+  - survey
+  contexts:
+  - biological
+  - military
+  - cultural-history
+  description: Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/
+- id: behrens2002falsecolors
+  title: 'False Colors: Art, Design and Modern Camouflage'
+  authors: Behrens, Roy R.
+  venue: Bobolink Books
+  year: 2002
+  pillar: generation
+  domain: physical
+  perspective: art
+  task: application
+  paper: https://works.bepress.com/roy-behrens/
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Core art-and-design history of modern camouflage and its Gestalt and military connections.
+  publication_status: published
+  source_type: official-project
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: book
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - art-design
+  - military-camouflage
+  - historical-analysis
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - art-history
+  - design-history
+  - gestalt
+  contexts:
+  - art-design
+  - military
+  - cultural-history
+  description: Core art-and-design history of modern camouflage and its Gestalt and military connections.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://works.bepress.com/roy-behrens/
+- id: behrens2009camoupedia
+  title: 'Camoupedia: A Compendium of Research on Art, Architecture, and Camouflage'
+  authors: Behrens, Roy R.
+  venue: Bobolink Books
+  year: 2009
+  pillar: evaluation
+  domain: physical
+  perspective: art
+  task: survey
+  paper: https://camoupedia.blogspot.com/
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Reference compendium covering art, architecture, perception, and military camouflage history.
+  publication_status: published
+  source_type: official-project
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: book
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - art-design
+  - military-camouflage
+  - historical-analysis
+  - survey
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - reference-work
+  - art-history
+  contexts:
+  - art-design
+  - military
+  - cultural-history
+  description: Reference compendium covering art, architecture, perception, and military camouflage history.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://camoupedia.blogspot.com/
+- id: hartcup1980camouflage
+  title: 'Camouflage: A History of Concealment and Deception in War'
+  authors: Hartcup, Guy
+  venue: David & Charles
+  year: 1980
+  pillar: evaluation
+  domain: physical
+  perspective: war
+  task: application
+  paper: https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Military history of concealment and deception technologies through the twentieth century.
+  publication_status: published
+  source_type: secondary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: book
+  pillars:
+  - generation
+  - evaluation
+  tasks:
+  - military-camouflage
+  - historical-analysis
+  modalities:
+  - rgb
+  supervision:
+  - not-applicable
+  method_families:
+  - military-history
+  contexts:
+  - military
+  - cultural-history
+  description: Military history of concealment and deception technologies through the twentieth century.
+  curated: true
+  curation_tier: core
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup
+- id: nist2023aml
+  title: 'Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations'
+  authors: NIST
+  venue: NIST AI 100-2e2023
+  year: 2023
+  pillar: evaluation
+  domain: digital
+  perspective: ai
+  task: digital-adversarial
+  paper: https://csrc.nist.gov/pubs/ai/100/2/e2023/final
+  code: null
+  datasets: []
+  bibtex_key: null
+  notes: Authoritative terminology standard for adversarial-ML threats and mitigations used to bound digital/physical
+    camouflage claims.
+  publication_status: published
+  source_type: primary
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license: null
+  resource_type: standard
+  pillars:
+  - generation
+  - detection
+  - evaluation
+  tasks:
+  - digital-adversarial
+  - physical-adversarial
+  - standard
+  modalities:
+  - multimodal
+  supervision:
+  - not-applicable
+  method_families:
+  - standard
+  - risk-taxonomy
+  contexts:
+  - computer-vision
+  - ai-safety
+  description: Authoritative terminology standard for adversarial-ML threats and mitigations used to bound
+    digital/physical camouflage claims.
+  curated: true
+  curation_tier: recommended
+  date_added: '2026-07-13'
+  discovery_status: accepted
+  canonical_url: https://csrc.nist.gov/pubs/ai/100/2/e2023/final

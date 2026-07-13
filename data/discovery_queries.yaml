@@ -1,0 +1,83 @@
+schema_version: '1.0'
+policy: Candidate discovery only. No query may write directly to the accepted catalog.
+last_reviewed: '2026-07-13'
+pr_smoke_queries:
+- image-cod
+- biology
+sources:
+  arxiv:
+    endpoint: https://export.arxiv.org/api/query
+    max_results_per_query: 25
+    polite_delay_seconds: 3
+  crossref:
+    endpoint: https://api.crossref.org/works
+    max_enrichment_requests: 20
+queries:
+- id: image-cod
+  source: arxiv
+  query: all:"camouflaged object detection" OR all:"concealed object segmentation"
+  tags:
+  - image-cod
+- id: video-cod
+  source: arxiv
+  query: all:"video camouflaged object" OR all:"camouflaged moving object"
+  tags:
+  - video-cod
+- id: instance-box
+  source: arxiv
+  query: all:"camouflaged instance segmentation" OR all:"realistic camouflaged object detection"
+  tags:
+  - instance-cod
+  - bbox-rcod
+- id: incomplete-supervision
+  source: arxiv
+  query: (all:camouflaged OR all:concealed) AND (all:"weakly supervised" OR all:"semi-supervised" OR all:unsupervised)
+  tags:
+  - weakly-supervised-cod
+  - semi-supervised-cod
+  - unsupervised-cod
+- id: zero-open
+  source: arxiv
+  query: (all:camouflaged OR all:concealed) AND (all:"zero-shot" OR all:"open-vocabulary")
+  tags:
+  - zero-shot-cod
+  - open-vocabulary
+- id: foundation-vlm
+  source: arxiv
+  query: (all:camouflaged OR all:concealed) AND (all:SAM OR all:"vision-language" OR all:MLLM)
+  tags:
+  - foundation-model
+  - vision-language
+- id: spectral
+  source: arxiv
+  query: (all:camouflaged OR all:camouflage) AND (all:multispectral OR all:hyperspectral OR all:polarization
+    OR all:thermal)
+  tags:
+  - multimodal
+- id: generation
+  source: arxiv
+  query: all:"camouflage generation" OR all:"adversarial camouflage"
+  tags:
+  - generation
+  - physical-adversarial
+- id: assessment
+  source: arxiv
+  query: (all:camouflage OR all:camouflaged) AND (all:assessment OR all:detectability OR all:"visual search")
+  tags:
+  - camouflage-assessment
+- id: tracking
+  source: arxiv
+  query: all:"camouflaged object tracking"
+  tags:
+  - tracking
+- id: biology
+  source: crossref
+  query: animal camouflage visual ecology detectability
+  tags:
+  - biological-camouflage
+- id: military-art
+  source: crossref
+  query: military camouflage art design assessment
+  tags:
+  - military-camouflage
+  - art-design

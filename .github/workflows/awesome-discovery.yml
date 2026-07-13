@@ -1,0 +1,117 @@
+name: awesome candidate discovery
+
+# PR smoke verifies both sources and the candidate-quality filter without writing accepted metadata.
+on:
+  pull_request:
+    branches: [main, agent/project-audit-remediation]
+    paths:
+      - "data/discovery_queries.yaml"
+      - "data/papers.yaml"
+      - "scripts/discover_awesome.py"
+      - ".github/workflows/awesome-discovery.yml"
+  schedule:
+    - cron: "23 3 * * 2"
+  workflow_dispatch:
+    inputs:
+      max_results:
+        description: "Maximum candidates retrieved per configured query"
+        required: false
+        default: "15"
+      min_year:
+        description: "Ignore records older than this year"
+        required: false
+        default: "2024"
+
+concurrency:
+  group: awesome-discovery-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install discovery dependency
+        run: pip install pyyaml
+
+      - name: Self-test parser and deduplication
+        run: python scripts/discover_awesome.py --self-test
+
+      - name: Resolve scan limits
+        id: limits
+        shell: bash
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            echo "max_results=2" >> "$GITHUB_OUTPUT"
+            echo "min_year=2025" >> "$GITHUB_OUTPUT"
+            echo "selection=--query-id image-cod --query-id biology" >> "$GITHUB_OUTPUT"
+            echo "required_sources=--require-source arxiv --require-source crossref" >> "$GITHUB_OUTPUT"
+          else
+            echo "max_results=${{ inputs.max_results || '15' }}" >> "$GITHUB_OUTPUT"
+            echo "min_year=${{ inputs.min_year || '2024' }}" >> "$GITHUB_OUTPUT"
+            echo "selection=" >> "$GITHUB_OUTPUT"
+            echo "required_sources=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Discover candidates
+        run: |
+          python scripts/discover_awesome.py \
+            --max-results "${{ steps.limits.outputs.max_results }}" \
+            --min-year "${{ steps.limits.outputs.min_year }}" \
+            ${{ steps.limits.outputs.selection }} \
+            ${{ steps.limits.outputs.required_sources }} \
+            --output-json awesome_candidates.json \
+            --output-markdown awesome_candidates.md
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: awesome-candidates-${{ github.run_id }}
+          path: |
+            awesome_candidates.json
+            awesome_candidates.md
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Create candidate triage issue
+        if: github.event_name != 'pull_request' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('awesome_candidates.md', 'utf8');
+            const date = new Date().toISOString().slice(0, 10);
+            const labelName = 'awesome:triage';
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: labelName,
+              });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: labelName,
+                color: '6f42c1',
+                description: 'Automated discovery candidates requiring human Awesome review',
+              });
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Awesome candidate triage — ${date} — run ${context.runId}`,
+              body,
+              labels: [labelName],
+            });

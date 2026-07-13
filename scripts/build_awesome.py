@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Build generated Markdown surfaces from ``data/*.yaml``."""
+"""Build the curated Awesome list and the complete CamoGED research catalog.
+
+The accepted metadata lives in ``data/papers.yaml`` and ``data/datasets.yaml``.
+``data/awesome.yaml`` controls only human curation and presentation; automated
+discovery never writes directly to accepted metadata.
+"""
 
 from __future__ import annotations
 
+from collections import Counter
 from pathlib import Path
+from typing import Iterable
 
 import yaml
 
@@ -12,358 +19,391 @@ DATA = ROOT / "data"
 AWESOME_OUT = ROOT / "awesome" / "README.md"
 WEB = ROOT / "web"
 
-PILLAR_ORDER = ["generation", "detection", "evaluation"]
-PILLAR_TITLES = {
-    "generation": "Generation",
-    "detection": "Detection",
-    "evaluation": "Evaluation",
-}
-
 
 def load_yaml(name: str) -> dict:
-    return yaml.safe_load((DATA / name).read_text(encoding="utf-8"))
+    return yaml.safe_load((DATA / name).read_text(encoding="utf-8")) or {}
 
 
-def load_data() -> tuple[list[dict], list[dict], list[dict]]:
-    papers = load_yaml("papers.yaml")["papers"]
-    datasets = load_yaml("datasets.yaml")["datasets"]
-    leaderboard = load_yaml("leaderboard.yaml")["leaderboard"]
-    return papers, datasets, leaderboard
+def load_data() -> tuple[list[dict], list[dict], list[dict], dict]:
+    papers = load_yaml("papers.yaml").get("papers", [])
+    datasets = load_yaml("datasets.yaml").get("datasets", [])
+    results = load_yaml("leaderboard.yaml").get("leaderboard", [])
+    config = load_yaml("awesome.yaml")
+    return papers, datasets, results, config
 
 
-def format_authors(authors: str | list[str]) -> str:
-    if isinstance(authors, list):
-        return ", ".join(authors)
-    return str(authors)
+def as_list(value: object) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    return [str(value)]
 
 
-def format_link(label: str, url: str | None) -> str:
-    if not url:
-        return ""
-    return f" [{label}]({url})"
+def authors(value: str | list[str]) -> str:
+    return ", ".join(value) if isinstance(value, list) else str(value)
 
 
-def format_optional_url(url: str | None, label: str) -> str:
-    if not url:
-        return ""
-    return f"[{label}]({url})"
+def link(label: str, url: str | None) -> str:
+    return f"[{label}]({url})" if url else ""
 
 
-def format_reference_url(entry: dict) -> str:
-    return format_optional_url(entry.get("paper"), "paper")
+def md_escape(value: object) -> str:
+    return str(value).replace("|", "\\|").replace("\n", " ").strip()
 
 
-def format_dataset_link(entry: dict) -> str:
-    return format_optional_url(entry.get("link"), "link")
-
-
-def render_paper_bullet(entry: dict) -> str:
-    suffix = [
-        f"{format_authors(entry['authors'])}, *{entry['venue']}* {entry['year']}",
-        f"`{entry['task']}`",
-        f"`{entry['domain']}`",
-        f"`{entry['perspective']}`",
-    ]
-    text = f"- **{entry['title']}** -- " + " | ".join(suffix)
-    text += format_link("paper", entry["paper"])
-    text += format_link("code", entry.get("code"))
-    return text
-
-
-def sort_papers(papers: list[dict]) -> list[dict]:
-    return sorted(papers, key=lambda item: (-item["year"], item["title"].lower()))
-
-
-def sort_datasets(datasets: list[dict]) -> list[dict]:
-    return sorted(datasets, key=lambda item: item["name"].lower())
-
-
-def sort_verified_rows(leaderboard: list[dict]) -> list[dict]:
+def sort_resources(resources: Iterable[dict]) -> list[dict]:
     return sorted(
-        [row for row in leaderboard if row["verified"]],
-        key=lambda item: (item["dataset"], item["method"].lower()),
+        resources, key=lambda item: (-int(item.get("year") or 0), item["title"].lower())
     )
 
 
-def render_awesome() -> str:
-    papers, datasets, leaderboard = load_data()
-    papers_sorted = sort_papers(papers)
-    datasets_sorted = sort_datasets(datasets)
-    verified_rows = sort_verified_rows(leaderboard)
+def matches(entry: dict, rule: dict) -> bool:
+    """Match if any configured axis intersects; a section is intentionally broad."""
+
+    for field, wanted in rule.items():
+        current = as_list(entry.get(field))
+        if set(current) & set(as_list(wanted)):
+            return True
+    return False
+
+
+def badge(entry: dict) -> str:
+    status = entry.get("verification_status", "unverified")
+    publication = entry.get("publication_status", "unknown")
+    return f"`{publication}` · `{status}`"
+
+
+def resource_bullet(entry: dict) -> str:
+    links = " · ".join(
+        item
+        for item in [
+            link("source", entry.get("paper")),
+            link("code/project", entry.get("code")),
+        ]
+        if item
+    )
+    axis = ", ".join(as_list(entry.get("tasks"))[:4])
+    description = entry.get("description") or entry.get("notes") or ""
+    return (
+        f"- **{entry['title']}** — {authors(entry['authors'])}, *{entry['venue']}* "
+        f"({entry['year']}). {md_escape(description)}  \n"
+        f"  {badge(entry)} · `{md_escape(entry.get('resource_type', 'paper'))}` · "
+        f"{md_escape(axis)}" + (f" · {links}" if links else "")
+    )
+
+
+def curated_resources(resources: list[dict]) -> list[dict]:
+    return sort_resources(item for item in resources if item.get("curated") is True)
+
+
+def latest_resources(resources: list[dict], limit: int = 12) -> list[dict]:
+    return sorted(
+        resources,
+        key=lambda item: (
+            str(item.get("date_added") or ""),
+            int(item.get("year") or 0),
+        ),
+        reverse=True,
+    )[:limit]
+
+
+def render_curated(
+    config: dict, resources: list[dict], datasets: list[dict], *, catalog_link: str
+) -> str:
+    selected = curated_resources(resources)
+    by_id = {item["id"]: item for item in resources}
+    core = [
+        by_id[item_id] for item_id in config.get("core_reading", []) if item_id in by_id
+    ]
+    latest = latest_resources(resources)
 
     lines = [
         "# Awesome Camouflage",
         "",
-        "> A generated, schema-backed list of camouflage resources maintained by CamoGED.",
-        "> Edit `data/*.yaml`; do not hand-edit this file.",
+        "> A human-curated reading map across camouflage vision, natural camouflage, military history,",
+        "> art/design, generation, and assessment. The complete schema-backed catalog is published",
+        f"> separately at [Research Catalog]({catalog_link}).",
         "",
-        f"- Papers/methods: **{len(papers_sorted)}**",
-        f"- Datasets: **{len(datasets_sorted)}**",
-        f"- Verified leaderboard rows: **{len(verified_rows)}**",
+        f"- Curated resources: **{len(selected)}**",
+        f"- Accepted catalog records: **{len(resources)}**",
+        f"- Datasets/benchmarks: **{len(datasets)}**",
+        f"- Coverage reviewed through: **{config.get('coverage_through', 'unknown')}**",
+        f"- Last human review: **{config.get('last_human_review', 'unknown')}**",
+        "- Update policy: **automated discovery, human acceptance**",
         "",
-        "## Papers by Pillar",
+        "## Scope and status",
+        "",
+        config.get("scope_note", ""),
+        "",
+        "This README is the concise curated layer. Metadata-only or experimental records may appear in",
+        "the full catalog but are not automatically promoted here. Automated scans open triage issues;",
+        "they never merge entries directly.",
+        "",
+        "## Start here",
         "",
     ]
+    lines.extend(resource_bullet(item) for item in core)
 
-    for pillar in PILLAR_ORDER:
-        lines.append(f"### {PILLAR_TITLES[pillar]}")
-        pillar_entries = [entry for entry in papers_sorted if entry["pillar"] == pillar]
-        if not pillar_entries:
-            lines.extend(["", "_No entries yet._", ""])
+    lines.extend(["", "## Latest accepted additions", ""])
+    lines.extend(resource_bullet(item) for item in latest)
+
+    for section in config.get("sections", []):
+        entries = [item for item in selected if matches(item, section.get("match", {}))]
+        if not entries:
             continue
-        lines.append("")
-        for entry in pillar_entries:
-            lines.append(render_paper_bullet(entry))
-        lines.append("")
+        lines.extend(["", f"## {section['title']}", ""])
+        lines.extend(resource_bullet(item) for item in entries)
 
     lines.extend(
         [
-            "## Datasets",
             "",
-            "| Name | ID | Task | Modality | Year | Notes |",
-            "| --- | --- | --- | --- | --- | --- |",
+            "## Dataset and benchmark index",
+            "",
+            "| Dataset | Task | Modality | Year | Availability | License status | Last reviewed |",
+            "|---|---|---:|---:|---|---|---|",
         ]
     )
-    for entry in datasets_sorted:
-        year = "" if entry["year"] is None else str(entry["year"])
-        notes = entry["notes"] or ""
+    for item in sorted(
+        datasets,
+        key=lambda value: (-int(value.get("year") or 0), value["name"].lower()),
+    ):
         lines.append(
-            f"| {entry['name']} | `{entry['id']}` | `{entry['task']}` | `{entry['modality']}` | {year} | {notes} |"
+            f"| {link(item['name'], item.get('link')) or item['name']} | `{item['task']}` | "
+            f"`{item['modality']}` | {item.get('year') or ''} | "
+            f"{item.get('publication_status') or ''} | `{item.get('license_status') or 'unknown'}` | "
+            f"{item.get('last_verified') or ''} |"
         )
-    lines.append("")
-
-    lines.extend(["## Verified Results Registry", ""])
-    if verified_rows:
-        lines.extend(
-            [
-                "| Method | Dataset | Task | Metrics | Source |",
-                "| --- | --- | --- | --- | --- |",
-            ]
-        )
-        for row in verified_rows:
-            metrics = ", ".join(
-                f"{key}={value}" for key, value in row["metrics"].items() if value is not None
-            )
-            lines.append(
-                f"| {row['method']} | `{row['dataset']}` | `{row['task']}` | {metrics} | {row['source']} |"
-            )
-    else:
-        lines.append("_No verified leaderboard entries yet._")
-    lines.append("")
 
     lines.extend(
         [
-            "## Acknowledgements",
             "",
-            "- [visionxiang/awesome-camouflaged-object-detection](https://github.com/visionxiang/awesome-camouflaged-object-detection)",
-            "- [ChunmingHe/awesome-concealed-object-segmentation](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)",
-            "- [clelouch/Awesome-Camouflaged-Object-Detection](https://github.com/clelouch/Awesome-Camouflaged-Object-Detection)",
-            "- [GuoleiSun/Awesome-SAM2](https://github.com/GuoleiSun/Awesome-SAM2)",
+            "## Dynamic maintenance",
+            "",
+            "- Weekly discovery workflow: `.github/workflows/awesome-discovery.yml`.",
+            "- Candidate reports: GitHub issues carrying the `awesome:triage` label.",
+            "- Human acceptance workflow: `.github/workflows/awesome-curation.yml`.",
+            "- Query definitions: `data/discovery_queries.yaml`.",
+            "- Curation rules and evidence levels: `docs/AWESOME_GOVERNANCE.md`.",
+            "",
+            "## Related curated lists",
+            "",
+        ]
+    )
+    for url in config.get("external_candidate_sources", []):
+        lines.append(f"- {url}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_catalog(resources: list[dict], config: dict) -> str:
+    type_counts = Counter(item.get("resource_type", "paper") for item in resources)
+    task_counts = Counter(
+        task for item in resources for task in as_list(item.get("tasks"))
+    )
+    modality_counts = Counter(
+        modality for item in resources for modality in as_list(item.get("modalities"))
+    )
+    context_counts = Counter(
+        context for item in resources for context in as_list(item.get("contexts"))
+    )
+
+    lines = [
+        "# CamoGED Research Catalog",
+        "",
+        "> Complete accepted metadata catalog. Inclusion does not imply endorsement, full-text availability,",
+        "> reproduced results, or a verified license. Use the status columns.",
+        "",
+        f"- Accepted records: **{len(resources)}**",
+        f"- Coverage reviewed through: **{config.get('coverage_through', 'unknown')}**",
+        f"- Verified metadata: **{sum(item.get('verification_status') == 'verified' for item in resources)}**",
+        f"- Metadata-only: **{sum(item.get('verification_status') == 'metadata-only' for item in resources)}**",
+        "",
+        "## Coverage matrix",
+        "",
+        f"- Resource types: {', '.join(f'`{key}` {value}' for key, value in type_counts.most_common())}",
+        f"- Leading tasks: {', '.join(f'`{key}` {value}' for key, value in task_counts.most_common(15))}",
+        f"- Modalities: {', '.join(f'`{key}` {value}' for key, value in modality_counts.most_common())}",
+        f"- Contexts: {', '.join(f'`{key}` {value}' for key, value in context_counts.most_common())}",
+        "",
+        "## All resources",
+        "",
+        "| Year | Resource | Type | Tasks | Modalities | Supervision | Status | Links |",
+        "|---:|---|---|---|---|---|---|---|",
+    ]
+    for item in sort_resources(resources):
+        links = " ".join(
+            value
+            for value in [
+                link("source", item.get("paper")),
+                link("code", item.get("code")),
+            ]
+            if value
+        )
+        lines.append(
+            f"| {item.get('year') or ''} | **{md_escape(item['title'])}**<br>{md_escape(item.get('description') or '')} | "
+            f"`{md_escape(item.get('resource_type', 'paper'))}` | "
+            f"{md_escape(', '.join(as_list(item.get('tasks'))))} | "
+            f"{md_escape(', '.join(as_list(item.get('modalities'))))} | "
+            f"{md_escape(', '.join(as_list(item.get('supervision'))))} | "
+            f"{badge(item)}<br>reviewed {item.get('last_verified') or ''} | {links} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_updates(config: dict, resources: list[dict]) -> str:
+    latest = latest_resources(resources, 20)
+    lines = [
+        "# Awesome update status",
+        "",
+        f"- Coverage reviewed through: **{config.get('coverage_through', 'unknown')}**",
+        f"- Last human review: **{config.get('last_human_review', 'unknown')}**",
+        "- Automated scan: see the latest GitHub issue labeled `awesome:triage`.",
+        "- Automated candidates are not accepted records until a human-reviewed PR is merged.",
+        "",
+        "## Latest accepted records",
+        "",
+    ]
+    lines.extend(resource_bullet(item) for item in latest)
+    lines.extend(
+        [
+            "",
+            "## Maintenance surfaces",
+            "",
+            "- Discovery query configuration: `data/discovery_queries.yaml`",
+            "- Candidate scanner: `scripts/discover_awesome.py`",
+            "- Candidate acceptance tool: `scripts/accept_awesome_candidates.py`",
+            "- Governance: `docs/AWESOME_GOVERNANCE.md`",
             "",
         ]
     )
     return "\n".join(lines)
 
 
-def render_papers_page(papers: list[dict]) -> str:
-    papers_sorted = sort_papers(papers)
-    lines = [
-        "# Papers",
-        "",
-        "> Generated from `data/papers.yaml`.",
-        "",
-        f"- Total entries: **{len(papers_sorted)}**",
-        "",
-    ]
-    for pillar in PILLAR_ORDER:
-        lines.append(f"## {PILLAR_TITLES[pillar]}")
-        lines.append("")
-        entries = [entry for entry in papers_sorted if entry["pillar"] == pillar]
-        if not entries:
-            lines.extend(["_No entries yet._", ""])
-            continue
-        lines.extend(
-            [
-                "| Title | Year | Domain | Task | Links |",
-                "| --- | --- | --- | --- | --- |",
-            ]
-        )
-        for entry in entries:
-            links = " ".join(
-                filter(
-                    None,
-                    [
-                        format_reference_url(entry),
-                        format_optional_url(entry.get("code"), "code"),
-                    ],
-                )
-            )
-            lines.append(
-                f"| {entry['title']} | {entry['year']} | `{entry['domain']}` | `{entry['task']}` | {links} |"
-            )
-        lines.append("")
-    return "\n".join(lines) + "\n"
+def render_papers_page(resources: list[dict]) -> str:
+    return "# Papers and resources\n\nThe complete multi-axis catalog has moved to [Research Catalog](./catalog.md).\n"
 
 
-def render_models_page(papers: list[dict]) -> str:
-    code_entries = [entry for entry in sort_papers(papers) if entry.get("code")]
-    groups = [
-        (
-            "Methods and models",
-            [
-                entry
-                for entry in code_entries
-                if entry["task"] not in {"dataset", "survey"} and entry["pillar"] != "evaluation"
-            ],
-        ),
-        (
-            "Evaluation tools",
-            [
-                entry
-                for entry in code_entries
-                if entry["pillar"] == "evaluation" and entry["task"] != "dataset"
-            ],
-        ),
-        (
-            "Dataset and project releases",
-            [entry for entry in code_entries if entry["task"] == "dataset"],
-        ),
-        (
-            "Survey and curated indexes",
-            [entry for entry in code_entries if entry["task"] == "survey"],
-        ),
-    ]
+def render_models_page(resources: list[dict]) -> str:
+    entries = [item for item in sort_resources(resources) if item.get("code")]
     lines = [
         "# Code & Resources",
         "",
-        "> Code, dataset, and project links derived from `data/papers.yaml`.",
+        "> Project and code links from accepted catalog records. A link is not a reproduction claim.",
         "",
-        f"- Entries with links: **{len(code_entries)}**",
-        "",
+        "| Resource | Year | Tasks | Status | Link |",
+        "|---|---:|---|---|---|",
     ]
-    if not code_entries:
-        lines.extend(["_No code-linked entries yet._", ""])
-        return "\n".join(lines) + "\n"
-
-    for title, entries in groups:
-        if not entries:
-            continue
-        lines.extend(
-            [
-                f"## {title}",
-                "",
-                "| Title | Year | Pillar | Task | Link | Paper |",
-                "| --- | --- | --- | --- | --- | --- |",
-            ]
-        )
-        for entry in entries:
-            lines.append(
-                f"| {entry['title']} | {entry['year']} | `{entry['pillar']}` | `{entry['task']}` | "
-                f"{format_optional_url(entry['code'], 'link')} | {format_reference_url(entry)} |"
-            )
-        lines.append("")
-    lines.append("")
-    return "\n".join(lines) + "\n"
-
-
-def render_datasets_page(datasets: list[dict]) -> str:
-    datasets_sorted = sort_datasets(datasets)
-    lines = [
-        "# Datasets",
-        "",
-        "> Generated from `data/datasets.yaml`.",
-        "",
-        f"- Total datasets: **{len(datasets_sorted)}**",
-        "",
-        "| Name | Task | Modality | Size | Split | Year | Link | License | Reference |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
-    ]
-    for entry in datasets_sorted:
+    for item in entries:
         lines.append(
-            f"| {entry['name']} | `{entry['task']}` | `{entry['modality']}` | {entry.get('size') or ''} | "
-            f"{entry.get('split') or ''} | {entry.get('year') or ''} | {format_dataset_link(entry)} | "
-            f"{entry.get('license') or ''} | `{entry.get('bibtex_key') or ''}` |"
+            f"| {md_escape(item['title'])} | {item.get('year') or ''} | "
+            f"{md_escape(', '.join(as_list(item.get('tasks'))))} | {badge(item)} | "
+            f"{link('project', item.get('code'))} |"
         )
     lines.append("")
-    return "\n".join(lines) + "\n"
-
-
-def render_leaderboard_page(leaderboard: list[dict]) -> str:
-    verified_rows = sort_verified_rows(leaderboard)
-    lines = [
-        "# Verified Results Registry",
-        "",
-        "> Source-checked result records. This page is not a comprehensive SOTA ranking.",
-        "",
-        f"- Verified rows: **{len(verified_rows)}**",
-        "",
-        "| Method | Dataset | Task | Metrics | Protocol | Implementation | Verified | Source |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
-    ]
-    for row in verified_rows:
-        metrics = ", ".join(
-            f"{key}={value}" for key, value in row["metrics"].items() if value is not None
-        )
-        lines.append(
-            f"| {row['method']} | `{row['dataset']}` | `{row['task']}` | {metrics} | "
-            f"{row.get('protocol') or ''} | `{row['metric_implementation']}` | "
-            f"{row['last_verified']} / {row['verified_by']} | {row['source']} |"
-        )
-    if not verified_rows:
-        lines.append("| _No verified results_ | | | | | | | |")
-    lines.append("")
-    return "\n".join(lines) + "\n"
-
-
-def render_demo_page() -> str:
-    lines = [
-        "---",
-        "pageClass: camoged-demo-page",
-        "---",
-        "",
-        "<CamoDemo />",
-        "",
-    ]
     return "\n".join(lines)
 
 
-def render_awesome_page() -> str:
-    awesome_body = render_awesome().splitlines()
+def render_datasets_page(datasets: list[dict]) -> str:
     lines = [
-        "# Awesome",
+        "# Datasets and benchmarks",
         "",
-        "> Mirror of the generated Awesome index.",
+        "> Metadata registry only. Unknown or restricted licenses prohibit redistribution by CamoGED.",
         "",
+        "| Dataset | Task | Modality | Size | Split | Year | License | Status | Last reviewed |",
+        "|---|---|---|---|---|---:|---|---|---|",
     ]
-    lines.extend(awesome_body[1:])
-    return "\n".join(lines) + "\n"
+    for item in sorted(
+        datasets,
+        key=lambda value: (-int(value.get("year") or 0), value["name"].lower()),
+    ):
+        lines.append(
+            f"| {link(item['name'], item.get('link')) or item['name']} | `{item['task']}` | "
+            f"`{item['modality']}` | {md_escape(item.get('size') or '')} | "
+            f"{md_escape(item.get('split') or '')} | {item.get('year') or ''} | "
+            f"{md_escape(item.get('license') or 'unknown')} | `{item.get('license_status') or 'unknown'}` | "
+            f"{item.get('last_verified') or ''} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
 
 
-def write_text(path: Path, content: str) -> None:
+def render_results(results: list[dict]) -> str:
+    rows = sorted(
+        [item for item in results if item.get("verified") is True],
+        key=lambda item: (item["dataset"], item["method"].lower()),
+    )
+    lines = [
+        "# Verified Results Registry",
+        "",
+        "> Source-checked result records. This is not a comprehensive SOTA ranking.",
+        "",
+        "| Method | Dataset | Task | Metrics | Protocol | Implementation | Verified | Source |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for item in rows:
+        metrics = ", ".join(
+            f"{key}={value}"
+            for key, value in item["metrics"].items()
+            if value is not None
+        )
+        lines.append(
+            f"| {item['method']} | `{item['dataset']}` | `{item['task']}` | {metrics} | "
+            f"{md_escape(item.get('protocol') or '')} | `{item['metric_implementation']}` | "
+            f"{item['last_verified']} / {item['verified_by']} | {item['source']} |"
+        )
+    if not rows:
+        lines.append("| _No verified results_ | | | | | | | |")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_demo_page() -> str:
+    return """---
+layout: page
+---
+
+# Synthetic teaching demo
+
+<CamoDemo />
+
+The browser demo uses deterministic synthetic scenes and exploratory heuristics. It is not a model inference service, a standard camouflage score, or part of the Awesome catalog.
+"""
+
+
+def write(path: Path, content: str) -> None:
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
 
 
-def write_outputs() -> None:
-    papers, datasets, leaderboard = load_data()
-    write_text(AWESOME_OUT, render_awesome())
-    write_text(WEB / "papers.md", render_papers_page(papers))
-    write_text(WEB / "models.md", render_models_page(papers))
-    write_text(WEB / "datasets.md", render_datasets_page(datasets))
-    write_text(WEB / "leaderboard.md", render_leaderboard_page(leaderboard))
-    write_text(WEB / "demo.md", render_demo_page())
-    write_text(WEB / "awesome.md", render_awesome_page())
-
-
 def render() -> str:
-    """Backward-compatible helper used by ``check_data.py``."""
+    """Return the generated curated README for legacy deterministic checks."""
 
-    return render_awesome()
+    resources, datasets, _results, config = load_data()
+    return render_curated(config, resources, datasets, catalog_link="../web/catalog.md")
 
 
-def main() -> int:
-    write_outputs()
-    return 0
+def main() -> None:
+    resources, datasets, results, config = load_data()
+    write(
+        AWESOME_OUT,
+        render_curated(config, resources, datasets, catalog_link="../web/catalog.md"),
+    )
+    write(
+        WEB / "awesome.md",
+        render_curated(config, resources, datasets, catalog_link="./catalog.md"),
+    )
+    write(WEB / "catalog.md", render_catalog(resources, config))
+    write(WEB / "updates.md", render_updates(config, resources))
+    write(WEB / "papers.md", render_papers_page(resources))
+    write(WEB / "models.md", render_models_page(resources))
+    write(WEB / "datasets.md", render_datasets_page(datasets))
+    write(WEB / "leaderboard.md", render_results(results))
+    print(
+        f"Generated Awesome/catalog surfaces: {len(resources)} resources, "
+        f"{sum(item.get('curated') is True for item in resources)} curated, {len(datasets)} datasets"
+    )
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

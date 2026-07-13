@@ -1,39 +1,200 @@
-name: Add a paper / method
-description: Propose a paper or method for the Awesome list and website.
+name: Propose an Awesome / Catalog resource
+description: Propose a paper, book, dataset, standard, tool, or historical source for human review.
 labels: ["resource:paper"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Automated and community proposals enter candidate review only. Inclusion in the Catalog or curated Awesome list is never automatic.
+
+  - type: dropdown
+    id: resource_type
+    attributes:
+      label: Resource type
+      options:
+        - paper
+        - survey
+        - book
+        - dataset
+        - benchmark
+        - standard
+        - tool
+        - historical-source
+        - project-page
+    validations:
+      required: true
+
   - type: input
     id: title
     attributes:
-      label: Title
+      label: Canonical title
     validations:
       required: true
+
+  - type: input
+    id: authors
+    attributes:
+      label: Authors / responsible institution
+    validations:
+      required: true
+
   - type: input
     id: venue
     attributes:
-      label: Venue & year
-      placeholder: "TPAMI 2024"
-  - type: dropdown
-    id: pillar
-    attributes:
-      label: Pillar
-      options:
-        - generation
-        - detection
-        - evaluation
-  - type: dropdown
-    id: domain
-    attributes:
-      label: Domain
-      options:
-        - physical
-        - digital
-        - intelligent
+      label: Venue, publisher, and year
+      placeholder: "TPAMI 2025; Cambridge University Press 2011"
+    validations:
+      required: true
+
   - type: input
-    id: paper
+    id: identifier
     attributes:
-      label: Paper link
+      label: DOI, arXiv ID, ISBN, or stable identifier
+      placeholder: "10.xxxx/xxxxx or 2501.01234"
+
+  - type: input
+    id: source
+    attributes:
+      label: Canonical source link
+      description: Prefer the publisher, proceedings, arXiv, official archive, or responsible institution.
+    validations:
+      required: true
+
   - type: input
     id: code
     attributes:
-      label: Code link (optional)
+      label: Official code / project / dataset link
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Why this resource matters
+      description: One or two factual sentences. Avoid promotional claims such as first, best, or largest unless explicitly attributed.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tasks
+    attributes:
+      label: Tasks or topics
+      multiple: true
+      options:
+        - image-cod
+        - video-cod
+        - instance-cod
+        - bbox-rcod
+        - tracking
+        - referring-cod
+        - collaborative-cod
+        - weakly-supervised-cod
+        - semi-supervised-cod
+        - unsupervised-cod
+        - zero-shot-cod
+        - open-vocabulary
+        - vision-language
+        - multimodal-evaluation
+        - generation
+        - physical-adversarial
+        - camouflage-assessment
+        - human-detection
+        - biological-camouflage
+        - military-camouflage
+        - art-design
+        - historical-analysis
+        - survey
+        - standard
+    validations:
+      required: true
+
+  - type: dropdown
+    id: modalities
+    attributes:
+      label: Modalities
+      multiple: true
+      options:
+        - rgb
+        - video
+        - depth
+        - thermal
+        - infrared
+        - polarization
+        - multispectral
+        - hyperspectral
+        - radar
+        - multimodal
+        - vision-language
+        - not-applicable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: supervision
+    attributes:
+      label: Supervision / study mode
+      multiple: true
+      options:
+        - fully-supervised
+        - weakly-supervised
+        - semi-supervised
+        - self-supervised
+        - unsupervised
+        - zero-shot
+        - prompt-based
+        - training-free
+        - optimization-based
+        - human-study
+        - historical-analysis
+        - not-applicable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: contexts
+    attributes:
+      label: Application or knowledge contexts
+      multiple: true
+      options:
+        - computer-vision
+        - biological
+        - wildlife
+        - agriculture
+        - underwater
+        - military
+        - materials
+        - art-design
+        - cultural-history
+        - remote-sensing
+        - ai-safety
+    validations:
+      required: true
+
+  - type: dropdown
+    id: publication_status
+    attributes:
+      label: Publication status
+      options:
+        - published
+        - preprint
+        - released
+        - project-page
+        - unpublished
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License or access terms
+      placeholder: "Unknown is acceptable; do not infer a license from public availability."
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Proposal checks
+      options:
+        - label: I searched the current Catalog for the DOI/arXiv ID and normalized title.
+          required: true
+        - label: I have not represented public availability as redistribution permission.
+          required: true
+        - label: I understand that acceptance and curated promotion require human review.
+          required: true

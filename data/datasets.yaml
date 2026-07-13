@@ -247,11 +247,129 @@ datasets:
   link: https://arxiv.org/abs/2502.13859
   license: null
   bibtex_key: gao2025msvcod
-  notes: Multi-scene video COD benchmark; no separate dataset release link found during
-    audit.
+  notes: Multi-scene video COD benchmark; no separate dataset release link found during audit.
   publication_status: released
   verification_status: metadata-only
   last_verified: '2026-07-13'
   verified_by: maintainer
   license_status: unknown
   annotation: video frames/sequences and temporal mask annotations as provided upstream
+- id: cotd
+  name: COTD
+  task: dataset
+  modality: video
+  size: 200 sequences; approximately 80,000 frames
+  split: benchmark split provided upstream
+  year: 2024
+  link: https://github.com/openat25/HIPTrack-MLS
+  license: null
+  bibtex_key: null
+  notes: Bounding-box benchmark for camouflaged object tracking.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: video sequences with bounding-box tracking annotations
+- id: camotion
+  name: CAMotion
+  task: dataset
+  modality: video
+  size: null
+  split: benchmark split provided upstream
+  year: 2026
+  link: https://www.camotion.focuslab.net.cn
+  license: null
+  bibtex_key: null
+  notes: Wild camouflaged moving-object benchmark with challenge attributes.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: video masks and challenge attributes as provided upstream
+- id: rcod-benchmark
+  name: RCOD Benchmark
+  task: dataset
+  modality: rgb
+  size: three converted COD benchmarks
+  split: train/test protocol provided upstream
+  year: 2025
+  link: https://github.com/zhimengXin/RCOD
+  license: null
+  bibtex_key: null
+  notes: Bounding-box annotations derived from established COD segmentation datasets.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: class labels and bounding boxes
+- id: ovcod-d
+  name: OVCOD-D
+  task: dataset
+  modality: multimodal
+  size: null
+  split: open-set protocol described in the paper
+  year: 2026
+  link: https://arxiv.org/abs/2603.26109
+  license: null
+  bibtex_key: null
+  notes: Open-vocabulary camouflage benchmark with fine-grained text descriptions.
+  publication_status: project-page
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: bounding boxes and fine-grained textual descriptions
+- id: mmcsbench
+  name: MMCSBench
+  task: dataset
+  modality: multimodal
+  size: null
+  split: benchmark protocol provided upstream
+  year: 2025
+  link: https://neurips.cc/virtual/2025/poster/121542
+  license: null
+  bibtex_key: null
+  notes: Fine-grained benchmark for large vision-language models in camouflage scenes.
+  publication_status: project-page
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: multimodal question-answering and camouflage-scene annotations
+- id: usc12k
+  name: USC12K
+  task: dataset
+  modality: rgb
+  size: approximately 12K images
+  split: train/test protocol provided upstream
+  year: 2025
+  link: https://github.com/ssecv/USCNet
+  license: null
+  bibtex_key: null
+  notes: Unconstrained salient-and-camouflaged object benchmark.
+  publication_status: released
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: salient/camouflaged object masks and scene labels
+- id: reftextcod
+  name: RefTextCOD
+  task: dataset
+  modality: multimodal
+  size: null
+  split: protocol provided upstream
+  year: 2025
+  link: https://github.com/Heartfirey/SCOUT
+  license: null
+  bibtex_key: null
+  notes: Text-augmented semi-supervised camouflage dataset introduced with SCOUT.
+  publication_status: project-page
+  verification_status: metadata-only
+  last_verified: '2026-07-13'
+  verified_by: maintainer
+  license_status: unknown
+  annotation: images, masks or partial labels, and text descriptions
