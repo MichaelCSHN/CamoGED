@@ -391,7 +391,7 @@ def main() -> None:
     )
     write(
         WEB / "awesome.md",
-        render_curated(config, resources, datasets, catalog_link="./catalog"),
+        render_curated(config, resources, datasets, catalog_link="./catalog.md"),
     )
     write(WEB / "catalog.md", render_catalog(resources, config))
     write(WEB / "updates.md", render_updates(config, resources))
