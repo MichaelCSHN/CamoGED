@@ -1,6 +1,6 @@
 name: awesome candidate discovery
 
-# Pull requests run one representative query per source; scheduled/manual runs scan all configured queries.
+# PR smoke is bounded and emits artifacts even when a required public source is unavailable.
 on:
   pull_request:
     branches: [main, agent/project-audit-remediation]
