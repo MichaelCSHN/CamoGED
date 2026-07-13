@@ -2,23 +2,23 @@
 layout: home
 hero:
   name: CamoGED
-  text: "Camouflage: Generation · Evaluation · Detection"
-  tagline: A cross-domain open platform — Nature, War, and Machines.
+  text: "Camouflage research preview"
+  tagline: A cross-domain monograph with verified metadata, protocol-aware evaluation tools, and synthetic teaching demos.
   actions:
     - theme: brand
-      text: Book
-      link: https://michaelcshn.github.io/CamoGED/book/
+      text: Read the book
+      link: /book/
     - theme: alt
-      text: Demo
+      text: Verified results registry
+      link: /leaderboard
+    - theme: alt
+      text: Synthetic demo
       link: /demo
-    - theme: alt
-      text: Awesome
-      link: /awesome
 features:
-  - title: ✍️ Generation
-    details: Physical, digital, and intelligent-domain camouflage synthesis and adversarial attacks.
-  - title: 🔎 Detection
-    details: Image / video / instance camouflaged object detection, foundation-model adaptations.
-  - title: 📊 Evaluation
-    details: Unified metrics via camo-eval — accuracy, generation quality, robustness.
+  - title: Generation
+    details: Published mechanisms and research questions; original generator projects remain agendas until reproducible.
+  - title: Detection
+    details: Image, video, instance, semantic, and multimodal detection literature organized by declared tasks and protocols.
+  - title: Evaluation
+    details: Validated COD core metrics are separated from explicitly experimental diagnostics.
 ---

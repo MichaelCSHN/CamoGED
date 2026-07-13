@@ -1,1731 +1,299 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from "vue";
-import { withBase } from "vitepress";
 
-const samples = [
-  {
-    id: "cod10k-batfish",
-    label: "Aquatic: BatFish",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-seadragon",
-    label: "Aquatic: LeafySeaDragon",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-octopus",
-    label: "Aquatic: Octopus",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-chameleon",
-    label: "Terrestrial: Chameleon",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-cheetah",
-    label: "Terrestrial: Cheetah",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-moth",
-    label: "Flying: Moth",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-frog",
-    label: "Aquatic: FrogFish",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  },
-  {
-    id: "cod10k-human",
-    label: "Terrestrial: Human",
-    caption: "Real COD10K Test image with object mask.",
-    scene: "scene.png",
-    pred: "prediction.png",
-    gt: "ground-truth.png"
-  }
-];
-
-const workflowSteps = [
-  {
-    number: "1",
-    title: "Choose an image",
-    body: "Upload a local image or start from a real COD10K sample."
-  },
-  {
-    number: "2",
-    title: "Mark the target",
-    body: "Use Auto Seg first, then correct the mask with paint and erase."
-  },
-  {
-    number: "3",
-    title: "Define background",
-    body: "Use the near ring for local camouflage, all non-target for global contrast, or paint it manually."
-  },
-  {
-    number: "4",
-    title: "Read the metrics",
-    body: "Use the explanations to decide whether the object is visually hidden or the mask needs refinement."
-  }
-];
-
-const toolHelp = {
-  auto: "Load the bundled object mask when available. For uploaded images, click the object once to set a seed, then run the lightweight browser fallback.",
-  target: "Paint pixels that belong to the camouflaged object. This is the orange overlay.",
-  background: "Paint comparison background pixels. This switches background mode to Manual.",
-  erase: "Remove target or manual-background paint. Use brush/line for edges, or box erase for large wrong regions."
-};
-
-const backgroundHelp = {
-  near: "Compares the target with a narrow ring around it. Best for local concealment.",
-  all: "Compares the target with every non-target pixel. Useful for whole-image contrast.",
-  manual: "Compares the target only with blue pixels you paint as background."
-};
-
-const interactiveMetricInfo = {
-  "Target pixels": "Size of the current orange target mask. If this is too small or too large, fix the mask first.",
-  "Background pixels": "Number of pixels used as the comparison background. Manual mode needs blue paint.",
-  "Target area": "Fraction of the image covered by the target mask.",
-  "Mean abs diff": "Brightness difference between target and background. Lower means closer luminance.",
-  "Contrast abs diff": "Texture/contrast spread difference. Lower means the target has similar contrast.",
-  "Histogram overlap": "Grayscale distribution overlap. Higher means the target and background look more alike.",
-  "Edge density": "How cluttered the image is by local edges. Higher clutter can hide boundaries.",
-  "Camouflage difficulty": "A heuristic 0-1 score combining overlap, low brightness difference, and clutter. Higher means harder visual separation."
-};
-
-const selectedId = ref(samples[0].id);
-const editorCanvas = ref(null);
-const imageName = ref("Aquatic: BatFish");
-const imageWidth = ref(0);
-const imageHeight = ref(0);
-const sourcePixels = ref(null);
-const targetMask = ref(null);
-const manualBackgroundMask = ref(null);
-const maskVersion = ref(0);
-const activeTool = ref("auto");
-const brushSize = ref(18);
-const eraseMode = ref("brush");
+const canvasRef = ref(null);
+const width = ref(560);
+const height = ref(340);
+const source = ref(null);
+const mask = ref(null);
+const seed = ref(null);
+const tool = ref("seed");
 const tolerance = ref(42);
-const backgroundMode = ref("near");
-const lastSeed = ref(null);
-const currentSampleId = ref(samples[0].id);
-const autoSegMessage = ref("COD10K sample loaded with its bundled object mask.");
+const brush = ref(16);
+const version = ref(0);
+const label = ref("Synthetic bark scene");
 
-function asset(path) {
-  return withBase(`/demo-artifacts/${path}`);
+function makeScene(kind) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width.value;
+  canvas.height = height.value;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const gradient = ctx.createLinearGradient(0, 0, width.value, height.value);
+  if (kind === "bark") {
+    gradient.addColorStop(0, "#5f5a49");
+    gradient.addColorStop(1, "#81765d");
+  } else if (kind === "leaf") {
+    gradient.addColorStop(0, "#5b774f");
+    gradient.addColorStop(1, "#8f9b62");
+  } else {
+    gradient.addColorStop(0, "#77878a");
+    gradient.addColorStop(1, "#a0a59b");
+  }
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width.value, height.value);
+  const rng = mulberry32(kind === "bark" ? 13 : kind === "leaf" ? 29 : 41);
+  for (let i = 0; i < 900; i += 1) {
+    const value = 55 + Math.floor(rng() * 90);
+    ctx.fillStyle = `rgba(${value},${value + 8},${Math.max(30, value - 15)},0.20)`;
+    ctx.fillRect(rng() * width.value, rng() * height.value, 1 + rng() * 9, 1 + rng() * 3);
+  }
+  const target = new Uint8Array(width.value * height.value);
+  const cx = width.value * 0.58;
+  const cy = height.value * 0.52;
+  const rx = kind === "leaf" ? 88 : 72;
+  const ry = kind === "leaf" ? 44 : 62;
+  ctx.fillStyle = kind === "bark" ? "rgba(102,96,76,0.96)" : kind === "leaf" ? "rgba(105,126,74,0.96)" : "rgba(132,142,136,0.96)";
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, rx, ry, kind === "leaf" ? -0.45 : 0.15, 0, Math.PI * 2);
+  ctx.fill();
+  for (let y = 0; y < height.value; y += 1) {
+    for (let x = 0; x < width.value; x += 1) {
+      const cos = Math.cos(kind === "leaf" ? -0.45 : 0.15);
+      const sin = Math.sin(kind === "leaf" ? -0.45 : 0.15);
+      const dx = x - cx;
+      const dy = y - cy;
+      const xr = dx * cos + dy * sin;
+      const yr = -dx * sin + dy * cos;
+      if ((xr * xr) / (rx * rx) + (yr * yr) / (ry * ry) <= 1) target[y * width.value + x] = 1;
+    }
+  }
+  return { pixels: ctx.getImageData(0, 0, width.value, height.value), target };
 }
 
-function formatValue(value) {
-  if (value === undefined || value === null || Number.isNaN(value)) return "n/a";
-  if (typeof value !== "number") return String(value);
-  if (Math.abs(value) >= 100) return value.toFixed(1);
-  if (Math.abs(value) >= 10) return value.toFixed(2);
-  return value.toFixed(3);
-}
-
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
-}
-
-function scaledSize(width, height, maxSide = 640) {
-  const scale = Math.min(1, maxSide / Math.max(width, height));
-  return {
-    width: Math.max(1, Math.round(width * scale)),
-    height: Math.max(1, Math.round(height * scale))
+function mulberry32(seedValue) {
+  return function random() {
+    let value = (seedValue += 0x6d2b79f5);
+    value = Math.imul(value ^ (value >>> 15), value | 1);
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
   };
 }
 
-async function setEditorImage(img, name) {
-  const size = scaledSize(img.naturalWidth || img.width, img.naturalHeight || img.height);
-  imageWidth.value = size.width;
-  imageHeight.value = size.height;
-  imageName.value = name;
+async function loadSynthetic(kind) {
+  label.value = `Synthetic ${kind} scene`;
+  const generated = makeScene(kind);
+  source.value = generated.pixels;
+  mask.value = generated.target;
+  seed.value = null;
+  version.value += 1;
   await nextTick();
-
-  const canvas = document.createElement("canvas");
-  canvas.width = size.width;
-  canvas.height = size.height;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  ctx.drawImage(img, 0, 0, size.width, size.height);
-  sourcePixels.value = ctx.getImageData(0, 0, size.width, size.height);
-  targetMask.value = new Uint8Array(size.width * size.height);
-  manualBackgroundMask.value = new Uint8Array(size.width * size.height);
-  maskVersion.value += 1;
-  lastSeed.value = null;
-  drawEditor();
+  draw();
 }
 
-async function loadBundledMask(sample) {
-  const maskImg = await loadImage(asset(`${sample.id}/${sample.gt}`));
-  const canvas = document.createElement("canvas");
-  canvas.width = imageWidth.value;
-  canvas.height = imageHeight.value;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  ctx.drawImage(maskImg, 0, 0, imageWidth.value, imageHeight.value);
-  const data = ctx.getImageData(0, 0, imageWidth.value, imageHeight.value).data;
-  const mask = new Uint8Array(imageWidth.value * imageHeight.value);
-  for (let i = 0; i < mask.length; i += 1) {
-    mask[i] = data[i * 4] > 127 ? 1 : 0;
-  }
-  targetMask.value = mask;
-  manualBackgroundMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
-  maskVersion.value += 1;
-  autoSegMessage.value = "Auto Seg loaded the bundled COD10K object mask for this sample.";
-  drawEditor();
-}
-
-async function loadBundledIntoEditor(sample = samples[0]) {
-  selectedId.value = sample.id;
-  currentSampleId.value = sample.id;
-  const img = await loadImage(asset(`${sample.id}/${sample.scene}`));
-  await setEditorImage(img, sample.label);
-  await loadBundledMask(sample);
-}
-
-async function selectSample(sample) {
-  await loadBundledIntoEditor(sample);
-}
-
-async function onFileUpload(event) {
+async function upload(event) {
   const file = event.target.files?.[0];
   if (!file) return;
-  currentSampleId.value = null;
-  selectedId.value = null;
   const url = URL.createObjectURL(file);
   try {
-    const img = await loadImage(url);
-    await setEditorImage(img, file.name);
-    lastSeed.value = {
-      x: Math.floor(imageWidth.value / 2),
-      y: Math.floor(imageHeight.value / 2)
-    };
-    autoSegMessage.value = "Uploaded image has no bundled mask. Auto Seg will run a browser fallback from the image center; click the object to set a better seed, or use SAM3 for SOTA masks.";
+    const image = await new Promise((resolve, reject) => {
+      const item = new Image();
+      item.onload = () => resolve(item);
+      item.onerror = reject;
+      item.src = url;
+    });
+    const scale = Math.min(1, 720 / Math.max(image.width, image.height));
+    width.value = Math.max(1, Math.round(image.width * scale));
+    height.value = Math.max(1, Math.round(image.height * scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width.value;
+    canvas.height = height.value;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(image, 0, 0, width.value, height.value);
+    source.value = ctx.getImageData(0, 0, width.value, height.value);
+    mask.value = new Uint8Array(width.value * height.value);
+    seed.value = { x: Math.floor(width.value / 2), y: Math.floor(height.value / 2) };
+    label.value = file.name;
+    version.value += 1;
+    await nextTick();
+    draw();
   } finally {
     URL.revokeObjectURL(url);
     event.target.value = "";
   }
 }
 
-function drawEditor() {
-  const canvas = editorCanvas.value;
-  if (!canvas || !sourcePixels.value) return;
-  canvas.width = imageWidth.value;
-  canvas.height = imageHeight.value;
-  const ctx = canvas.getContext("2d");
-  const rendered = new ImageData(
-    new Uint8ClampedArray(sourcePixels.value.data),
-    imageWidth.value,
-    imageHeight.value
-  );
-  const bg = currentBackgroundMask();
-  for (let i = 0; i < targetMask.value.length; i += 1) {
-    const offset = i * 4;
-    if (bg[i]) {
-      rendered.data[offset] = Math.round(rendered.data[offset] * 0.55 + 40 * 0.45);
-      rendered.data[offset + 1] = Math.round(rendered.data[offset + 1] * 0.55 + 110 * 0.45);
-      rendered.data[offset + 2] = Math.round(rendered.data[offset + 2] * 0.55 + 210 * 0.45);
-    }
-    if (targetMask.value[i]) {
-      rendered.data[offset] = Math.round(rendered.data[offset] * 0.45 + 248 * 0.55);
-      rendered.data[offset + 1] = Math.round(rendered.data[offset + 1] * 0.45 + 176 * 0.55);
-      rendered.data[offset + 2] = Math.round(rendered.data[offset + 2] * 0.45 + 35 * 0.55);
-    }
-  }
-  ctx.putImageData(rendered, 0, 0);
-  drawEraseBox(ctx);
-}
-
-function pointFromEvent(event) {
-  const rect = editorCanvas.value.getBoundingClientRect();
-  const scaleX = imageWidth.value / rect.width;
-  const scaleY = imageHeight.value / rect.height;
+function point(event) {
+  const rect = canvasRef.value.getBoundingClientRect();
   return {
-    x: Math.max(0, Math.min(imageWidth.value - 1, Math.floor((event.clientX - rect.left) * scaleX))),
-    y: Math.max(0, Math.min(imageHeight.value - 1, Math.floor((event.clientY - rect.top) * scaleY)))
+    x: Math.floor(((event.clientX - rect.left) / rect.width) * width.value),
+    y: Math.floor(((event.clientY - rect.top) / rect.height) * height.value),
   };
 }
 
-let pointerDown = false;
-let lastPaintPoint = null;
-let eraseBoxStart = null;
-let eraseBoxCurrent = null;
-
-function drawEraseBox(ctx) {
-  if (!eraseBoxStart || !eraseBoxCurrent) return;
-  const left = Math.min(eraseBoxStart.x, eraseBoxCurrent.x);
-  const top = Math.min(eraseBoxStart.y, eraseBoxCurrent.y);
-  const width = Math.abs(eraseBoxCurrent.x - eraseBoxStart.x);
-  const height = Math.abs(eraseBoxCurrent.y - eraseBoxStart.y);
-  ctx.save();
-  ctx.fillStyle = "rgba(255, 68, 68, 0.16)";
-  ctx.strokeStyle = "rgba(255, 68, 68, 0.9)";
-  ctx.lineWidth = Math.max(2, Math.round(Math.min(imageWidth.value, imageHeight.value) / 240));
-  ctx.setLineDash([8, 5]);
-  ctx.fillRect(left, top, width, height);
-  ctx.strokeRect(left, top, width, height);
-  ctx.restore();
-}
-
-function paintAt(x, y, commit = true) {
-  if (!targetMask.value) return;
-  const radius = Math.max(1, Math.round(brushSize.value / 2));
-  for (let yy = y - radius; yy <= y + radius; yy += 1) {
-    if (yy < 0 || yy >= imageHeight.value) continue;
-    for (let xx = x - radius; xx <= x + radius; xx += 1) {
-      if (xx < 0 || xx >= imageWidth.value) continue;
-      if ((xx - x) ** 2 + (yy - y) ** 2 > radius ** 2) continue;
-      const index = yy * imageWidth.value + xx;
-      if (activeTool.value === "target") {
-        targetMask.value[index] = 1;
-        manualBackgroundMask.value[index] = 0;
-      } else if (activeTool.value === "background") {
-        manualBackgroundMask.value[index] = 1;
-        targetMask.value[index] = 0;
-      } else if (activeTool.value === "erase") {
-        targetMask.value[index] = 0;
-        manualBackgroundMask.value[index] = 0;
-      }
-    }
-  }
-  if (commit) {
-    maskVersion.value += 1;
-    drawEditor();
-  }
-}
-
-function paintLine(from, to) {
-  const distance = Math.hypot(to.x - from.x, to.y - from.y);
-  const step = Math.max(1, Math.round(brushSize.value / 3));
-  const count = Math.max(1, Math.ceil(distance / step));
-  for (let i = 1; i <= count; i += 1) {
-    const t = i / count;
-    paintAt(
-      Math.round(from.x + (to.x - from.x) * t),
-      Math.round(from.y + (to.y - from.y) * t),
-      false
-    );
-  }
-  maskVersion.value += 1;
-  drawEditor();
-}
-
-function applyEraseBox() {
-  if (!eraseBoxStart || !eraseBoxCurrent || !targetMask.value) return;
-  const left = Math.max(0, Math.min(eraseBoxStart.x, eraseBoxCurrent.x));
-  const right = Math.min(imageWidth.value - 1, Math.max(eraseBoxStart.x, eraseBoxCurrent.x));
-  const top = Math.max(0, Math.min(eraseBoxStart.y, eraseBoxCurrent.y));
-  const bottom = Math.min(imageHeight.value - 1, Math.max(eraseBoxStart.y, eraseBoxCurrent.y));
-  for (let y = top; y <= bottom; y += 1) {
-    for (let x = left; x <= right; x += 1) {
-      const index = y * imageWidth.value + x;
-      targetMask.value[index] = 0;
-      manualBackgroundMask.value[index] = 0;
-    }
-  }
-  maskVersion.value += 1;
-}
-
-function onPointerDown(event) {
-  if (!sourcePixels.value) return;
-  event.preventDefault();
-  const point = pointFromEvent(event);
-  if (activeTool.value === "auto") {
-    lastSeed.value = point;
-    autoSegMessage.value = currentSampleId.value
-      ? "Seed noted. Press Auto Seg to restore the bundled COD10K mask, or switch tools to edit manually."
-      : "Seed noted. Press Auto Seg to run the browser fallback from this point, or open SAM3 for model-assisted segmentation.";
-    return;
-  }
-  pointerDown = true;
-  lastPaintPoint = point;
-  editorCanvas.value.setPointerCapture?.(event.pointerId);
-  if (activeTool.value === "erase" && eraseMode.value === "box") {
-    eraseBoxStart = point;
-    eraseBoxCurrent = point;
-    drawEditor();
-    return;
-  }
-  paintAt(point.x, point.y);
-}
-
-function onPointerMove(event) {
-  if (!pointerDown || activeTool.value === "auto") return;
-  event.preventDefault();
-  const point = pointFromEvent(event);
-  if (activeTool.value === "erase" && eraseMode.value === "box") {
-    eraseBoxCurrent = point;
-    drawEditor();
-    return;
-  }
-  if (lastPaintPoint) {
-    paintLine(lastPaintPoint, point);
-  } else {
-    paintAt(point.x, point.y);
-  }
-  lastPaintPoint = point;
-}
-
-function onPointerUp() {
-  if (activeTool.value === "erase" && eraseMode.value === "box" && eraseBoxStart && eraseBoxCurrent) {
-    applyEraseBox();
-    eraseBoxStart = null;
-    eraseBoxCurrent = null;
-    drawEditor();
-  }
-  pointerDown = false;
-  lastPaintPoint = null;
-}
-
-function onPointerCancel() {
-  eraseBoxStart = null;
-  eraseBoxCurrent = null;
-  pointerDown = false;
-  lastPaintPoint = null;
-  drawEditor();
-}
-
-function colorDistance(index, seed) {
-  const data = sourcePixels.value.data;
-  const offset = index * 4;
-  const dr = data[offset] - seed[0];
-  const dg = data[offset + 1] - seed[1];
-  const db = data[offset + 2] - seed[2];
-  return Math.sqrt(dr * dr + dg * dg + db * db);
-}
-
-function autoSegment(x = Math.floor(imageWidth.value / 2), y = Math.floor(imageHeight.value / 2)) {
-  if (!sourcePixels.value) return;
-  const width = imageWidth.value;
-  const height = imageHeight.value;
-  const seedIndex = y * width + x;
-  const offset = seedIndex * 4;
-  const seed = [
-    sourcePixels.value.data[offset],
-    sourcePixels.value.data[offset + 1],
-    sourcePixels.value.data[offset + 2]
-  ];
-  const visited = new Uint8Array(width * height);
-  const proposed = new Uint8Array(width * height);
-  const queue = [seedIndex];
-  visited[seedIndex] = 1;
-  const limit = Number(tolerance.value);
-
+function regionGrow(x, y) {
+  if (!source.value) return;
+  const data = source.value.data;
+  const start = y * width.value + x;
+  const base = [data[start * 4], data[start * 4 + 1], data[start * 4 + 2]];
+  const visited = new Uint8Array(width.value * height.value);
+  const result = new Uint8Array(width.value * height.value);
+  const queue = [start];
+  visited[start] = 1;
   for (let head = 0; head < queue.length; head += 1) {
     const index = queue[head];
-    if (colorDistance(index, seed) > limit) continue;
-    proposed[index] = 1;
-    const px = index % width;
-    const py = Math.floor(index / width);
-    const neighbors = [
-      [px - 1, py],
-      [px + 1, py],
-      [px, py - 1],
-      [px, py + 1]
-    ];
-    for (const [nx, ny] of neighbors) {
-      if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
-      const next = ny * width + nx;
+    const offset = index * 4;
+    const distance = Math.hypot(data[offset] - base[0], data[offset + 1] - base[1], data[offset + 2] - base[2]);
+    if (distance > tolerance.value) continue;
+    result[index] = 1;
+    const px = index % width.value;
+    const py = Math.floor(index / width.value);
+    for (const [nx, ny] of [[px - 1, py], [px + 1, py], [px, py - 1], [px, py + 1]]) {
+      if (nx < 0 || nx >= width.value || ny < 0 || ny >= height.value) continue;
+      const next = ny * width.value + nx;
       if (!visited[next]) {
         visited[next] = 1;
         queue.push(next);
       }
     }
   }
-
-  targetMask.value = proposed;
-  manualBackgroundMask.value = new Uint8Array(width * height);
-  maskVersion.value += 1;
-  lastSeed.value = { x, y };
-  autoSegMessage.value = "Auto Seg used the browser fallback: connected color region growing from the selected seed. For SOTA segmentation, use SAM3.";
-  drawEditor();
+  mask.value = result;
+  version.value += 1;
+  draw();
 }
 
-async function runAutoSeg() {
-  if (!sourcePixels.value) return;
-  if (currentSampleId.value) {
-    const sample = samples.find((item) => item.id === currentSampleId.value);
-    if (sample?.gt) {
-      await loadBundledMask(sample);
-      return;
+let painting = false;
+function pointerDown(event) {
+  const p = point(event);
+  if (tool.value === "seed") {
+    seed.value = p;
+    regionGrow(p.x, p.y);
+    return;
+  }
+  painting = true;
+  paint(p.x, p.y);
+}
+function pointerMove(event) {
+  if (!painting) return;
+  const p = point(event);
+  paint(p.x, p.y);
+}
+function pointerUp() { painting = false; }
+function paint(x, y) {
+  const radius = Math.max(1, Math.round(brush.value / 2));
+  for (let yy = y - radius; yy <= y + radius; yy += 1) {
+    for (let xx = x - radius; xx <= x + radius; xx += 1) {
+      if (xx < 0 || yy < 0 || xx >= width.value || yy >= height.value) continue;
+      if ((xx - x) ** 2 + (yy - y) ** 2 > radius ** 2) continue;
+      mask.value[yy * width.value + xx] = tool.value === "paint" ? 1 : 0;
     }
   }
-  const seed = lastSeed.value || {
-    x: Math.floor(imageWidth.value / 2),
-    y: Math.floor(imageHeight.value / 2)
-  };
-  autoSegment(seed.x, seed.y);
+  version.value += 1;
+  draw();
 }
 
-function clearMasks() {
-  if (!sourcePixels.value) return;
-  targetMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
-  manualBackgroundMask.value = new Uint8Array(imageWidth.value * imageHeight.value);
-  maskVersion.value += 1;
-  lastSeed.value = null;
-  autoSegMessage.value = currentSampleId.value
-    ? "Mask cleared. Press Auto Seg to restore the bundled COD10K mask."
-    : "Mask cleared. Click the object to set a seed, then press Auto Seg for the browser fallback.";
-  drawEditor();
-}
-
-function dilate(mask, iterations = 5) {
-  let current = mask;
-  const width = imageWidth.value;
-  const height = imageHeight.value;
-  for (let iter = 0; iter < iterations; iter += 1) {
-    const next = new Uint8Array(current);
-    for (let y = 0; y < height; y += 1) {
-      for (let x = 0; x < width; x += 1) {
-        const index = y * width + x;
-        if (current[index]) continue;
-        let hit = false;
-        for (let dy = -1; dy <= 1; dy += 1) {
-          for (let dx = -1; dx <= 1; dx += 1) {
-            const nx = x + dx;
-            const ny = y + dy;
-            if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
-            if (current[ny * width + nx]) hit = true;
-          }
-        }
-        if (hit) next[index] = 1;
-      }
-    }
-    current = next;
+function draw() {
+  const canvas = canvasRef.value;
+  if (!canvas || !source.value || !mask.value) return;
+  canvas.width = width.value;
+  canvas.height = height.value;
+  const data = new Uint8ClampedArray(source.value.data);
+  for (let i = 0; i < mask.value.length; i += 1) {
+    if (!mask.value[i]) continue;
+    data[i * 4] = Math.round(data[i * 4] * 0.45 + 245 * 0.55);
+    data[i * 4 + 1] = Math.round(data[i * 4 + 1] * 0.45 + 165 * 0.55);
+    data[i * 4 + 2] = Math.round(data[i * 4 + 2] * 0.45 + 35 * 0.55);
   }
-  return current;
+  canvas.getContext("2d").putImageData(new ImageData(data, width.value, height.value), 0, 0);
 }
 
-function currentBackgroundMask() {
-  const total = imageWidth.value * imageHeight.value;
-  const bg = new Uint8Array(total);
-  if (!targetMask.value) return bg;
-  if (backgroundMode.value === "manual") {
-    return manualBackgroundMask.value || bg;
-  }
-  if (backgroundMode.value === "all") {
-    for (let i = 0; i < total; i += 1) bg[i] = targetMask.value[i] ? 0 : 1;
-    return bg;
-  }
-  const dilated = dilate(targetMask.value, 5);
-  for (let i = 0; i < total; i += 1) bg[i] = dilated[i] && !targetMask.value[i] ? 1 : 0;
-  return bg;
+function gray(index) {
+  const data = source.value.data;
+  return (0.299 * data[index * 4] + 0.587 * data[index * 4 + 1] + 0.114 * data[index * 4 + 2]) / 255;
 }
-
-function grayAt(index) {
-  const offset = index * 4;
-  const data = sourcePixels.value.data;
-  return (0.299 * data[offset] + 0.587 * data[offset + 1] + 0.114 * data[offset + 2]) / 255;
+function histogram(values, bins = 24) {
+  const output = new Array(bins).fill(0);
+  values.forEach((value) => output[Math.min(bins - 1, Math.floor(value * bins))]++);
+  return output.map((value) => value / Math.max(1, values.length));
 }
-
-function stats(values) {
-  if (!values.length) return { mean: NaN, std: NaN };
-  const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
-  const variance = values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length;
-  return { mean, std: Math.sqrt(variance) };
-}
-
-function histogram(values, bins = 32) {
-  const hist = new Array(bins).fill(0);
-  for (const value of values) {
-    const bin = Math.max(0, Math.min(bins - 1, Math.floor(value * bins)));
-    hist[bin] += 1;
-  }
-  const denom = Math.max(1, values.length);
-  return hist.map((value) => value / denom);
-}
-
-function sobelMagnitude(index) {
-  const width = imageWidth.value;
-  const height = imageHeight.value;
-  const x = index % width;
-  const y = Math.floor(index / width);
-  if (x === 0 || y === 0 || x === width - 1 || y === height - 1) return 0;
-  const g = (xx, yy) => grayAt(yy * width + xx);
-  const gx =
-    -g(x - 1, y - 1) - 2 * g(x - 1, y) - g(x - 1, y + 1) +
-    g(x + 1, y - 1) + 2 * g(x + 1, y) + g(x + 1, y + 1);
-  const gy =
-    -g(x - 1, y - 1) - 2 * g(x, y - 1) - g(x + 1, y - 1) +
-    g(x - 1, y + 1) + 2 * g(x, y + 1) + g(x + 1, y + 1);
-  return Math.sqrt(gx * gx + gy * gy);
-}
-
-const maskStats = computed(() => {
-  maskVersion.value;
-  if (!sourcePixels.value || !targetMask.value) {
-    return { total: 0, target: 0, background: 0, hasTarget: false, hasBackground: false };
-  }
-  const bgMask = currentBackgroundMask();
-  let target = 0;
-  let background = 0;
-  for (let i = 0; i < targetMask.value.length; i += 1) {
-    if (targetMask.value[i]) target += 1;
-    if (bgMask[i]) background += 1;
-  }
-  return {
-    total: targetMask.value.length,
-    target,
-    background,
-    hasTarget: target > 0,
-    hasBackground: background > 0
-  };
-});
-
-const labStatus = computed(() => {
-  if (!sourcePixels.value) return "Choose or upload an image to start.";
-  if (!maskStats.value.hasTarget) return "Step 2 needed: run Auto Seg, or paint the target manually.";
-  if (!maskStats.value.hasBackground) return "Step 3 needed: choose Auto all non-target or paint a manual background.";
-  return "Ready: metrics below update live as you refine target and background masks.";
-});
-
-const interactiveMetrics = computed(() => {
-  maskVersion.value;
-  if (!sourcePixels.value || !targetMask.value) return [];
-  const bgMask = currentBackgroundMask();
+const metrics = computed(() => {
+  version.value;
+  if (!source.value || !mask.value) return null;
   const target = [];
   const background = [];
-  const gradients = [];
-  for (let i = 0; i < targetMask.value.length; i += 1) {
-    const gray = grayAt(i);
-    gradients.push(sobelMagnitude(i));
-    if (targetMask.value[i]) target.push(gray);
-    if (bgMask[i]) background.push(gray);
-  }
-  const targetStats = stats(target);
-  const backgroundStats = stats(background);
-  const targetHist = histogram(target);
-  const backgroundHist = histogram(background);
-  const histIntersection = targetHist.reduce(
-    (sum, value, index) => sum + Math.min(value, backgroundHist[index]),
-    0
-  );
-  const gradStats = stats(gradients);
-  const edgeThreshold = gradStats.mean + gradStats.std;
-  const edgeDensity = gradients.filter((value) => value > edgeThreshold).length / gradients.length;
-  const meanAbsDiff = Math.abs(targetStats.mean - backgroundStats.mean);
-  const contrastAbsDiff = Math.abs(targetStats.std - backgroundStats.std);
-  const difficultyScore = Math.max(
-    0,
-    Math.min(1, 0.5 * histIntersection + 0.3 * (1 - meanAbsDiff) + 0.2 * edgeDensity)
-  );
-  return [
-    ["Target pixels", target.length],
-    ["Background pixels", background.length],
-    ["Target area", target.length / targetMask.value.length],
-    ["Mean abs diff", meanAbsDiff],
-    ["Contrast abs diff", contrastAbsDiff],
-    ["Histogram overlap", histIntersection],
-    ["Edge density", edgeDensity],
-    ["Camouflage difficulty", difficultyScore]
-  ].map(([name, value]) => ({
-    name,
-    value,
-    info: interactiveMetricInfo[name]
-  }));
+  for (let i = 0; i < mask.value.length; i += 1) (mask.value[i] ? target : background).push(gray(i));
+  if (!target.length || !background.length) return null;
+  const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
+  const tMean = mean(target);
+  const bMean = mean(background);
+  const tHist = histogram(target);
+  const bHist = histogram(background);
+  const overlap = tHist.reduce((sum, value, index) => sum + Math.min(value, bHist[index]), 0);
+  const meanDifference = Math.abs(tMean - bMean);
+  const exploratory = Math.max(0, Math.min(1, 0.65 * overlap + 0.35 * (1 - meanDifference)));
+  return { target: target.length, overlap, meanDifference, exploratory };
 });
 
-onMounted(async () => {
-  await loadBundledIntoEditor(samples[0]);
-});
+onMounted(() => loadSynthetic("bark"));
 </script>
 
 <template>
-  <section class="camo-demo">
-    <div class="demo-hero">
+  <main class="demo">
+    <header>
+      <p class="eyebrow">Synthetic teaching demo</p>
+      <h1>Explore target–background similarity</h1>
+      <p>
+        This page uses deterministic synthetic scenes or an image kept locally in your browser.
+        It is not a COD model, not a benchmark, and not a standard camo-eval score.
+      </p>
+    </header>
+
+    <section class="controls">
+      <button @click="loadSynthetic('bark')">Synthetic bark</button>
+      <button @click="loadSynthetic('leaf')">Synthetic leaf</button>
+      <button @click="loadSynthetic('stone')">Synthetic stone</button>
+      <label class="upload">Upload local image <input type="file" accept="image/*" @change="upload" /></label>
+    </section>
+
+    <section class="workspace">
       <div>
-        <p class="eyebrow">Interactive browser demo</p>
-        <h1>Upload. Segment. Choose background. Measure camouflage.</h1>
-        <p class="hero-copy">
-          This demo runs entirely in the browser for lightweight measurement. Use
-          bundled-mask auto segmentation, manual mask/background brushes, or send the
-          image to a SAM3 Space for model-assisted segmentation.
-        </p>
+        <canvas ref="canvasRef" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerUp" @pointerleave="pointerUp" />
+        <p>{{ label }} · orange overlay = current target mask</p>
       </div>
-      <div class="hero-panel">
-        <strong>4</strong>
-        <span>workflow steps</span>
-        <small>image → mask → background → metrics</small>
-      </div>
-    </div>
-
-    <section class="workflow-strip" aria-label="Demo workflow">
-      <article v-for="step in workflowSteps" :key="step.number" class="workflow-step">
-        <span>{{ step.number }}</span>
-        <div>
-          <h2>{{ step.title }}</h2>
-          <p>{{ step.body }}</p>
-        </div>
-      </article>
+      <aside>
+        <label>Tool
+          <select v-model="tool">
+            <option value="seed">Seeded colour region</option>
+            <option value="paint">Paint target</option>
+            <option value="erase">Erase mask</option>
+          </select>
+        </label>
+        <label>Region tolerance <input v-model.number="tolerance" type="range" min="5" max="150" /></label>
+        <label>Brush size <input v-model.number="brush" type="range" min="4" max="60" /></label>
+        <button v-if="seed" @click="regionGrow(seed.x, seed.y)">Re-run seeded region</button>
+      </aside>
     </section>
 
-    <section class="sample-gallery">
-      <div class="section-title">
-        <p class="eyebrow">Start here</p>
-        <h2>Use a real COD10K sample, or upload your own image</h2>
-        <p>
-          Uploads enter the same lab as bundled samples. COD10K samples include
-          a real object mask; user images use the browser Auto Seg fallback unless
-          you open SAM3 for model-assisted segmentation.
-        </p>
+    <section class="results">
+      <h2>Exploratory diagnostics</h2>
+      <div v-if="metrics" class="grid">
+        <article><strong>{{ metrics.target }}</strong><span>target pixels</span></article>
+        <article><strong>{{ metrics.overlap.toFixed(3) }}</strong><span>grayscale histogram overlap</span></article>
+        <article><strong>{{ metrics.meanDifference.toFixed(3) }}</strong><span>mean luminance difference</span></article>
+        <article><strong>{{ metrics.exploratory.toFixed(3) }}</strong><span>exploratory heuristic</span></article>
       </div>
-
-      <div class="upload-card">
-        <div>
-          <p class="eyebrow">Upload user image</p>
-          <h3>Your image -> Auto Seg -> metrics</h3>
-          <p>
-            Choose a local image. The lab will load it immediately, set an initial
-            center seed, and make the Auto Seg button available for browser-side
-            fallback segmentation.
-          </p>
-        </div>
-        <input class="file-picker big-file-picker" type="file" accept="image/*" @change="onFileUpload" />
-      </div>
-
-      <div class="sample-tabs" aria-label="Bundled demo samples">
-        <button
-          v-for="sample in samples"
-          :key="sample.id"
-          type="button"
-          :class="{ active: selectedId === sample.id }"
-          @click="selectSample(sample)"
-        >
-          <img :src="asset(`${sample.id}/${sample.scene}`)" :alt="`${sample.label} thumbnail`" />
-          <span>{{ sample.label }}</span>
-          <small>Load image + mask</small>
-        </button>
-      </div>
+      <p class="warning">
+        The heuristic combines histogram overlap and luminance similarity. It has no claim to human detectability,
+        ecological fitness, detector failure, or mission effectiveness. Use validated metrics and a declared protocol for research reporting.
+      </p>
     </section>
-
-    <section class="lab-card">
-      <div class="lab-header">
-        <div>
-          <p class="eyebrow">Interactive lab</p>
-          <h2>Mask the object, define background, then inspect the numbers</h2>
-          <p>
-            The goal is not to get a pretty overlay. The goal is to create a
-            defensible target/background comparison and understand what each
-            number says about camouflage.
-          </p>
-        </div>
-        <div class="lab-actions">
-          <button
-            v-for="sample in samples.slice(0, 2)"
-            :key="`quick-${sample.id}`"
-            type="button"
-            @click="loadBundledIntoEditor(sample)"
-          >
-            {{ sample.label }}
-          </button>
-          <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">Open SAM3</a>
-        </div>
-      </div>
-
-      <div class="lab-status" :class="{ ready: maskStats.hasTarget && maskStats.hasBackground }">
-        <strong>{{ labStatus }}</strong>
-        <span>
-          Target {{ formatValue(maskStats.target) }} px /
-          background {{ formatValue(maskStats.background) }} px /
-          image {{ imageWidth }}x{{ imageHeight }}
-        </span>
-      </div>
-
-      <div class="lab-grid">
-        <div class="editor-wrap">
-          <div class="canvas-shell">
-            <canvas
-              ref="editorCanvas"
-              aria-label="Interactive segmentation canvas"
-              @pointerdown="onPointerDown"
-              @pointermove="onPointerMove"
-              @pointerup="onPointerUp"
-              @pointerleave="onPointerUp"
-              @pointercancel="onPointerCancel"
-            />
-          </div>
-          <div class="legend">
-            <span><i class="target-dot"></i>target mask</span>
-            <span><i class="background-dot"></i>background</span>
-            <span>{{ imageName }} · {{ imageWidth }}×{{ imageHeight }}</span>
-          </div>
-        </div>
-
-        <aside class="controls-card">
-          <p class="eyebrow">Controls</p>
-          <div class="tool-grid">
-            <button type="button" :class="{ active: activeTool === 'auto' }" :title="toolHelp.auto" @click="activeTool = 'auto'; runAutoSeg()">Auto Seg</button>
-            <button type="button" :class="{ active: activeTool === 'target' }" :title="toolHelp.target" @click="activeTool = 'target'">Paint target</button>
-            <button type="button" :class="{ active: activeTool === 'background' }" :title="toolHelp.background" @click="activeTool = 'background'; backgroundMode = 'manual'">Paint background</button>
-            <button type="button" :class="{ active: activeTool === 'erase' }" :title="toolHelp.erase" @click="activeTool = 'erase'">Erase</button>
-          </div>
-
-          <p class="tool-help">{{ toolHelp[activeTool] }}</p>
-          <p class="auto-seg-note">{{ autoSegMessage }}</p>
-
-          <label>
-            Auto tolerance
-            <input v-model.number="tolerance" type="range" min="8" max="150" />
-            <span>{{ tolerance }}</span>
-            <small>Higher values include colors farther from the clicked seed.</small>
-          </label>
-          <label>
-            Brush / line width
-            <input v-model.number="brushSize" type="range" min="4" max="80" />
-            <span>{{ brushSize }}</span>
-            <small>Use a small brush near edges; use a large brush for coarse cleanup.</small>
-          </label>
-          <label v-if="activeTool === 'erase'">
-            Erase mode
-            <select v-model="eraseMode">
-              <option value="brush">Brush / line erase</option>
-              <option value="box">Box erase</option>
-            </select>
-            <small>
-              Brush/line follows the cursor with the selected width. Box erase
-              deletes every mask pixel inside the rectangle when you release.
-            </small>
-          </label>
-          <label>
-            Background mode
-            <select v-model="backgroundMode" @change="drawEditor">
-              <option value="near">Auto near ring</option>
-              <option value="all">Auto all non-target</option>
-              <option value="manual">Manual background</option>
-            </select>
-            <small>{{ backgroundHelp[backgroundMode] }}</small>
-          </label>
-
-          <div class="control-buttons">
-            <button type="button" @click="runAutoSeg">Run Auto Seg</button>
-            <button type="button" @click="clearMasks">Clear masks</button>
-          </div>
-
-          <p class="control-note">
-            Auto Seg uses bundled COD10K masks for sample images. Uploaded images
-            use a lightweight browser fallback unless you open SAM3 for model-assisted masks.
-          </p>
-        </aside>
-      </div>
-
-      <div class="interactive-metrics">
-        <article v-for="metric in interactiveMetrics" :key="metric.name" class="metric-card" :title="metric.info">
-          <span>{{ metric.name }}</span>
-          <strong>{{ formatValue(metric.value) }}</strong>
-          <small>{{ metric.info }}</small>
-        </article>
-      </div>
-
-      <div class="metric-explainer">
-        <h3>How to read this lab</h3>
-        <p>
-          These live numbers describe visual similarity between the orange target
-          and the selected background. They are not a model leaderboard score.
-          If target/background pixels are wrong, the numbers are wrong.
-        </p>
-        <ul>
-          <li>Low mean/contrast difference plus high histogram overlap means stronger appearance matching.</li>
-          <li>High edge density means the scene is cluttered, which can hide boundaries.</li>
-          <li>The difficulty score is a heuristic for quick inspection, not a published benchmark metric.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="run-strip sam-strip">
-      <div>
-        <p class="eyebrow">Model-assisted route</p>
-        <h2>SAM3 belongs in a backend Space, not static Pages</h2>
-        <p>
-          GitHub Pages cannot host GPU inference or SAM3 weights. The browser lab
-          computes lightweight metrics locally and uses only a fallback segmenter
-          for uploaded images. SOTA segmentation should run through a dedicated
-          HF Space/API backend, or a future WebGPU/ONNX model if the weight size
-          and browser support are acceptable.
-        </p>
-      </div>
-      <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">SAM3 Demo</a>
-      <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noreferrer">facebook/sam3</a>
-      <a href="https://github.com/facebookresearch/sam3" target="_blank" rel="noreferrer">SAM3 code</a>
-    </section>
-
-    <section class="execution-ladder">
-      <div class="section-title">
-        <p class="eyebrow">Execution ladder</p>
-        <h2>Choose the surface by compute cost</h2>
-        <p>
-          The browser handles annotation and lightweight metrics. Anything that needs
-          model weights, GPUs, videos, or larger datasets should move to a hosted
-          notebook, Codespace, Kaggle runtime, or a dedicated project implementation.
-        </p>
-      </div>
-
-      <div class="route-grid">
-        <article class="route-card">
-          <span>01 · Browser</span>
-          <h3>Bundled-mask Auto Seg and lightweight fallback</h3>
-          <p>
-            COD10K samples restore their bundled object mask. Uploaded images can
-            use a seed-based browser fallback, then target/background measurements
-            update immediately on GitHub Pages.
-          </p>
-          <ul>
-            <li>No login, no backend, no model weights.</li>
-            <li>Best for quick camouflage-difficulty inspection.</li>
-          </ul>
-        </article>
-
-        <article class="route-card">
-          <span>02 · HF Space</span>
-          <h3>SAM3-assisted masks</h3>
-          <p>
-            Use SAM3 for text/click/exemplar segmentation, then bring the mask back to
-            CamoGED metrics or run a future CamoGED Space with both segmentation and
-            measurement in one backend.
-          </p>
-          <div class="route-links">
-            <a href="https://huggingface.co/spaces/prithivMLmods/SAM3-Demo" target="_blank" rel="noreferrer">SAM3 Demo</a>
-            <a href="https://huggingface.co/facebook/sam3" target="_blank" rel="noreferrer">Model card</a>
-          </div>
-        </article>
-
-        <article class="route-card">
-          <span>03 · Notebook runtimes</span>
-          <h3>Colab, Codespaces, Kaggle</h3>
-          <p>
-            Use these when the user needs Python, persistent files, GPU/CPU runtime, or
-            batch evaluation beyond what a static page can safely run.
-          </p>
-          <div class="route-links">
-            <a href="https://colab.research.google.com/github/MichaelCSHN/CamoGED/blob/main/camo-eval/notebooks/camo_eval_colab_demo.ipynb" target="_blank" rel="noreferrer">Open Colab</a>
-            <a href="https://codespaces.new/MichaelCSHN/CamoGED" target="_blank" rel="noreferrer">Open Codespace</a>
-            <a href="https://www.kaggle.com/code" target="_blank" rel="noreferrer">Kaggle notebooks</a>
-          </div>
-        </article>
-
-        <article class="route-card">
-          <span>04 · Research implementations</span>
-          <h3>Complex segmentation and benchmark work</h3>
-          <p>
-            Full SAM3 inference, video tracking, promptable concept segmentation, and
-            heavyweight benchmark claims should point to the corresponding paper,
-            model, and code rather than being hidden behind a fragile static demo.
-          </p>
-          <div class="route-links">
-            <a href="https://ai.meta.com/research/sam3/" target="_blank" rel="noreferrer">Meta SAM3</a>
-            <a href="https://arxiv.org/abs/2511.16719" target="_blank" rel="noreferrer">SAM3 paper</a>
-            <a href="https://github.com/facebookresearch/sam3" target="_blank" rel="noreferrer">Official repo</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="command-card">
-      <p class="eyebrow">CLI equivalent</p>
-      <pre><code>camo-eval visualize --pred camo-eval/demo_data/cod_sota_masks/pred/sample1.png --gt camo-eval/demo_data/cod_sota_masks/gt/sample1.png --output-dir demo-output
-camo-eval image-diagnostics --image camo-eval/demo_data/cod_sota_masks/images/sample1.png --mask camo-eval/demo_data/cod_sota_masks/gt/sample1.png
-camo-eval generation-distance --real-dir camo-eval/demo_data/cod_sota_masks/gt --fake-dir camo-eval/demo_data/cod_sota_masks/pred</code></pre>
-    </section>
-  </section>
+  </main>
 </template>
 
 <style scoped>
-.camo-demo {
-  display: grid;
-  gap: 28px;
-  margin-top: 10px;
-}
-
-.camo-demo,
-.camo-demo * {
-  box-sizing: border-box;
-}
-
-.camo-demo > *,
-.demo-hero > *,
-.lab-header > *,
-.lab-grid > *,
-.interactive-metrics > *,
-.sample-tabs > *,
-.image-grid > *,
-.group-grid > *,
-.route-grid > * {
-  min-width: 0;
-}
-
-.demo-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 240px;
-  gap: 28px;
-  align-items: stretch;
-  padding: 32px;
-  border: 1px solid rgba(28, 55, 45, 0.15);
-  border-radius: 28px;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(103, 139, 93, 0.2), transparent 28%),
-    linear-gradient(135deg, #f6f1df 0%, #e7efe3 55%, #d8e4d0 100%);
-  color: #17251f;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  color: #58715b;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.demo-hero h1,
-.lab-header h2,
-.section-title h2,
-.run-strip h2,
-.visual-card h2 {
-  margin: 0;
-  color: #17251f;
-  line-height: 1.04;
-}
-
-.demo-hero h1 {
-  max-width: 780px;
-  font-size: clamp(38px, 6vw, 72px);
-  letter-spacing: -0.06em;
-}
-
-.hero-copy {
-  max-width: 760px;
-  margin: 18px 0 0;
-  color: #39483f;
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-.hero-panel {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 24px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.58);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
-}
-
-.hero-panel strong {
-  color: #182b22;
-  font-size: 64px;
-  line-height: 1;
-}
-
-.hero-panel span {
-  color: #223b31;
-  font-weight: 800;
-}
-
-.hero-panel small {
-  margin-top: 10px;
-  color: #5d6d61;
-}
-
-.lab-card,
-.visual-card,
-.metric-panel,
-.group-card,
-.upload-card,
-.workflow-step,
-.metric-explainer,
-.run-strip,
-.command-card {
-  border: 1px solid rgba(39, 59, 49, 0.14);
-  border-radius: 24px;
-  background: #fffdf7;
-  box-shadow: 0 18px 60px rgba(28, 48, 38, 0.08);
-}
-
-.lab-card {
-  padding: 24px;
-}
-
-.workflow-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.workflow-step {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
-  padding: 16px;
-  align-items: start;
-}
-
-.workflow-step span {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: #1d3529;
-  color: #fff9e8;
-  font-weight: 900;
-}
-
-.workflow-step h2 {
-  margin: 0;
-  color: #17251f;
-  font-size: 16px;
-  font-weight: 900;
-}
-
-.workflow-step p {
-  margin: 6px 0 0;
-  color: #5d685f;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.lab-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
-  align-items: start;
-  margin-bottom: 20px;
-}
-
-.lab-header p {
-  max-width: 760px;
-  margin: 10px 0 0;
-  color: #5d685f;
-}
-
-.lab-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-button,
-.lab-actions a,
-.run-strip a {
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 16px;
-  background: #1d3529;
-  color: #fff9e8;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.lab-actions button {
-  background: #e8efe2;
-  color: #1d3529;
-}
-
-.lab-status {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 18px;
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: #fff2d5;
-  color: #4f3b11;
-}
-
-.lab-status.ready {
-  background: #e5f0df;
-  color: #183224;
-}
-
-.lab-status strong {
-  font-weight: 900;
-}
-
-.lab-status span {
-  color: inherit;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.file-picker {
-  max-width: 260px;
-  border: 1px solid rgba(29, 53, 41, 0.22);
-  border-radius: 999px;
-  padding: 8px;
-  background: #fffdf7;
-  color: #1d3529;
-  font-weight: 800;
-}
-
-.file-picker::file-selector-button {
-  margin-right: 10px;
-  border: 0;
-  border-radius: 999px;
-  padding: 8px 12px;
-  background: #1d3529;
-  color: #fff9e8;
-  cursor: pointer;
-  font: inherit;
-  font-weight: 800;
-}
-
-.big-file-picker {
-  width: min(100%, 360px);
-  max-width: 360px;
-}
-
-.lab-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 20px;
-}
-
-.canvas-shell {
-  display: grid;
-  justify-items: center;
-  overflow: auto;
-  max-height: 70vh;
-  border: 1px solid rgba(39, 59, 49, 0.14);
-  border-radius: 22px;
-  background: #e7ece0;
-}
-
-canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  touch-action: none;
-  cursor: crosshair;
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 10px;
-  color: #5f6b62;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.legend i {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
-  border-radius: 999px;
-}
-
-.target-dot {
-  background: #f8b023;
-}
-
-.background-dot {
-  background: #286ed2;
-}
-
-.controls-card {
-  padding: 18px;
-  border-radius: 22px;
-  background: #eef3e7;
-}
-
-.tool-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.tool-grid button,
-.control-buttons button {
-  background: #fffdf7;
-  color: #23362d;
-}
-
-.tool-grid button.active {
-  background: #1d3529;
-  color: #fff9e8;
-}
-
-.tool-help {
-  margin: 12px 0 0;
-  padding: 12px;
-  border-radius: 14px;
-  background: #fffdf7;
-  color: #3f5047;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.45;
-}
-
-.auto-seg-note {
-  margin: 10px 0 0;
-  padding: 12px;
-  border-radius: 14px;
-  background: #dfeadd;
-  color: #294236;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.45;
-}
-
-.controls-card label {
-  display: grid;
-  gap: 6px;
-  margin-top: 14px;
-  color: #3f5047;
-  font-weight: 800;
-}
-
-.controls-card input,
-.controls-card select {
-  width: 100%;
-}
-
-.controls-card small {
-  color: #69766d;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.control-buttons {
-  display: grid;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.control-note {
-  margin: 14px 0 0;
-  color: #687268;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.interactive-metrics {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.sample-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.sample-gallery {
-  display: grid;
-  gap: 16px;
-}
-
-.upload-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
-  align-items: center;
-  padding: 20px;
-  background:
-    linear-gradient(135deg, rgba(255, 253, 247, 0.95), rgba(232, 239, 226, 0.95)),
-    radial-gradient(circle at 95% 10%, rgba(248, 176, 35, 0.22), transparent 32%);
-}
-
-.upload-card h3 {
-  margin: 0;
-  color: #17251f;
-  font-size: 22px;
-}
-
-.upload-card p:last-child {
-  margin: 8px 0 0;
-  color: #5d685f;
-  line-height: 1.55;
-}
-
-.sample-tabs button {
-  display: grid;
-  gap: 8px;
-  border: 1px solid rgba(72, 91, 79, 0.22);
-  border-radius: 18px;
-  padding: 8px;
-  background: #f6f3ea;
-  color: #26362e;
-  text-align: left;
-}
-
-.sample-tabs button.active {
-  border-color: #1d3529;
-  background: #e8efe2;
-  color: #17251f;
-  box-shadow: 0 14px 32px rgba(29, 53, 41, 0.18);
-}
-
-.sample-tabs img {
-  width: 100%;
-  aspect-ratio: 1.35 / 1;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.sample-tabs span {
-  padding: 0 4px 4px;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.sample-tabs small {
-  padding: 0 4px 6px;
-  color: #637066;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.visual-card,
-.metric-panel {
-  padding: 22px;
-}
-
-.card-heading {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 18px;
-}
-
-.card-heading p:last-child {
-  max-width: 340px;
-  margin: 0;
-  color: #687268;
-}
-
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-figure {
-  overflow: hidden;
-  margin: 0;
-  border: 1px solid rgba(48, 67, 57, 0.12);
-  border-radius: 18px;
-  background: #eff2e8;
-}
-
-figure.wide {
-  grid-column: span 2;
-}
-
-figure img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
-  background:
-    linear-gradient(45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%);
-  background-size: 16px 16px;
-}
-
-figure.wide img {
-  aspect-ratio: 1.55 / 1;
-  background: #fff;
-}
-
-figcaption {
-  padding: 9px 12px;
-  color: #4d5c52;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.metric-cards {
-  display: grid;
-  gap: 12px;
-}
-
-.metric-card {
-  padding: 14px;
-  border-radius: 18px;
-  background: #eef3e7;
-}
-
-.metric-card span,
-.generation-card span {
-  display: block;
-  color: #5c685f;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.metric-card strong {
-  display: block;
-  margin-top: 3px;
-  color: #15291f;
-  font-size: 28px;
-}
-
-.metric-card small {
-  color: #6c756d;
-  display: block;
-  margin-top: 6px;
-  line-height: 1.35;
-}
-
-.metric-explainer {
-  margin-top: 16px;
-  padding: 18px;
-  background: #f6f3ea;
-}
-
-.metric-explainer h3 {
-  margin: 0;
-  color: #17251f;
-}
-
-.metric-explainer p,
-.metric-explainer li,
-.panel-note {
-  color: #5d685f;
-  line-height: 1.55;
-}
-
-.metric-explainer p {
-  margin: 8px 0 0;
-}
-
-.metric-explainer ul {
-  margin: 12px 0 0;
-  padding-left: 18px;
-}
-
-.panel-note {
-  margin: 0 0 14px;
-  font-size: 13px;
-}
-
-.generation-card {
-  margin-top: 16px;
-  padding: 16px;
-  border-radius: 18px;
-  background: #1d3529;
-  color: #fff9e8;
-}
-
-.generation-card span {
-  color: #b6c7b8;
-}
-
-.generation-card div {
-  display: grid;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.execution-ladder {
-  display: grid;
-  gap: 18px;
-}
-
-.section-title p:last-child {
-  max-width: 820px;
-  margin: 10px 0 0;
-  color: #5f6b62;
-}
-
-.group-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.route-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.group-card,
-.route-card {
-  padding: 18px;
-}
-
-.route-card {
-  border: 1px solid rgba(39, 59, 49, 0.14);
-  border-radius: 24px;
-  background: #fffdf7;
-  box-shadow: 0 18px 60px rgba(28, 48, 38, 0.08);
-}
-
-.route-card span {
-  color: #58715b;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.group-card h3,
-.route-card h3 {
-  margin: 0 0 14px;
-  color: #17251f;
-}
-
-.route-card h3 {
-  margin-top: 8px;
-}
-
-.route-card p,
-.route-card li {
-  color: #5d685f;
-  line-height: 1.55;
-}
-
-.route-card ul {
-  margin: 12px 0 0;
-  padding-left: 18px;
-}
-
-.route-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.route-links a {
-  border-radius: 999px;
-  padding: 8px 12px;
-  background: #e8efe2;
-  color: #1d3529;
-  font-size: 13px;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-dl {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px 12px;
-  margin: 0;
-}
-
-dt {
-  color: #627067;
-}
-
-dd {
-  margin: 0;
-  color: #17251f;
-  font-weight: 800;
-}
-
-.run-strip {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) repeat(3, auto);
-  gap: 14px;
-  align-items: center;
-  padding: 22px;
-  background: #eef3e7;
-}
-
-.run-strip p {
-  margin: 8px 0 0;
-  color: #5f6b62;
-}
-
-.command-card {
-  padding: 20px;
-}
-
-.command-card pre {
-  overflow-x: auto;
-  max-width: 100%;
-  margin: 0;
-  padding: 18px;
-  border-radius: 16px;
-  background: #16241d;
-  color: #ecf7e6;
-}
-
-@media (max-width: 980px) {
-  .demo-hero,
-  .lab-header,
-  .lab-grid,
-  .upload-card,
-  .run-strip {
-    grid-template-columns: 1fr;
-  }
-
-  .lab-actions {
-    justify-content: flex-start;
-  }
-
-  .group-grid,
-  .route-grid,
-  .workflow-strip,
-  .sample-tabs,
-  .interactive-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .demo-hero,
-  .lab-card,
-  .upload-card,
-  .visual-card,
-  .metric-panel,
-  .run-strip,
-  .command-card {
-    padding: 16px;
-    border-radius: 20px;
-  }
-
-  .image-grid,
-  .group-grid,
-  .route-grid,
-  .workflow-strip,
-  .sample-tabs,
-  .interactive-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  figure.wide {
-    grid-column: span 1;
-  }
-}
+.demo { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; font-weight: 700; }
+.controls { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.5rem 0; }
+button, .upload, select { border: 1px solid var(--vp-c-divider); border-radius: 8px; padding: .65rem .85rem; background: var(--vp-c-bg-soft); }
+.upload input { display: block; margin-top: .45rem; }
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 1rem; }
+canvas { width: 100%; max-height: 620px; object-fit: contain; border-radius: 10px; border: 1px solid var(--vp-c-divider); touch-action: none; }
+aside { display: grid; align-content: start; gap: 1rem; padding: 1rem; border: 1px solid var(--vp-c-divider); border-radius: 10px; }
+aside label { display: grid; gap: .4rem; }
+.results { margin-top: 2rem; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+article { padding: 1rem; border: 1px solid var(--vp-c-divider); border-radius: 10px; }
+article strong, article span { display: block; }
+article strong { font-size: 1.5rem; }
+.warning { padding: 1rem; border-left: 4px solid var(--vp-c-warning-1); background: var(--vp-c-warning-soft); }
+@media (max-width: 760px) { .workspace { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr 1fr; } }
 </style>

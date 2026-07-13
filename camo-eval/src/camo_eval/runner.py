@@ -15,10 +15,15 @@ from .metrics.detection import (
     s_measure,
     weighted_f_measure,
 )
-from .metrics.generation import dists, lpips
-from .metrics.instance import boundary_iou, dice, iou
-from .metrics.perceptual import ms_ssim, ssim
-from .metrics.video import boundary_f_score, j_and_f, jaccard_index, temporal_stability
+from .metrics.generation import dists_lite, lpips_lite
+from .metrics.instance import boundary_match_score, dice, iou
+from .metrics.perceptual import ms_ssim_lite, ssim
+from .metrics.video import (
+    boundary_f_score_lite,
+    j_and_f_lite,
+    jaccard_index,
+    temporal_stability,
+)
 from .results import ResultsTable
 
 
@@ -28,20 +33,19 @@ def _load_array(path: Path) -> np.ndarray:
     try:
         from PIL import Image
     except ImportError as exc:  # pragma: no cover
-        raise ImportError(
-            "Image loading requires Pillow for non-.npy inputs. "
-            "Install with `pip install pillow` or use .npy files."
-        ) from exc
+        raise ImportError("Image loading requires Pillow for non-.npy inputs.") from exc
     return np.asarray(Image.open(path))
 
 
 def _index_files(directory: Path) -> dict[str, Path]:
+    if not directory.exists() or not directory.is_dir():
+        raise ValueError(f"{directory} is not a directory")
     return {path.stem: path for path in directory.iterdir() if path.is_file()}
 
 
 def _metric_value(name: str, pred: np.ndarray, gt: np.ndarray) -> dict[str, float]:
     key = name.lower()
-    if key in {"mae"}:
+    if key == "mae":
         return {"MAE": mae(pred, gt)}
     if key in {"weighted_f_measure", "fw"}:
         return {"Fw": weighted_f_measure(pred, gt)}
@@ -55,52 +59,58 @@ def _metric_value(name: str, pred: np.ndarray, gt: np.ndarray) -> dict[str, floa
         return {f"P_{subkey}": value for subkey, value in precision(pred, gt).items()}
     if key in {"recall", "r"}:
         return {f"R_{subkey}": value for subkey, value in recall(pred, gt).items()}
-    if key in {"iou"}:
+    if key == "iou":
         return {"IoU": iou(pred, gt)}
-    if key in {"dice"}:
+    if key == "dice":
         return {"Dice": dice(pred, gt)}
-    if key in {"boundary_iou"}:
-        return {"BoundaryIoU": boundary_iou(pred, gt)}
-    if key in {"ssim"}:
+    if key in {"boundary_match", "boundary_match_score"}:
+        return {"BoundaryMatch": boundary_match_score(pred, gt)}
+    if key == "ssim":
         return {"SSIM": ssim(pred, gt)}
-    if key in {"ms_ssim", "msssim"}:
-        return {"MS_SSIM": ms_ssim(pred, gt)}
-    if key in {"lpips", "lpips_lite", "perceptual_distance"}:
-        return {"LPIPS_lite": lpips(pred, gt)}
-    if key in {"dists", "dists_lite", "structure_texture"}:
-        return {"DISTS_lite": dists(pred, gt)}
+    if key in {"ms_ssim_lite", "msssim_lite"}:
+        return {"MS_SSIM_lite": ms_ssim_lite(pred, gt)}
+    if key in {"lpips_lite", "perceptual_distance_lite"}:
+        return {"LPIPS_lite": lpips_lite(pred, gt)}
+    if key in {"dists_lite", "structure_texture_lite"}:
+        return {"DISTS_lite": dists_lite(pred, gt)}
     if key in {"j", "jaccard"}:
         return {"J": jaccard_index(pred, gt)}
-    if key in {"boundary_f", "f_boundary"}:
-        return {"BoundaryF": boundary_f_score(pred, gt)}
-    if key in {"jf", "j_and_f"}:
-        return {"JF": j_and_f(pred, gt)}
+    if key in {"boundary_f_lite", "f_boundary_lite"}:
+        return {"BoundaryF_lite": boundary_f_score_lite(pred, gt)}
+    if key in {"jf_lite", "j_and_f_lite"}:
+        return {"JF_lite": j_and_f_lite(pred, gt)}
     if key in {"temporal", "temporal_stability"}:
         return {"Temporal": temporal_stability(pred, gt)}
-    raise KeyError(f"Unsupported metric '{name}'.")
+    if key in {
+        "boundary_iou",
+        "ms_ssim",
+        "lpips",
+        "dists",
+        "boundary_f",
+        "jf",
+        "j_and_f",
+    }:
+        raise NotImplementedError(
+            f"Metric {name!r} is a reserved standard name without a validated implementation in this release."
+        )
+    raise KeyError(f"Unsupported metric {name!r}.")
 
 
 def evaluate(pred_dir, gt_dir, metrics: list[str]) -> ResultsTable:
-    """Evaluate matching files by basename across two directories."""
-
-    pred_path = Path(pred_dir)
-    gt_path = Path(gt_dir)
-    pred_files = _index_files(pred_path)
-    gt_files = _index_files(gt_path)
+    pred_files = _index_files(Path(pred_dir))
+    gt_files = _index_files(Path(gt_dir))
     basenames = sorted(set(pred_files) & set(gt_files))
     if not basenames:
         raise ValueError("No matching prediction/ground-truth files found by basename.")
-
     aggregates: dict[str, list[float]] = {}
     for basename in basenames:
         pred = _load_array(pred_files[basename])
         gt = _load_array(gt_files[basename])
         for metric in metrics:
-            values = _metric_value(metric, pred, gt)
-            for key, value in values.items():
+            for key, value in _metric_value(metric, pred, gt).items():
                 aggregates.setdefault(key, []).append(float(value))
-
     row = {"samples": len(basenames)}
-    for key in sorted(aggregates):
-        row[key] = float(np.mean(aggregates[key]))
+    row.update(
+        {key: float(np.mean(values)) for key, values in sorted(aggregates.items())}
+    )
     return ResultsTable(rows=[row], columns=list(row.keys()))

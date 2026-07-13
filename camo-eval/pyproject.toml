@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "camo-eval"
-version = "0.1.0"
-description = "Unified evaluation toolkit for camouflage: detection accuracy, generation quality, and adversarial robustness."
+version = "0.2.0.dev0"
+description = "Protocol-aware camouflage evaluation research preview with validated COD core metrics and explicitly experimental extensions."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "Apache-2.0" }
-authors = [{ name = "CamoGED Authors" }]
+authors = [{ name = "Michael C." }]
 keywords = ["camouflage", "evaluation", "metrics", "computer-vision", "benchmark"]
 dependencies = [
     "numpy>=1.21",
@@ -21,7 +21,6 @@ camo-eval = "camo_eval.cli:main"
 
 [project.optional-dependencies]
 full = [
-    "scipy>=1.7",
     "gradio>=4.0",
     "pillow>=9.0",
     "matplotlib>=3.5",
@@ -34,6 +33,7 @@ dev = [
     "pillow>=9.0",
     "matplotlib>=3.5",
     "scikit-image>=0.19",
+    "build>=1.2",
     # Reference implementation for the detection-metric cross-check in
     # tests/test_detection_reference.py (PyPI package `pysodmetrics`, imported as
     # `py_sod_metrics`). Without it that test silently `importorskip`s, so the only

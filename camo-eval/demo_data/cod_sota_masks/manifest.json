@@ -3,8 +3,11 @@
   "observer": "model",
   "channel": "rgb",
   "task": "image-cod",
-  "protocol": "COD/SOD metric visualization demo",
-  "notes": "Synthetic 96x96 mask pairs for COD metric scoring and visualization demos.",
+  "protocol": "synthetic COD/SOD metric visualization demo",
+  "notes": "Synthetic 96x96 mask pairs. boundary_match_score and ms_ssim_lite are experimental diagnostics, not standard Boundary IoU or MS-SSIM.",
+  "implementation_version": "0.2.0.dev0",
+  "dataset_version": "synthetic-fixture-v1",
+  "threshold_policy": "default metric thresholds",
   "pred_dir": "pred",
   "gt_dir": "gt",
   "pred_source": "demo_data/cod_sota_masks/pred",
@@ -19,8 +22,8 @@
     "recall",
     "iou",
     "dice",
-    "boundary_iou",
+    "boundary_match_score",
     "ssim",
-    "ms_ssim"
+    "ms_ssim_lite"
   ]
 }

@@ -1,0 +1,74 @@
+import json
+
+import numpy as np
+import pytest
+
+from camo_eval.cli import main
+from camo_eval.protocols import load_protocol_manifest
+
+
+def test_evaluate_protocol_preserves_provenance(tmp_path, capsys):
+    pred_dir = tmp_path / "pred"
+    gt_dir = tmp_path / "gt"
+    pred_dir.mkdir()
+    gt_dir.mkdir()
+    np.save(
+        pred_dir / "sample.npy",
+        np.array([[0, 255], [255, 0]], dtype=np.uint8),
+    )
+    np.save(
+        gt_dir / "sample.npy",
+        np.array([[0, 255], [255, 0]], dtype=np.uint8),
+    )
+
+    manifest = {
+        "name": "provenance-test",
+        "observer": "model",
+        "channel": "rgb",
+        "task": "image-cod",
+        "protocol": "fixed synthetic fixture",
+        "notes": "regression test",
+        "implementation_version": "0.2.0.dev0",
+        "dataset_version": "fixture-v1",
+        "prediction_revision": "pred-abc123",
+        "threshold_policy": "0.5 for binary helpers",
+        "seed": 42,
+        "environment": "pytest",
+        "uncertainty": "not applicable",
+        "pred_dir": "pred",
+        "gt_dir": "gt",
+        "metrics": ["mae", "iou"],
+    }
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    exit_code = main(["evaluate-protocol", "--manifest", str(manifest_path)])
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+
+    assert exit_code == 0
+    assert payload["context"]["dataset_version"] == "fixture-v1"
+    assert payload["context"]["prediction_revision"] == "pred-abc123"
+    assert payload["context"]["threshold_policy"] == "0.5 for binary helpers"
+    assert payload["context"]["seed"] == 42
+    assert payload["context"]["environment"] == "pytest"
+    assert payload["context"]["uncertainty"] == "not applicable"
+
+
+@pytest.mark.parametrize("field", ["observer", "channel", "task", "protocol"])
+def test_manifest_rejects_implicitly_coercible_required_fields(tmp_path, field):
+    manifest = {
+        "observer": "model",
+        "channel": "rgb",
+        "task": "image-cod",
+        "protocol": "fixed synthetic fixture",
+        "pred_dir": "pred",
+        "gt_dir": "gt",
+        "metrics": ["mae"],
+    }
+    manifest[field] = None
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(ValueError):
+        load_protocol_manifest(path)

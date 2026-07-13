@@ -1,0 +1,51 @@
+# Editorial revision log
+
+Revision date: 2026-07-13
+
+- `book/_quarto.yml`: 统一正式书名、篇章顺序、作者角色、版本日期，并配置 HTML/PDF/ePub 输出
+- `book/index.qmd`: 将项目公告式前言改写为正式前言，补充读者、证据等级、版本和责任边界
+- `CITATION.cff`: 清除作者和发布日期占位项，更新项目标题与引用元数据
+- `README.md`: 区分项目品牌缩写与专著实际篇章顺序
+- `README.md`: 将“完全同构”的强命题改为可检验的工作性命题
+- `README.md`: 修正专著标题并如实说明多格式成熟度
+- `README.md`: 同步 camo-eval 当前实现状态
+- `README.md`: 移除尚未兑现的 DOI 自动生成承诺
+- `.github/workflows/book.yml`: 将 HTML 与 ePub 纳入 PR/主分支 CI，并明确 PDF 需独立中文排版校样
+- `docs/BOOK_STYLE_GUIDE.md`: 新增正式体例、术语、证据、动态数据和多格式出版规范
+- `docs/BOOK_SEARCH_METHODOLOGY.md`: 新增可审计的检索范围、关键词、纳入标准和结论用语
+- `docs/BOOK_FACTCHECK_REGISTER.md`: 新增逐项事实核查台账并记录本轮处理状态
+- `book/chapters/01-essence-and-the-game.qmd`: 将 H/S/C/U 从完整博弈论降格为工作性分析框架
+- `book/chapters/01-essence-and-the-game.qmd`: 删除跨域严格零和断言
+- `book/chapters/01-essence-and-the-game.qmd`: 压缩第1章结论并明确理论边界（命中 1 处）
+- `book/chapters/02-natural-camouflage.qmd`: 压缩第2章反复回扣并保留生物学方法论结论（命中 1 处）
+- `book/chapters/03-military-camouflage.qmd`: 删除由早期图录支撑后续 UCP 结论的过强叙述（命中 1 处）
+- `book/chapters/03-military-camouflage.qmd`: 压缩第3章结语并明确历史证据边界和跨章分工（命中 1 处）
+- `book/chapters/04-camouflage-in-art.qmd`: 压缩第4章结论并保留艺术评价的独立性（命中 1 处）
+- `book/chapters/05-physical-generation.qmd`: 纠正热像辐射并非只由温度和发射率决定的过度简化
+- `book/chapters/05-physical-generation.qmd`: 保留多目标公式，删除章末多轮口号式收尾（命中 1 处）
+- `book/chapters/07-digital-generation.qmd`: 将数字章节从笼统‘伪装生成’改为更准确的隐藏与欺骗
+- `book/chapters/07-digital-generation.qmd`: 明确隐写、Deepfake 与数字对抗是本书工作性并置而非公认统一门类
+- `book/chapters/07-digital-generation.qmd`: 压缩第7章二次收尾并强化三类任务边界（命中 1 处）
+- `book/chapters/08-intelligent-generation.qmd`: 将未发表 flowcamo 长篇占位压缩为有边界的研究议程（命中 1 处）
+- `book/chapters/08-intelligent-generation.qmd`: 压缩第二篇总结并删除项目路线式重复段落（命中 1 处）
+- `book/chapters/10-intelligent-overview-datasets.qmd`: 将 NC4K 从严格 OOD 降格为跨数据集泛化测试
+- `book/chapters/10-intelligent-overview-datasets.qmd`: 删除无来源的 1—5% 泄漏增益断言（命中 1 处）
+- `book/chapters/10-intelligent-overview-datasets.qmd`: 压缩第10章重复的‘规则是地基’尾段（命中 1 处）
+- `book/chapters/11-image-cod.qmd`: 将 coder 长篇占位与空 SOTA 表压缩为研究议程（命中 1 处）
+- `book/chapters/11-image-cod.qmd`: 删除第11章多轮方法宣言和一行式视频过渡（命中 1 处）
+- `book/chapters/12-video-cod.qmd`: 将 flowcamo 检测分支占位压缩为可验收研究议程（命中 1 处）
+- `book/chapters/12-video-cod.qmd`: 统一视频指标解释并删除重复过渡尾句（命中 1 处）
+- `book/chapters/13-instance-extended.qmd`: 将 dualvcod 占位压缩为视频实例研究议程（命中 1 处）
+- `book/chapters/13-instance-extended.qmd`: 删除第13章结论后的多轮重复收束和单句尾段（命中 1 处）
+- `book/chapters/14-foundation-models.qmd`: 将基础模型优势改为条件性路线判断
+- `book/chapters/14-foundation-models.qmd`: 纠正原始 CLIP 可直接定位目标的表述
+- `book/chapters/14-foundation-models.qmd`: 修正 SAM 原论文误作 Adapter 方法引文
+- `book/chapters/14-foundation-models.qmd`: 修正第三篇章数错误
+- `book/chapters/14-foundation-models.qmd`: 压缩第三篇总结并突出基础模型实验分档（命中 1 处）
+- `book/chapters/15-unified-evaluation.qmd`: 区分物理/数据输入信道与文本提示条件
+- `book/chapters/15-unified-evaluation.qmd`: 删除第15章多轮终句并保留五元组和工具边界（命中 1 处）
+- `book/chapters/16-frontiers-ethics.qmd`: 删除具身揭示方拥有无穷信道的绝对化比喻
+- `book/chapters/16-frontiers-ethics.qmd`: 将终章压缩为一次正式收束，删除第二轮展望和‘继续’式尾句（命中 1 处）
+- `book/chapters/appendix-resources.qmd`: 将简短资源索引扩充为数据、指标、报告、术语、核验、项目和版权出版附录
+- `docs/BOOK_COMPILATION_PLAN.md`: 给编纂计划增加事实核验边界
+- `docs/BOOK_COMPILATION_PLAN.md`: 将绝对唯一性结论改为有检索边界的工作性判断

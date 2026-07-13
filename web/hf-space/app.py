@@ -1,4 +1,4 @@
-"""Lightweight Hugging Face Space for camo-eval."""
+"""Lightweight Gradio surface for the camo-eval research preview."""
 
 from __future__ import annotations
 
@@ -18,140 +18,90 @@ DEMO_ROOT = ROOT / "camo-eval" / "demo_data" / "cod_sota_masks"
 from camo_eval import (  # noqa: E402
     EvaluationContext,
     EvaluationReport,
-    boundary_iou,
-    camouflage_difficulty,
+    boundary_match_score,
     dice,
-    dists,
+    dists_lite,
     e_measure,
-    edge_density,
-    feature_congestion,
+    evaluate,
     iou,
-    lpips,
+    lpips_lite,
     mae,
-    ms_ssim,
+    ms_ssim_lite,
     precision,
     recall,
     s_measure,
     ssim,
-    subband_entropy,
-    target_background_similarity,
+    to_markdown,
     weighted_f_measure,
 )
-from camo_eval import evaluate, to_markdown  # noqa: E402
 from camo_eval.visualization import error_map, mask_overlay  # noqa: E402
 
-
 METRIC_GROUPS = {
-    "COD core": ["mae", "fw", "sm", "em", "f"],
-    "PR diagnostics": ["precision", "recall"],
-    "Region and boundary": ["iou", "dice", "boundary_iou"],
-    "Mask similarity": ["ssim", "ms_ssim", "lpips_lite", "dists_lite"],
-    "Clutter and difficulty": [
-        "edge_density",
-        "subband_entropy",
-        "feature_congestion",
-        "camouflage_difficulty",
-    ],
-    "Target-background similarity": [
-        "tb_all",
-        "tb_near",
+    "Validated COD core": ["mae", "fw", "sm", "em", "f", "precision", "recall"],
+    "Validated region and SSIM": ["iou", "dice", "ssim"],
+    "Experimental lite diagnostics": [
+        "boundary_match_score",
+        "ms_ssim_lite",
+        "lpips_lite",
+        "dists_lite",
     ],
 }
+DEFAULT_GROUPS = ["Validated COD core", "Validated region and SSIM"]
 
-DEFAULT_GROUPS = ["COD core", "PR diagnostics", "Region and boundary"]
 
-
-def _demo_examples() -> list[list[str]]:
+def _examples() -> list[list[str]]:
     return [
         [
-            str(DEMO_ROOT / "images" / "sample1.png"),
-            str(DEMO_ROOT / "pred" / "sample1.png"),
-            str(DEMO_ROOT / "gt" / "sample1.png"),
+            str(DEMO_ROOT / "images" / f"sample{index}.png"),
+            str(DEMO_ROOT / "pred" / f"sample{index}.png"),
+            str(DEMO_ROOT / "gt" / f"sample{index}.png"),
             DEFAULT_GROUPS,
             "model",
             "rgb",
             "image-cod",
-            "COD/SOD metric visualization demo / sample1",
-        ],
-        [
-            str(DEMO_ROOT / "images" / "sample2.png"),
-            str(DEMO_ROOT / "pred" / "sample2.png"),
-            str(DEMO_ROOT / "gt" / "sample2.png"),
-            DEFAULT_GROUPS,
-            "model",
-            "rgb",
-            "image-cod",
-            "COD/SOD metric visualization demo / sample2",
-        ],
+            f"Synthetic repository fixture / sample{index}",
+        ]
+        for index in (1, 2)
     ]
 
 
-def _to_gray_array(image: Image.Image | None) -> np.ndarray:
+def _gray(image: Image.Image | None) -> np.ndarray:
     if image is None:
-        raise gr.Error("Both prediction and ground-truth images are required.")
+        raise gr.Error("Prediction and ground-truth images are required.")
     return np.asarray(image.convert("L"))
 
 
-def _compute_grouped_metrics(
-    scene: np.ndarray | None, pred: np.ndarray, gt: np.ndarray, groups: list[str] | None
+def _grouped_metrics(
+    pred: np.ndarray, gt: np.ndarray, groups: list[str] | None
 ) -> dict[str, dict[str, float | dict[str, float]]]:
     selected = groups or DEFAULT_GROUPS
     metrics: dict[str, dict[str, float | dict[str, float]]] = {}
-
-    if "COD core" in selected:
-        metrics["COD core"] = {
+    if "Validated COD core" in selected:
+        metrics["Validated COD core"] = {
             "MAE": mae(pred, gt),
             "Fw": weighted_f_measure(pred, gt),
             "Sm": s_measure(pred, gt),
             "Em": e_measure(pred, gt),
-        }
-    if "PR diagnostics" in selected:
-        metrics["PR diagnostics"] = {
             "Precision": precision(pred, gt),
             "Recall": recall(pred, gt),
         }
-    if "Region and boundary" in selected:
-        metrics["Region and boundary"] = {
+    if "Validated region and SSIM" in selected:
+        metrics["Validated region and SSIM"] = {
             "IoU": iou(pred, gt),
             "Dice": dice(pred, gt),
-            "BoundaryIoU": boundary_iou(pred, gt),
-        }
-    if "Mask similarity" in selected:
-        metrics["Mask similarity"] = {
             "SSIM": ssim(pred, gt),
-            "MS_SSIM": ms_ssim(pred, gt),
-            "LPIPS_lite": lpips(pred, gt),
-            "DISTS_lite": dists(pred, gt),
         }
-    if "Clutter and difficulty" in selected:
-        # These are scene-clutter metrics; computing them on the binary GT mask
-        # (when no scene is uploaded) produces meaningless numbers, so gate the
-        # whole group on a scene being present.
-        if scene is None:
-            metrics["Clutter and difficulty"] = {
-                "status": "Upload a scene image to compute scene-clutter metrics."
-            }
-        else:
-            metrics["Clutter and difficulty"] = {
-                "edge_density": edge_density(scene),
-                "subband_entropy": subband_entropy(scene),
-                "feature_congestion": feature_congestion(scene),
-                "camouflage_difficulty": camouflage_difficulty(scene, gt),
-            }
-    if "Target-background similarity" in selected:
-        if scene is None:
-            metrics["Target-background similarity"] = {
-                "status": "Upload a scene image to compute this group."
-            }
-        else:
-            metrics["Target-background similarity"] = {
-                "all_background": target_background_similarity(scene, gt, mode="all"),
-                "near_background": target_background_similarity(scene, gt, mode="near"),
-            }
+    if "Experimental lite diagnostics" in selected:
+        metrics["Experimental lite diagnostics"] = {
+            "BoundaryMatch_experimental": boundary_match_score(pred, gt),
+            "MS_SSIM_lite": ms_ssim_lite(pred, gt),
+            "LPIPS_lite": lpips_lite(pred, gt),
+            "DISTS_lite": dists_lite(pred, gt),
+        }
     return metrics
 
 
-def evaluate_demo(
+def evaluate_pair(
     scene_image: Image.Image | None,
     pred_image: Image.Image | None,
     gt_image: Image.Image | None,
@@ -161,16 +111,13 @@ def evaluate_demo(
     task: str,
     protocol: str,
 ) -> tuple[str, str, np.ndarray, np.ndarray]:
-    scene = None if scene_image is None else _to_gray_array(scene_image)
-    pred = _to_gray_array(pred_image)
-    gt = _to_gray_array(gt_image)
-    # Domain errors (mismatched sizes, empty/degenerate masks) raise ValueError
-    # deep in camo-eval; surface them as a clean gr.Error instead of a raw
-    # traceback.
+    del scene_image  # Scene uploads are intentionally not evaluated by this mask-only Space.
+    pred = _gray(pred_image)
+    gt = _gray(gt_image)
     try:
-        metrics = _compute_grouped_metrics(scene, pred, gt, metric_groups)
+        metrics = _grouped_metrics(pred, gt, metric_groups)
         overlay = mask_overlay(pred, gt)
-        emap = error_map(pred, gt)
+        errors = error_map(pred, gt)
     except ValueError as exc:
         raise gr.Error(str(exc)) from exc
 
@@ -179,43 +126,24 @@ def evaluate_demo(
         channel=channel,
         task=task,
         protocol=protocol or "ad hoc upload",
+        notes=(
+            "The Space does not retain uploads. Experimental lite metrics are not "
+            "standard Boundary IoU, MS-SSIM, LPIPS, or DISTS."
+        ),
     )
     report = EvaluationReport(context=context, metrics=metrics)
-    return (
-        json.dumps(report.to_dict(), indent=2),
-        report.to_markdown(),
-        overlay,
-        emap,
-    )
+    return report.to_json(), report.to_markdown(), overlay, errors
 
 
 def evaluate_demo_dataset() -> tuple[str, str]:
-    results = evaluate(
-        DEMO_ROOT / "pred",
-        DEMO_ROOT / "gt",
-        [
-            "mae",
-            "fw",
-            "sm",
-            "em",
-            "f",
-            "precision",
-            "recall",
-            "iou",
-            "dice",
-            "boundary_iou",
-            "ssim",
-            "ms_ssim",
-            "lpips_lite",
-            "dists_lite",
-        ],
-    )
+    metrics = ["mae", "fw", "sm", "em", "f", "precision", "recall", "iou", "dice", "ssim"]
+    results = evaluate(DEMO_ROOT / "pred", DEMO_ROOT / "gt", metrics)
     context = EvaluationContext(
         observer="model",
         channel="rgb",
         task="image-cod",
-        protocol="COD/SOD metric visualization demo",
-        notes="Synthetic repository-local 96x96 mask dataset",
+        protocol="synthetic repository fixture",
+        notes="No external dataset is redistributed by this demo bundle.",
     )
     report = EvaluationReport(
         context=context,
@@ -228,106 +156,59 @@ def evaluate_demo_dataset() -> tuple[str, str]:
     return json.dumps(report.to_dict(), indent=2), to_markdown(results)
 
 
-with gr.Blocks(title="camo-eval Space") as demo:
-    gr.Markdown("# camo-eval")
+with gr.Blocks(title="camo-eval research preview") as demo:
+    gr.Markdown("# camo-eval research preview")
     gr.Markdown(
-        "Upload a scene, prediction, and ground-truth mask, or run the bundled "
-        "repository demo dataset. This Space only computes lightweight metrics "
-        "that do not require large datasets or model weights."
+        "This Space evaluates prediction/ground-truth masks. Standard names are shown only "
+        "for validated implementations; approximations are explicitly labelled experimental "
+        "or `_lite`. Uploaded files are processed for the session and are not a hosted model input."
     )
 
-    with gr.Tab("Single Pair"):
+    with gr.Tab("Single pair"):
         with gr.Row():
-            scene_image = gr.Image(type="pil", label="Scene Image")
+            scene_image = gr.Image(type="pil", label="Optional scene (display only)")
             pred_image = gr.Image(type="pil", label="Prediction")
-            gt_image = gr.Image(type="pil", label="Ground Truth")
-
+            gt_image = gr.Image(type="pil", label="Ground truth")
         metric_groups = gr.CheckboxGroup(
-            choices=list(METRIC_GROUPS),
-            value=DEFAULT_GROUPS,
-            label="Metric Groups",
+            choices=list(METRIC_GROUPS), value=DEFAULT_GROUPS, label="Metric groups"
         )
-
         with gr.Row():
             observer = gr.Dropdown(
-                choices=["model", "human", "operator", "hybrid"],
-                value="model",
-                label="Observer",
+                choices=["model", "human", "operator", "hybrid"], value="model", label="Observer"
             )
             channel = gr.Dropdown(
-                choices=[
-                    "rgb",
-                    "video",
-                    "thermal",
-                    "multispectral",
-                    "multimodal",
-                    "radar",
-                    "custom",
-                ],
+                choices=["rgb", "video", "thermal", "multispectral", "multimodal", "radar", "custom"],
                 value="rgb",
                 label="Channel",
             )
             task = gr.Dropdown(
-                choices=[
-                    "image-cod",
-                    "video-cod",
-                    "instance-cod",
-                    "physical-adversarial",
-                    "generation",
-                    "human-search",
-                    "signature-analysis",
-                    "custom",
-                ],
+                choices=["image-cod", "video-cod", "instance-cod", "generation", "custom"],
                 value="image-cod",
                 label="Task",
             )
-
-        protocol = gr.Textbox(label="Protocol", value="interactive demo")
-        run_button = gr.Button("Evaluate Pair")
-
+        protocol = gr.Textbox(label="Protocol", value="interactive synthetic demonstration")
+        run_button = gr.Button("Evaluate pair")
         with gr.Row():
-            json_output = gr.Code(label="JSON Report", language="json")
-            markdown_output = gr.Textbox(label="Markdown Report", lines=18)
+            json_output = gr.Code(label="JSON report", language="json")
+            markdown_output = gr.Textbox(label="Markdown report", lines=18)
         with gr.Row():
-            overlay_output = gr.Image(label="Mask Overlay", type="numpy")
-            error_output = gr.Image(label="Error Map", type="numpy")
-
+            overlay_output = gr.Image(label="Mask overlay", type="numpy")
+            error_output = gr.Image(label="TP/FP/FN error map", type="numpy")
         gr.Examples(
-            examples=_demo_examples(),
-            inputs=[
-                scene_image,
-                pred_image,
-                gt_image,
-                metric_groups,
-                observer,
-                channel,
-                task,
-                protocol,
-            ],
+            examples=_examples(),
+            inputs=[scene_image, pred_image, gt_image, metric_groups, observer, channel, task, protocol],
         )
-
         run_button.click(
-            fn=evaluate_demo,
-            inputs=[
-                scene_image,
-                pred_image,
-                gt_image,
-                metric_groups,
-                observer,
-                channel,
-                task,
-                protocol,
-            ],
+            fn=evaluate_pair,
+            inputs=[scene_image, pred_image, gt_image, metric_groups, observer, channel, task, protocol],
             outputs=[json_output, markdown_output, overlay_output, error_output],
         )
 
-    with gr.Tab("Demo Dataset"):
-        gr.Markdown(
-            "Run the tiny repository-local demo dataset through the batch evaluator and package the result as a protocol-aware report."
-        )
-        dataset_button = gr.Button("Evaluate Demo Dataset")
-        dataset_json = gr.Code(label="Dataset Report", language="json")
-        dataset_markdown = gr.Textbox(label="Batch Markdown Table", lines=18)
+    with gr.Tab("Synthetic fixture batch"):
+        gr.Markdown("Runs the repository-local synthetic mask fixture; no third-party dataset is bundled.")
+        dataset_button = gr.Button("Evaluate synthetic fixture")
+        dataset_json = gr.Code(label="Dataset report", language="json")
+        dataset_markdown = gr.Textbox(label="Batch table", lines=18)
         dataset_button.click(
             fn=evaluate_demo_dataset,
             inputs=[],
@@ -336,7 +217,4 @@ with gr.Blocks(title="camo-eval Space") as demo:
 
 
 if __name__ == "__main__":
-    # Hugging Face Spaces proxies to the container, so the app must bind 0.0.0.0;
-    # binding loopback would make a deployed Space unreachable. Allow a local
-    # override via GRADIO_SERVER_NAME (e.g. 127.0.0.1) when running privately.
     demo.launch(server_name=os.environ.get("GRADIO_SERVER_NAME", "0.0.0.0"))

@@ -1,5 +1,25 @@
-"""Generation and deception metrics."""
+"""Generation metrics with explicit validation levels."""
 
-from .fid import deception_rate, dists, fid, kid, lpips
+from .fid import (
+    deception_rate,
+    dists,
+    dists_lite,
+    fid,
+    fid_lite,
+    kid,
+    kid_lite,
+    lpips,
+    lpips_lite,
+)
 
-__all__ = ["fid", "kid", "lpips", "dists", "deception_rate"]
+__all__ = [
+    "deception_rate",
+    "dists",
+    "dists_lite",
+    "fid",
+    "fid_lite",
+    "kid",
+    "kid_lite",
+    "lpips",
+    "lpips_lite",
+]

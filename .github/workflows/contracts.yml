@@ -1,15 +1,5 @@
 name: contracts
 
-# Enforces the frozen interfaces:
-#   - data/*.yaml conforms to data/SCHEMA.md      (scripts/check_data.py)
-#   - camo-eval public API matches Appendix B     (scripts/check_api.py)
-#   - awesome/README.md is the build_awesome.py output, if that script exists
-#
-# NOTE: these checks are STRICT and will fail until the data is aligned (task B1)
-# and the camo-eval metrics are implemented (WP-A). That red state is the to-do
-# list, not a bug. Mark this workflow as a *required* status check in branch
-# protection only once it is green, if you prefer main to stay green meanwhile.
-
 on:
   push:
     branches: [main]
@@ -19,34 +9,36 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: contracts-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   contracts:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install minimal deps
-        run: python -m pip install --upgrade pip pyyaml numpy
-
-      - name: Install camo-eval (core, best-effort)
-        run: pip install -e ./camo-eval || echo "camo-eval not installable yet; check_api uses sys.path fallback"
-
-      - name: Data schema & no-fabrication check
+        with: { python-version: "3.11" }
+      - name: Install contract dependencies
+        run: python -m pip install --upgrade pip pyyaml numpy scipy
+      - name: Install camo-eval core
+        run: pip install -e ./camo-eval
+      - name: Metadata schema and source integrity
         run: python scripts/check_data.py
-
-      - name: camo-eval API contract check
-        run: python scripts/check_api.py
-
-      - name: Awesome list is generated (no manual drift)
+      - name: Awesome/catalog specialist acceptance
         run: |
-          if [ -f scripts/build_awesome.py ]; then
-            python scripts/build_awesome.py
-            git diff --exit-code -- awesome/README.md \
-              || (echo "awesome/README.md is out of sync with build_awesome.py" && exit 1)
-          else
-            echo "scripts/build_awesome.py not present yet; skipping (task B3)."
-          fi
+          python scripts/discover_awesome.py --self-test
+          python scripts/check_awesome.py
+      - name: camo-eval API and standard-name guards
+        run: python scripts/check_api.py
+      - name: Third-party asset ledger
+        run: python scripts/check_assets.py
+      - name: Release metadata honesty
+        run: python scripts/check_release.py
+      - name: Generated surfaces have no manual drift
+        run: |
+          python scripts/build_awesome.py
+          git diff --exit-code -- \
+            awesome/README.md web/awesome.md web/catalog.md web/updates.md \
+            web/papers.md web/datasets.md web/leaderboard.md web/models.md

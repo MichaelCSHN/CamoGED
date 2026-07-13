@@ -1,26 +1,43 @@
+// Resource navigation intentionally separates the curated Awesome view from the full Catalog.
 export default {
   title: "CamoGED",
   base: "/CamoGED/",
-  description: "Camouflage: Generation · Evaluation · Detection",
+  description: "CamoGED research preview: monograph, curated resources, verified metadata, and evaluation tools.",
   themeConfig: {
     nav: [
       { text: "Home", link: "/" },
-      { text: "Book", link: "https://michaelcshn.github.io/CamoGED/book/" },
-      { text: "Demo", link: "/demo" },
+      { text: "Book", link: "/book/" },
       {
-        text: "Awesome",
+        text: "Resources",
         items: [
-          { text: "Overview", link: "/awesome" },
-          { text: "Papers", link: "/papers" },
-          { text: "Code", link: "/models" },
-          { text: "Leaderboard", link: "/leaderboard" },
-          { text: "Datasets", link: "/datasets" }
+          { text: "Awesome Camouflage", link: "/awesome" },
+          { text: "Research Catalog", link: "/catalog" },
+          { text: "Update status", link: "/updates" },
+          { text: "Datasets", link: "/datasets" },
+          { text: "Code & Resources", link: "/models" },
+          { text: "Verified results", link: "/leaderboard" }
         ]
-      }
+      },
+      { text: "Synthetic demo", link: "/demo" }
     ],
-    socialLinks: [
-      { icon: "github", link: "https://github.com/MichaelCSHN/CamoGED" }
-    ],
+    sidebar: {
+      "/": [
+        {
+          text: "CamoGED",
+          items: [
+            { text: "Home", link: "/" },
+            { text: "Awesome Camouflage", link: "/awesome" },
+            { text: "Research Catalog", link: "/catalog" },
+            { text: "Update status", link: "/updates" },
+            { text: "Datasets", link: "/datasets" },
+            { text: "Code & Resources", link: "/models" },
+            { text: "Verified results", link: "/leaderboard" },
+            { text: "Synthetic demo", link: "/demo" }
+          ]
+        }
+      ]
+    },
+    socialLinks: [{ icon: "github", link: "https://github.com/MichaelCSHN/CamoGED" }],
     search: { provider: "local" }
   }
-}
+};

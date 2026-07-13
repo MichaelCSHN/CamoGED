@@ -1,38 +1,26 @@
-# Responsible Use & Dual-Use Policy
+# Responsible use and dual-use policy
 
-CamoGED studies camouflage across nature, the military, art, and AI. Some of this material —
-notably **military camouflage** and **adversarial attacks on perception systems** — is
-inherently *dual-use*: the same knowledge that improves defense can, in principle, be misused.
+CamoGED studies camouflage across nature, engineered systems, visual culture, and machine perception. Some material is dual-use. The project therefore separates explanation and evaluation from deployment-oriented enablement.
 
-We choose to cover these topics because understanding them is essential to building **better
-detection, defense, and robustness evaluation**. We do so under the following commitments.
+## Commitments
 
-## What we do
+- Defense and evaluation first: emphasize detection, robustness, protocol quality, and failure analysis.
+- Method-level description: discuss published mechanisms without supplying system-specific bypass recipes or manufacturing parameters.
+- Honest capability labels: distinguish validated, experimental, planned, and research-agenda components.
+- Data minimization: link third-party datasets rather than redistributing them unless file-level rights are documented.
+- No user-upload retention in browser-only demos; external services must be identified as third parties.
+- Coordinated disclosure: use the private process in `SECURITY.md` for real-system vulnerabilities.
 
-- **Defense-oriented framing.** Adversarial and military content is presented to explain
-  mechanisms and to *strengthen* detection, robustness, and evaluation.
-- **Method-level, not weapon-level.** We describe methods, math, and published academic
-  benchmarks. We pair attacks with defenses and evaluation wherever possible.
+## Publication review
 
-## What we do not do
+Before releasing adversarial-generation code, physical deployment guidance, sensitive imagery, or a new interactive service, the maintainer must record:
 
-- **No directly weaponizable artifacts.** We do not publish ready-to-use attack recipes
-  against specific real-world deployed systems, nor manufacturing parameters for physical
-  camouflage intended to defeat specific real equipment.
-- **No redistribution of restricted data.** Datasets are linked, never re-hosted; upstream
-  licenses and privacy terms are respected.
-
-## Responsible disclosure
-
-If material in this repository reveals a vulnerability in a real, deployed system, follow
-coordinated/responsible-disclosure norms: contact the affected party first and allow
-reasonable time to remediate before public discussion.
+1. intended defensive or scientific value;
+2. deployment realism and affected targets;
+3. information already public in primary sources;
+4. safeguards, withheld details, and safer alternatives;
+5. reviewer and release decision.
 
 ## Reporting concerns
 
-If you believe content here crosses the line from education into enabling harm, open a
-confidential issue or contact the maintainers. We will review and, if warranted, revise or
-remove the material.
-
-This policy is referenced from the README and restated in the monograph (Evaluation part,
-"Ethics" section).
+Use the private contact in `SECURITY.md` when a concern contains sensitive details. Ordinary corrections may use public issues.

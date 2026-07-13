@@ -4,10 +4,26 @@
   "channel": "rgb",
   "task": "image-cod",
   "protocol": "repository demo bundle",
-  "notes": "Synthetic two-sample mask set for CLI, Colab, and Hugging Face Space demos.",
+  "notes": "Synthetic two-sample mask set. boundary_match_score and ms_ssim_lite are experimental diagnostics.",
+  "implementation_version": "0.2.0.dev0",
+  "dataset_version": "synthetic-fixture-v1",
+  "threshold_policy": "default metric thresholds",
   "pred_dir": "pred",
   "gt_dir": "gt",
   "pred_source": "demo_data/rgb_masks/pred",
   "gt_source": "demo_data/rgb_masks/gt",
-  "metrics": ["mae", "fw", "sm", "em", "f", "precision", "recall", "iou", "dice", "boundary_iou", "ssim", "ms_ssim"]
+  "metrics": [
+    "mae",
+    "fw",
+    "sm",
+    "em",
+    "f",
+    "precision",
+    "recall",
+    "iou",
+    "dice",
+    "boundary_match_score",
+    "ssim",
+    "ms_ssim_lite"
+  ]
 }

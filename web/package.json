@@ -1,7 +1,7 @@
 {
   "name": "camoged-web",
   "version": "0.1.0",
-  "description": "CamoGED aggregator website: papers, model zoo, leaderboard, demos, datasets.",
+  "description": "CamoGED research-preview website: monograph, verified metadata, evaluation resources, and synthetic teaching demos.",
   "license": "MIT",
   "scripts": {
     "docs:dev": "vitepress dev",
