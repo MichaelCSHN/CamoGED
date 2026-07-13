@@ -2,7 +2,7 @@
 
 > A human-curated reading map across camouflage vision, natural camouflage, military history,
 > art/design, generation, and assessment. The complete schema-backed catalog is published
-> separately at [`web/catalog.md`](../web/catalog.md).
+> separately at [Research Catalog](./catalog).
 
 - Curated resources: **44**
 - Accepted catalog records: **69**

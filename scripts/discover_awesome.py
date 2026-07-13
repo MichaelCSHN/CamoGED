@@ -267,12 +267,22 @@ def markdown_report(payload: dict) -> str:
     lines = [
         f"# Awesome candidate triage — {payload['scan_timestamp'][:10]}",
         "",
-        f"- Query count: **{payload['query_count']}**",
+        f"- Configured queries: **{payload['query_count']}**",
+        f"- Successful queries: **{payload['successful_query_count']}**",
+        f"- Successful sources: **{', '.join(payload['successful_sources']) or 'none'}**",
+        f"- Query errors: **{len(payload['query_errors'])}**",
         f"- New candidates after deduplication: **{len(payload['candidates'])}**",
         f"- Minimum publication year: **{payload['min_year']}**",
         "- Policy: automated discovery only; human review is required before acceptance.",
         "",
     ]
+    if payload["query_errors"]:
+        lines.extend(["## Query errors", ""])
+        for error in payload["query_errors"]:
+            lines.append(
+                f"- `{error['query_id']}` / `{error['source']}`: {error['error']}"
+            )
+        lines.append("")
     for item in payload["candidates"]:
         lines.extend(
             [
@@ -319,6 +329,13 @@ def main() -> int:
     parser.add_argument("--output-markdown", default="awesome_candidates.md")
     parser.add_argument("--max-results", type=int, default=15)
     parser.add_argument("--min-year", type=int, default=datetime.now(UTC).year - 2)
+    parser.add_argument(
+        "--require-source",
+        action="append",
+        default=[],
+        choices=("arxiv", "crossref"),
+        help="Fail unless at least one query from this source succeeds; repeatable.",
+    )
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
@@ -328,21 +345,57 @@ def main() -> int:
     config = load_yaml("discovery_queries.yaml")
     accepted = load_yaml("papers.yaml").get("papers", [])
     discovered: list[dict] = []
+    query_errors: list[dict[str, str]] = []
+    successful_queries: list[str] = []
+    successful_sources: set[str] = set()
     for query in config.get("queries", []):
-        source = query.get("source")
-        if source == "arxiv":
-            discovered.extend(query_arxiv(config, query, args.max_results))
-            time.sleep(float(config["sources"]["arxiv"].get("polite_delay_seconds", 3)))
-        elif source == "crossref":
-            discovered.extend(query_crossref(config, query, min(args.max_results, 20)))
-        else:
-            raise ValueError(f"unsupported discovery source: {source!r}")
+        source = str(query.get("source"))
+        try:
+            if source == "arxiv":
+                discovered.extend(query_arxiv(config, query, args.max_results))
+                time.sleep(
+                    float(config["sources"]["arxiv"].get("polite_delay_seconds", 3))
+                )
+            elif source == "crossref":
+                discovered.extend(
+                    query_crossref(config, query, min(args.max_results, 20))
+                )
+            else:
+                raise ValueError(f"unsupported discovery source: {source!r}")
+        except Exception as exc:  # public API boundary; retain partial scan
+            query_errors.append(
+                {
+                    "query_id": str(query.get("id")),
+                    "source": source,
+                    "error": clean_text(str(exc))[:500],
+                }
+            )
+            continue
+        successful_queries.append(str(query.get("id")))
+        successful_sources.add(source)
+
+    missing_required = sorted(set(args.require_source) - successful_sources)
+    if missing_required:
+        details = "; ".join(
+            f"{item['query_id']}: {item['error']}"
+            for item in query_errors
+            if item["source"] in missing_required
+        )
+        raise RuntimeError(
+            f"required discovery source(s) had no successful query: {missing_required}; {details}"
+        )
+    if not successful_queries:
+        raise RuntimeError("all configured discovery queries failed")
 
     candidates = filter_candidates(discovered, accepted, min_year=args.min_year)
     payload = {
         "schema_version": "1.0",
         "scan_timestamp": datetime.now(UTC).isoformat(),
         "query_count": len(config.get("queries", [])),
+        "successful_query_count": len(successful_queries),
+        "successful_queries": successful_queries,
+        "successful_sources": sorted(successful_sources),
+        "query_errors": query_errors,
         "min_year": args.min_year,
         "candidate_count": len(candidates),
         "candidates": candidates,

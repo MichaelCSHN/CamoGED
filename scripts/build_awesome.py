@@ -108,7 +108,9 @@ def latest_resources(resources: list[dict], limit: int = 12) -> list[dict]:
     )[:limit]
 
 
-def render_curated(config: dict, resources: list[dict], datasets: list[dict]) -> str:
+def render_curated(
+    config: dict, resources: list[dict], datasets: list[dict], *, catalog_link: str
+) -> str:
     selected = curated_resources(resources)
     by_id = {item["id"]: item for item in resources}
     core = [
@@ -121,7 +123,7 @@ def render_curated(config: dict, resources: list[dict], datasets: list[dict]) ->
         "",
         "> A human-curated reading map across camouflage vision, natural camouflage, military history,",
         "> art/design, generation, and assessment. The complete schema-backed catalog is published",
-        "> separately at [`web/catalog.md`](../web/catalog.md).",
+        f"> separately at [Research Catalog]({catalog_link}).",
         "",
         f"- Curated resources: **{len(selected)}**",
         f"- Accepted catalog records: **{len(resources)}**",
@@ -378,14 +380,19 @@ def render() -> str:
     """Return the generated curated README for legacy deterministic checks."""
 
     resources, datasets, _results, config = load_data()
-    return render_curated(config, resources, datasets)
+    return render_curated(config, resources, datasets, catalog_link="../web/catalog.md")
 
 
 def main() -> None:
     resources, datasets, results, config = load_data()
-    curated = render_curated(config, resources, datasets)
-    write(AWESOME_OUT, curated)
-    write(WEB / "awesome.md", curated)
+    write(
+        AWESOME_OUT,
+        render_curated(config, resources, datasets, catalog_link="../web/catalog.md"),
+    )
+    write(
+        WEB / "awesome.md",
+        render_curated(config, resources, datasets, catalog_link="./catalog"),
+    )
     write(WEB / "catalog.md", render_catalog(resources, config))
     write(WEB / "updates.md", render_updates(config, resources))
     write(WEB / "papers.md", render_papers_page(resources))
