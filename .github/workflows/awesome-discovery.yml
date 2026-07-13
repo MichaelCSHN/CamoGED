@@ -1,6 +1,6 @@
 name: awesome candidate discovery
 
-# PR smoke is bounded and emits artifacts even when a required public source is unavailable.
+# PR smoke verifies both sources and the candidate-quality filter without writing accepted metadata.
 on:
   pull_request:
     branches: [main, agent/project-audit-remediation]
