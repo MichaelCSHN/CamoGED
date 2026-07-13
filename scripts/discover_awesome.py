@@ -392,6 +392,7 @@ def main() -> int:
         successful_queries.append(str(query.get("id")))
         successful_sources.add(source)
 
+    fatal_errors: list[str] = []
     missing_required = sorted(set(args.require_source) - successful_sources)
     if missing_required:
         details = "; ".join(
@@ -399,11 +400,11 @@ def main() -> int:
             for item in query_errors
             if item["source"] in missing_required
         )
-        raise RuntimeError(
+        fatal_errors.append(
             f"required discovery source(s) had no successful query: {missing_required}; {details}"
         )
     if not successful_queries:
-        raise RuntimeError("all configured discovery queries failed")
+        fatal_errors.append("all configured discovery queries failed")
 
     candidates = filter_candidates(discovered, accepted, min_year=args.min_year)
     payload = {
@@ -414,6 +415,7 @@ def main() -> int:
         "successful_queries": successful_queries,
         "successful_sources": sorted(successful_sources),
         "query_errors": query_errors,
+        "fatal_errors": fatal_errors,
         "min_year": args.min_year,
         "candidate_count": len(candidates),
         "candidates": candidates,
@@ -422,8 +424,13 @@ def main() -> int:
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     Path(args.output_markdown).write_text(markdown_report(payload), encoding="utf-8")
-    print(f"discover_awesome: {len(candidates)} new candidate(s)")
-    return 0
+    for error in fatal_errors:
+        print(f"ERROR {error}")
+    print(
+        f"discover_awesome: {len(candidates)} new candidate(s); "
+        f"successful_queries={len(successful_queries)}; query_errors={len(query_errors)}"
+    )
+    return 1 if fatal_errors else 0
 
 
 if __name__ == "__main__":
