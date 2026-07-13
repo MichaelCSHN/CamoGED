@@ -1,0 +1,45 @@
+name: one-shot-awesome-link-fix
+
+on:
+  pull_request:
+    branches: [agent/project-audit-remediation]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.head_ref == 'agent/awesome-special-remediation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/awesome-special-remediation
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pyyaml black
+      - name: Apply and generate
+        run: |
+          python scripts/prepare_awesome_link_fix.py
+          black scripts/build_awesome.py
+          python scripts/build_awesome.py
+          python scripts/check_data.py
+          python scripts/check_awesome.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Build website
+        run: cd web && npm ci && npm run docs:build
+      - name: Commit correction
+        run: |
+          rm -f scripts/prepare_awesome_link_fix.py
+          rm -f .github/workflows/awesome-link-fix.yml
+          git config user.name "CamoGED Awesome Editorial Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(awesome): use source-valid catalog links"
+          git push origin HEAD:agent/awesome-special-remediation
