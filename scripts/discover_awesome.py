@@ -83,7 +83,9 @@ def parse_arxiv(xml_text: str, query_id: str, tags: list[str]) -> list[dict]:
         url = clean_text(entry.findtext("a:id", default="", namespaces=ATOM))
         arxiv_match = ARXIV_RE.search(url)
         arxiv_id = arxiv_match.group(1) if arxiv_match else None
-        published = clean_text(entry.findtext("a:published", default="", namespaces=ATOM))
+        published = clean_text(
+            entry.findtext("a:published", default="", namespaces=ATOM)
+        )
         updated = clean_text(entry.findtext("a:updated", default="", namespaces=ATOM))
         authors = [
             clean_text(author.findtext("a:name", default="", namespaces=ATOM))
@@ -130,7 +132,9 @@ def parse_crossref(json_text: str, query_id: str, tags: list[str]) -> list[dict]
         doi = clean_text(item.get("DOI")) or None
         url = f"https://doi.org/{doi}" if doi else clean_text(item.get("URL"))
         authors = [
-            clean_text(" ".join(filter(None, [author.get("given"), author.get("family")])))
+            clean_text(
+                " ".join(filter(None, [author.get("given"), author.get("family")]))
+            )
             for author in item.get("author") or []
         ]
         date_parts = (
@@ -141,7 +145,11 @@ def parse_crossref(json_text: str, query_id: str, tags: list[str]) -> list[dict]
         )
         year = date_parts[0][0] if date_parts and date_parts[0] else None
         venue_values = item.get("container-title") or []
-        venue = clean_text(venue_values[0]) if venue_values else clean_text(item.get("publisher"))
+        venue = (
+            clean_text(venue_values[0])
+            if venue_values
+            else clean_text(item.get("publisher"))
+        )
         candidates.append(
             {
                 "candidate_id": candidate_id("crossref", doi, title),
@@ -176,7 +184,9 @@ def query_arxiv(config: dict, query: dict, max_results: int) -> list[dict]:
             "sortOrder": "descending",
         }
     )
-    return parse_arxiv(request_text(f"{endpoint}?{parameters}"), query["id"], query.get("tags", []))
+    return parse_arxiv(
+        request_text(f"{endpoint}?{parameters}"), query["id"], query.get("tags", [])
+    )
 
 
 def query_crossref(config: dict, query: dict, max_results: int) -> list[dict]:
@@ -190,7 +200,9 @@ def query_crossref(config: dict, query: dict, max_results: int) -> list[dict]:
             "select": "DOI,title,author,container-title,publisher,published-print,published-online,issued,indexed,URL,type",
         }
     )
-    return parse_crossref(request_text(f"{endpoint}?{parameters}"), query["id"], query.get("tags", []))
+    return parse_crossref(
+        request_text(f"{endpoint}?{parameters}"), query["id"], query.get("tags", [])
+    )
 
 
 def existing_keys(records: Iterable[dict]) -> tuple[set[str], set[tuple[str, str]]]:
@@ -213,8 +225,12 @@ def merge_candidates(candidates: Iterable[dict]) -> list[dict]:
         if current is None:
             merged[key] = item
             continue
-        current["discovered_by"] = sorted(set(current["discovered_by"] + item["discovered_by"]))
-        current["suggested_tags"] = sorted(set(current["suggested_tags"] + item["suggested_tags"]))
+        current["discovered_by"] = sorted(
+            set(current["discovered_by"] + item["discovered_by"])
+        )
+        current["suggested_tags"] = sorted(
+            set(current["suggested_tags"] + item["suggested_tags"])
+        )
         if not current.get("doi") and item.get("doi"):
             current["doi"] = item["doi"]
             current["paper"] = item["paper"]
@@ -223,7 +239,9 @@ def merge_candidates(candidates: Iterable[dict]) -> list[dict]:
     return list(merged.values())
 
 
-def filter_candidates(candidates: Iterable[dict], accepted: list[dict], *, min_year: int) -> list[dict]:
+def filter_candidates(
+    candidates: Iterable[dict], accepted: list[dict], *, min_year: int
+) -> list[dict]:
     titles, identifiers = existing_keys(accepted)
     output: list[dict] = []
     for item in merge_candidates(candidates):
@@ -238,7 +256,11 @@ def filter_candidates(candidates: Iterable[dict], accepted: list[dict], *, min_y
         if arxiv and arxiv in identifiers:
             continue
         output.append(item)
-    return sorted(output, key=lambda value: (int(value.get("year") or 0), value.get("updated") or ""), reverse=True)
+    return sorted(
+        output,
+        key=lambda value: (int(value.get("year") or 0), value.get("updated") or ""),
+        reverse=True,
+    )
 
 
 def markdown_report(payload: dict) -> str:
@@ -325,7 +347,9 @@ def main() -> int:
         "candidate_count": len(candidates),
         "candidates": candidates,
     }
-    Path(args.output_json).write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    Path(args.output_json).write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     Path(args.output_markdown).write_text(markdown_report(payload), encoding="utf-8")
     print(f"discover_awesome: {len(candidates)} new candidate(s)")
     return 0

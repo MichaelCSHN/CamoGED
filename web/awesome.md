@@ -1,90 +1,391 @@
-# Awesome
+# Awesome Camouflage
 
-> Mirror of the generated Awesome index.
+> A human-curated reading map across camouflage vision, natural camouflage, military history,
+> art/design, generation, and assessment. The complete schema-backed catalog is published
+> separately at [`web/catalog.md`](../web/catalog.md).
 
+- Curated resources: **44**
+- Accepted catalog records: **69**
+- Datasets/benchmarks: **22**
+- Coverage reviewed through: **2026-07-13**
+- Last human review: **2026-07-13**
+- Update policy: **automated discovery, human acceptance**
 
-> A generated, schema-backed list of camouflage resources maintained by CamoGED.
-> Edit `data/*.yaml`; do not hand-edit this file.
+## Scope and status
 
-- Papers/methods: **32**
-- Datasets: **15**
-- Verified leaderboard rows: **4**
+Human-curated entry points across camouflage vision, biological camouflage, military history, art/design, generation, and assessment. The complete catalog is generated separately and may contain metadata-only records.
 
-## Papers by Pillar
+This README is the concise curated layer. Metadata-only or experimental records may appear in
+the full catalog but are not automatically promoted here. Automated scans open triage issues;
+they never merge entries directly.
 
-### Generation
+## Start here
 
-- **CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction** -- Liu, Ziqi, Luo, Wei, Guo, Sixu, Zhang, Jingnan, Wang, Zhipan, *Electronics* 2025 | `physical-adversarial` | `physical` | `ai` [paper](https://www.mdpi.com/2079-9292/14/19/3868)
-- **PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack** -- Zhang et al., *AAAI* 2025 | `physical-adversarial` | `physical` | `ai` [paper](https://doi.org/10.1609/aaai.v39i10.33110)
-- **CamDiff: Camouflage Image Augmentation via Diffusion** -- Luo et al., *CAAI AIR* 2023 | `generation` | `intelligent` | `ai` [paper](https://www.sciopen.com/article/10.26599/AIR.2023.9150021)
-- **Cultural evolution of military camouflage** -- Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C., *Phil. Trans. R. Soc. B* 2017 | `application` | `physical` | `war` [paper](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351)
+- **Adaptive Coloration in Animals** — Cott, Hugh B., *Oxford University Press* (1940). Foundational natural-history synthesis of concealment, disguise, disruption, and display.  
+  `published` · `metadata-only` · `book` · biological-camouflage, historical-analysis · [source](https://archive.org/details/adaptivecolorati00cott)
+- **Animal Camouflage: Mechanisms and Function** — Stevens, Martin; Merilaita, Sami (eds.), *Cambridge University Press* (2011). Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.  
+  `published` · `metadata-only` · `book` · biological-camouflage, human-detection, survey · [source](https://www.cambridge.org/core/books/animal-camouflage/)
+- **Camouflage** — Cuthill, Innes C., *Journal of Zoology* (2019). Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.  
+  `published` · `metadata-only` · `survey` · biological-camouflage, survey · [source](https://doi.org/10.1111/jzo.12682)
+- **Concealed Object Detection** — Fan, Deng-Ping; Ji, Ge-Peng; Cheng, Ming-Ming; Shao, Ling, *IEEE TPAMI* (2022). Systematic COD study introducing COD10K and the SINet search-identification baseline.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2102.10274) · [code/project](https://github.com/DengPingFan/SINet)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **Quantifying camouflage: how to predict detectability from appearance** — Troscianko, Jolyon, Skelhorn, John, Stevens, Martin, *BMC Evolutionary Biology* (2017). Bridges objective appearance measures and human detectability.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, human-detection · [source](https://link.springer.com/article/10.1186/s12862-016-0854-2)
+- **Review of camouflage assessment techniques** — Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* (2020). Survey of subjective and objective camouflage assessment in military settings.  
+  `published` · `metadata-only` · `survey` · camouflage-assessment · [source](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
+- **False Colors: Art, Design and Modern Camouflage** — Behrens, Roy R., *Bobolink Books* (2002). Core art-and-design history of modern camouflage and its Gestalt and military connections.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis · [source](https://works.bepress.com/roy-behrens/)
+- **Camouflage: A History of Concealment and Deception in War** — Hartcup, Guy, *David & Charles* (1980). Military history of concealment and deception technologies through the twentieth century.  
+  `published` · `metadata-only` · `book` · military-camouflage, historical-analysis · [source](https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup)
 
-### Detection
+## Latest accepted additions
 
-- **CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection** -- Zhang et al., *arXiv* 2025 | `video-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2504.00375)
-- **PlantCamo: Plant Camouflage Detection** -- Yang, Jinyu, Wang, Qingwei, Zheng, Feng, Chen, Peng, Leonardis, Aleš, Fan, Deng-Ping, *CAAI AIR* 2025 | `image-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2410.17598) [code](https://github.com/yjybuaa/PlantCamo)
-- **When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation** -- Zhou et al., *Visual Intelligence* 2025 | `video-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2409.18653)
-- **A Survey of Camouflaged Object Detection and Beyond** -- Xiao et al., *CAAI AIR* 2024 | `survey` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2408.14562) [code](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
-- **Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes** -- Wang, Liqiong, Yang, Jinyu, Zhang, Yanfu, Wang, Fangyi, Zheng, Feng, *CVPR* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html) [code](https://github.com/Kki2Eve/RISNet)
-- **HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection** -- Yao, Siyuan, Sun, Hao, Xiang, Tian-Zhu, Wang, Xiao, Cao, Xiaochun, *IEEE TIP* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TIP.2024.3475219) [code](https://github.com/Garyson1204/HGINet)
-- **ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection** -- Pang et al., *TPAMI* 2024 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TPAMI.2024.3417329)
-- **Collaborative Camouflaged Object Detection: A Large-Scale Dataset and Benchmark** -- Zhang, Cong, Bi, Hongbo, Xiang, Tian-Zhu, Wu, Ranwan, Tong, Jinghui, Wang, Xiufang, *IEEE TNNLS* 2023 | `collaborative-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TNNLS.2023.3317091) [code](https://github.com/zc199823/BBNet--CoCOD)
-- **Extraordinary MHNet: Military High-Level Camouflage Object Detection Network and Dataset** -- Liu, Maozhen, Di, Xiaoguang, *Neurocomputing* 2023 | `image-cod` | `intelligent` | `war` [paper](https://doi.org/10.1016/j.neucom.2023.126466) [code](https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022)
-- **Referring Camouflaged Object Detection** -- Zhang, Xuying, Yin, Bowen, Lin, Zheng, Hou, Qibin, Fan, Deng-Ping, Cheng, Ming-Ming, *arXiv* 2023 | `referring-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2306.07532) [code](https://github.com/zhangxuying1004/RefCOD)
-- **Implicit Motion Handling for Video Camouflaged Object Detection** -- Cheng, Xuelian, Xiong, Huan, Fan, Deng-Ping, Zhong, Yiran, Harandi, Mehrtash, Drummond, Tom, Ge, Zongyuan, *CVPR* 2022 | `video-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html) [code](https://github.com/XuelianCheng/SLT-Net)
-- **Simultaneously Localize, Segment and Rank the Camouflaged Objects** -- Lyu, Yunqiu, Zhang, Jing, Dai, Yuchao, Li, Aixuan, Liu, Bowen, Barnes, Nick, Fan, Deng-Ping, *CVPR* 2021 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html) [code](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment)
-- **Anabranch Network for Camouflaged Object Segmentation** -- Le, Trung-Nghia, Nguyen, Tam V., Nie, Zhongliang, Tran, Minh-Triet, Sugimoto, Akihiro, *CVIU* 2019 | `image-cod` | `intelligent` | `ai` [paper](https://doi.org/10.1016/j.cviu.2019.04.006) [code](https://github.com/ltnghia/CAMO)
+- **CamoVid60K: A Large-Scale Video Dataset for Moving Camouflaged Animals Understanding** — Vu, Tuan-Anh, Zheng, Ziqiang, Song, Chengyang, Guo, Qing, Tsang, Ivor W., Yeung, Sai-Kit, *IJCV* (2026). Introduces the CamoVid60K camouflaged animal video benchmark.  
+  `published` · `metadata-only` · `paper` · dataset · [source](https://link.springer.com/article/10.1007/s11263-026-02765-8) · [code/project](https://camovid60k.hkustvgd.com/)
+- **COD10K-C: Benchmarking Robustness of Camouflaged Object Detection Under Natural Image Corruptions** — Sayem, Arafat Hossain, *arXiv* (2026). Recent corruption-robustness benchmark derived from COD10K; release status requires follow-up.  
+  `preprint` · `metadata-only` · `paper` · robustness, dataset, image-cod · [source](https://arxiv.org/abs/2606.02603)
+- **CAMotion: A High-Quality Benchmark for Camouflaged Moving Object Detection in the Wild** — Yao, Siyuan; Sun, Hao; Yu, Ruiqi; Jiang, Xiwei; Ren, Wenqi; Cao, Xiaochun, *arXiv* (2026). Recent wild-video benchmark with motion and boundary challenge attributes.  
+  `preprint` · `metadata-only` · `paper` · video-cod, dataset · [source](https://arxiv.org/abs/2604.08287) · [code/project](https://www.camotion.focuslab.net.cn)
+- **FCL-COD: Weakly Supervised Camouflaged Object Detection with Frequency-aware and Contrastive Learning** — Ni, Jingchen; Zhang, Quan; Jiang, Dan; Lv, Keyu; Zhang, Ke; Yuan, Chun, *arXiv* (2026). Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod · [source](https://arxiv.org/abs/2603.22969)
+- **SDDF: Specificity-Driven Dynamic Focusing for Open-Vocabulary Camouflaged Object Detection** — Liang, Jiaming; Zhan, Yifeng; Liu, Chunlin; Zheng, Weihua; Peng, Bingye; Liang, Qiwei; Cai, Boyang; Mai, Xiaochun; Nie, Qiang, *arXiv* (2026). Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.  
+  `preprint` · `metadata-only` · `paper` · open-vocabulary, bbox-rcod, dataset · [source](https://arxiv.org/abs/2603.26109)
+- **When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation** — Zhou et al., *Visual Intelligence* (2025). Systematic evaluation and adaptation study of SAM2 under video camouflaged object segmentation protocols.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2409.18653)
+- **CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection** — Zhang et al., *arXiv* (2025). Automatic motion-appearance prompt induction and multi-prompt refinement framework built around SAM2.  
+  `preprint` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2504.00375)
+- **PlantCamo: Plant Camouflage Detection** — Yang, Jinyu, Wang, Qingwei, Zheng, Feng, Chen, Peng, Leonardis, Aleš, Fan, Deng-Ping, *CAAI AIR* (2025). Introduces a plant-focused camouflage benchmark with 58 categories.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2410.17598) · [code/project](https://github.com/yjybuaa/PlantCamo)
+- **PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack** — Zhang et al., *AAAI* (2025). Physical Adversarial resource.  
+  `published` · `metadata-only` · `paper` · physical-adversarial · [source](https://doi.org/10.1609/aaai.v39i10.33110)
+- **CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction** — Liu, Ziqi, Luo, Wei, Guo, Sixu, Zhang, Jingnan, Wang, Zhipan, *Electronics* (2025). Physical Adversarial resource.  
+  `published` · `metadata-only` · `paper` · physical-adversarial · [source](https://www.mdpi.com/2079-9292/14/19/3868)
+- **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** — Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *AAAI* (2025). Published at AAAI 2025; multimodal camouflage benchmark for LVLM evaluation.  
+  `published` · `metadata-only` · `paper` · dataset, vision-language, multimodal-evaluation · [source](https://doi.org/10.1609/aaai.v39i7.32723) · [code/project](https://github.com/JCruan519/MM-CamObj)
+- **MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection** — Li, Yang, Xu, Tingfa, Bai, ShuYan, Liu, Peifu, Li, Jianan, *arXiv* (2025). Introduces the first multispectral COD benchmark.  
+  `preprint` · `metadata-only` · `paper` · dataset · [source](https://arxiv.org/abs/2509.15753) · [code/project](https://github.com/yl2900260-bit/MCOD)
 
-### Evaluation
+## Foundations, surveys, and reading maps
 
-- **CamoVid60K: A Large-Scale Video Dataset for Moving Camouflaged Animals Understanding** -- Vu, Tuan-Anh, Zheng, Ziqiang, Song, Chengyang, Guo, Qing, Tsang, Ivor W., Yeung, Sai-Kit, *IJCV* 2026 | `dataset` | `intelligent` | `nature` [paper](https://link.springer.com/article/10.1007/s11263-026-02765-8) [code](https://camovid60k.hkustvgd.com/)
-- **MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection** -- Li, Yang, Xu, Tingfa, Bai, ShuYan, Liu, Peifu, Li, Jianan, *arXiv* 2025 | `dataset` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2509.15753) [code](https://github.com/yl2900260-bit/MCOD)
-- **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** -- Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *AAAI* 2025 | `dataset` | `intelligent` | `ai` [paper](https://doi.org/10.1609/aaai.v39i7.32723) [code](https://github.com/JCruan519/MM-CamObj)
-- **MSVCOD: A Large-Scale Multi-Scene Dataset for Video Camouflage Object Detection** -- Gao, Shuyong, Feng, Yu'ang, Wang, Qishan, Hong, Lingyi, Zhou, Xinyu, Fei, Liu, Wang, Yan, Zhang, Wenqiang, *arXiv* 2025 | `dataset` | `intelligent` | `ai` [paper](https://arxiv.org/abs/2502.13859)
-- **Review of camouflage assessment techniques** -- Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* 2020 | `application` | `physical` | `war` [paper](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
-- **Animal Camouflage Analysis: CHAMELEON Database** -- Skurowski, Przemyslaw, Abdulameer, Hassan, Blaszczyk, Jakub, Depta, Tomasz, Kornacki, Adam, Koziel, Przemyslaw, *Unpublished manuscript* 2018 | `dataset` | `intelligent` | `nature` [paper](https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/)
-- **Enhanced-alignment Measure for Binary Foreground Map Evaluation** -- Fan, Deng-Ping, Gong, Cheng, Cao, Yang, Ren, Bo, Cheng, Ming-Ming, Borji, Ali, *IJCAI* 2018 | `image-cod` | `intelligent` | `ai` [paper](https://www.ijcai.org/proceedings/2018/97) [code](https://github.com/DengPingFan/E-measure)
-- **The Unreasonable Effectiveness of Deep Features as a Perceptual Metric** -- Zhang, Richard, Isola, Phillip, Efros, Alexei A., Shechtman, Eli, Wang, Oliver, *CVPR* 2018 | `generation` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content_cvpr_2018/html/Zhang_The_Unreasonable_Effectiveness_CVPR_2018_paper.html)
-- **GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium** -- Heusel, Martin, Ramsauer, Hubert, Unterthiner, Thomas, Nessler, Bernhard, Hochreiter, Sepp, *NeurIPS* 2017 | `generation` | `intelligent` | `ai` [paper](https://papers.nips.cc/paper/7240-gans-trained-by-a-two-time-scale-update-rule-converge-to-a-local-nash-equilibrium) [code](https://github.com/bioinf-jku/TTUR)
-- **Quantifying camouflage: how to predict detectability from appearance** -- Troscianko, Jolyon, Skelhorn, John, Stevens, Martin, *BMC Evolutionary Biology* 2017 | `application` | `physical` | `nature` [paper](https://link.springer.com/article/10.1186/s12862-016-0854-2)
-- **Structure-measure: A New Way to Evaluate Foreground Maps** -- Fan, Deng-Ping, Cheng, Ming-Ming, Liu, Yun, Li, Tao, Borji, Ali, *ICCV* 2017 | `image-cod` | `intelligent` | `ai` [paper](https://arxiv.org/abs/1708.00786) [code](https://github.com/DengPingFan/S-measure)
-- **A Benchmark Dataset and Evaluation Methodology for Video Object Segmentation** -- Perazzi, Federico, Pont-Tuset, Jordi, McWilliams, Brian, Van Gool, Luc, Gross, Markus, Sorkine-Hornung, Alexander, *CVPR* 2016 | `video-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content_cvpr_2016/html/Perazzi_A_Benchmark_Dataset_CVPR_2016_paper.html) [code](https://github.com/fperazzi/davis)
-- **It's Moving! A Probabilistic Model for Causal Motion Segmentation in Moving Camera Videos** -- Bideau, Pia, Learned-Miller, Erik, *ECCV* 2016 | `video-cod` | `intelligent` | `nature` [paper](https://arxiv.org/abs/1604.00136)
-- **How to Evaluate Foreground Maps?** -- Margolin, Ran, Zelnik-Manor, Lihi, Tal, Ayellet, *CVPR* 2014 | `image-cod` | `intelligent` | `ai` [paper](https://openaccess.thecvf.com/content_cvpr_2014/html/Margolin_How_to_Evaluate_2014_CVPR_paper.html)
-- **Image Quality Assessment: From Error Visibility to Structural Similarity** -- Wang, Zhou, Bovik, Alan C., Sheikh, Hamid R., Simoncelli, Eero P., *IEEE TIP* 2004 | `generation` | `intelligent` | `ai` [paper](https://doi.org/10.1109/TIP.2003.819861)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations** — NIST, *NIST AI 100-2e2023* (2023). Authoritative terminology standard for adversarial-ML threats and mitigations used to bound digital/physical camouflage claims.  
+  `published` · `metadata-only` · `standard` · digital-adversarial, physical-adversarial, standard · [source](https://csrc.nist.gov/pubs/ai/100/2/e2023/final)
+- **Review of camouflage assessment techniques** — Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* (2020). Survey of subjective and objective camouflage assessment in military settings.  
+  `published` · `metadata-only` · `survey` · camouflage-assessment · [source](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
+- **Camouflage** — Cuthill, Innes C., *Journal of Zoology* (2019). Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.  
+  `published` · `metadata-only` · `survey` · biological-camouflage, survey · [source](https://doi.org/10.1111/jzo.12682)
+- **Animal Camouflage: Mechanisms and Function** — Stevens, Martin; Merilaita, Sami (eds.), *Cambridge University Press* (2011). Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.  
+  `published` · `metadata-only` · `book` · biological-camouflage, human-detection, survey · [source](https://www.cambridge.org/core/books/animal-camouflage/)
+- **Camoupedia: A Compendium of Research on Art, Architecture, and Camouflage** — Behrens, Roy R., *Bobolink Books* (2009). Reference compendium covering art, architecture, perception, and military camouflage history.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis, survey · [source](https://camoupedia.blogspot.com/)
+- **Dazzled and Deceived: Mimicry and Camouflage** — Forbes, Peter, *Yale University Press* (2009). Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.  
+  `published` · `metadata-only` · `book` · biological-camouflage, military-camouflage, historical-analysis · [source](https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/)
+- **False Colors: Art, Design and Modern Camouflage** — Behrens, Roy R., *Bobolink Books* (2002). Core art-and-design history of modern camouflage and its Gestalt and military connections.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis · [source](https://works.bepress.com/roy-behrens/)
+- **Camouflage: A History of Concealment and Deception in War** — Hartcup, Guy, *David & Charles* (1980). Military history of concealment and deception technologies through the twentieth century.  
+  `published` · `metadata-only` · `book` · military-camouflage, historical-analysis · [source](https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup)
+- **Adaptive Coloration in Animals** — Cott, Hugh B., *Oxford University Press* (1940). Foundational natural-history synthesis of concealment, disguise, disruption, and display.  
+  `published` · `metadata-only` · `book` · biological-camouflage, historical-analysis · [source](https://archive.org/details/adaptivecolorati00cott)
 
-## Datasets
+## Image camouflaged object segmentation
 
-| Name | ID | Task | Modality | Year | Notes |
-| --- | --- | --- | --- | --- | --- |
-| ACOD-12K | `acod-12k` | `image-cod` | `depth` | 2024 | Dense agricultural concealed crop benchmark with depth maps. |
-| CAD | `cad` | `video-cod` | `video` | 2016 | Early video camouflage dataset. |
-| CAMO | `camo` | `image-cod` | `rgb` | 2019 | Early fully annotated COD benchmark. |
-| CamoVid60K | `camovid60k` | `video-cod` | `video` | 2026 | Large-scale camouflaged animal video understanding benchmark. |
-| CHAMELEON | `chameleon` | `image-cod` | `rgb` | 2017 | Early small-scale set; often dropped due to bias. |
-| CoCOD8K | `cocod8k` | `collaborative-cod` | `rgb` | 2023 | Collaborative camouflage benchmark regrouped from multiple COD sources. |
-| COD10K | `cod10k` | `image-cod` | `rgb` | 2020 | Large image COD benchmark; scale claim is version-dependent. |
-| MCOD | `mcod` | `image-cod` | `multispectral` | 2025 | Multispectral COD benchmark; novelty claim belongs to the cited source. |
-| MHCD2022 | `mhcd2022` | `image-cod` | `rgb` | 2022 | Military high-level camouflage dataset. |
-| MM-CamObj | `mm-camobj` | `dataset` | `multimodal` | 2024 | Multimodal MLLM evaluation set for camouflage. |
-| MoCA-Mask | `moca-mask` | `video-cod` | `video` | 2022 | Moving camouflaged animals with mask annotations. |
-| MSVCOD | `msvcod` | `video-cod` | `video` | 2025 | Multi-scene video COD benchmark; no separate dataset release link found during audit. |
-| NC4K | `nc4k` | `image-cod` | `rgb` | 2021 | Includes ranking annotations. |
-| PlantCamo | `plantcamo` | `image-cod` | `rgb` | 2024 | Plant camouflage benchmark. |
-| R2C7K | `r2c7k` | `referring-cod` | `rgb` | 2023 | Referring COD. |
+- **FCL-COD: Weakly Supervised Camouflaged Object Detection with Frequency-aware and Contrastive Learning** — Ni, Jingchen; Zhang, Quan; Jiang, Dan; Lv, Keyu; Zhang, Ke; Yuan, Chun, *arXiv* (2026). Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod · [source](https://arxiv.org/abs/2603.22969)
+- **A Holistically Point-guided Text Framework for Weakly-Supervised Camouflaged Object Detection** — Mok, Tsui Qin; Gao, Shuyong; Xing, Haozhe; He, Miaoyang; Wang, Yan; Zhang, Wenqiang, *arXiv* (2025). Point- and text-guided weak supervision for COD.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, vision-language · [source](https://arxiv.org/abs/2501.06038)
+- **Rethinking Detecting Salient and Camouflaged Objects in Unconstrained Scenes** — Zhou, Zhangjun; Li, Yiping; Zhong, Chunlin; Huang, Jianuo; Pei, Jialun; Li, Hua; Tang, He, *ICCV* (2025). Unifies salient and camouflaged object segmentation in unconstrained scenes.  
+  `published` · `metadata-only` · `paper` · image-cod, universal-segmentation, dataset · [source](https://arxiv.org/abs/2412.10943) · [code/project](https://github.com/ssecv/USCNet)
+- **SCOUT: Semi-supervised Camouflaged Object Detection by Utilizing Text and Adaptive Data Selection** — Yan, Weiqi; Chen, Lvhai; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan, *arXiv* (2025). Semi-supervised COD with adaptive data selection and text-visual interaction.  
+  `preprint` · `metadata-only` · `paper` · image-cod, semi-supervised-cod, vision-language · [source](https://arxiv.org/abs/2508.17843) · [code/project](https://github.com/Heartfirey/SCOUT)
+- **Segment Concealed Objects with Incomplete Supervision** — He, Chunming; Li, Kai; Zhang, Yachao; Yang, Ziyun; Pang, Youwei; Tang, Longxiang; Fang, Chengyu; Zhang, Yulun; Kong, Linghe; Li, Xiu; Farsiu, Sina, *arXiv* (2025). Unified weak/semi-supervised COS framework using SAM-generated and quality-controlled pseudo-labels.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, semi-supervised-cod · [source](https://arxiv.org/abs/2506.08955)
+- **Towards Real Zero-Shot Camouflaged Object Segmentation without Camouflaged Annotations** — Lei, Cheng; Fan, Jie; Li, Xinran; Xiang, Tian-Zhu; Li, Ao; Zhu, Ce; Zhang, Le, *IEEE TPAMI* (2025). Real zero-shot COS framework combining masked-image pretraining, MLLM semantics, and PEFT.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, open-vocabulary, image-cod · [source](https://arxiv.org/abs/2410.16953) · [code/project](https://github.com/R-LEI360725/ZSCOS-CaMF)
+- **UCOD-DPL: Unsupervised Camouflaged Object Detection via Dynamic Pseudo-label Learning** — Yan, Weiqi; Chen, Lvhai; Kou, Huaijia; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan, *arXiv* (2025). Unsupervised teacher-student COD with adaptive pseudo-labeling and adversarial decoding.  
+  `preprint` · `metadata-only` · `paper` · image-cod, unsupervised-cod · [source](https://arxiv.org/abs/2506.07087)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **CamoTeacher: Dual-Rotation Consistency Learning for Semi-Supervised Camouflaged Object Detection** — Lai, Xunfa; Yang, Zhiyu; Hu, Jie; Zhang, Shengchuan; Cao, Liujuan; Jiang, Guannan; Wang, Zhiyu; Zhang, Songan; Ji, Rongrong, *arXiv* (2024). Semi-supervised teacher-student COD with pixel- and instance-level rotation consistency.  
+  `preprint` · `metadata-only` · `paper` · image-cod, semi-supervised-cod · [source](https://arxiv.org/abs/2408.08050)
+- **Concealed Object Segmentation with Hierarchical Coherence Modeling** — Xiao, Fengyang; Zhang, Pan; He, Chunming; Hu, Runze; Liu, Yutao, *arXiv* (2024). Cross-task COS model emphasizing intra-stage and cross-stage feature coherence.  
+  `preprint` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2401.11767)
+- **ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection** — Pang et al., *TPAMI* (2024). Representative unified architecture spanning image and video camouflage segmentation.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://doi.org/10.1109/TPAMI.2024.3417329)
+- **Chain of Visual Perception: Harnessing Multimodal Large Language Models for Zero-shot Camouflaged Object Detection** — Tang, Lv; Jiang, Peng-Tao; Shen, Zhihao; Zhang, Hao; Chen, Jinwei; Li, Bo, *arXiv* (2023). Early MLLM-centered zero-shot camouflage perception pipeline using language and visual cues.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, vision-language, video-cod, image-cod · [source](https://arxiv.org/abs/2311.11273) · [code/project](https://github.com/luckybird1994/MMCPF)
+- **Feature Shrinkage Pyramid for Camouflaged Object Detection with Transformers** — Huang, Zhou; Dai, Hang; Xiang, Tian-Zhu; Wang, Shuo; Chen, Huai-Xin; Qin, Jie; Xiong, Huan, *CVPR* (2023). Transformer COD architecture combining locality enhancement and a shrinkage-pyramid decoder.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2303.14816) · [code/project](https://github.com/ZhouHuang23/FSPNet)
+- **Concealed Object Detection** — Fan, Deng-Ping; Ji, Ge-Peng; Cheng, Ming-Ming; Shao, Ling, *IEEE TPAMI* (2022). Systematic COD study introducing COD10K and the SINet search-identification baseline.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2102.10274) · [code/project](https://github.com/DengPingFan/SINet)
+- **Zoom In and Out: A Mixed-scale Triplet Network for Camouflaged Object Detection** — Pang, Youwei; Zhao, Xiaoqi; Xiang, Tian-Zhu; Zhang, Lihe; Lu, Huchuan, *CVPR* (2022). Representative mixed-scale COD model with explicit zoom-in/zoom-out processing.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2203.02688) · [code/project](https://github.com/lartpang/ZoomNet)
+- **Camouflaged Object Segmentation with Distraction Mining** — Mei, Haiyang; Ji, Ge-Peng; Wei, Ziqi; Yang, Xin; Wei, Xiaopeng; Fan, Deng-Ping, *CVPR* (2021). PFNet separates global positioning from progressive focus and distraction mining.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2104.10475)
 
-## Verified Results Registry
+## Video segmentation and tracking
 
-| Method | Dataset | Task | Metrics | Source |
-| --- | --- | --- | --- | --- |
-| ZoomNeXt (PVTv2-B5) | `camo` | `image-cod` | Sm=0.889, Fw=0.857, MAE=0.041 | https://github.com/lartpang/ZoomNeXt#performance |
-| ZoomNeXt (PVTv2-B5) | `chameleon` | `image-cod` | Sm=0.924, Fw=0.885, MAE=0.018 | https://github.com/lartpang/ZoomNeXt#performance |
-| ZoomNeXt (PVTv2-B5) | `cod10k` | `image-cod` | Sm=0.898, Fw=0.827, MAE=0.018 | https://github.com/lartpang/ZoomNeXt#performance |
-| ZoomNeXt (PVTv2-B5) | `nc4k` | `image-cod` | Sm=0.903, Fw=0.863, MAE=0.028 | https://github.com/lartpang/ZoomNeXt#performance |
+- **CAMotion: A High-Quality Benchmark for Camouflaged Moving Object Detection in the Wild** — Yao, Siyuan; Sun, Hao; Yu, Ruiqi; Jiang, Xiwei; Ren, Wenqi; Cao, Xiaochun, *arXiv* (2026). Recent wild-video benchmark with motion and boundary challenge attributes.  
+  `preprint` · `metadata-only` · `paper` · video-cod, dataset · [source](https://arxiv.org/abs/2604.08287) · [code/project](https://www.camotion.focuslab.net.cn)
+- **CamSAM2: Segment Anything Accurately in Camouflaged Videos** — Zhou, Yuli; Sun, Guolei; Li, Yawei; Fu, Yuqian; Benini, Luca; Konukoglu, Ender, *NeurIPS* (2025). SAM2 adaptation for camouflaged videos using object-aware fusion and prototype memory.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2503.19730) · [code/project](https://github.com/zhoustan/CamSAM2)
+- **ZS-VCOS: Zero-Shot Outperforms Supervised Video Camouflaged Object Segmentation** — Guo, Wenqi; Du, Shan, *arXiv* (2025). Zero-shot video pipeline combining optical flow, a vision-language model, and SAM2.  
+  `preprint` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2505.01431) · [code/project](https://github.com/weathon/vcos)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **Camouflaged Object Tracking: A Benchmark** — Guo, Xiaoyu; Zhong, Pengzhi; Zhang, Hao; Huang, Defeng; Shao, Huikai; Zhao, Qijun; Li, Shuiwang, *arXiv* (2024). Introduces COTD and evaluates general trackers in camouflaged-object sequences.  
+  `preprint` · `metadata-only` · `paper` · tracking, dataset · [source](https://arxiv.org/abs/2408.13877) · [code/project](https://github.com/openat25/HIPTrack-MLS)
+- **Chain of Visual Perception: Harnessing Multimodal Large Language Models for Zero-shot Camouflaged Object Detection** — Tang, Lv; Jiang, Peng-Tao; Shen, Zhihao; Zhang, Hao; Chen, Jinwei; Li, Bo, *arXiv* (2023). Early MLLM-centered zero-shot camouflage perception pipeline using language and visual cues.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, vision-language, video-cod, image-cod · [source](https://arxiv.org/abs/2311.11273) · [code/project](https://github.com/luckybird1994/MMCPF)
+- **The Making and Breaking of Camouflage** — Lamdouar, Hala; Xie, Weidi; Zisserman, Andrew, *ICCV* (2023). Links camouflage-effectiveness scores, synthetic generation, and video segmentation.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, generation, video-cod · [source](https://arxiv.org/abs/2309.03899)
+- **Implicit Motion Handling for Video Camouflaged Object Detection** — Cheng, Xuelian, Xiong, Huan, Fan, Deng-Ping, Zhong, Yiran, Harandi, Mehrtash, Drummond, Tom, Ge, Zongyuan, *CVPR* (2022). Introduces the MoCA-Mask benchmark for video camouflage detection.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html) · [code/project](https://github.com/XuelianCheng/SLT-Net)
+- **Betrayed by Motion: Camouflaged Object Discovery via Motion Segmentation** — Lamdouar, Hala; Yang, Charig; Xie, Weidi; Zisserman, Andrew, *ACCV* (2020). Foundational motion-driven video camouflage discovery work and source of the MoCA lineage.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2011.11630)
 
-## Acknowledgements
+## Instance, box, referring, and collaborative tasks
 
-- [visionxiang/awesome-camouflaged-object-detection](https://github.com/visionxiang/awesome-camouflaged-object-detection)
-- [ChunmingHe/awesome-concealed-object-segmentation](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
-- [clelouch/Awesome-Camouflaged-Object-Detection](https://github.com/clelouch/Awesome-Camouflaged-Object-Detection)
-- [GuoleiSun/Awesome-SAM2](https://github.com/GuoleiSun/Awesome-SAM2)
+- **SDDF: Specificity-Driven Dynamic Focusing for Open-Vocabulary Camouflaged Object Detection** — Liang, Jiaming; Zhan, Yifeng; Liu, Chunlin; Zheng, Weihua; Peng, Bingye; Liang, Qiwei; Cai, Boyang; Mai, Xiaochun; Nie, Qiang, *arXiv* (2026). Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.  
+  `preprint` · `metadata-only` · `paper` · open-vocabulary, bbox-rcod, dataset · [source](https://arxiv.org/abs/2603.26109)
+- **Toward Realistic Camouflaged Object Detection: Benchmarks and Method** — Xin, Zhimeng; Wu, Tianxu; Chen, Shiming; Ye, Shuo; Xie, Zijing; Zou, Yixiong; You, Xinge; Guo, Yufei, *arXiv* (2025). Defines bounding-box-oriented realistic COD and releases converted detection benchmarks.  
+  `preprint` · `metadata-only` · `paper` · bbox-rcod, dataset · [source](https://arxiv.org/abs/2501.07297) · [code/project](https://github.com/zhimengXin/RCOD)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **A Unified Query-based Paradigm for Camouflaged Instance Segmentation** — Dong, Bo; Pei, Jialun; Gao, Rongrong; Xiang, Tian-Zhu; Wang, Shuo; Xiong, Huan, *arXiv* (2023). Query-based joint instance-mask and boundary modeling for CIS.  
+  `preprint` · `metadata-only` · `paper` · instance-cod · [source](https://arxiv.org/abs/2308.07392) · [code/project](https://github.com/dongbo811/UQFormer)
+- **Leveraging Open-Vocabulary Diffusion to Camouflaged Instance Segmentation** — Vu, Tuan-Anh; Nguyen, Duc Thanh; Guo, Qing; Hua, Binh-Son; Chung, Nhat Minh; Tsang, Ivor W.; Yeung, Sai-Kit, *arXiv* (2023). Explores open-vocabulary diffusion priors for camouflaged instance segmentation.  
+  `preprint` · `metadata-only` · `paper` · instance-cod, open-vocabulary · [source](https://arxiv.org/abs/2312.17505)
+- **OSFormer: One-Stage Camouflaged Instance Segmentation with Transformers** — Pei, Jialun; Cheng, Tianyang; Fan, Deng-Ping; Tang, He; Chen, Chuanbo; Van Gool, Luc, *ECCV* (2022). Representative one-stage transformer framework for camouflaged instance segmentation.  
+  `published` · `metadata-only` · `paper` · instance-cod · [source](https://arxiv.org/abs/2207.02255) · [code/project](https://github.com/PJLallen/OSFormer)
+
+## Weak, semi, self, and unsupervised learning
+
+- **FCL-COD: Weakly Supervised Camouflaged Object Detection with Frequency-aware and Contrastive Learning** — Ni, Jingchen; Zhang, Quan; Jiang, Dan; Lv, Keyu; Zhang, Ke; Yuan, Chun, *arXiv* (2026). Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod · [source](https://arxiv.org/abs/2603.22969)
+- **A Holistically Point-guided Text Framework for Weakly-Supervised Camouflaged Object Detection** — Mok, Tsui Qin; Gao, Shuyong; Xing, Haozhe; He, Miaoyang; Wang, Yan; Zhang, Wenqiang, *arXiv* (2025). Point- and text-guided weak supervision for COD.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, vision-language · [source](https://arxiv.org/abs/2501.06038)
+- **SCOUT: Semi-supervised Camouflaged Object Detection by Utilizing Text and Adaptive Data Selection** — Yan, Weiqi; Chen, Lvhai; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan, *arXiv* (2025). Semi-supervised COD with adaptive data selection and text-visual interaction.  
+  `preprint` · `metadata-only` · `paper` · image-cod, semi-supervised-cod, vision-language · [source](https://arxiv.org/abs/2508.17843) · [code/project](https://github.com/Heartfirey/SCOUT)
+- **Segment Concealed Objects with Incomplete Supervision** — He, Chunming; Li, Kai; Zhang, Yachao; Yang, Ziyun; Pang, Youwei; Tang, Longxiang; Fang, Chengyu; Zhang, Yulun; Kong, Linghe; Li, Xiu; Farsiu, Sina, *arXiv* (2025). Unified weak/semi-supervised COS framework using SAM-generated and quality-controlled pseudo-labels.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, semi-supervised-cod · [source](https://arxiv.org/abs/2506.08955)
+- **UCOD-DPL: Unsupervised Camouflaged Object Detection via Dynamic Pseudo-label Learning** — Yan, Weiqi; Chen, Lvhai; Kou, Huaijia; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan, *arXiv* (2025). Unsupervised teacher-student COD with adaptive pseudo-labeling and adversarial decoding.  
+  `preprint` · `metadata-only` · `paper` · image-cod, unsupervised-cod · [source](https://arxiv.org/abs/2506.07087)
+- **CamoTeacher: Dual-Rotation Consistency Learning for Semi-Supervised Camouflaged Object Detection** — Lai, Xunfa; Yang, Zhiyu; Hu, Jie; Zhang, Shengchuan; Cao, Liujuan; Jiang, Guannan; Wang, Zhiyu; Zhang, Songan; Ji, Rongrong, *arXiv* (2024). Semi-supervised teacher-student COD with pixel- and instance-level rotation consistency.  
+  `preprint` · `metadata-only` · `paper` · image-cod, semi-supervised-cod · [source](https://arxiv.org/abs/2408.08050)
+- **Betrayed by Motion: Camouflaged Object Discovery via Motion Segmentation** — Lamdouar, Hala; Yang, Charig; Xie, Weidi; Zisserman, Andrew, *ACCV* (2020). Foundational motion-driven video camouflage discovery work and source of the MoCA lineage.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2011.11630)
+
+## Zero-shot, open-vocabulary, and foundation models
+
+- **FCL-COD: Weakly Supervised Camouflaged Object Detection with Frequency-aware and Contrastive Learning** — Ni, Jingchen; Zhang, Quan; Jiang, Dan; Lv, Keyu; Zhang, Ke; Yuan, Chun, *arXiv* (2026). Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod · [source](https://arxiv.org/abs/2603.22969)
+- **SDDF: Specificity-Driven Dynamic Focusing for Open-Vocabulary Camouflaged Object Detection** — Liang, Jiaming; Zhan, Yifeng; Liu, Chunlin; Zheng, Weihua; Peng, Bingye; Liang, Qiwei; Cai, Boyang; Mai, Xiaochun; Nie, Qiang, *arXiv* (2026). Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.  
+  `preprint` · `metadata-only` · `paper` · open-vocabulary, bbox-rcod, dataset · [source](https://arxiv.org/abs/2603.26109)
+- **A Holistically Point-guided Text Framework for Weakly-Supervised Camouflaged Object Detection** — Mok, Tsui Qin; Gao, Shuyong; Xing, Haozhe; He, Miaoyang; Wang, Yan; Zhang, Wenqiang, *arXiv* (2025). Point- and text-guided weak supervision for COD.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, vision-language · [source](https://arxiv.org/abs/2501.06038)
+- **CamSAM2: Segment Anything Accurately in Camouflaged Videos** — Zhou, Yuli; Sun, Guolei; Li, Yawei; Fu, Yuqian; Benini, Luca; Konukoglu, Ender, *NeurIPS* (2025). SAM2 adaptation for camouflaged videos using object-aware fusion and prototype memory.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2503.19730) · [code/project](https://github.com/zhoustan/CamSAM2)
+- **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** — Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *AAAI* (2025). Published at AAAI 2025; multimodal camouflage benchmark for LVLM evaluation.  
+  `published` · `metadata-only` · `paper` · dataset, vision-language, multimodal-evaluation · [source](https://doi.org/10.1609/aaai.v39i7.32723) · [code/project](https://github.com/JCruan519/MM-CamObj)
+- **MMCSBench: A Fine-Grained Benchmark for Large Vision-Language Models in Camouflage Scenes** — Zhang, Jin; Zhang, Ruiheng; Cao, Zhe; Chen, Kaizheng, *NeurIPS* (2025). Fine-grained benchmark for evaluating LVLM reasoning and perception in camouflage scenes.  
+  `published` · `metadata-only` · `paper` · vision-language, multimodal-evaluation, dataset · [source](https://neurips.cc/virtual/2025/poster/121542)
+- **SCOUT: Semi-supervised Camouflaged Object Detection by Utilizing Text and Adaptive Data Selection** — Yan, Weiqi; Chen, Lvhai; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan, *arXiv* (2025). Semi-supervised COD with adaptive data selection and text-visual interaction.  
+  `preprint` · `metadata-only` · `paper` · image-cod, semi-supervised-cod, vision-language · [source](https://arxiv.org/abs/2508.17843) · [code/project](https://github.com/Heartfirey/SCOUT)
+- **Segment Concealed Objects with Incomplete Supervision** — He, Chunming; Li, Kai; Zhang, Yachao; Yang, Ziyun; Pang, Youwei; Tang, Longxiang; Fang, Chengyu; Zhang, Yulun; Kong, Linghe; Li, Xiu; Farsiu, Sina, *arXiv* (2025). Unified weak/semi-supervised COS framework using SAM-generated and quality-controlled pseudo-labels.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, semi-supervised-cod · [source](https://arxiv.org/abs/2506.08955)
+- **Toward Realistic Camouflaged Object Detection: Benchmarks and Method** — Xin, Zhimeng; Wu, Tianxu; Chen, Shiming; Ye, Shuo; Xie, Zijing; Zou, Yixiong; You, Xinge; Guo, Yufei, *arXiv* (2025). Defines bounding-box-oriented realistic COD and releases converted detection benchmarks.  
+  `preprint` · `metadata-only` · `paper` · bbox-rcod, dataset · [source](https://arxiv.org/abs/2501.07297) · [code/project](https://github.com/zhimengXin/RCOD)
+- **Towards Real Zero-Shot Camouflaged Object Segmentation without Camouflaged Annotations** — Lei, Cheng; Fan, Jie; Li, Xinran; Xiang, Tian-Zhu; Li, Ao; Zhu, Ce; Zhang, Le, *IEEE TPAMI* (2025). Real zero-shot COS framework combining masked-image pretraining, MLLM semantics, and PEFT.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, open-vocabulary, image-cod · [source](https://arxiv.org/abs/2410.16953) · [code/project](https://github.com/R-LEI360725/ZSCOS-CaMF)
+- **ZS-VCOS: Zero-Shot Outperforms Supervised Video Camouflaged Object Segmentation** — Guo, Wenqi; Du, Shan, *arXiv* (2025). Zero-shot video pipeline combining optical flow, a vision-language model, and SAM2.  
+  `preprint` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2505.01431) · [code/project](https://github.com/weathon/vcos)
+- **Chain of Visual Perception: Harnessing Multimodal Large Language Models for Zero-shot Camouflaged Object Detection** — Tang, Lv; Jiang, Peng-Tao; Shen, Zhihao; Zhang, Hao; Chen, Jinwei; Li, Bo, *arXiv* (2023). Early MLLM-centered zero-shot camouflage perception pipeline using language and visual cues.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, vision-language, video-cod, image-cod · [source](https://arxiv.org/abs/2311.11273) · [code/project](https://github.com/luckybird1994/MMCPF)
+- **Leveraging Open-Vocabulary Diffusion to Camouflaged Instance Segmentation** — Vu, Tuan-Anh; Nguyen, Duc Thanh; Guo, Qing; Hua, Binh-Son; Chung, Nhat Minh; Tsang, Ivor W.; Yeung, Sai-Kit, *arXiv* (2023). Explores open-vocabulary diffusion priors for camouflaged instance segmentation.  
+  `preprint` · `metadata-only` · `paper` · instance-cod, open-vocabulary · [source](https://arxiv.org/abs/2312.17505)
+
+## Depth, thermal, spectral, polarization, and multimodal camouflage
+
+- **SDDF: Specificity-Driven Dynamic Focusing for Open-Vocabulary Camouflaged Object Detection** — Liang, Jiaming; Zhan, Yifeng; Liu, Chunlin; Zheng, Weihua; Peng, Bingye; Liang, Qiwei; Cai, Boyang; Mai, Xiaochun; Nie, Qiang, *arXiv* (2026). Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.  
+  `preprint` · `metadata-only` · `paper` · open-vocabulary, bbox-rcod, dataset · [source](https://arxiv.org/abs/2603.26109)
+- **A Holistically Point-guided Text Framework for Weakly-Supervised Camouflaged Object Detection** — Mok, Tsui Qin; Gao, Shuyong; Xing, Haozhe; He, Miaoyang; Wang, Yan; Zhang, Wenqiang, *arXiv* (2025). Point- and text-guided weak supervision for COD.  
+  `preprint` · `metadata-only` · `paper` · image-cod, weakly-supervised-cod, vision-language · [source](https://arxiv.org/abs/2501.06038)
+- **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** — Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *AAAI* (2025). Published at AAAI 2025; multimodal camouflage benchmark for LVLM evaluation.  
+  `published` · `metadata-only` · `paper` · dataset, vision-language, multimodal-evaluation · [source](https://doi.org/10.1609/aaai.v39i7.32723) · [code/project](https://github.com/JCruan519/MM-CamObj)
+- **MMCSBench: A Fine-Grained Benchmark for Large Vision-Language Models in Camouflage Scenes** — Zhang, Jin; Zhang, Ruiheng; Cao, Zhe; Chen, Kaizheng, *NeurIPS* (2025). Fine-grained benchmark for evaluating LVLM reasoning and perception in camouflage scenes.  
+  `published` · `metadata-only` · `paper` · vision-language, multimodal-evaluation, dataset · [source](https://neurips.cc/virtual/2025/poster/121542)
+- **SCOUT: Semi-supervised Camouflaged Object Detection by Utilizing Text and Adaptive Data Selection** — Yan, Weiqi; Chen, Lvhai; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan, *arXiv* (2025). Semi-supervised COD with adaptive data selection and text-visual interaction.  
+  `preprint` · `metadata-only` · `paper` · image-cod, semi-supervised-cod, vision-language · [source](https://arxiv.org/abs/2508.17843) · [code/project](https://github.com/Heartfirey/SCOUT)
+- **Towards Real Zero-Shot Camouflaged Object Segmentation without Camouflaged Annotations** — Lei, Cheng; Fan, Jie; Li, Xinran; Xiang, Tian-Zhu; Li, Ao; Zhu, Ce; Zhang, Le, *IEEE TPAMI* (2025). Real zero-shot COS framework combining masked-image pretraining, MLLM semantics, and PEFT.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, open-vocabulary, image-cod · [source](https://arxiv.org/abs/2410.16953) · [code/project](https://github.com/R-LEI360725/ZSCOS-CaMF)
+- **ZS-VCOS: Zero-Shot Outperforms Supervised Video Camouflaged Object Segmentation** — Guo, Wenqi; Du, Shan, *arXiv* (2025). Zero-shot video pipeline combining optical flow, a vision-language model, and SAM2.  
+  `preprint` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2505.01431) · [code/project](https://github.com/weathon/vcos)
+- **Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations** — NIST, *NIST AI 100-2e2023* (2023). Authoritative terminology standard for adversarial-ML threats and mitigations used to bound digital/physical camouflage claims.  
+  `published` · `metadata-only` · `standard` · digital-adversarial, physical-adversarial, standard · [source](https://csrc.nist.gov/pubs/ai/100/2/e2023/final)
+- **Chain of Visual Perception: Harnessing Multimodal Large Language Models for Zero-shot Camouflaged Object Detection** — Tang, Lv; Jiang, Peng-Tao; Shen, Zhihao; Zhang, Hao; Chen, Jinwei; Li, Bo, *arXiv* (2023). Early MLLM-centered zero-shot camouflage perception pipeline using language and visual cues.  
+  `published` · `metadata-only` · `paper` · zero-shot-cod, vision-language, video-cod, image-cod · [source](https://arxiv.org/abs/2311.11273) · [code/project](https://github.com/luckybird1994/MMCPF)
+- **Leveraging Open-Vocabulary Diffusion to Camouflaged Instance Segmentation** — Vu, Tuan-Anh; Nguyen, Duc Thanh; Guo, Qing; Hua, Binh-Son; Chung, Nhat Minh; Tsang, Ivor W.; Yeung, Sai-Kit, *arXiv* (2023). Explores open-vocabulary diffusion priors for camouflaged instance segmentation.  
+  `preprint` · `metadata-only` · `paper` · instance-cod, open-vocabulary · [source](https://arxiv.org/abs/2312.17505)
+- **Camouflage** — Cuthill, Innes C., *Journal of Zoology* (2019). Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.  
+  `published` · `metadata-only` · `survey` · biological-camouflage, survey · [source](https://doi.org/10.1111/jzo.12682)
+- **Animal Camouflage: Mechanisms and Function** — Stevens, Martin; Merilaita, Sami (eds.), *Cambridge University Press* (2011). Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.  
+  `published` · `metadata-only` · `book` · biological-camouflage, human-detection, survey · [source](https://www.cambridge.org/core/books/animal-camouflage/)
+
+## Camouflage generation and adversarial camouflage
+
+- **PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack** — Zhang et al., *AAAI* (2025). Physical Adversarial resource.  
+  `published` · `metadata-only` · `paper` · physical-adversarial · [source](https://doi.org/10.1609/aaai.v39i10.33110)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations** — NIST, *NIST AI 100-2e2023* (2023). Authoritative terminology standard for adversarial-ML threats and mitigations used to bound digital/physical camouflage claims.  
+  `published` · `metadata-only` · `standard` · digital-adversarial, physical-adversarial, standard · [source](https://csrc.nist.gov/pubs/ai/100/2/e2023/final)
+- **The Making and Breaking of Camouflage** — Lamdouar, Hala; Xie, Weidi; Zisserman, Andrew, *ICCV* (2023). Links camouflage-effectiveness scores, synthetic generation, and video segmentation.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, generation, video-cod · [source](https://arxiv.org/abs/2309.03899)
+- **Universal Physical Camouflage Attacks on Object Detectors** — Huang, Lifeng; Gao, Chengying; Zhou, Yuyin; Xie, Cihang; Yuille, Alan; Zou, Changqing; Liu, Ning, *CVPR* (2020). Foundational category-level physical camouflage attack and controlled AttackScenes benchmark.  
+  `published` · `metadata-only` · `paper` · physical-adversarial, generation · [source](https://arxiv.org/abs/1909.04326) · [code/project](https://mesunhlf.github.io/index_physical.html)
+- **Camouflage** — Cuthill, Innes C., *Journal of Zoology* (2019). Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.  
+  `published` · `metadata-only` · `survey` · biological-camouflage, survey · [source](https://doi.org/10.1111/jzo.12682)
+- **Cultural evolution of military camouflage** — Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C., *Phil. Trans. R. Soc. B* (2017). Comparative study of how military camouflage patterns evolve under perceptual, cultural, and operational pressures.  
+  `published` · `metadata-only` · `paper` · military-camouflage, historical-analysis · [source](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351)
+- **Animal Camouflage: Mechanisms and Function** — Stevens, Martin; Merilaita, Sami (eds.), *Cambridge University Press* (2011). Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.  
+  `published` · `metadata-only` · `book` · biological-camouflage, human-detection, survey · [source](https://www.cambridge.org/core/books/animal-camouflage/)
+- **Camoupedia: A Compendium of Research on Art, Architecture, and Camouflage** — Behrens, Roy R., *Bobolink Books* (2009). Reference compendium covering art, architecture, perception, and military camouflage history.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis, survey · [source](https://camoupedia.blogspot.com/)
+- **Dazzled and Deceived: Mimicry and Camouflage** — Forbes, Peter, *Yale University Press* (2009). Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.  
+  `published` · `metadata-only` · `book` · biological-camouflage, military-camouflage, historical-analysis · [source](https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/)
+- **False Colors: Art, Design and Modern Camouflage** — Behrens, Roy R., *Bobolink Books* (2002). Core art-and-design history of modern camouflage and its Gestalt and military connections.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis · [source](https://works.bepress.com/roy-behrens/)
+- **Camouflage: A History of Concealment and Deception in War** — Hartcup, Guy, *David & Charles* (1980). Military history of concealment and deception technologies through the twentieth century.  
+  `published` · `metadata-only` · `book` · military-camouflage, historical-analysis · [source](https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup)
+- **Adaptive Coloration in Animals** — Cott, Hugh B., *Oxford University Press* (1940). Foundational natural-history synthesis of concealment, disguise, disruption, and display.  
+  `published` · `metadata-only` · `book` · biological-camouflage, historical-analysis · [source](https://archive.org/details/adaptivecolorati00cott)
+- **Concealing-Coloration in the Animal Kingdom** — Thayer, Gerald H.; Thayer, Abbott H., *Macmillan* (1909). Historically influential, controversial account of countershading and disruptive coloration.  
+  `published` · `metadata-only` · `historical-source` · biological-camouflage, art-design, historical-analysis · [source](https://archive.org/details/concealingcolora00thay)
+
+## Assessment, metrics, human perception, and robustness
+
+- **CAMotion: A High-Quality Benchmark for Camouflaged Moving Object Detection in the Wild** — Yao, Siyuan; Sun, Hao; Yu, Ruiqi; Jiang, Xiwei; Ren, Wenqi; Cao, Xiaochun, *arXiv* (2026). Recent wild-video benchmark with motion and boundary challenge attributes.  
+  `preprint` · `metadata-only` · `paper` · video-cod, dataset · [source](https://arxiv.org/abs/2604.08287) · [code/project](https://www.camotion.focuslab.net.cn)
+- **MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios** — Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo, *AAAI* (2025). Published at AAAI 2025; multimodal camouflage benchmark for LVLM evaluation.  
+  `published` · `metadata-only` · `paper` · dataset, vision-language, multimodal-evaluation · [source](https://doi.org/10.1609/aaai.v39i7.32723) · [code/project](https://github.com/JCruan519/MM-CamObj)
+- **MMCSBench: A Fine-Grained Benchmark for Large Vision-Language Models in Camouflage Scenes** — Zhang, Jin; Zhang, Ruiheng; Cao, Zhe; Chen, Kaizheng, *NeurIPS* (2025). Fine-grained benchmark for evaluating LVLM reasoning and perception in camouflage scenes.  
+  `published` · `metadata-only` · `paper` · vision-language, multimodal-evaluation, dataset · [source](https://neurips.cc/virtual/2025/poster/121542)
+- **A Survey of Camouflaged Object Detection and Beyond** — Xiao et al., *CAAI AIR* (2024). Broad modern survey of image/video COD, extended tasks, datasets, and metrics.  
+  `published` · `metadata-only` · `survey` · survey, image-cod, video-cod, instance-cod · [source](https://arxiv.org/abs/2408.14562) · [code/project](https://github.com/ChunmingHe/awesome-concealed-object-segmentation)
+- **Camouflaged Object Tracking: A Benchmark** — Guo, Xiaoyu; Zhong, Pengzhi; Zhang, Hao; Huang, Defeng; Shao, Huikai; Zhao, Qijun; Li, Shuiwang, *arXiv* (2024). Introduces COTD and evaluates general trackers in camouflaged-object sequences.  
+  `preprint` · `metadata-only` · `paper` · tracking, dataset · [source](https://arxiv.org/abs/2408.13877) · [code/project](https://github.com/openat25/HIPTrack-MLS)
+- **Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations** — NIST, *NIST AI 100-2e2023* (2023). Authoritative terminology standard for adversarial-ML threats and mitigations used to bound digital/physical camouflage claims.  
+  `published` · `metadata-only` · `standard` · digital-adversarial, physical-adversarial, standard · [source](https://csrc.nist.gov/pubs/ai/100/2/e2023/final)
+- **The Making and Breaking of Camouflage** — Lamdouar, Hala; Xie, Weidi; Zisserman, Andrew, *ICCV* (2023). Links camouflage-effectiveness scores, synthetic generation, and video segmentation.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, generation, video-cod · [source](https://arxiv.org/abs/2309.03899)
+- **Review of camouflage assessment techniques** — Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* (2020). Survey of subjective and objective camouflage assessment in military settings.  
+  `published` · `metadata-only` · `survey` · camouflage-assessment · [source](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
+- **Camouflage** — Cuthill, Innes C., *Journal of Zoology* (2019). Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.  
+  `published` · `metadata-only` · `survey` · biological-camouflage, survey · [source](https://doi.org/10.1111/jzo.12682)
+- **Cultural evolution of military camouflage** — Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C., *Phil. Trans. R. Soc. B* (2017). Comparative study of how military camouflage patterns evolve under perceptual, cultural, and operational pressures.  
+  `published` · `metadata-only` · `paper` · military-camouflage, historical-analysis · [source](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351)
+- **Quantifying camouflage: how to predict detectability from appearance** — Troscianko, Jolyon, Skelhorn, John, Stevens, Martin, *BMC Evolutionary Biology* (2017). Bridges objective appearance measures and human detectability.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, human-detection · [source](https://link.springer.com/article/10.1186/s12862-016-0854-2)
+- **Animal Camouflage: Mechanisms and Function** — Stevens, Martin; Merilaita, Sami (eds.), *Cambridge University Press* (2011). Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.  
+  `published` · `metadata-only` · `book` · biological-camouflage, human-detection, survey · [source](https://www.cambridge.org/core/books/animal-camouflage/)
+- **Camoupedia: A Compendium of Research on Art, Architecture, and Camouflage** — Behrens, Roy R., *Bobolink Books* (2009). Reference compendium covering art, architecture, perception, and military camouflage history.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis, survey · [source](https://camoupedia.blogspot.com/)
+- **Dazzled and Deceived: Mimicry and Camouflage** — Forbes, Peter, *Yale University Press* (2009). Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.  
+  `published` · `metadata-only` · `book` · biological-camouflage, military-camouflage, historical-analysis · [source](https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/)
+- **False Colors: Art, Design and Modern Camouflage** — Behrens, Roy R., *Bobolink Books* (2002). Core art-and-design history of modern camouflage and its Gestalt and military connections.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis · [source](https://works.bepress.com/roy-behrens/)
+- **Camouflage: A History of Concealment and Deception in War** — Hartcup, Guy, *David & Charles* (1980). Military history of concealment and deception technologies through the twentieth century.  
+  `published` · `metadata-only` · `book` · military-camouflage, historical-analysis · [source](https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup)
+- **Adaptive Coloration in Animals** — Cott, Hugh B., *Oxford University Press* (1940). Foundational natural-history synthesis of concealment, disguise, disruption, and display.  
+  `published` · `metadata-only` · `book` · biological-camouflage, historical-analysis · [source](https://archive.org/details/adaptivecolorati00cott)
+- **Concealing-Coloration in the Animal Kingdom** — Thayer, Gerald H.; Thayer, Abbott H., *Macmillan* (1909). Historically influential, controversial account of countershading and disruptive coloration.  
+  `published` · `metadata-only` · `historical-source` · biological-camouflage, art-design, historical-analysis · [source](https://archive.org/details/concealingcolora00thay)
+
+## Natural camouflage and visual ecology
+
+- **CAMotion: A High-Quality Benchmark for Camouflaged Moving Object Detection in the Wild** — Yao, Siyuan; Sun, Hao; Yu, Ruiqi; Jiang, Xiwei; Ren, Wenqi; Cao, Xiaochun, *arXiv* (2026). Recent wild-video benchmark with motion and boundary challenge attributes.  
+  `preprint` · `metadata-only` · `paper` · video-cod, dataset · [source](https://arxiv.org/abs/2604.08287) · [code/project](https://www.camotion.focuslab.net.cn)
+- **The Making and Breaking of Camouflage** — Lamdouar, Hala; Xie, Weidi; Zisserman, Andrew, *ICCV* (2023). Links camouflage-effectiveness scores, synthetic generation, and video segmentation.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, generation, video-cod · [source](https://arxiv.org/abs/2309.03899)
+- **Concealed Object Detection** — Fan, Deng-Ping; Ji, Ge-Peng; Cheng, Ming-Ming; Shao, Ling, *IEEE TPAMI* (2022). Systematic COD study introducing COD10K and the SINet search-identification baseline.  
+  `published` · `metadata-only` · `paper` · image-cod · [source](https://arxiv.org/abs/2102.10274) · [code/project](https://github.com/DengPingFan/SINet)
+- **Betrayed by Motion: Camouflaged Object Discovery via Motion Segmentation** — Lamdouar, Hala; Yang, Charig; Xie, Weidi; Zisserman, Andrew, *ACCV* (2020). Foundational motion-driven video camouflage discovery work and source of the MoCA lineage.  
+  `published` · `metadata-only` · `paper` · video-cod · [source](https://arxiv.org/abs/2011.11630)
+- **Camouflage** — Cuthill, Innes C., *Journal of Zoology* (2019). Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.  
+  `published` · `metadata-only` · `survey` · biological-camouflage, survey · [source](https://doi.org/10.1111/jzo.12682)
+- **Cultural evolution of military camouflage** — Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C., *Phil. Trans. R. Soc. B* (2017). Comparative study of how military camouflage patterns evolve under perceptual, cultural, and operational pressures.  
+  `published` · `metadata-only` · `paper` · military-camouflage, historical-analysis · [source](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351)
+- **Quantifying camouflage: how to predict detectability from appearance** — Troscianko, Jolyon, Skelhorn, John, Stevens, Martin, *BMC Evolutionary Biology* (2017). Bridges objective appearance measures and human detectability.  
+  `published` · `metadata-only` · `paper` · camouflage-assessment, human-detection · [source](https://link.springer.com/article/10.1186/s12862-016-0854-2)
+- **Animal Camouflage: Mechanisms and Function** — Stevens, Martin; Merilaita, Sami (eds.), *Cambridge University Press* (2011). Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.  
+  `published` · `metadata-only` · `book` · biological-camouflage, human-detection, survey · [source](https://www.cambridge.org/core/books/animal-camouflage/)
+- **Dazzled and Deceived: Mimicry and Camouflage** — Forbes, Peter, *Yale University Press* (2009). Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.  
+  `published` · `metadata-only` · `book` · biological-camouflage, military-camouflage, historical-analysis · [source](https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/)
+- **Adaptive Coloration in Animals** — Cott, Hugh B., *Oxford University Press* (1940). Foundational natural-history synthesis of concealment, disguise, disruption, and display.  
+  `published` · `metadata-only` · `book` · biological-camouflage, historical-analysis · [source](https://archive.org/details/adaptivecolorati00cott)
+- **Concealing-Coloration in the Animal Kingdom** — Thayer, Gerald H.; Thayer, Abbott H., *Macmillan* (1909). Historically influential, controversial account of countershading and disruptive coloration.  
+  `published` · `metadata-only` · `historical-source` · biological-camouflage, art-design, historical-analysis · [source](https://archive.org/details/concealingcolora00thay)
+
+## Military history, art, architecture, and design
+
+- **Review of camouflage assessment techniques** — Toet, Alexander, Hogervorst, Maarten A., *SPIE Target and Background Signatures VI* (2020). Survey of subjective and objective camouflage assessment in military settings.  
+  `published` · `metadata-only` · `survey` · camouflage-assessment · [source](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short)
+- **Cultural evolution of military camouflage** — Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C., *Phil. Trans. R. Soc. B* (2017). Comparative study of how military camouflage patterns evolve under perceptual, cultural, and operational pressures.  
+  `published` · `metadata-only` · `paper` · military-camouflage, historical-analysis · [source](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351)
+- **Camoupedia: A Compendium of Research on Art, Architecture, and Camouflage** — Behrens, Roy R., *Bobolink Books* (2009). Reference compendium covering art, architecture, perception, and military camouflage history.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis, survey · [source](https://camoupedia.blogspot.com/)
+- **Dazzled and Deceived: Mimicry and Camouflage** — Forbes, Peter, *Yale University Press* (2009). Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.  
+  `published` · `metadata-only` · `book` · biological-camouflage, military-camouflage, historical-analysis · [source](https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/)
+- **False Colors: Art, Design and Modern Camouflage** — Behrens, Roy R., *Bobolink Books* (2002). Core art-and-design history of modern camouflage and its Gestalt and military connections.  
+  `published` · `metadata-only` · `book` · art-design, military-camouflage, historical-analysis · [source](https://works.bepress.com/roy-behrens/)
+- **Camouflage: A History of Concealment and Deception in War** — Hartcup, Guy, *David & Charles* (1980). Military history of concealment and deception technologies through the twentieth century.  
+  `published` · `metadata-only` · `book` · military-camouflage, historical-analysis · [source](https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup)
+- **Adaptive Coloration in Animals** — Cott, Hugh B., *Oxford University Press* (1940). Foundational natural-history synthesis of concealment, disguise, disruption, and display.  
+  `published` · `metadata-only` · `book` · biological-camouflage, historical-analysis · [source](https://archive.org/details/adaptivecolorati00cott)
+- **Concealing-Coloration in the Animal Kingdom** — Thayer, Gerald H.; Thayer, Abbott H., *Macmillan* (1909). Historically influential, controversial account of countershading and disruptive coloration.  
+  `published` · `metadata-only` · `historical-source` · biological-camouflage, art-design, historical-analysis · [source](https://archive.org/details/concealingcolora00thay)
+
+## Dataset and benchmark index
+
+| Dataset | Task | Modality | Year | Availability | License status | Last reviewed |
+|---|---|---:|---:|---|---|---|
+| [CAMotion](https://www.camotion.focuslab.net.cn) | `dataset` | `video` | 2026 | released | `unknown` | 2026-07-13 |
+| [CamoVid60K](https://camovid60k.hkustvgd.com/) | `video-cod` | `video` | 2026 | released | `verified` | 2026-07-13 |
+| [OVCOD-D](https://arxiv.org/abs/2603.26109) | `dataset` | `multimodal` | 2026 | project-page | `unknown` | 2026-07-13 |
+| [MCOD](https://github.com/yl2900260-bit/MCOD) | `image-cod` | `multispectral` | 2025 | released | `verified` | 2026-07-13 |
+| [MMCSBench](https://neurips.cc/virtual/2025/poster/121542) | `dataset` | `multimodal` | 2025 | project-page | `unknown` | 2026-07-13 |
+| [MSVCOD](https://arxiv.org/abs/2502.13859) | `video-cod` | `video` | 2025 | released | `unknown` | 2026-07-13 |
+| [RCOD Benchmark](https://github.com/zhimengXin/RCOD) | `dataset` | `rgb` | 2025 | released | `unknown` | 2026-07-13 |
+| [RefTextCOD](https://github.com/Heartfirey/SCOUT) | `dataset` | `multimodal` | 2025 | project-page | `unknown` | 2026-07-13 |
+| [USC12K](https://github.com/ssecv/USCNet) | `dataset` | `rgb` | 2025 | released | `unknown` | 2026-07-13 |
+| [ACOD-12K](https://github.com/Kki2Eve/RISNet) | `image-cod` | `depth` | 2024 | released | `unknown` | 2026-07-13 |
+| [COTD](https://github.com/openat25/HIPTrack-MLS) | `dataset` | `video` | 2024 | released | `unknown` | 2026-07-13 |
+| [MM-CamObj](https://github.com/JCruan519/MM-CamObj) | `dataset` | `multimodal` | 2024 | released | `unknown` | 2026-07-13 |
+| [PlantCamo](https://github.com/yjybuaa/PlantCamo) | `image-cod` | `rgb` | 2024 | released | `unknown` | 2026-07-13 |
+| [CoCOD8K](https://github.com/zc199823/BBNet--CoCOD) | `collaborative-cod` | `rgb` | 2023 | released | `unknown` | 2026-07-13 |
+| [R2C7K](https://github.com/zhangxuying1004/RefCOD) | `referring-cod` | `rgb` | 2023 | released | `unknown` | 2026-07-13 |
+| [MHCD2022](https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022) | `image-cod` | `rgb` | 2022 | released | `unknown` | 2026-07-13 |
+| [MoCA-Mask](https://xueliancheng.github.io/SLT-Net-project/) | `video-cod` | `video` | 2022 | released | `unknown` | 2026-07-13 |
+| [NC4K](https://github.com/JingZhang617/COD-Rank-Localize-and-Segment) | `image-cod` | `rgb` | 2021 | released | `unknown` | 2026-07-13 |
+| [COD10K](https://dengpingfan.github.io/pages/COD.html) | `image-cod` | `rgb` | 2020 | released | `unknown` | 2026-07-13 |
+| [CAMO](https://sites.google.com/view/ltnghia/research/camo) | `image-cod` | `rgb` | 2019 | released | `unknown` | 2026-07-13 |
+| [CHAMELEON](https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/) | `image-cod` | `rgb` | 2017 | released | `unknown` | 2026-07-13 |
+| [CAD](https://arxiv.org/abs/1604.00136) | `video-cod` | `video` | 2016 | released | `unknown` | 2026-07-13 |
+
+## Dynamic maintenance
+
+- Weekly discovery workflow: `.github/workflows/awesome-discovery.yml`.
+- Candidate reports: GitHub issues carrying the `awesome:triage` label.
+- Human acceptance workflow: `.github/workflows/awesome-curation.yml`.
+- Query definitions: `data/discovery_queries.yaml`.
+- Curation rules and evidence levels: `docs/AWESOME_GOVERNANCE.md`.
+
+## Related curated lists
+
+- https://github.com/visionxiang/awesome-camouflaged-object-detection
+- https://github.com/ChunmingHe/awesome-concealed-object-segmentation
+- https://github.com/clelouch/Awesome-Camouflaged-Object-Detection
+- https://github.com/GuoleiSun/Awesome-SAM2

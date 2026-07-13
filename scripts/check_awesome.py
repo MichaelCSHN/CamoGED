@@ -47,7 +47,14 @@ REQUIRED_TASK_COVERAGE = {
     "camouflage-assessment",
 }
 REQUIRED_CONTEXT_COVERAGE = {"computer-vision", "biological", "military", "art-design"}
-REQUIRED_MODALITY_COVERAGE = {"rgb", "video", "depth", "multispectral", "multimodal", "vision-language"}
+REQUIRED_MODALITY_COVERAGE = {
+    "rgb",
+    "video",
+    "depth",
+    "multispectral",
+    "multimodal",
+    "vision-language",
+}
 
 
 def load(name: str) -> dict:
@@ -78,7 +85,9 @@ def identifier(url: str | None) -> tuple[str, str] | None:
 
 
 def matches(entry: dict, rule: dict) -> bool:
-    return any(set(values(entry, field)) & set(expected) for field, expected in rule.items())
+    return any(
+        set(values(entry, field)) & set(expected) for field, expected in rule.items()
+    )
 
 
 def main() -> int:
@@ -90,12 +99,18 @@ def main() -> int:
     discovery = load("discovery_queries.yaml")
 
     if len(resources) < 60:
-        errors.append(f"catalog requires at least 60 accepted resources; found {len(resources)}")
+        errors.append(
+            f"catalog requires at least 60 accepted resources; found {len(resources)}"
+        )
     curated = [item for item in resources if item.get("curated") is True]
     if len(curated) < 25:
-        errors.append(f"curated Awesome requires at least 25 resources; found {len(curated)}")
+        errors.append(
+            f"curated Awesome requires at least 25 resources; found {len(curated)}"
+        )
     if len(datasets) < 20:
-        errors.append(f"dataset index requires at least 20 records; found {len(datasets)}")
+        errors.append(
+            f"dataset index requires at least 20 records; found {len(datasets)}"
+        )
 
     seen_titles: dict[str, str] = {}
     seen_ids: dict[tuple[str, str], str] = {}
@@ -109,10 +124,20 @@ def main() -> int:
         if missing:
             errors.append(f"{where}: missing Awesome fields {missing}")
             continue
-        for field in ("pillars", "tasks", "modalities", "supervision", "method_families", "contexts"):
+        for field in (
+            "pillars",
+            "tasks",
+            "modalities",
+            "supervision",
+            "method_families",
+            "contexts",
+        ):
             if not isinstance(item.get(field), list) or not item[field]:
                 errors.append(f"{where}: {field} must be a non-empty list")
-        if not isinstance(item.get("description"), str) or len(item["description"].strip()) < 25:
+        if (
+            not isinstance(item.get("description"), str)
+            or len(item["description"].strip()) < 25
+        ):
             errors.append(f"{where}: description is missing or too short")
         if item.get("curation_tier") not in {"core", "recommended", "catalog"}:
             errors.append(f"{where}: invalid curation_tier")
@@ -120,19 +145,28 @@ def main() -> int:
             errors.append(f"{where}: invalid discovery_status")
         for field in ("date_added", "last_verified"):
             value = item.get(field)
-            if value is not None and (not isinstance(value, str) or not DATE.match(value)):
+            if value is not None and (
+                not isinstance(value, str) or not DATE.match(value)
+            ):
                 errors.append(f"{where}: {field} must be YYYY-MM-DD or null")
         canonical = item.get("canonical_url")
-        if not isinstance(canonical, str) or urlparse(canonical).scheme not in {"http", "https"}:
+        if not isinstance(canonical, str) or urlparse(canonical).scheme not in {
+            "http",
+            "https",
+        }:
             errors.append(f"{where}: canonical_url must be http(s)")
 
         normalized = normalize_title(str(item.get("title", "")))
         if normalized in seen_titles:
-            errors.append(f"{where}: duplicate normalized title with {seen_titles[normalized]}")
+            errors.append(
+                f"{where}: duplicate normalized title with {seen_titles[normalized]}"
+            )
         seen_titles[normalized] = str(item.get("id"))
         external_id = identifier(canonical)
         if external_id and external_id in seen_ids:
-            errors.append(f"{where}: duplicate {external_id[0]} identifier with {seen_ids[external_id]}")
+            errors.append(
+                f"{where}: duplicate {external_id[0]} identifier with {seen_ids[external_id]}"
+            )
         elif external_id:
             seen_ids[external_id] = str(item.get("id"))
 
@@ -153,18 +187,26 @@ def main() -> int:
     recent = [item for item in resources if int(item.get("year") or 0) >= 2025]
     current = [item for item in resources if int(item.get("year") or 0) >= 2026]
     if len(recent) < 15:
-        errors.append(f"freshness gate requires at least 15 records from 2025+; found {len(recent)}")
+        errors.append(
+            f"freshness gate requires at least 15 records from 2025+; found {len(recent)}"
+        )
     if len(current) < 3:
-        errors.append(f"freshness gate requires at least 3 records from 2026+; found {len(current)}")
+        errors.append(
+            f"freshness gate requires at least 3 records from 2026+; found {len(current)}"
+        )
 
     by_id = {item.get("id"): item for item in resources}
     for item_id in config.get("core_reading", []):
         if item_id not in by_id:
-            errors.append(f"awesome.yaml core_reading references unknown id {item_id!r}")
+            errors.append(
+                f"awesome.yaml core_reading references unknown id {item_id!r}"
+            )
         elif by_id[item_id].get("curated") is not True:
             errors.append(f"core resource {item_id!r} is not curated")
     for section in config.get("sections", []):
-        section_entries = [item for item in curated if matches(item, section.get("match", {}))]
+        section_entries = [
+            item for item in curated if matches(item, section.get("match", {}))
+        ]
         if not section_entries:
             errors.append(f"curated section {section.get('id')!r} has no entries")
     if len(config.get("sections", [])) < 10:
@@ -173,7 +215,9 @@ def main() -> int:
     queries = discovery.get("queries", [])
     query_ids = [item.get("id") for item in queries]
     if len(queries) < 10:
-        errors.append(f"dynamic discovery requires at least 10 queries; found {len(queries)}")
+        errors.append(
+            f"dynamic discovery requires at least 10 queries; found {len(queries)}"
+        )
     if len(query_ids) != len(set(query_ids)):
         errors.append("discovery query ids must be unique")
     sources = {item.get("source") for item in queries}
@@ -195,7 +239,9 @@ def main() -> int:
             errors.append(f"missing Awesome maintenance surface: {relative}")
 
     if config.get("last_human_review") != config.get("coverage_through"):
-        warnings.append("last_human_review differs from coverage_through; verify that this is intentional")
+        warnings.append(
+            "last_human_review differs from coverage_through; verify that this is intentional"
+        )
 
     for warning in warnings:
         print(f"WARN {warning}")

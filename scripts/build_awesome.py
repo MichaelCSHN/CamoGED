@@ -53,7 +53,9 @@ def md_escape(value: object) -> str:
 
 
 def sort_resources(resources: Iterable[dict]) -> list[dict]:
-    return sorted(resources, key=lambda item: (-int(item.get("year") or 0), item["title"].lower()))
+    return sorted(
+        resources, key=lambda item: (-int(item.get("year") or 0), item["title"].lower())
+    )
 
 
 def matches(entry: dict, rule: dict) -> bool:
@@ -75,7 +77,10 @@ def badge(entry: dict) -> str:
 def resource_bullet(entry: dict) -> str:
     links = " · ".join(
         item
-        for item in [link("source", entry.get("paper")), link("code/project", entry.get("code"))]
+        for item in [
+            link("source", entry.get("paper")),
+            link("code/project", entry.get("code")),
+        ]
         if item
     )
     axis = ", ".join(as_list(entry.get("tasks"))[:4])
@@ -95,7 +100,10 @@ def curated_resources(resources: list[dict]) -> list[dict]:
 def latest_resources(resources: list[dict], limit: int = 12) -> list[dict]:
     return sorted(
         resources,
-        key=lambda item: (str(item.get("date_added") or ""), int(item.get("year") or 0)),
+        key=lambda item: (
+            str(item.get("date_added") or ""),
+            int(item.get("year") or 0),
+        ),
         reverse=True,
     )[:limit]
 
@@ -103,7 +111,9 @@ def latest_resources(resources: list[dict], limit: int = 12) -> list[dict]:
 def render_curated(config: dict, resources: list[dict], datasets: list[dict]) -> str:
     selected = curated_resources(resources)
     by_id = {item["id"]: item for item in resources}
-    core = [by_id[item_id] for item_id in config.get("core_reading", []) if item_id in by_id]
+    core = [
+        by_id[item_id] for item_id in config.get("core_reading", []) if item_id in by_id
+    ]
     latest = latest_resources(resources)
 
     lines = [
@@ -152,7 +162,10 @@ def render_curated(config: dict, resources: list[dict], datasets: list[dict]) ->
             "|---|---|---:|---:|---|---|---|",
         ]
     )
-    for item in sorted(datasets, key=lambda value: (-int(value.get("year") or 0), value["name"].lower())):
+    for item in sorted(
+        datasets,
+        key=lambda value: (-int(value.get("year") or 0), value["name"].lower()),
+    ):
         lines.append(
             f"| {link(item['name'], item.get('link')) or item['name']} | `{item['task']}` | "
             f"`{item['modality']}` | {item.get('year') or ''} | "
@@ -183,9 +196,15 @@ def render_curated(config: dict, resources: list[dict], datasets: list[dict]) ->
 
 def render_catalog(resources: list[dict], config: dict) -> str:
     type_counts = Counter(item.get("resource_type", "paper") for item in resources)
-    task_counts = Counter(task for item in resources for task in as_list(item.get("tasks")))
-    modality_counts = Counter(modality for item in resources for modality in as_list(item.get("modalities")))
-    context_counts = Counter(context for item in resources for context in as_list(item.get("contexts")))
+    task_counts = Counter(
+        task for item in resources for task in as_list(item.get("tasks"))
+    )
+    modality_counts = Counter(
+        modality for item in resources for modality in as_list(item.get("modalities"))
+    )
+    context_counts = Counter(
+        context for item in resources for context in as_list(item.get("contexts"))
+    )
 
     lines = [
         "# CamoGED Research Catalog",
@@ -213,7 +232,10 @@ def render_catalog(resources: list[dict], config: dict) -> str:
     for item in sort_resources(resources):
         links = " ".join(
             value
-            for value in [link("source", item.get("paper")), link("code", item.get("code"))]
+            for value in [
+                link("source", item.get("paper")),
+                link("code", item.get("code")),
+            ]
             if value
         )
         lines.append(
@@ -290,7 +312,10 @@ def render_datasets_page(datasets: list[dict]) -> str:
         "| Dataset | Task | Modality | Size | Split | Year | License | Status | Last reviewed |",
         "|---|---|---|---|---|---:|---|---|---|",
     ]
-    for item in sorted(datasets, key=lambda value: (-int(value.get("year") or 0), value["name"].lower())):
+    for item in sorted(
+        datasets,
+        key=lambda value: (-int(value.get("year") or 0), value["name"].lower()),
+    ):
         lines.append(
             f"| {link(item['name'], item.get('link')) or item['name']} | `{item['task']}` | "
             f"`{item['modality']}` | {md_escape(item.get('size') or '')} | "
@@ -316,7 +341,11 @@ def render_results(results: list[dict]) -> str:
         "|---|---|---|---|---|---|---|---|",
     ]
     for item in rows:
-        metrics = ", ".join(f"{key}={value}" for key, value in item["metrics"].items() if value is not None)
+        metrics = ", ".join(
+            f"{key}={value}"
+            for key, value in item["metrics"].items()
+            if value is not None
+        )
         lines.append(
             f"| {item['method']} | `{item['dataset']}` | `{item['task']}` | {metrics} | "
             f"{md_escape(item.get('protocol') or '')} | `{item['metric_implementation']}` | "
@@ -343,6 +372,13 @@ The browser demo uses deterministic synthetic scenes and exploratory heuristics.
 
 def write(path: Path, content: str) -> None:
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
+
+
+def render() -> str:
+    """Return the generated curated README for legacy deterministic checks."""
+
+    resources, datasets, _results, config = load_data()
+    return render_curated(config, resources, datasets)
 
 
 def main() -> None:

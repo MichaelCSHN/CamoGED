@@ -1,0 +1,109 @@
+schema_version: '1.0'
+title: Awesome Camouflage
+scope_note: Human-curated entry points across camouflage vision, biological camouflage, military history,
+  art/design, generation, and assessment. The complete catalog is generated separately and may contain
+  metadata-only records.
+coverage_through: '2026-07-13'
+last_human_review: '2026-07-13'
+automated_discovery:
+  workflow: .github/workflows/awesome-discovery.yml
+  status_surface: GitHub issues labeled awesome:triage
+  policy: automated discovery, human acceptance
+core_reading:
+- cott1940adaptive
+- stevens2011animal
+- cuthill2019camouflage
+- fan2021concealed
+- xiao2024survey
+- troscianko2017quantifying
+- toet2020review
+- behrens2002falsecolors
+- hartcup1980camouflage
+sections:
+- id: foundations
+  title: Foundations, surveys, and reading maps
+  match:
+    resource_type:
+    - survey
+    - book
+    - standard
+- id: image-cod
+  title: Image camouflaged object segmentation
+  match:
+    tasks:
+    - image-cod
+- id: video-tracking
+  title: Video segmentation and tracking
+  match:
+    tasks:
+    - video-cod
+    - tracking
+- id: instance-box-language
+  title: Instance, box, referring, and collaborative tasks
+  match:
+    tasks:
+    - instance-cod
+    - bbox-rcod
+    - referring-cod
+    - collaborative-cod
+- id: incomplete-supervision
+  title: Weak, semi, self, and unsupervised learning
+  match:
+    supervision:
+    - weakly-supervised
+    - semi-supervised
+    - self-supervised
+    - unsupervised
+- id: zero-open-foundation
+  title: Zero-shot, open-vocabulary, and foundation models
+  match:
+    tasks:
+    - zero-shot-cod
+    - open-vocabulary
+    - vision-language
+    method_families:
+    - foundation-model
+    - vision-language
+- id: multimodal
+  title: Depth, thermal, spectral, polarization, and multimodal camouflage
+  match:
+    modalities:
+    - depth
+    - thermal
+    - multispectral
+    - hyperspectral
+    - polarization
+    - multimodal
+    - vision-language
+- id: generation
+  title: Camouflage generation and adversarial camouflage
+  match:
+    pillars:
+    - generation
+- id: assessment
+  title: Assessment, metrics, human perception, and robustness
+  match:
+    tasks:
+    - camouflage-assessment
+    - human-detection
+    - robustness
+    pillars:
+    - evaluation
+- id: natural
+  title: Natural camouflage and visual ecology
+  match:
+    contexts:
+    - biological
+    - wildlife
+- id: military-art
+  title: Military history, art, architecture, and design
+  match:
+    contexts:
+    - military
+    - art-design
+    - cultural-history
+external_candidate_sources:
+- https://github.com/visionxiang/awesome-camouflaged-object-detection
+- https://github.com/ChunmingHe/awesome-concealed-object-segmentation
+- https://github.com/clelouch/Awesome-Camouflaged-Object-Detection
+- https://github.com/GuoleiSun/Awesome-SAM2

@@ -70,11 +70,30 @@ def infer_legacy_task(tags: list[str]) -> str:
     return "application"
 
 
-def infer_axes(tags: list[str]) -> tuple[str, str, str, list[str], list[str], list[str], list[str]]:
-    pillar = "generation" if any(tag in {"generation", "physical-adversarial"} for tag in tags) else "detection"
+def infer_axes(
+    tags: list[str],
+) -> tuple[str, str, str, list[str], list[str], list[str], list[str]]:
+    pillar = (
+        "generation"
+        if any(tag in {"generation", "physical-adversarial"} for tag in tags)
+        else "detection"
+    )
     if any(tag in {"camouflage-assessment", "dataset", "robustness"} for tag in tags):
         pillar = "evaluation"
-    domain = "physical" if any(tag in {"physical-adversarial", "biological-camouflage", "military-camouflage", "art-design"} for tag in tags) else "intelligent"
+    domain = (
+        "physical"
+        if any(
+            tag
+            in {
+                "physical-adversarial",
+                "biological-camouflage",
+                "military-camouflage",
+                "art-design",
+            }
+            for tag in tags
+        )
+        else "intelligent"
+    )
     if "biological-camouflage" in tags:
         perspective = "nature"
     elif "military-camouflage" in tags:
@@ -84,8 +103,12 @@ def infer_axes(tags: list[str]) -> tuple[str, str, str, list[str], list[str], li
     else:
         perspective = "ai"
 
-    modalities = ["video"] if any(tag in {"video-cod", "tracking"} for tag in tags) else ["rgb"]
-    if any(tag in {"vision-language", "open-vocabulary", "zero-shot-cod"} for tag in tags):
+    modalities = (
+        ["video"] if any(tag in {"video-cod", "tracking"} for tag in tags) else ["rgb"]
+    )
+    if any(
+        tag in {"vision-language", "open-vocabulary", "zero-shot-cod"} for tag in tags
+    ):
         modalities.append("vision-language")
     if "multimodal" in tags:
         modalities.append("multimodal")
@@ -127,14 +150,21 @@ def infer_axes(tags: list[str]) -> tuple[str, str, str, list[str], list[str], li
 
 def candidate_to_record(candidate: dict, reviewer: str, review_date: str) -> dict:
     tags = sorted(set(str(tag) for tag in candidate.get("suggested_tags") or []))
-    pillar, domain, perspective, modalities, supervision, families, contexts = infer_axes(tags)
+    pillar, domain, perspective, modalities, supervision, families, contexts = (
+        infer_axes(tags)
+    )
     title = str(candidate["title"]).strip()
     authors = candidate.get("authors") or "Unknown authors"
     abstract = re.sub(r"\s+", " ", str(candidate.get("abstract") or "")).strip()
-    description = abstract[:320].rstrip() or "Candidate accepted after metadata screening; substantive review remains pending."
+    description = (
+        abstract[:320].rstrip()
+        or "Candidate accepted after metadata screening; substantive review remains pending."
+    )
     paper = str(candidate.get("paper") or "").strip()
     if not paper.startswith(("http://", "https://")):
-        raise ValueError(f"candidate {candidate.get('candidate_id')} has no valid source URL")
+        raise ValueError(
+            f"candidate {candidate.get('candidate_id')} has no valid source URL"
+        )
     return {
         "id": slug(f"{candidate.get('year') or 'undated'}-{title}"),
         "title": title,
@@ -181,12 +211,16 @@ def candidate_to_record(candidate: dict, reviewer: str, review_date: str) -> dic
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--issue-markdown", required=True)
-    parser.add_argument("--accepted-ids", required=True, help="comma-separated candidate ids")
+    parser.add_argument(
+        "--accepted-ids", required=True, help="comma-separated candidate ids"
+    )
     parser.add_argument("--reviewer", required=True)
     parser.add_argument("--review-date", default=date.today().isoformat())
     args = parser.parse_args()
 
-    requested = {value.strip() for value in args.accepted_ids.split(",") if value.strip()}
+    requested = {
+        value.strip() for value in args.accepted_ids.split(",") if value.strip()
+    }
     if not requested:
         raise ValueError("accepted-ids is empty")
     candidates = parse_candidates(Path(args.issue_markdown).read_text(encoding="utf-8"))
@@ -198,10 +232,15 @@ def main() -> int:
     document = yaml.safe_load(PAPERS.read_text(encoding="utf-8")) or {"papers": []}
     records = document.setdefault("papers", [])
     existing_ids = {item.get("id") for item in records}
-    existing_titles = {re.sub(r"[^a-z0-9]+", "", str(item.get("title", "")).lower()) for item in records}
+    existing_titles = {
+        re.sub(r"[^a-z0-9]+", "", str(item.get("title", "")).lower())
+        for item in records
+    }
     added = 0
     for candidate_id in sorted(requested):
-        record = candidate_to_record(by_id[candidate_id], args.reviewer, args.review_date)
+        record = candidate_to_record(
+            by_id[candidate_id], args.reviewer, args.review_date
+        )
         normalized = re.sub(r"[^a-z0-9]+", "", record["title"].lower())
         if normalized in existing_titles:
             print(f"skip duplicate title: {record['title']}")
