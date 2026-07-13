@@ -1,0 +1,81 @@
+name: one-shot-cross-component-remediation
+
+on:
+  pull_request:
+    branches: [agent/project-audit-remediation]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cross-component-remediation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  remediate:
+    if: github.head_ref == 'agent/cross-component-backlog'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/cross-component-backlog
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python tooling
+        run: pip install pyyaml ruff black jupyter numpy matplotlib scipy
+
+      - name: Apply backlog closure
+        run: python scripts/apply_cross_component_backlog.py
+
+      - name: Format and lint Python maintenance code
+        run: |
+          black scripts/build_awesome.py scripts/check_cross_component.py
+          ruff check --fix scripts/build_awesome.py scripts/check_cross_component.py
+          black scripts/build_awesome.py scripts/check_cross_component.py
+          ruff check scripts/build_awesome.py scripts/check_cross_component.py
+
+      - name: Regenerate resource surfaces
+        run: python scripts/build_awesome.py
+
+      - name: Validate contracts and cross-component closure
+        run: |
+          python scripts/check_data.py
+          python scripts/discover_awesome.py --self-test
+          python scripts/check_awesome.py
+          python scripts/check_cross_component.py
+          python scripts/check_api.py
+          python scripts/check_assets.py
+          python scripts/check_release.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build VitePress
+        working-directory: web
+        run: |
+          npm ci
+          npm run docs:build
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render book HTML and ePub
+        run: |
+          quarto render book --to html
+          quarto render book --to epub --no-execute
+
+      - name: Commit completed backlog
+        run: |
+          rm -f scripts/apply_cross_component_backlog.py
+          rm -f .github/workflows/cross-component-remediation.yml
+          git config user.name "CamoGED Cross-Component Editorial Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "feat(project): close Book Demo and Catalog follow-ups"
+          git push origin HEAD:agent/cross-component-backlog
