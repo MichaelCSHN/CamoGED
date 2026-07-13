@@ -60,12 +60,12 @@ def candidate_id(source: str, external_id: str | None, title: str) -> str:
     return f"{source}-{digest}"
 
 
-def request_text(url: str, *, attempts: int = 3) -> str:
+def request_text(url: str, *, attempts: int = 2) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     last_error: Exception | None = None
     for attempt in range(attempts):
         try:
-            with urllib.request.urlopen(request, timeout=45) as response:
+            with urllib.request.urlopen(request, timeout=20) as response:
                 return response.read().decode("utf-8")
         except Exception as exc:  # network boundary
             last_error = exc
@@ -336,6 +336,12 @@ def main() -> int:
         choices=("arxiv", "crossref"),
         help="Fail unless at least one query from this source succeeds; repeatable.",
     )
+    parser.add_argument(
+        "--query-id",
+        action="append",
+        default=[],
+        help="Run only the named configured query; repeatable. Default: all queries.",
+    )
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
@@ -344,11 +350,23 @@ def main() -> int:
 
     config = load_yaml("discovery_queries.yaml")
     accepted = load_yaml("papers.yaml").get("papers", [])
+    configured_queries = config.get("queries", [])
+    if args.query_id:
+        requested = set(args.query_id)
+        queries = [
+            query for query in configured_queries if query.get("id") in requested
+        ]
+        missing = sorted(requested - {str(query.get("id")) for query in queries})
+        if missing:
+            raise ValueError(f"unknown discovery query id(s): {missing}")
+    else:
+        queries = configured_queries
+
     discovered: list[dict] = []
     query_errors: list[dict[str, str]] = []
     successful_queries: list[str] = []
     successful_sources: set[str] = set()
-    for query in config.get("queries", []):
+    for query in queries:
         source = str(query.get("source"))
         try:
             if source == "arxiv":
@@ -391,7 +409,7 @@ def main() -> int:
     payload = {
         "schema_version": "1.0",
         "scan_timestamp": datetime.now(UTC).isoformat(),
-        "query_count": len(config.get("queries", [])),
+        "query_count": len(queries),
         "successful_query_count": len(successful_queries),
         "successful_queries": successful_queries,
         "successful_sources": sorted(successful_sources),
