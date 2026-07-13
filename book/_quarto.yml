@@ -40,6 +40,13 @@ book:
     - part: "第四篇　评价：如何裁定胜负"
       chapters:
         - chapters/15-unified-evaluation.qmd
+        - chapters/16-detectability-curves.qmd
+        - chapters/17-temporal-cross-model.qmd
+        - chapters/18-reliability-calibration.qmd
+        - chapters/19-cross-model-irt.qmd
+        - chapters/20-causal-standardization.qmd
+    - part: "第五篇　前沿、伦理与治理"
+      chapters:
         - chapters/16-frontiers-ethics.qmd
   appendices:
     - chapters/appendix-resources.qmd
