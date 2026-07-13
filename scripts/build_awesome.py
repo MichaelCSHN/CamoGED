@@ -399,7 +399,6 @@ def main() -> None:
     write(WEB / "models.md", render_models_page(resources))
     write(WEB / "datasets.md", render_datasets_page(datasets))
     write(WEB / "leaderboard.md", render_results(results))
-    write(WEB / "demo.md", render_demo_page())
     print(
         f"Generated Awesome/catalog surfaces: {len(resources)} resources, "
         f"{sum(item.get('curated') is True for item in resources)} curated, {len(datasets)} datasets"
