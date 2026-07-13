@@ -1,0 +1,2530 @@
+{
+  "schema_version": "1.0",
+  "coverage_through": "2026-07-13",
+  "last_human_review": "2026-07-13",
+  "resource_count": 69,
+  "resources": [
+    {
+      "id": "yao2026camotion",
+      "title": "CAMotion: A High-Quality Benchmark for Camouflaged Moving Object Detection in the Wild",
+      "venue": "arXiv",
+      "year": 2026,
+      "description": "Recent wild-video benchmark with motion and boundary challenge attributes.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation",
+        "detection"
+      ],
+      "tasks": [
+        "video-cod",
+        "dataset"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "benchmark"
+      ],
+      "contexts": [
+        "wildlife",
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2604.08287",
+      "code": "https://www.camotion.focuslab.net.cn",
+      "last_verified": "2026-07-13",
+      "authors": "Yao, Siyuan; Sun, Hao; Yu, Ruiqi; Jiang, Xiwei; Ren, Wenqi; Cao, Xiaochun"
+    },
+    {
+      "id": "vu2026camovid",
+      "title": "CamoVid60K: A Large-Scale Video Dataset for Moving Camouflaged Animals Understanding",
+      "venue": "IJCV",
+      "year": 2026,
+      "description": "Introduces the CamoVid60K camouflaged animal video benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "dataset"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://link.springer.com/article/10.1007/s11263-026-02765-8",
+      "code": "https://camovid60k.hkustvgd.com/",
+      "last_verified": "2026-07-13",
+      "authors": "Vu, Tuan-Anh, Zheng, Ziqiang, Song, Chengyang, Guo, Qing, Tsang, Ivor W., Yeung, Sai-Kit"
+    },
+    {
+      "id": "sayem2026cod10kc",
+      "title": "COD10K-C: Benchmarking Robustness of Camouflaged Object Detection Under Natural Image Corruptions",
+      "venue": "arXiv",
+      "year": 2026,
+      "description": "Recent corruption-robustness benchmark derived from COD10K; release status requires follow-up.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation",
+        "detection"
+      ],
+      "tasks": [
+        "robustness",
+        "dataset",
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "benchmark",
+        "robustness"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2606.02603",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Sayem, Arafat Hossain"
+    },
+    {
+      "id": "ni2026fclcod",
+      "title": "FCL-COD: Weakly Supervised Camouflaged Object Detection with Frequency-aware and Contrastive Learning",
+      "venue": "arXiv",
+      "year": 2026,
+      "description": "Frequency-aware LoRA and contrastive learning for weakly supervised COD with SAM.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "weakly-supervised-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "weakly-supervised"
+      ],
+      "method_families": [
+        "foundation-model",
+        "parameter-efficient-tuning",
+        "frequency-domain"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2603.22969",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Ni, Jingchen; Zhang, Quan; Jiang, Dan; Lv, Keyu; Zhang, Ke; Yuan, Chun"
+    },
+    {
+      "id": "liang2026sddf",
+      "title": "SDDF: Specificity-Driven Dynamic Focusing for Open-Vocabulary Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2026,
+      "description": "Open-vocabulary bounding-box COD with specificity-aware text descriptions and OVCOD-D.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "open-vocabulary",
+        "bbox-rcod",
+        "dataset"
+      ],
+      "modalities": [
+        "rgb",
+        "vision-language"
+      ],
+      "supervision": [
+        "zero-shot",
+        "fully-supervised"
+      ],
+      "method_families": [
+        "open-vocabulary",
+        "vision-language",
+        "object-detection"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2603.26109",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Liang, Jiaming; Zhan, Yifeng; Liu, Chunlin; Zheng, Weihua; Peng, Bingye; Liang, Qiwei; Cai, Boyang; Mai, Xiaochun; Nie, Qiang"
+    },
+    {
+      "id": "mok2025hpgt",
+      "title": "A Holistically Point-guided Text Framework for Weakly-Supervised Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Point- and text-guided weak supervision for COD.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "weakly-supervised-cod",
+        "vision-language"
+      ],
+      "modalities": [
+        "rgb",
+        "vision-language"
+      ],
+      "supervision": [
+        "weakly-supervised",
+        "point-supervised"
+      ],
+      "method_families": [
+        "vision-language",
+        "prompting",
+        "weak-supervision"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2501.06038",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Mok, Tsui Qin; Gao, Shuyong; Xing, Haozhe; He, Miaoyang; Wang, Yan; Zhang, Wenqiang"
+    },
+    {
+      "id": "cam3d2025",
+      "title": "CAM3D: Cross-Domain 3D Adversarial Attacks from a Single-View Image via Mamba-Enhanced Reconstruction",
+      "venue": "Electronics",
+      "year": 2025,
+      "description": "Physical Adversarial resource.",
+      "resource_type": "paper",
+      "pillars": [
+        "generation"
+      ],
+      "tasks": [
+        "physical-adversarial"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "optimization-based"
+      ],
+      "method_families": [
+        "physical-system"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://www.mdpi.com/2079-9292/14/19/3868",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Liu, Ziqi, Luo, Wei, Guo, Sixu, Zhang, Jingnan, Wang, Zhipan"
+    },
+    {
+      "id": "camosam2-2025",
+      "title": "CamoSAM2: Motion-Appearance Induced Auto-Refining Prompts for Video Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Automatic motion-appearance prompt induction and multi-prompt refinement framework built around SAM2.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/2504.00375",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Zhang et al."
+    },
+    {
+      "id": "zhou2025camsam2",
+      "title": "CamSAM2: Segment Anything Accurately in Camouflaged Videos",
+      "venue": "NeurIPS",
+      "year": 2025,
+      "description": "SAM2 adaptation for camouflaged videos using object-aware fusion and prototype memory.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "prompt-based",
+        "fully-supervised"
+      ],
+      "method_families": [
+        "foundation-model",
+        "memory",
+        "prompting"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2503.19730",
+      "code": "https://github.com/zhoustan/CamSAM2",
+      "last_verified": "2026-07-13",
+      "authors": "Zhou, Yuli; Sun, Guolei; Li, Yawei; Fu, Yuqian; Benini, Luca; Konukoglu, Ender"
+    },
+    {
+      "id": "mcod2025",
+      "title": "MCOD: The First Challenging Benchmark for Multispectral Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Introduces the first multispectral COD benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "dataset"
+      ],
+      "modalities": [
+        "multispectral"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/2509.15753",
+      "code": "https://github.com/yl2900260-bit/MCOD",
+      "last_verified": "2026-07-13",
+      "authors": "Li, Yang, Xu, Tingfa, Bai, ShuYan, Liu, Peifu, Li, Jianan"
+    },
+    {
+      "id": "mmcamobj2024",
+      "title": "MM-CamObj: A Comprehensive Multimodal Dataset for Camouflaged Object Scenarios",
+      "venue": "AAAI",
+      "year": 2025,
+      "description": "Published at AAAI 2025; multimodal camouflage benchmark for LVLM evaluation.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "dataset",
+        "vision-language",
+        "multimodal-evaluation"
+      ],
+      "modalities": [
+        "multimodal",
+        "vision-language"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://doi.org/10.1609/aaai.v39i7.32723",
+      "code": "https://github.com/JCruan519/MM-CamObj",
+      "last_verified": "2026-07-13",
+      "authors": "Ruan, Jiacheng, Yuan, Wenzhen, Lin, Zehao, Liao, Ning, Li, Zhiyu, Xiong, Feiyu, Liu, Ting, Fu, Yuzhuo"
+    },
+    {
+      "id": "zhang2025mmcsbench",
+      "title": "MMCSBench: A Fine-Grained Benchmark for Large Vision-Language Models in Camouflage Scenes",
+      "venue": "NeurIPS",
+      "year": 2025,
+      "description": "Fine-grained benchmark for evaluating LVLM reasoning and perception in camouflage scenes.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "vision-language",
+        "multimodal-evaluation",
+        "dataset"
+      ],
+      "modalities": [
+        "multimodal",
+        "vision-language"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "benchmark",
+        "vision-language"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://neurips.cc/virtual/2025/poster/121542",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Zhang, Jin; Zhang, Ruiheng; Cao, Zhe; Chen, Kaizheng"
+    },
+    {
+      "id": "gao2025msvcod",
+      "title": "MSVCOD: A Large-Scale Multi-Scene Dataset for Video Camouflage Object Detection",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Introduces MSVCOD; dataset/code release is stated as future work in the arXiv paper.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "dataset"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/2502.13859",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Gao, Shuyong, Feng, Yu'ang, Wang, Qishan, Hong, Lingyi, Zhou, Xinyu, Fei, Liu, Wang, Yan, Zhang, Wenqiang"
+    },
+    {
+      "id": "phycamo2025",
+      "title": "PhyCamo: A Robust Physical Camouflage via Contrastive Learning for Multi-View Physical Adversarial Attack",
+      "venue": "AAAI",
+      "year": 2025,
+      "description": "Physical Adversarial resource.",
+      "resource_type": "paper",
+      "pillars": [
+        "generation"
+      ],
+      "tasks": [
+        "physical-adversarial"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "optimization-based"
+      ],
+      "method_families": [
+        "physical-adversarial",
+        "contrastive-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://doi.org/10.1609/aaai.v39i10.33110",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Zhang et al."
+    },
+    {
+      "id": "plantcamo2025",
+      "title": "PlantCamo: Plant Camouflage Detection",
+      "venue": "CAAI AIR",
+      "year": 2025,
+      "description": "Introduces a plant-focused camouflage benchmark with 58 categories.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/2410.17598",
+      "code": "https://github.com/yjybuaa/PlantCamo",
+      "last_verified": "2026-07-13",
+      "authors": "Yang, Jinyu, Wang, Qingwei, Zheng, Feng, Chen, Peng, Leonardis, Aleš, Fan, Deng-Ping"
+    },
+    {
+      "id": "zhou2025uscnet",
+      "title": "Rethinking Detecting Salient and Camouflaged Objects in Unconstrained Scenes",
+      "venue": "ICCV",
+      "year": 2025,
+      "description": "Unifies salient and camouflaged object segmentation in unconstrained scenes.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "universal-segmentation",
+        "dataset"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "universal-segmentation",
+        "transformer"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2412.10943",
+      "code": "https://github.com/ssecv/USCNet",
+      "last_verified": "2026-07-13",
+      "authors": "Zhou, Zhangjun; Li, Yiping; Zhong, Chunlin; Huang, Jianuo; Pei, Jialun; Li, Hua; Tang, He"
+    },
+    {
+      "id": "yan2025scout",
+      "title": "SCOUT: Semi-supervised Camouflaged Object Detection by Utilizing Text and Adaptive Data Selection",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Semi-supervised COD with adaptive data selection and text-visual interaction.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "semi-supervised-cod",
+        "vision-language"
+      ],
+      "modalities": [
+        "rgb",
+        "vision-language"
+      ],
+      "supervision": [
+        "semi-supervised"
+      ],
+      "method_families": [
+        "vision-language",
+        "active-data-selection"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2508.17843",
+      "code": "https://github.com/Heartfirey/SCOUT",
+      "last_verified": "2026-07-13",
+      "authors": "Yan, Weiqi; Chen, Lvhai; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan"
+    },
+    {
+      "id": "he2025see",
+      "title": "Segment Concealed Objects with Incomplete Supervision",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Unified weak/semi-supervised COS framework using SAM-generated and quality-controlled pseudo-labels.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "weakly-supervised-cod",
+        "semi-supervised-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "weakly-supervised",
+        "semi-supervised"
+      ],
+      "method_families": [
+        "foundation-model",
+        "teacher-student",
+        "pseudo-labeling"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2506.08955",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "He, Chunming; Li, Kai; Zhang, Yachao; Yang, Ziyun; Pang, Youwei; Tang, Longxiang; Fang, Chengyu; Zhang, Yulun; Kong, Linghe; Li, Xiu; Farsiu, Sina"
+    },
+    {
+      "id": "xin2025rcod",
+      "title": "Toward Realistic Camouflaged Object Detection: Benchmarks and Method",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Defines bounding-box-oriented realistic COD and releases converted detection benchmarks.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "bbox-rcod",
+        "dataset"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "foundation-model",
+        "object-detection"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2501.07297",
+      "code": "https://github.com/zhimengXin/RCOD",
+      "last_verified": "2026-07-13",
+      "authors": "Xin, Zhimeng; Wu, Tianxu; Chen, Shiming; Ye, Shuo; Xie, Zijing; Zou, Yixiong; You, Xinge; Guo, Yufei"
+    },
+    {
+      "id": "lei2025camf",
+      "title": "Towards Real Zero-Shot Camouflaged Object Segmentation without Camouflaged Annotations",
+      "venue": "IEEE TPAMI",
+      "year": 2025,
+      "description": "Real zero-shot COS framework combining masked-image pretraining, MLLM semantics, and PEFT.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "zero-shot-cod",
+        "open-vocabulary",
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb",
+        "vision-language"
+      ],
+      "supervision": [
+        "zero-shot"
+      ],
+      "method_families": [
+        "foundation-model",
+        "vision-language",
+        "parameter-efficient-tuning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2410.16953",
+      "code": "https://github.com/R-LEI360725/ZSCOS-CaMF",
+      "last_verified": "2026-07-13",
+      "authors": "Lei, Cheng; Fan, Jie; Li, Xinran; Xiang, Tian-Zhu; Li, Ao; Zhu, Ce; Zhang, Le"
+    },
+    {
+      "id": "yan2025ucoddpl",
+      "title": "UCOD-DPL: Unsupervised Camouflaged Object Detection via Dynamic Pseudo-label Learning",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Unsupervised teacher-student COD with adaptive pseudo-labeling and adversarial decoding.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "unsupervised-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "unsupervised"
+      ],
+      "method_families": [
+        "teacher-student",
+        "pseudo-labeling",
+        "adversarial-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2506.07087",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Yan, Weiqi; Chen, Lvhai; Kou, Huaijia; Zhang, Shengchuan; Zhang, Yan; Cao, Liujuan"
+    },
+    {
+      "id": "samvcos2025",
+      "title": "When SAM2 Meets Video Camouflaged Object Segmentation: A Comprehensive Evaluation and Adaptation",
+      "venue": "Visual Intelligence",
+      "year": 2025,
+      "description": "Systematic evaluation and adaptation study of SAM2 under video camouflaged object segmentation protocols.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/2409.18653",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Zhou et al."
+    },
+    {
+      "id": "guo2025zsvcos",
+      "title": "ZS-VCOS: Zero-Shot Outperforms Supervised Video Camouflaged Object Segmentation",
+      "venue": "arXiv",
+      "year": 2025,
+      "description": "Zero-shot video pipeline combining optical flow, a vision-language model, and SAM2.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video",
+        "vision-language"
+      ],
+      "supervision": [
+        "zero-shot",
+        "training-free"
+      ],
+      "method_families": [
+        "foundation-model",
+        "vision-language",
+        "motion"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2505.01431",
+      "code": "https://github.com/weathon/vcos",
+      "last_verified": "2026-07-13",
+      "authors": "Guo, Wenqi; Du, Shan"
+    },
+    {
+      "id": "xiao2024survey",
+      "title": "A Survey of Camouflaged Object Detection and Beyond",
+      "venue": "CAAI AIR",
+      "year": 2024,
+      "description": "Broad modern survey of image/video COD, extended tasks, datasets, and metrics.",
+      "resource_type": "survey",
+      "pillars": [
+        "generation",
+        "detection",
+        "evaluation"
+      ],
+      "tasks": [
+        "survey",
+        "image-cod",
+        "video-cod",
+        "instance-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "survey"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2408.14562",
+      "code": "https://github.com/ChunmingHe/awesome-concealed-object-segmentation",
+      "last_verified": "2026-07-13",
+      "authors": "Xiao et al."
+    },
+    {
+      "id": "lai2024camoteacher",
+      "title": "CamoTeacher: Dual-Rotation Consistency Learning for Semi-Supervised Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2024,
+      "description": "Semi-supervised teacher-student COD with pixel- and instance-level rotation consistency.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod",
+        "semi-supervised-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "semi-supervised"
+      ],
+      "method_families": [
+        "teacher-student",
+        "consistency-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2408.08050",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Lai, Xunfa; Yang, Zhiyu; Hu, Jie; Zhang, Shengchuan; Cao, Liujuan; Jiang, Guannan; Wang, Zhiyu; Zhang, Songan; Ji, Rongrong"
+    },
+    {
+      "id": "guo2024cot",
+      "title": "Camouflaged Object Tracking: A Benchmark",
+      "venue": "arXiv",
+      "year": 2024,
+      "description": "Introduces COTD and evaluates general trackers in camouflaged-object sequences.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation",
+        "detection"
+      ],
+      "tasks": [
+        "tracking",
+        "dataset"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "tracking",
+        "benchmark"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2408.13877",
+      "code": "https://github.com/openat25/HIPTrack-MLS",
+      "last_verified": "2026-07-13",
+      "authors": "Guo, Xiaoyu; Zhong, Pengzhi; Zhang, Hao; Huang, Defeng; Shao, Huikai; Zhao, Qijun; Li, Shuiwang"
+    },
+    {
+      "id": "xiao2024hcm",
+      "title": "Concealed Object Segmentation with Hierarchical Coherence Modeling",
+      "venue": "arXiv",
+      "year": 2024,
+      "description": "Cross-task COS model emphasizing intra-stage and cross-stage feature coherence.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "transformer",
+        "coherence-modeling"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2401.11767",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Xiao, Fengyang; Zhang, Pan; He, Chunming; Hu, Runze; Liu, Yutao"
+    },
+    {
+      "id": "wang2024depth",
+      "title": "Depth-Aware Concealed Crop Detection in Dense Agricultural Scenes",
+      "venue": "CVPR",
+      "year": 2024,
+      "description": "Introduces the ACOD-12K RGB-D concealed crop benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "depth"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Depth-Aware_Concealed_Crop_Detection_in_Dense_Agricultural_Scenes_CVPR_2024_paper.html",
+      "code": "https://github.com/Kki2Eve/RISNet",
+      "last_verified": "2026-07-13",
+      "authors": "Wang, Liqiong, Yang, Jinyu, Zhang, Yanfu, Wang, Fangyi, Zheng, Feng"
+    },
+    {
+      "id": "hginet2024",
+      "title": "HGINet: Hierarchical Graph Interaction Network for Camouflaged Object Detection",
+      "venue": "IEEE TIP",
+      "year": 2024,
+      "description": "Graph-interaction transformer using dynamic token clustering for fine-grained camouflaged object segmentation.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://doi.org/10.1109/TIP.2024.3475219",
+      "code": "https://github.com/Garyson1204/HGINet",
+      "last_verified": "2026-07-13",
+      "authors": "Yao, Siyuan, Sun, Hao, Xiang, Tian-Zhu, Wang, Xiao, Cao, Xiaochun"
+    },
+    {
+      "id": "pang2024zoomnext",
+      "title": "ZoomNeXt: A Unified Collaborative Pyramid Network for Camouflaged Object Detection",
+      "venue": "TPAMI",
+      "year": 2024,
+      "description": "Representative unified architecture spanning image and video camouflage segmentation.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "transformer",
+        "multi-scale"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://doi.org/10.1109/TPAMI.2024.3417329",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Pang et al."
+    },
+    {
+      "id": "dong2023uqformer",
+      "title": "A Unified Query-based Paradigm for Camouflaged Instance Segmentation",
+      "venue": "arXiv",
+      "year": 2023,
+      "description": "Query-based joint instance-mask and boundary modeling for CIS.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "instance-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "transformer",
+        "query-based",
+        "instance-segmentation"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2308.07392",
+      "code": "https://github.com/dongbo811/UQFormer",
+      "last_verified": "2026-07-13",
+      "authors": "Dong, Bo; Pei, Jialun; Gao, Rongrong; Xiang, Tian-Zhu; Wang, Shuo; Xiong, Huan"
+    },
+    {
+      "id": "nist2023aml",
+      "title": "Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations",
+      "venue": "NIST AI 100-2e2023",
+      "year": 2023,
+      "description": "Authoritative terminology standard for adversarial-ML threats and mitigations used to bound digital/physical camouflage claims.",
+      "resource_type": "standard",
+      "pillars": [
+        "generation",
+        "detection",
+        "evaluation"
+      ],
+      "tasks": [
+        "digital-adversarial",
+        "physical-adversarial",
+        "standard"
+      ],
+      "modalities": [
+        "multimodal"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "standard",
+        "risk-taxonomy"
+      ],
+      "contexts": [
+        "computer-vision",
+        "ai-safety"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://csrc.nist.gov/pubs/ai/100/2/e2023/final",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "NIST"
+    },
+    {
+      "id": "camdiff2023",
+      "title": "CamDiff: Camouflage Image Augmentation via Diffusion",
+      "venue": "CAAI AIR",
+      "year": 2023,
+      "description": "Diffusion-based camouflage image augmentation study evaluating synthetic data for downstream COD training.",
+      "resource_type": "paper",
+      "pillars": [
+        "generation"
+      ],
+      "tasks": [
+        "generation"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "optimization-based"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://www.sciopen.com/article/10.26599/AIR.2023.9150021",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Luo et al."
+    },
+    {
+      "id": "tang2023mmcpf",
+      "title": "Chain of Visual Perception: Harnessing Multimodal Large Language Models for Zero-shot Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2023,
+      "description": "Early MLLM-centered zero-shot camouflage perception pipeline using language and visual cues.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "zero-shot-cod",
+        "vision-language",
+        "video-cod",
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb",
+        "video",
+        "vision-language"
+      ],
+      "supervision": [
+        "zero-shot",
+        "training-free"
+      ],
+      "method_families": [
+        "vision-language",
+        "foundation-model",
+        "chain-of-thought"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2311.11273",
+      "code": "https://github.com/luckybird1994/MMCPF",
+      "last_verified": "2026-07-13",
+      "authors": "Tang, Lv; Jiang, Peng-Tao; Shen, Zhihao; Zhang, Hao; Chen, Jinwei; Li, Bo"
+    },
+    {
+      "id": "zhang2023collaborative",
+      "title": "Collaborative Camouflaged Object Detection: A Large-Scale Dataset and Benchmark",
+      "venue": "IEEE TNNLS",
+      "year": 2023,
+      "description": "Introduces the CoCOD8K collaborative camouflage benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "collaborative-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://doi.org/10.1109/TNNLS.2023.3317091",
+      "code": "https://github.com/zc199823/BBNet--CoCOD",
+      "last_verified": "2026-07-13",
+      "authors": "Zhang, Cong, Bi, Hongbo, Xiang, Tian-Zhu, Wu, Ranwan, Tong, Jinghui, Wang, Xiufang"
+    },
+    {
+      "id": "liu2023mhnet",
+      "title": "Extraordinary MHNet: Military High-Level Camouflage Object Detection Network and Dataset",
+      "venue": "Neurocomputing",
+      "year": 2023,
+      "description": "Introduces the MHCD2022 military high-level camouflage benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "military"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://doi.org/10.1016/j.neucom.2023.126466",
+      "code": "https://github.com/liumaozhen-lmz/Military-Camouflage-MHCD2022",
+      "last_verified": "2026-07-13",
+      "authors": "Liu, Maozhen, Di, Xiaoguang"
+    },
+    {
+      "id": "huang2023fspnet",
+      "title": "Feature Shrinkage Pyramid for Camouflaged Object Detection with Transformers",
+      "venue": "CVPR",
+      "year": 2023,
+      "description": "Transformer COD architecture combining locality enhancement and a shrinkage-pyramid decoder.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "transformer",
+        "multi-scale"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2303.14816",
+      "code": "https://github.com/ZhouHuang23/FSPNet",
+      "last_verified": "2026-07-13",
+      "authors": "Huang, Zhou; Dai, Hang; Xiang, Tian-Zhu; Wang, Shuo; Chen, Huai-Xin; Qin, Jie; Xiong, Huan"
+    },
+    {
+      "id": "vu2023ovdiffcis",
+      "title": "Leveraging Open-Vocabulary Diffusion to Camouflaged Instance Segmentation",
+      "venue": "arXiv",
+      "year": 2023,
+      "description": "Explores open-vocabulary diffusion priors for camouflaged instance segmentation.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "instance-cod",
+        "open-vocabulary"
+      ],
+      "modalities": [
+        "rgb",
+        "vision-language"
+      ],
+      "supervision": [
+        "zero-shot"
+      ],
+      "method_families": [
+        "diffusion",
+        "open-vocabulary",
+        "instance-segmentation"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://arxiv.org/abs/2312.17505",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Vu, Tuan-Anh; Nguyen, Duc Thanh; Guo, Qing; Hua, Binh-Son; Chung, Nhat Minh; Tsang, Ivor W.; Yeung, Sai-Kit"
+    },
+    {
+      "id": "zhang2023refcod",
+      "title": "Referring Camouflaged Object Detection",
+      "venue": "arXiv",
+      "year": 2023,
+      "description": "Defines the Ref-COD task and introduces R2C7K.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "referring-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "preprint",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/2306.07532",
+      "code": "https://github.com/zhangxuying1004/RefCOD",
+      "last_verified": "2026-07-13",
+      "authors": "Zhang, Xuying, Yin, Bowen, Lin, Zheng, Hou, Qibin, Fan, Deng-Ping, Cheng, Ming-Ming"
+    },
+    {
+      "id": "lamdouar2023makingbreaking",
+      "title": "The Making and Breaking of Camouflage",
+      "venue": "ICCV",
+      "year": 2023,
+      "description": "Links camouflage-effectiveness scores, synthetic generation, and video segmentation.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation",
+        "generation",
+        "detection"
+      ],
+      "tasks": [
+        "camouflage-assessment",
+        "generation",
+        "video-cod"
+      ],
+      "modalities": [
+        "rgb",
+        "video"
+      ],
+      "supervision": [
+        "fully-supervised",
+        "generative"
+      ],
+      "method_families": [
+        "assessment",
+        "generation",
+        "transformer"
+      ],
+      "contexts": [
+        "wildlife",
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2309.03899",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Lamdouar, Hala; Xie, Weidi; Zisserman, Andrew"
+    },
+    {
+      "id": "fan2021concealed",
+      "title": "Concealed Object Detection",
+      "venue": "IEEE TPAMI",
+      "year": 2022,
+      "description": "Systematic COD study introducing COD10K and the SINet search-identification baseline.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "cnn",
+        "bio-inspired",
+        "coarse-to-fine"
+      ],
+      "contexts": [
+        "computer-vision",
+        "wildlife"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2102.10274",
+      "code": "https://github.com/DengPingFan/SINet",
+      "last_verified": "2026-07-13",
+      "authors": "Fan, Deng-Ping; Ji, Ge-Peng; Cheng, Ming-Ming; Shao, Ling"
+    },
+    {
+      "id": "cheng2022implicit",
+      "title": "Implicit Motion Handling for Video Camouflaged Object Detection",
+      "venue": "CVPR",
+      "year": 2022,
+      "description": "Introduces the MoCA-Mask benchmark for video camouflage detection.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "temporal-model",
+        "motion"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://openaccess.thecvf.com/content/CVPR2022/html/Cheng_Implicit_Motion_Handling_for_Video_Camouflaged_Object_Detection_CVPR_2022_paper.html",
+      "code": "https://github.com/XuelianCheng/SLT-Net",
+      "last_verified": "2026-07-13",
+      "authors": "Cheng, Xuelian, Xiong, Huan, Fan, Deng-Ping, Zhong, Yiran, Harandi, Mehrtash, Drummond, Tom, Ge, Zongyuan"
+    },
+    {
+      "id": "pei2022osformer",
+      "title": "OSFormer: One-Stage Camouflaged Instance Segmentation with Transformers",
+      "venue": "ECCV",
+      "year": 2022,
+      "description": "Representative one-stage transformer framework for camouflaged instance segmentation.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "instance-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "transformer",
+        "instance-segmentation"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2207.02255",
+      "code": "https://github.com/PJLallen/OSFormer",
+      "last_verified": "2026-07-13",
+      "authors": "Pei, Jialun; Cheng, Tianyang; Fan, Deng-Ping; Tang, He; Chen, Chuanbo; Van Gool, Luc"
+    },
+    {
+      "id": "pang2022zoomnet",
+      "title": "Zoom In and Out: A Mixed-scale Triplet Network for Camouflaged Object Detection",
+      "venue": "CVPR",
+      "year": 2022,
+      "description": "Representative mixed-scale COD model with explicit zoom-in/zoom-out processing.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "cnn",
+        "multi-scale"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2203.02688",
+      "code": "https://github.com/lartpang/ZoomNet",
+      "last_verified": "2026-07-13",
+      "authors": "Pang, Youwei; Zhao, Xiaoqi; Xiang, Tian-Zhu; Zhang, Lihe; Lu, Huchuan"
+    },
+    {
+      "id": "mei2021pfnet",
+      "title": "Camouflaged Object Segmentation with Distraction Mining",
+      "venue": "CVPR",
+      "year": 2021,
+      "description": "PFNet separates global positioning from progressive focus and distraction mining.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "cnn",
+        "coarse-to-fine",
+        "bio-inspired"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2104.10475",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Mei, Haiyang; Ji, Ge-Peng; Wei, Ziqi; Yang, Xin; Wei, Xiaopeng; Fan, Deng-Ping"
+    },
+    {
+      "id": "lyu2021ranknet",
+      "title": "Simultaneously Localize, Segment and Rank the Camouflaged Objects",
+      "venue": "CVPR",
+      "year": 2021,
+      "description": "Introduces the NC4K generalization benchmark and ranking-based COD.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://openaccess.thecvf.com/content/CVPR2021/html/Lv_Simultaneously_Localize_Segment_and_Rank_the_Camouflaged_Objects_CVPR_2021_paper.html",
+      "code": "https://github.com/JingZhang617/COD-Rank-Localize-and-Segment",
+      "last_verified": "2026-07-13",
+      "authors": "Lyu, Yunqiu, Zhang, Jing, Dai, Yuchao, Li, Aixuan, Liu, Bowen, Barnes, Nick, Fan, Deng-Ping"
+    },
+    {
+      "id": "lamdouar2020motion",
+      "title": "Betrayed by Motion: Camouflaged Object Discovery via Motion Segmentation",
+      "venue": "ACCV",
+      "year": 2020,
+      "description": "Foundational motion-driven video camouflage discovery work and source of the MoCA lineage.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "self-supervised"
+      ],
+      "method_families": [
+        "motion",
+        "registration",
+        "memory"
+      ],
+      "contexts": [
+        "wildlife",
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/2011.11630",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Lamdouar, Hala; Yang, Charig; Xie, Weidi; Zisserman, Andrew"
+    },
+    {
+      "id": "toet2020review",
+      "title": "Review of camouflage assessment techniques",
+      "venue": "SPIE Target and Background Signatures VI",
+      "year": 2020,
+      "description": "Survey of subjective and objective camouflage assessment in military settings.",
+      "resource_type": "survey",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "camouflage-assessment"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "survey",
+        "human-study",
+        "physical-measurement"
+      ],
+      "contexts": [
+        "military"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11536/1153604/Review-of-camouflage-assessment-techniques/10.1117/12.2566183.short",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Toet, Alexander, Hogervorst, Maarten A."
+    },
+    {
+      "id": "huang2019upc",
+      "title": "Universal Physical Camouflage Attacks on Object Detectors",
+      "venue": "CVPR",
+      "year": 2020,
+      "description": "Foundational category-level physical camouflage attack and controlled AttackScenes benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "generation"
+      ],
+      "tasks": [
+        "physical-adversarial",
+        "generation"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "optimization-based"
+      ],
+      "method_families": [
+        "physical-adversarial",
+        "rendering",
+        "robust-optimization"
+      ],
+      "contexts": [
+        "computer-vision",
+        "physical-system"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://arxiv.org/abs/1909.04326",
+      "code": "https://mesunhlf.github.io/index_physical.html",
+      "last_verified": "2026-07-13",
+      "authors": "Huang, Lifeng; Gao, Chengying; Zhou, Yuyin; Xie, Cihang; Yuille, Alan; Zou, Changqing; Liu, Ning"
+    },
+    {
+      "id": "le2019anet",
+      "title": "Anabranch Network for Camouflaged Object Segmentation",
+      "venue": "CVIU",
+      "year": 2019,
+      "description": "Introduces the CAMO benchmark for camouflaged object segmentation.",
+      "resource_type": "paper",
+      "pillars": [
+        "detection"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "fully-supervised"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://doi.org/10.1016/j.cviu.2019.04.006",
+      "code": "https://github.com/ltnghia/CAMO",
+      "last_verified": "2026-07-13",
+      "authors": "Le, Trung-Nghia, Nguyen, Tam V., Nie, Zhongliang, Tran, Minh-Triet, Sugimoto, Akihiro"
+    },
+    {
+      "id": "cuthill2019camouflage",
+      "title": "Camouflage",
+      "venue": "Journal of Zoology",
+      "year": 2019,
+      "description": "Modern visual-ecology review of camouflage mechanisms, evidence, and observer dependence.",
+      "resource_type": "survey",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "biological-camouflage",
+        "survey"
+      ],
+      "modalities": [
+        "rgb",
+        "multispectral"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "visual-ecology",
+        "survey"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://doi.org/10.1111/jzo.12682",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Cuthill, Innes C."
+    },
+    {
+      "id": "skurowski2018animal",
+      "title": "Animal Camouflage Analysis: CHAMELEON Database",
+      "venue": "Unpublished manuscript",
+      "year": 2018,
+      "description": "Documents the CHAMELEON camouflaged animal image database.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "dataset"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife"
+      ],
+      "publication_status": "unpublished",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://www.polsl.pl/rau6/chameleon-database-animal-camouflage-analysis/",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Skurowski, Przemyslaw, Abdulameer, Hassan, Blaszczyk, Jakub, Depta, Tomasz, Kornacki, Adam, Koziel, Przemyslaw"
+    },
+    {
+      "id": "fan2018emeasure",
+      "title": "Enhanced-alignment Measure for Binary Foreground Map Evaluation",
+      "venue": "IJCAI",
+      "year": 2018,
+      "description": "Canonical enhanced-alignment metric used in COD benchmarks.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://www.ijcai.org/proceedings/2018/97",
+      "code": "https://github.com/DengPingFan/E-measure",
+      "last_verified": "2026-07-13",
+      "authors": "Fan, Deng-Ping, Gong, Cheng, Cao, Yang, Ren, Bo, Cheng, Ming-Ming, Borji, Ali"
+    },
+    {
+      "id": "zhang2018lpips",
+      "title": "The Unreasonable Effectiveness of Deep Features as a Perceptual Metric",
+      "venue": "CVPR",
+      "year": 2018,
+      "description": "Foundational learned perceptual similarity study introducing LPIPS and validating deep features against human judgments.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "generation"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://openaccess.thecvf.com/content_cvpr_2018/html/Zhang_The_Unreasonable_Effectiveness_CVPR_2018_paper.html",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Zhang, Richard, Isola, Phillip, Efros, Alexei A., Shechtman, Eli, Wang, Oliver"
+    },
+    {
+      "id": "talas2017military",
+      "title": "Cultural evolution of military camouflage",
+      "venue": "Phil. Trans. R. Soc. B",
+      "year": 2017,
+      "description": "Comparative study of how military camouflage patterns evolve under perceptual, cultural, and operational pressures.",
+      "resource_type": "paper",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "military-camouflage",
+        "historical-analysis"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "comparative-analysis",
+        "visual-ecology"
+      ],
+      "contexts": [
+        "military",
+        "biological",
+        "cultural-history"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0351",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Talas, Laszlo, Baddeley, Roland J., Cuthill, Innes C."
+    },
+    {
+      "id": "heusel2017fid",
+      "title": "GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium",
+      "venue": "NeurIPS",
+      "year": 2017,
+      "description": "Foundational GAN evaluation paper introducing the Fréchet Inception Distance for distribution-level comparison.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "generation"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://papers.nips.cc/paper/7240-gans-trained-by-a-two-time-scale-update-rule-converge-to-a-local-nash-equilibrium",
+      "code": "https://github.com/bioinf-jku/TTUR",
+      "last_verified": "2026-07-13",
+      "authors": "Heusel, Martin, Ramsauer, Hubert, Unterthiner, Thomas, Nessler, Bernhard, Hochreiter, Sepp"
+    },
+    {
+      "id": "troscianko2017quantifying",
+      "title": "Quantifying camouflage: how to predict detectability from appearance",
+      "venue": "BMC Evolutionary Biology",
+      "year": 2017,
+      "description": "Bridges objective appearance measures and human detectability.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "camouflage-assessment",
+        "human-detection"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "human-study",
+        "appearance-model"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://link.springer.com/article/10.1186/s12862-016-0854-2",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Troscianko, Jolyon, Skelhorn, John, Stevens, Martin"
+    },
+    {
+      "id": "fan2017smeasure",
+      "title": "Structure-measure: A New Way to Evaluate Foreground Maps",
+      "venue": "ICCV",
+      "year": 2017,
+      "description": "Canonical structural metric used in COD benchmarks.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/1708.00786",
+      "code": "https://github.com/DengPingFan/S-measure",
+      "last_verified": "2026-07-13",
+      "authors": "Fan, Deng-Ping, Cheng, Ming-Ming, Liu, Yun, Li, Tao, Borji, Ali"
+    },
+    {
+      "id": "perazzi2016davis",
+      "title": "A Benchmark Dataset and Evaluation Methodology for Video Object Segmentation",
+      "venue": "CVPR",
+      "year": 2016,
+      "description": "Defines the DAVIS J and F evaluation protocol used by video segmentation benchmarks.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://openaccess.thecvf.com/content_cvpr_2016/html/Perazzi_A_Benchmark_Dataset_CVPR_2016_paper.html",
+      "code": "https://github.com/fperazzi/davis",
+      "last_verified": "2026-07-13",
+      "authors": "Perazzi, Federico, Pont-Tuset, Jordi, McWilliams, Brian, Van Gool, Luc, Gross, Markus, Sorkine-Hornung, Alexander"
+    },
+    {
+      "id": "bideau2016moving",
+      "title": "It's Moving! A Probabilistic Model for Causal Motion Segmentation in Moving Camera Videos",
+      "venue": "ECCV",
+      "year": 2016,
+      "description": "Source paper for the small CAD camouflaged animal video benchmark.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "video-cod"
+      ],
+      "modalities": [
+        "video"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://arxiv.org/abs/1604.00136",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Bideau, Pia, Learned-Miller, Erik"
+    },
+    {
+      "id": "margolin2014",
+      "title": "How to Evaluate Foreground Maps?",
+      "venue": "CVPR",
+      "year": 2014,
+      "description": "Introduces weighted F-measure for foreground-map evaluation.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "image-cod"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://openaccess.thecvf.com/content_cvpr_2014/html/Margolin_How_to_Evaluate_2014_CVPR_paper.html",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Margolin, Ran, Zelnik-Manor, Lihi, Tal, Ayellet"
+    },
+    {
+      "id": "stevens2011animal",
+      "title": "Animal Camouflage: Mechanisms and Function",
+      "venue": "Cambridge University Press",
+      "year": 2011,
+      "description": "Authoritative edited volume on mechanisms, evolution, perception, and experimental study of animal camouflage.",
+      "resource_type": "book",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "biological-camouflage",
+        "human-detection",
+        "survey"
+      ],
+      "modalities": [
+        "rgb",
+        "multispectral"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "visual-ecology",
+        "behavioral-experiment",
+        "survey"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://www.cambridge.org/core/books/animal-camouflage/",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Stevens, Martin; Merilaita, Sami (eds.)"
+    },
+    {
+      "id": "behrens2009camoupedia",
+      "title": "Camoupedia: A Compendium of Research on Art, Architecture, and Camouflage",
+      "venue": "Bobolink Books",
+      "year": 2009,
+      "description": "Reference compendium covering art, architecture, perception, and military camouflage history.",
+      "resource_type": "book",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "art-design",
+        "military-camouflage",
+        "historical-analysis",
+        "survey"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "reference-work",
+        "art-history"
+      ],
+      "contexts": [
+        "art-design",
+        "military",
+        "cultural-history"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://camoupedia.blogspot.com/",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Behrens, Roy R."
+    },
+    {
+      "id": "forbes2009dazzled",
+      "title": "Dazzled and Deceived: Mimicry and Camouflage",
+      "venue": "Yale University Press",
+      "year": 2009,
+      "description": "Cross-domain history connecting evolutionary mimicry, animal camouflage, and military practice.",
+      "resource_type": "book",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "biological-camouflage",
+        "military-camouflage",
+        "historical-analysis"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "history-of-science",
+        "survey"
+      ],
+      "contexts": [
+        "biological",
+        "military",
+        "cultural-history"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "recommended",
+      "paper": "https://yalebooks.yale.edu/book/9780300178968/dazzled-and-deceived/",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Forbes, Peter"
+    },
+    {
+      "id": "wang2004ssim",
+      "title": "Image Quality Assessment: From Error Visibility to Structural Similarity",
+      "venue": "IEEE TIP",
+      "year": 2004,
+      "description": "Foundational perceptual quality metric used as a baseline in generation evaluation.",
+      "resource_type": "paper",
+      "pillars": [
+        "evaluation"
+      ],
+      "tasks": [
+        "generation"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "deep-learning"
+      ],
+      "contexts": [
+        "computer-vision"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": false,
+      "curation_tier": "catalog",
+      "paper": "https://doi.org/10.1109/TIP.2003.819861",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Wang, Zhou, Bovik, Alan C., Sheikh, Hamid R., Simoncelli, Eero P."
+    },
+    {
+      "id": "behrens2002falsecolors",
+      "title": "False Colors: Art, Design and Modern Camouflage",
+      "venue": "Bobolink Books",
+      "year": 2002,
+      "description": "Core art-and-design history of modern camouflage and its Gestalt and military connections.",
+      "resource_type": "book",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "art-design",
+        "military-camouflage",
+        "historical-analysis"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "art-history",
+        "design-history",
+        "gestalt"
+      ],
+      "contexts": [
+        "art-design",
+        "military",
+        "cultural-history"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://works.bepress.com/roy-behrens/",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Behrens, Roy R."
+    },
+    {
+      "id": "hartcup1980camouflage",
+      "title": "Camouflage: A History of Concealment and Deception in War",
+      "venue": "David & Charles",
+      "year": 1980,
+      "description": "Military history of concealment and deception technologies through the twentieth century.",
+      "resource_type": "book",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "military-camouflage",
+        "historical-analysis"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "military-history"
+      ],
+      "contexts": [
+        "military",
+        "cultural-history"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Hartcup, Guy"
+    },
+    {
+      "id": "cott1940adaptive",
+      "title": "Adaptive Coloration in Animals",
+      "venue": "Oxford University Press",
+      "year": 1940,
+      "description": "Foundational natural-history synthesis of concealment, disguise, disruption, and display.",
+      "resource_type": "book",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "biological-camouflage",
+        "historical-analysis"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "natural-history",
+        "visual-ecology"
+      ],
+      "contexts": [
+        "biological",
+        "wildlife",
+        "military"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://archive.org/details/adaptivecolorati00cott",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Cott, Hugh B."
+    },
+    {
+      "id": "thayer1909concealing",
+      "title": "Concealing-Coloration in the Animal Kingdom",
+      "venue": "Macmillan",
+      "year": 1909,
+      "description": "Historically influential, controversial account of countershading and disruptive coloration.",
+      "resource_type": "historical-source",
+      "pillars": [
+        "generation",
+        "evaluation"
+      ],
+      "tasks": [
+        "biological-camouflage",
+        "art-design",
+        "historical-analysis"
+      ],
+      "modalities": [
+        "rgb"
+      ],
+      "supervision": [
+        "not-applicable"
+      ],
+      "method_families": [
+        "natural-history",
+        "art-theory"
+      ],
+      "contexts": [
+        "biological",
+        "art-design",
+        "military",
+        "cultural-history"
+      ],
+      "publication_status": "published",
+      "verification_status": "metadata-only",
+      "curated": true,
+      "curation_tier": "core",
+      "paper": "https://archive.org/details/concealingcolora00thay",
+      "code": null,
+      "last_verified": "2026-07-13",
+      "authors": "Thayer, Gerald H.; Thayer, Abbott H."
+    }
+  ]
+}

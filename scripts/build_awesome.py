@@ -8,6 +8,7 @@ discovery never writes directly to accepted metadata.
 
 from __future__ import annotations
 
+import json
 from collections import Counter
 from pathlib import Path
 from typing import Iterable
@@ -18,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 AWESOME_OUT = ROOT / "awesome" / "README.md"
 WEB = ROOT / "web"
+WEB_PUBLIC = WEB / "public"
 
 
 def load_yaml(name: str) -> dict:
@@ -196,6 +198,42 @@ def render_curated(
     return "\n".join(lines)
 
 
+def catalog_payload(resources: list[dict], config: dict) -> dict[str, object]:
+    fields = (
+        "id",
+        "title",
+        "venue",
+        "year",
+        "description",
+        "resource_type",
+        "pillars",
+        "tasks",
+        "modalities",
+        "supervision",
+        "method_families",
+        "contexts",
+        "publication_status",
+        "verification_status",
+        "curated",
+        "curation_tier",
+        "paper",
+        "code",
+        "last_verified",
+    )
+    output = []
+    for item in sort_resources(resources):
+        record = {field: item.get(field) for field in fields}
+        record["authors"] = authors(item.get("authors", ""))
+        output.append(record)
+    return {
+        "schema_version": "1.0",
+        "coverage_through": config.get("coverage_through"),
+        "last_human_review": config.get("last_human_review"),
+        "resource_count": len(output),
+        "resources": output,
+    }
+
+
 def render_catalog(resources: list[dict], config: dict) -> str:
     type_counts = Counter(item.get("resource_type", "paper") for item in resources)
     task_counts = Counter(
@@ -209,10 +247,14 @@ def render_catalog(resources: list[dict], config: dict) -> str:
     )
 
     lines = [
+        "---",
+        "layout: page",
+        "---",
+        "",
         "# CamoGED Research Catalog",
         "",
         "> Complete accepted metadata catalog. Inclusion does not imply endorsement, full-text availability,",
-        "> reproduced results, or a verified license. Use the status columns.",
+        "> reproduced results, or a verified license. Use the status fields.",
         "",
         f"- Accepted records: **{len(resources)}**",
         f"- Coverage reviewed through: **{config.get('coverage_through', 'unknown')}**",
@@ -226,7 +268,10 @@ def render_catalog(resources: list[dict], config: dict) -> str:
         f"- Modalities: {', '.join(f'`{key}` {value}' for key, value in modality_counts.most_common())}",
         f"- Contexts: {', '.join(f'`{key}` {value}' for key, value in context_counts.most_common())}",
         "",
-        "## All resources",
+        "<CatalogExplorer />",
+        "",
+        "<details>",
+        "<summary>Static fallback table</summary>",
         "",
         "| Year | Resource | Type | Tasks | Modalities | Supervision | Status | Links |",
         "|---:|---|---|---|---|---|---|---|",
@@ -248,19 +293,24 @@ def render_catalog(resources: list[dict], config: dict) -> str:
             f"{md_escape(', '.join(as_list(item.get('supervision'))))} | "
             f"{badge(item)}<br>reviewed {item.get('last_verified') or ''} | {links} |"
         )
-    lines.append("")
+    lines.extend(["", "</details>", ""])
     return "\n".join(lines)
 
 
 def render_updates(config: dict, resources: list[dict]) -> str:
     latest = latest_resources(resources, 20)
     lines = [
+        "---",
+        "layout: page",
+        "---",
+        "",
         "# Awesome update status",
         "",
         f"- Coverage reviewed through: **{config.get('coverage_through', 'unknown')}**",
         f"- Last human review: **{config.get('last_human_review', 'unknown')}**",
-        "- Automated scan: see the latest GitHub issue labeled `awesome:triage`.",
         "- Automated candidates are not accepted records until a human-reviewed PR is merged.",
+        "",
+        "<AwesomeScanStatus />",
         "",
         "## Latest accepted records",
         "",
@@ -373,7 +423,16 @@ The browser demo uses deterministic synthetic scenes and exploratory heuristics.
 
 
 def write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content.rstrip() + "\n", encoding="utf-8")
+
+
+def write_json(path: Path, payload: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def render() -> str:
@@ -394,6 +453,7 @@ def main() -> None:
         render_curated(config, resources, datasets, catalog_link="./catalog.md"),
     )
     write(WEB / "catalog.md", render_catalog(resources, config))
+    write_json(WEB_PUBLIC / "catalog.json", catalog_payload(resources, config))
     write(WEB / "updates.md", render_updates(config, resources))
     write(WEB / "papers.md", render_papers_page(resources))
     write(WEB / "models.md", render_models_page(resources))

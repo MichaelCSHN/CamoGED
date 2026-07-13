@@ -1,7 +1,11 @@
+---
+layout: page
+---
+
 # CamoGED Research Catalog
 
 > Complete accepted metadata catalog. Inclusion does not imply endorsement, full-text availability,
-> reproduced results, or a verified license. Use the status columns.
+> reproduced results, or a verified license. Use the status fields.
 
 - Accepted records: **69**
 - Coverage reviewed through: **2026-07-13**
@@ -15,7 +19,10 @@
 - Modalities: `rgb` 52, `video` 14, `vision-language` 9, `multimodal` 3, `multispectral` 3, `depth` 1
 - Contexts: `computer-vision` 54, `wildlife` 11, `biological` 10, `military` 9, `cultural-history` 6, `art-design` 3, `physical-system` 1, `ai-safety` 1
 
-## All resources
+<CatalogExplorer />
+
+<details>
+<summary>Static fallback table</summary>
 
 | Year | Resource | Type | Tasks | Modalities | Supervision | Status | Links |
 |---:|---|---|---|---|---|---|---|
@@ -88,3 +95,5 @@
 | 1980 | **Camouflage: A History of Concealment and Deception in War**<br>Military history of concealment and deception technologies through the twentieth century. | `book` | military-camouflage, historical-analysis | rgb | not-applicable | `published` · `metadata-only`<br>reviewed 2026-07-13 | [source](https://search.worldcat.org/search?q=ti%3ACamouflage%20au%3AGuy%20Hartcup) |
 | 1940 | **Adaptive Coloration in Animals**<br>Foundational natural-history synthesis of concealment, disguise, disruption, and display. | `book` | biological-camouflage, historical-analysis | rgb | not-applicable | `published` · `metadata-only`<br>reviewed 2026-07-13 | [source](https://archive.org/details/adaptivecolorati00cott) |
 | 1909 | **Concealing-Coloration in the Animal Kingdom**<br>Historically influential, controversial account of countershading and disruptive coloration. | `historical-source` | biological-camouflage, art-design, historical-analysis | rgb | not-applicable | `published` · `metadata-only`<br>reviewed 2026-07-13 | [source](https://archive.org/details/concealingcolora00thay) |
+
+</details>
