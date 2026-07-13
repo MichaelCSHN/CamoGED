@@ -6,7 +6,9 @@ bibliography: ../references.bib
 
 ## A　数据集登记规范 {#sec-a}
 
-书中数据集表由 `data/datasets.yaml` 生成。正式版本只展示已核验记录，每条至少包含：名称、任务、模态、规模、正式划分、标注粒度、论文或官方页面、许可证、发布状态、最后核验日期与备注。项目只提供导航和校验信息，不重新分发受限数据。
+仓库现维护两个不同层级的资源表面：**Awesome Camouflage** 是人工精选的阅读地图；**CamoGED Research Catalog** 是完整的、Schema 驱动的已接受元数据目录。自动发现只能产生候选，不会直接进入任一正式表面；Catalog 条目默认仅为 `metadata-only`，进入精选 Awesome 还需要独立的人工编辑决定。
+
+书中数据集表由 `data/datasets.yaml` 生成。正式版本只展示已核验记录，每条至少包含：名称、任务、模态、规模、正式划分、标注粒度、论文或官方页面、许可证、发布状态、最后核验日期与备注。项目只提供导航和校验信息，不重新分发受限数据。资源分类采用多轴字段：资源类型、支柱、任务、模态、监督方式、方法族、应用语境和策展等级；旧的单值 `pillar/domain/task` 仅为兼容字段。
 
 | 字段 | 最低要求 | 说明 |
 |---|---|---|
@@ -80,7 +82,10 @@ last_verified: 2026-07-13
 - 书稿源码：`book/`
 - 数据元数据：`data/papers.yaml`、`data/datasets.yaml`、`data/leaderboard.yaml`
 - 评价工具：`camo-eval/`
-- 动态资源：网站 `/papers`、`/datasets`、`/leaderboard`、`/demo`
+- 人工精选阅读地图：网站 `/awesome`
+- 完整研究目录与筛选器：网站 `/catalog`
+- 自动扫描状态：网站 `/updates`（只读读取 GitHub 候选 Issue）
+- 其他动态资源：网站 `/datasets`、`/leaderboard`、`/demo`
 - 未发表作者项目：`projects/coder`、`projects/flowcamo`、`projects/dualvcod`
 
 未发表项目在正文中只作为研究议程，不作为已完成原创贡献。动态网站可以展示开发状态，但正式书稿不得预填结果。

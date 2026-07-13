@@ -2,7 +2,9 @@
 
 - Coverage reviewed through: **2026-07-13**
 - Last human review: **2026-07-13**
-- Automated scan: see the latest GitHub issue labeled `awesome:triage`.
+<ScanStatus />
+
+- Automated scan history is read from public GitHub issues labeled `awesome:triage`.
 - Automated candidates are not accepted records until a human-reviewed PR is merged.
 
 ## Latest accepted records

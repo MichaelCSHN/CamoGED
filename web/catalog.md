@@ -15,6 +15,10 @@
 - Modalities: `rgb` 52, `video` 14, `vision-language` 9, `multimodal` 3, `multispectral` 3, `depth` 1
 - Contexts: `computer-vision` 54, `wildlife` 11, `biological` 10, `military` 9, `cultural-history` 6, `art-design` 3, `physical-system` 1, `ai-safety` 1
 
+## Interactive explorer
+
+<CatalogExplorer />
+
 ## All resources
 
 | Year | Resource | Type | Tasks | Modalities | Supervision | Status | Links |
