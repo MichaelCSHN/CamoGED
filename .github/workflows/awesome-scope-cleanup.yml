@@ -1,0 +1,42 @@
+name: one-shot-awesome-scope-cleanup
+
+on:
+  pull_request:
+    branches: [agent/project-audit-remediation]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    if: github.head_ref == 'agent/awesome-special-remediation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/awesome-special-remediation
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pyyaml black ruff
+      - name: Apply scope cleanup
+        run: |
+          python scripts/prepare_awesome_scope_cleanup.py
+          black scripts/build_awesome.py
+          ruff check scripts/build_awesome.py
+          python scripts/build_awesome.py
+          python scripts/check_data.py
+          python scripts/check_awesome.py
+          git diff --exit-code -- web/demo.md
+      - name: Commit scope cleanup
+        run: |
+          rm -f scripts/prepare_awesome_scope_cleanup.py
+          rm -f .github/workflows/awesome-scope-cleanup.yml
+          git config user.name "CamoGED Awesome Editorial Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(awesome): keep demo outside specialist scope"
+          git push origin HEAD:agent/awesome-special-remediation
