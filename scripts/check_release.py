@@ -35,9 +35,13 @@ def main() -> int:
 
     if status == "unreleased-research-preview":
         if any(value is not None for value in (tag, date, source_commit)):
-            errors.append("unreleased preview must keep tag, date, and source_commit null")
+            errors.append(
+                "unreleased preview must keep tag, date, and source_commit null"
+            )
     elif status == "released":
-        if not all(isinstance(value, str) and value for value in (tag, date, source_commit)):
+        if not all(
+            isinstance(value, str) and value for value in (tag, date, source_commit)
+        ):
             errors.append("released status requires tag, date, and source_commit")
     else:
         errors.append(f"unsupported release_status: {status!r}")
@@ -77,7 +81,9 @@ def main() -> int:
 
     citation = yaml.safe_load(CITATION.read_text(encoding="utf-8")) or {}
     citation_version = citation.get("version")
-    if status == "unreleased-research-preview" and not str(citation_version).endswith("-pre"):
+    if status == "unreleased-research-preview" and not str(citation_version).endswith(
+        "-pre"
+    ):
         errors.append("unreleased root citation version must end with '-pre'")
     if citation.get("date-released") is not None and status != "released":
         errors.append("date-released is forbidden before a tagged release")

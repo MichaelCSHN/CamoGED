@@ -225,9 +225,7 @@ def build_parser() -> argparse.ArgumentParser:
     _add_context_arguments(report_parser)
     report_parser.add_argument("--pred-source")
     report_parser.add_argument("--gt-source")
-    report_parser.add_argument(
-        "--format", choices=("markdown", "json"), default="json"
-    )
+    report_parser.add_argument("--format", choices=("markdown", "json"), default="json")
     report_parser.add_argument("--output")
 
     manifest_parser = subparsers.add_parser(
@@ -399,7 +397,11 @@ def main(argv: list[str] | None = None) -> int:
             output_dir=args.output_dir,
             threshold=args.threshold,
         )
-        output = json.dumps(outputs, indent=2) if args.format == "json" else _mapping_to_markdown(outputs)
+        output = (
+            json.dumps(outputs, indent=2)
+            if args.format == "json"
+            else _mapping_to_markdown(outputs)
+        )
         _emit_text(output, None)
         return 0
 
