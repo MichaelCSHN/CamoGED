@@ -72,6 +72,11 @@ def main() -> int:
         "首批全标注 COD",
         "最常用视频基准",
         "目前标注质量最高",
+        "四个事实标准指标",
+        "保证了跨分布评测的干净性",
+        "当前最成熟的训练和测试协议",
+        "CAMO 首次系统推动",
+        "成为主训练集",
     ):
         if forbidden in chapter10:
             errors.append(f"chapter 10 retains unsupported wording {forbidden!r}")
@@ -92,7 +97,14 @@ def main() -> int:
         if token not in chapter14:
             errors.append(f"chapter 14 missing {token!r}")
     require(chapter14, "chapter 14 dynamic boundary", ("动态维护", "动态目录"), errors)
-    for forbidden in ("性能保留率，普遍高于", "普遍高于使用专有 CNN"):
+    for forbidden in (
+        "性能保留率，普遍高于",
+        "普遍高于使用专有 CNN",
+        "参数效率极高",
+        "刻意隐藏的伪装目标几乎不存在",
+        "目前最系统的 SAM-COD",
+        "通常只有主干的 1–5%",
+    ):
         if forbidden in chapter14:
             errors.append(f"chapter 14 retains unsupported wording {forbidden!r}")
 
