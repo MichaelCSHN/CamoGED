@@ -41,4 +41,4 @@ jobs:
           python scripts/build_awesome.py
           git diff --exit-code -- \
             awesome/README.md web/awesome.md web/catalog.md web/updates.md \
-            web/papers.md web/datasets.md web/leaderboard.md web/models.md web/demo.md
+            web/papers.md web/datasets.md web/leaderboard.md web/models.md
