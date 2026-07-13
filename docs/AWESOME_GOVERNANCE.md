@@ -87,7 +87,7 @@ Rejection or deferral reasons should use one of:
 - writes JSON and Markdown artifacts;
 - creates a GitHub triage issue.
 
-It has no contents-write permission.
+It has no contents-write permission. A failed individual query is recorded in the scan report while other queries continue. Pull requests run a small live-network smoke scan and require at least one successful arXiv query and one successful Crossref query; scheduled scans may publish a clearly marked partial report during a temporary upstream outage.
 
 ### Human-gated acceptance
 
