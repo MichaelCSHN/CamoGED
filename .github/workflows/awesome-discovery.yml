@@ -1,6 +1,6 @@
 name: awesome candidate discovery
 
-# Pull requests run a small real-network scan; scheduled/manual runs produce triage issues.
+# Pull requests run one representative query per source; scheduled/manual runs scan all configured queries.
 on:
   pull_request:
     branches: [main, agent/project-audit-remediation]
@@ -54,10 +54,12 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
             echo "max_results=2" >> "$GITHUB_OUTPUT"
             echo "min_year=2025" >> "$GITHUB_OUTPUT"
+            echo "selection=--query-id image-cod --query-id biology" >> "$GITHUB_OUTPUT"
             echo "required_sources=--require-source arxiv --require-source crossref" >> "$GITHUB_OUTPUT"
           else
             echo "max_results=${{ inputs.max_results || '15' }}" >> "$GITHUB_OUTPUT"
             echo "min_year=${{ inputs.min_year || '2024' }}" >> "$GITHUB_OUTPUT"
+            echo "selection=" >> "$GITHUB_OUTPUT"
             echo "required_sources=" >> "$GITHUB_OUTPUT"
           fi
 
@@ -66,6 +68,7 @@ jobs:
           python scripts/discover_awesome.py \
             --max-results "${{ steps.limits.outputs.max_results }}" \
             --min-year "${{ steps.limits.outputs.min_year }}" \
+            ${{ steps.limits.outputs.selection }} \
             ${{ steps.limits.outputs.required_sources }} \
             --output-json awesome_candidates.json \
             --output-markdown awesome_candidates.md
