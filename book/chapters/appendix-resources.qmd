@@ -65,10 +65,24 @@ implementation_version: camo-eval-x.y.z
 threshold_policy: continuous maps for COD core; declared threshold for binary set metrics
 statistical_unit: image/object
 uncertainty: scene-cluster bootstrap 95% CI
+dataset_hashes: [sha256:...]
+prediction_hashes: [sha256:...]
+environment_lock: requirements-lock.txt
+container_image_digest: sha256:...
+pollution_audit:
+  status: unknown
+  model_knowledge_cutoff: unverified
+  private_holdout: true
+query_budget:
+  provider: null
+  max_calls: null
+  max_cost: null
 last_verified: 2026-07-13
 ```
 
 若报告标准 Boundary IoU、FID、LPIPS、MS-SSIM 或 DAVIS J&F，必须使用经过相应参考实现验证的实现。当前验证登记中的 `boundary_match_score`、`fid_lite`、`lpips_lite`、`ms_ssim_lite`、`j_and_f_lite` 只能按其描述性或实验性名称报告。
+
+完整的协议扩展字段、哈希、环境冻结、污染审计和查询预算见 `docs/EVALUATION_MANIFEST_EXTENSION_V1.md`。
 
 退化响应实验还应加入：
 
@@ -93,6 +107,7 @@ reference_distribution: registered_scene_distribution_v1
 - **countershading**：消影；以体表明暗抵消部分形状阴影线索。
 - **stealth / low observable**：隐身／低可探测；需说明具体信道和任务。
 - **COD / VCOD / CIS / RCOD / COT**：图像伪装分割／视频COD／实例分割／bbox型现实COD／伪装目标跟踪。
+- **concealing the real / presenting the false**：隐真／示假；前者压低真实证据，后者制造替代解释或虚假证据。
 - **behavioral detectability**：行为可检测性；给定协议下任务成功概率。
 - **predictive reliability**：预测可靠性；分数、区间、集合或拒答与真实风险的一致程度。
 - **item difficulty**：条目难度；依赖模型面板、任务、工作点和样本域，不是目标固有属性。

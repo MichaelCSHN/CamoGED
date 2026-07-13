@@ -256,6 +256,14 @@ CLI、Python API、Colab 和 HF Space 在这里承担不同角色。CLI 面向�
 
 第二篇由此完成从材料到对抗纹理、数字隐藏和学习式生成的展开。第三篇将转向揭示方，并首先讨论换信道和融合证据。
 
+::: {.callout-note collapse="true"}
+## 本章与全书映射
+
+- **本章定位**：学习式生成、合成增强与作者研究议程。
+- **前后依赖**：向后服务第10—14章识别，并由第15—16、20章评价其真实收益。
+- **证据与风险边界**：生成样本进入正文前须有真实测试集收益、标注一致性和污染审计；作者项目不作既成方法。
+:::
+
 ## 延伸阅读 {#sec-08-further}
 
 - **生成模型基础**：GAN[@goodfellow2014gan]；条件 GAN[@mirza2014cgan]；CycleGAN[@zhu2017cyclegan]；DDPM[@ho2020ddpm]；隐扩散[@rombach2022ldm]；扩散超越 GAN[@dhariwal2021diffusion]；ControlNet[@zhang2023controlnet]；神经风格迁移[@gatys2016nst]。

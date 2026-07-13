@@ -50,6 +50,7 @@ book:
         - chapters/21-frontiers-ethics.qmd
   appendices:
     - chapters/appendix-resources.qmd
+    - chapters/appendix-research-agenda.qmd
 
 bibliography: references.bib
 number-sections: true

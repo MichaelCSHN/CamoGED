@@ -262,6 +262,14 @@ SAM 和通用分割模型为 COD 带来了新的半监督入口，但也暴露�
 
 第12章加入时间维度。视频方法是否真正进步，取决于它如何使用运动、对齐和记忆，而不是简单把更多帧堆入网络。
 
+::: {.callout-note collapse="true"}
+## 本章与全书映射
+
+- **本章定位**：轨道B的图像像素级识别。
+- **前后依赖**：承接第10章协议，连接第15章指标、第16章退化响应和第18章可靠性。
+- **证据与风险边界**：标准指标与教学代理严格分开；总体均值不能替代失败分层和外部测试。
+:::
+
 ## 延伸阅读 {#sec-11-further}
 
 - **方法**：SINet[@fan2020sinet]；SINetV2[@fan2021sinetv2]；PFNet[@mei2021pfnet]；ZoomNet[@pang2022zoomnet]；SegMaR[@jia2022segmar]；FSPNet[@fspnet2023]；ZoomNeXt[@pang2024zoomnext]；HGINet[@hginet2024]；双流适配 SAM[@dualstream2025]。

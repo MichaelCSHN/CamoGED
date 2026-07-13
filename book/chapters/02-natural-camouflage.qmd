@@ -289,6 +289,14 @@ plt.tight_layout()
 
 下一章讨论人类如何把这些机制工程化并嵌入组织、传感器和任务链。跨域比较的重点是机制与失败模式，而不是宣称自然选择和人工设计具有相同历史原因。
 
+::: {.callout-note collapse="true"}
+## 本章与全书映射
+
+- **本章定位**：自然域的隐真、拟态、行为选择和观察者依赖。
+- **前后依赖**：向前依赖第1章术语；向后连接第5章生成、第11章识别、第16章退化响应和第19章人机测量。
+- **证据与风险边界**：人类或机器观察者只能作为特定代理，不能替代真实捕食者与生态适应度。
+:::
+
 ## 延伸阅读 {#sec-02-further}
 
 - **奠基与机制**：Poulton[@poulton1890]、Thayer[@thayer1909]、Wallace[@wallace1889] 等早期著作；Cott[@cott1940]；Stevens & Merilaita[@stevens2011]；Ruxton 等[@ruxton2018]；Cuthill[@cuthill2019]；视觉科学视角的现代综述见 Harris、Penacchio 与 Osorio[@harris2025vision]。

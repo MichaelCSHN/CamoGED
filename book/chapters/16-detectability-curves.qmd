@@ -215,3 +215,12 @@ nonmonotonic_rule: report_first_crossing_and_all_crossings
 ## 16.10 本章小结 {#sec-16-summary}
 
 本章把可检测性从一个静态分数改写为“性能—退化响应函数”。$R_{\mathrm{ctrl}}$ 用于机制分析，$R_{\mathrm{std}}$ 用于参考分布中的总体比较，$R_{\mathrm{obs}}$ 用于诚实标注非因果关联；dAUC 概括全区间性能，$\tau_{50}$ 描述失效位置。下一章把这一思路推进到视频事件时间，并解决不同模型输出如何进入共同坐标的问题。
+
+::: {.callout-note collapse="true"}
+## 本章与全书映射
+
+- **本章定位**：行为可检测性的退化响应测量。
+- **前后依赖**：承接第15章对象级响应，连接第20章确证设计和第21章实证前沿。
+- **证据与风险边界**：R_ctrl/R_std、主dAUC和τ₅₀是CamoGED工作定义，依赖T_j、区间和参考分布。
+:::
+

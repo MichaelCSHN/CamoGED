@@ -1,0 +1,119 @@
+---
+title: "附录：开放问题、研究议程与模板"
+subtitle: "Open Questions, Ethics Protocol, and Data Card Templates"
+bibliography:
+  - ../references.bib
+  - ../evaluation-references.bib
+---
+
+## H　六项开放科学问题 {#sec-h}
+
+以下问题是第15—21章的研究议程，不是已完成结论。
+
+| 编号 | 核心问题 | 最小证据 | 主要章节 |
+|---|---|---|---|
+| SQ1 | 如何建立跨尺度、遮挡、相似度和成像条件稳定的行为可检测性量尺？ | 独立确证集、R_std、dAUC、τ₅₀与敏感性分析 | 第16、20章 |
+| SQ2 | 检测器、分割器、跟踪器与VLM能在多大程度上共享公共行为坐标？ | 冻结匹配规则、原生/匹配工作点、正负样本响应 | 第15、17章 |
+| SQ3 | 视频中的“发现”应如何处理持续性、删失、丢失和重捕获？ | T_FSD、生存曲线、序列级重采样 | 第17章 |
+| SQ4 | 校准、拒答与共形覆盖在分布漂移和漏检条件下是否仍可靠？ | 覆盖事件、分母、区间效率、漂移分层 | 第18章 |
+| SQ5 | 数字孪生和真实编辑能否识别退化因素的因果效应？ | 随机干预、操纵检查、安慰剂和真实域复核 | 第20章 |
+| SQ6 | 人类、动物与机器何时可以共量尺，何时必须保持多尺度？ | 共同锚定、等价任务、DIF和链接误差 | 第19、21章 |
+
+## I　人类观察者实验伦理与预注册模板 {#sec-i}
+
+```yaml
+study_id: human-detectability-study-v1
+research_question: null
+ethics_approval:
+  institution: null
+  protocol_number: null
+  status: pending
+participants:
+  target_n: null
+  inclusion: null
+  exclusion: null
+  compensation: null
+  vulnerable_population: false
+stimuli:
+  source_and_license: null
+  sensitive_content_screening: null
+  target_present_ratio: null
+  randomization: null
+observer_conditions:
+  display: null
+  viewing_distance: null
+  luminance_and_calibration: null
+  exposure_time: null
+tasks: [presence, localization, identification]
+responses: [hit, miss, false_alarm, correct_rejection, reaction_time, click_location]
+primary_hypotheses: []
+sequential_rule: none
+exclusions_and_missingness: preregistered
+privacy:
+  raw_video_or_eye_tracking: restricted
+  retention_period: null
+  deidentification: null
+analysis:
+  statistical_unit: participant_and_stimulus
+  model: hierarchical
+  multiplicity: null
+  sesoi: null
+```
+
+伦理审批不能被模板替代。涉及敏感场景、未成年人、眼动/生理信号或可识别影像时，应追加机构审查、最小化采集和访问控制。
+
+## J　数据卡模板 {#sec-j}
+
+```yaml
+dataset_id: null
+version: null
+purpose_and_tasks: []
+modalities: []
+collection:
+  dates: null
+  geography: null
+  devices: []
+  sampling_frame: null
+subjects_and_targets:
+  categories: []
+  sensitive_attributes: []
+annotations:
+  types: []
+  annotator_protocol: null
+  uncertainty_or_ignore_regions: null
+splits:
+  grouping_unit: scene_sequence_subject_source
+  train: null
+  calibration: null
+  validation: null
+  test: null
+deduplication:
+  exact_hash: null
+  perceptual_hash: null
+  source_level: null
+licenses_and_rights:
+  upstream_license: null
+  redistribution_allowed: false
+  restrictions: []
+pollution_audit:
+  public_since: null
+  known_model_exposure: unknown
+  private_holdout: null
+quality:
+  missingness: null
+  known_biases: []
+  known_label_issues: []
+provenance:
+  manifest_hash: null
+  files_hashes: []
+last_verified: null
+verified_by: null
+```
+
+## K　开放问题进入正文的准入规则 {#sec-k}
+
+1. 研究问题可以进入本附录，但不能以未来时架构或预填性能进入方法谱系表；
+2. 作者项目只有在代码、权重、预测、协议和独立复核齐备后，才从研究议程升级为正式方法；
+3. 人因和因果结论在伦理、功效、操纵检查和确证设计完成前保持假设状态；
+4. 动态Catalog负责发现候选，正文只引用经过一手来源和适用范围核验的工作；
+5. 每次正式发布对SQ1—SQ6给出状态：未启动、探索、确证中、部分支持、被推翻或已稳定复现。
