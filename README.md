@@ -35,10 +35,14 @@ as versioned literature-search conclusions rather than permanent promotional fac
 | Monograph | publication candidate | not yet rights- and format-cleared |
 | `camo-eval` COD core | validated research preview | report package version and protocol |
 | `camo-eval` extensions | experimental | use explicit `*_lite` or descriptive names |
-| Paper/dataset registry | metadata preview | coverage is selective; licenses may be unknown |
+| Awesome Camouflage | human-curated reading map | selection is editorial, not exhaustive or a reproduction claim |
+| Research Catalog | accepted metadata registry | automated discovery, human acceptance; records are metadata-only unless upgraded |
 | Results registry | minimal source-checked records | not a comprehensive ranking |
 | Browser demo | synthetic teaching tool | no model inference or standard difficulty score |
 | `coder` / `flowcamo` / `dualvcod` | research agendas | no integrated methods or verified results |
+
+
+The curated [Awesome Camouflage](awesome/README.md) and the complete [Research Catalog](web/catalog.md) are separate products. Automated scans create candidates; only human-reviewed pull requests can accept or promote records.
 
 Security reports use [`SECURITY.md`](SECURITY.md). Third-party asset policy is recorded in [`THIRD_PARTY_ASSETS.yml`](THIRD_PARTY_ASSETS.yml). Release state is recorded in [`RELEASE_MANIFEST.yml`](RELEASE_MANIFEST.yml).
 

@@ -1,0 +1,21 @@
+### python scripts/check_data.py
+check_data: 0 error(s), 0 warning(s)
+exit=0
+### python scripts/discover_awesome.py --self-test
+discover_awesome self-test: ok
+exit=0
+### python scripts/check_awesome.py
+check_awesome: 0 error(s), 0 warning(s); resources=69, curated=44, datasets=22, recent=23, current=5
+exit=0
+### python scripts/check_cross_component.py
+check_cross_component: 0 error(s)
+exit=0
+### python scripts/check_api.py
+check_api: 0 error(s)
+exit=0
+### python scripts/check_assets.py
+check_assets: 0 error(s), 0 registered asset(s)
+exit=0
+### python scripts/check_release.py
+check_release: 0 error(s); status=unreleased-research-preview
+exit=0

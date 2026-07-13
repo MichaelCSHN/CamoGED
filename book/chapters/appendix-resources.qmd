@@ -4,28 +4,37 @@ subtitle: "Appendix: Datasets, Metrics, Terminology, and Publication Notes"
 bibliography: ../references.bib
 ---
 
-## A　数据集登记规范 {#sec-a}
+## A　精选资源、完整目录与数据集登记 {#sec-a}
 
-书中数据集表由 `data/datasets.yaml` 生成。正式版本只展示已核验记录，每条至少包含：名称、任务、模态、规模、正式划分、标注粒度、论文或官方页面、许可证、发布状态、最后核验日期与备注。项目只提供导航和校验信息，不重新分发受限数据。
+CamoGED 将资源维护分为三个互不替代的层级：
 
-| 字段 | 最低要求 | 说明 |
+1. **Awesome Camouflage** 是人工精选的阅读地图，只展示 `curated: true` 且具有编辑说明的条目；
+2. **CamoGED Research Catalog** 是完整的已接受元数据目录，允许收录 `metadata-only` 条目，但不因此背书其方法结论、许可证或复现状态；
+3. **本书参考文献** 只包含正文实际引用且经编辑复核的来源。Catalog 新增条目不会自动进入书稿。
+
+自动发现流程只生成候选报告和 GitHub triage issue；它无权直接修改已接受目录，也无权改写本书。候选必须经过人工筛选和 Draft PR 才能成为 Catalog 记录，之后还需独立编辑决定是否进入 Awesome 精选层。
+
+| 字段组 | 关键字段 | 用途 |
 |---|---|---|
-| `name` / `task` | 必填 | 避免把图像、视频、实例、指代和多模态任务混排 |
-| `split` | 必填 | 明确训练、验证、测试及是否仅测试 |
-| `annotation` | 必填 | 二值 mask、实例、轨迹、语言、问答或信号标定 |
-| `license` | 必填 | 不明时标为待核，不进入正式下载表 |
-| `publication_status` | 必填 | 正式发表、预印本、项目发布或撤回 |
-| `last_verified` | 必填 | 动态事实的最后核验日期 |
-| `verified` | 必填 | 正式书稿只渲染 `true` |
+| 资源身份 | `resource_type`, `canonical_url`, `publication_status` | 区分论文、综述、专著、标准、历史资料和项目页，并关联规范来源 |
+| 任务轴 | `tasks[]` | 图像/视频 COD、实例、bbox、跟踪、指代、协同、开放词汇、生成、评价等 |
+| 模态轴 | `modalities[]` | RGB、视频、深度、热红外、多/高光谱、偏振、多模态和视觉语言 |
+| 监督轴 | `supervision[]` | 全监督、弱监督、半监督、无监督、零样本、提示式、训练自由等 |
+| 方法与语境 | `method_families[]`, `contexts[]` | 区分架构路线及生物、军事、艺术设计、计算机视觉等知识语境 |
+| 证据等级 | `verification_status`, `last_verified`, `verified_by` | `metadata-only` 仅表示身份与来源已核，不表示结论或结果已复核 |
+| 策展状态 | `curated`, `curation_tier`, `date_added` | 控制精选层、核心阅读和完整目录之间的关系 |
+| 许可状态 | `license_status`, `license` | 许可证不明时禁止由 CamoGED 再分发文件 |
 
-第10章提供任务版图，网站 `/datasets` 提供动态导航；附录不复制可能迅速过期的完整排行榜。
+数据集登记仍由 `data/datasets.yaml` 维护。正式使用时至少核查名称、任务、模态、规模、划分、标注粒度、官方来源、许可证状态、发布状态和最后核验日期。项目只提供导航和校验信息，不重新分发许可不明或受限数据。
+
+网站 `/awesome` 提供精选阅读地图，`/catalog` 提供可筛选完整目录，`/datasets` 提供数据集导航，`/updates` 显示人工审核日期与最近一次自动扫描状态。第 10 章给出较稳定的任务版图，不复制会快速过期的完整列表。
 
 ## B　指标速查 {#sec-b}
 
 | 层级 | 典型指标 | 方向 | 主要问题 | 不能替代什么 |
 |---|---|:---:|---|---|
 | 像素/前景图 | MAE、$F_\beta^w$ | ↓ / ↑ | 整体误差、漏检与误报 | 结构、实例和时间 |
-| 结构 | $S_\alpha$、$E_\phi$、Boundary IoU | ↑ | 形状、区域和边界 | 任务代价 |
+| 结构 | $S_\alpha$、$E_\phi$ | ↑ | 形状与区域一致性 | 标准 Boundary IoU；未对标实现不得借名 |
 | 实例 | AP、AR、Mask AP | ↑ | 是否分清多个目标 | ID 与轨迹 |
 | 视频 | $\mathcal J$、$\mathcal F$、$\mathcal J\&\mathcal F$ | ↑ | 区域与边界 | 时间稳定性；后者应另报 |
 | 生成 | FID/KID、LPIPS、SSIM | ↓/↑ | 分布或感知真实性 | 伪装/攻击有效性 |
@@ -33,7 +42,7 @@ bibliography: ../references.bib
 | 人因 | 反应时、hit/miss、$d'$ | 依定义 | 观察者敏感性与偏置 | 机器分割质量 |
 | 物理信号 | 热对比、SCR、光谱角 | 依定义 | 特定传感器信号差异 | 跨传感器任务结果 |
 
-指标首次出现必须注明实现、版本、阈值、方向和聚合方式。视频、物理和人因实验还应报告方差、置信区间或重复次数。
+指标首次出现必须注明实现、版本、阈值、方向和聚合方式。视频、物理和人因实验还应报告方差、置信区间或重复次数。实验性替代指标必须使用描述性名称或 `_lite` 后缀，不能占用标准名称。
 
 ## C　统一报告模板 {#sec-c}
 
@@ -53,11 +62,14 @@ observer: model-name-and-version
 channel: RGB image
 task: camouflaged object segmentation
 protocol: fixed test split; automatic prediction; no manual prompt
-metrics: [mae, fw, sm, em, boundary_iou]
+metrics: [mae, fw, sm, em, f]
 implementation_version: camo-eval-x.y.z
+threshold_policy: continuous maps for COD core metrics
 uncertainty: bootstrap 95% CI
 last_verified: 2026-07-13
 ```
+
+若额外报告 `boundary_match_score` 等实验性描述量，必须单列实现 ID 和定义，不能称为标准 Boundary IoU。
 
 ## D　术语中英对照 {#sec-d}
 
@@ -68,22 +80,28 @@ last_verified: 2026-07-13
 - **disruptive coloration**：瓦解色；通过竞争边缘和轮廓破坏降低整体组织。
 - **countershading**：消影；以体表明暗抵消部分形状阴影线索。
 - **stealth / low observable**：隐身／低可探测；需说明具体信道和任务。
-- **COD / VCOD / CIS**：伪装目标检测（社区通常指像素分割）／视频 COD／伪装实例分割。
+- **COD / VCOD / CIS / RCOD / COT**：像素级伪装分割／视频 COD／实例分割／bbox 型现实 COD／伪装目标跟踪。
 - **adversarial camouflage**：针对机器观察者优化的对抗伪装；不自动等于对人隐蔽。
 
 ## E　检索、核验与证据等级 {#sec-e}
 
-检索数据库、关键词、纳入标准与截止日期见 `docs/BOOK_SEARCH_METHODOLOGY.md`；逐项事实问题见 `docs/BOOK_FACTCHECK_REGISTER.md`。正文使用三类主要证据：P 级一手论文、标准与档案；S 级权威专著与综述；T 级预印本、项目页与临时资料。关键历史事实和“首个/最大”结论至少需要一条 P 级证据。
+检索数据库、关键词、纳入标准与截止日期见 `docs/BOOK_SEARCH_METHODOLOGY.md`；逐项事实问题见 `docs/BOOK_FACTCHECK_REGISTER.md`。正文使用三类主要证据：P 级一手论文、标准与档案；S 级权威专著与综述；T 级预印本、项目页与临时资料。关键历史事实和“首个/最大/最新”结论至少需要一条 P 级证据，并在每次发布前重新检索。
+
+Catalog 的 `metadata-only` 状态不等同于本书的 P 级证据。自动发现可以提示新来源，但不能自动改变正文结论。
 
 ## F　代码、项目与动态资源 {#sec-f}
 
 - 书稿源码：`book/`
-- 数据元数据：`data/papers.yaml`、`data/datasets.yaml`、`data/leaderboard.yaml`
-- 评价工具：`camo-eval/`
-- 动态资源：网站 `/papers`、`/datasets`、`/leaderboard`、`/demo`
+- 人工精选资源：`awesome/README.md` 与网站 `/awesome`
+- 完整研究目录：`data/papers.yaml` 与网站 `/catalog`
+- 数据集元数据：`data/datasets.yaml` 与网站 `/datasets`
+- 已核验结果：`data/leaderboard.yaml` 与网站 `/leaderboard`
+- 自动更新状态：网站 `/updates` 与 GitHub `awesome:triage` issues
+- 评价工具与验证登记：`camo-eval/`、`camo-eval/VALIDATION.md`
+- 浏览器教学演示：网站 `/demo`
 - 未发表作者项目：`projects/coder`、`projects/flowcamo`、`projects/dualvcod`
 
-未发表项目在正文中只作为研究议程，不作为已完成原创贡献。动态网站可以展示开发状态，但正式书稿不得预填结果。
+未发表项目在正文中只作为研究议程，不作为已完成原创贡献。动态网站可以展示开发状态，但正式书稿不得预填结果；Demo 也不得因某项资源进入 Catalog 就自动接入其模型或数据。
 
 ## G　图像版权与版本清单 {#sec-g}
 
