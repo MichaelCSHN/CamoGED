@@ -1,3 +1,4 @@
+// Resource navigation intentionally separates the curated Awesome view from the full Catalog.
 export default {
   title: "CamoGED",
   base: "/CamoGED/",
