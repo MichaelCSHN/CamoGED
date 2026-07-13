@@ -47,7 +47,7 @@ book:
         - chapters/20-causal-standardization.qmd
     - part: "第五篇　前沿、伦理与治理"
       chapters:
-        - chapters/16-frontiers-ethics.qmd
+        - chapters/21-frontiers-ethics.qmd
   appendices:
     - chapters/appendix-resources.qmd
 
