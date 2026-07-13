@@ -7,80 +7,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: contracts-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  apply-grok-review:
-    if: github.head_ref == 'agent/evaluation-part-restructure'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: agent/evaluation-part-restructure
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
-      - name: Apply Grok editorial review
-        run: python tools/apply_grok_book_review_20260713.py
-      - name: Commit ordinary source changes
-        run: |
-          git config user.name "CamoGED Editorial Bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add book docs
-          if git diff --cached --quiet; then
-            echo "No source changes to commit"
-            exit 0
-          fi
-          git commit -m "edit(book): apply Grok structural review"
-          git push origin HEAD:agent/evaluation-part-restructure
-      - name: Validate targeted changes
-        run: |
-          python -m pip install pyyaml
-          python scripts/check_evaluation_part.py
-          python - <<'PY'
-          from pathlib import Path
-          import yaml
-          root = Path('.')
-          q = yaml.safe_load((root / 'book/_quarto.yml').read_text(encoding='utf-8'))
-          errors = []
-          checks = {
-              'book/index.qmd': ['全书导航与依赖关系', 'flowchart LR', '| 21 | 前沿与责任边界'],
-              'book/chapters/01-essence-and-the-game.qmd': ['隐真与示假', '\\not\\Rightarrow', '设计手段不等于功能效果'],
-              'book/chapters/appendix-resources.qmd': ['dataset_hashes:', 'container_image_digest:', 'pollution_audit:', 'query_budget:'],
-              'book/chapters/appendix-research-agenda.qmd': ['SQ1', 'SQ2', 'SQ3', 'SQ4', 'SQ5', 'SQ6', '伦理与预注册模板', '数据卡模板'],
-          }
-          for name, tokens in checks.items():
-              text = (root / name).read_text(encoding='utf-8')
-              for token in tokens:
-                  if token not in text:
-                      errors.append(f'{name}: missing {token}')
-          chapter_files = []
-          for item in q['book']['chapters']:
-              if isinstance(item, dict):
-                  chapter_files.extend(item.get('chapters', []))
-          for rel in chapter_files:
-              text = (root / 'book' / rel).read_text(encoding='utf-8')
-              if text.count('## 本章与全书映射') != 1:
-                  errors.append(f'{rel}: expected one mapping card')
-          if 'chapters/appendix-research-agenda.qmd' not in q['book']['appendices']:
-              errors.append('research agenda appendix missing from _quarto.yml')
-          if errors:
-              raise SystemExit('\n'.join(errors))
-          print('Grok editorial checks: PASS')
-          PY
-
   contracts:
-    needs: apply-grok-review
-    if: always() && (needs.apply-grok-review.result == 'success' || needs.apply-grok-review.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - name: Install contract dependencies
@@ -95,6 +32,8 @@ jobs:
           python scripts/check_awesome.py
       - name: Evaluation-part structure terminology and citations
         run: python scripts/check_evaluation_part.py
+      - name: Book navigation mapping and protocol appendices
+        run: python scripts/check_book_navigation.py
       - name: camo-eval API and standard-name guards
         run: python scripts/check_api.py
       - name: Third-party asset ledger
