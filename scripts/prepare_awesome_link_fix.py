@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Correct the generated website link for source-level offline link checks."""
+"""Correct the website Catalog link for both VitePress and offline source checks."""
 
 from pathlib import Path
 
