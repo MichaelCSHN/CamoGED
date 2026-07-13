@@ -16,6 +16,13 @@ def read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
 
 
+def require(text: str, label: str, tokens: tuple[str, ...], errors: list[str]) -> None:
+    """Require at least one semantically equivalent token."""
+
+    if not any(token in text for token in tokens):
+        errors.append(f"{label} missing one of {tokens!r}")
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -41,7 +48,6 @@ def main() -> int:
 
     chapter10_tokens = (
         "任务、监督与模态三轴谱系",
-        "bbox RCOD",
         "伪装目标跟踪",
         "弱监督",
         "半监督",
@@ -57,6 +63,7 @@ def main() -> int:
     for token in chapter10_tokens:
         if token not in chapter10:
             errors.append(f"chapter 10 missing {token!r}")
+    require(chapter10, "chapter 10 bbox branch", ("bbox 型 RCOD", "bbox RCOD"), errors)
     for forbidden in ("当前最大图像基准", "跨数据集泛化评测标准"):
         if forbidden in chapter10:
             errors.append(f"chapter 10 retains unsupported wording {forbidden!r}")
@@ -66,11 +73,12 @@ def main() -> int:
         "@mmcsbench2025",
         "@sddf2026",
         "提示来源",
-        "动态目录",
+        "Research Catalog",
     )
     for token in chapter14_tokens:
         if token not in chapter14:
             errors.append(f"chapter 14 missing {token!r}")
+    require(chapter14, "chapter 14 dynamic boundary", ("动态维护", "动态目录"), errors)
     for forbidden in ("性能保留率，普遍高于", "普遍高于使用专有 CNN"):
         if forbidden in chapter14:
             errors.append(f"chapter 14 retains unsupported wording {forbidden!r}")
