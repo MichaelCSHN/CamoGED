@@ -37,15 +37,18 @@ jobs:
               '本平台要求方法提交时申报骨干预训练来源，并建议使用不与 COD 数据集来源重叠的预训练集（如 ImageNet-22K 而非 COCO 预训练）。':
                   '规范报告应申报骨干预训练来源；是否存在与 COD 测试样本或其来源的重叠，需要通过数据溯源审计判断，不能仅凭预训练数据集名称推断。',
               '图像 COD 的四个事实标准指标为：': '图像 COD 常用的四个核心指标为：',
+              '图像 COD 提供当前最成熟的训练和测试协议': '图像 COD 已形成较稳定的训练和测试协议',
+              'CAMO 首次系统推动像素级 COD': 'CAMO 是早期系统推动像素级 COD 的数据集之一',
+              'COD10K 把类别和样本规模显著扩大，成为主训练集': 'COD10K 扩大了类别与样本规模，并常被用作主训练集',
+              'COD10K 采用了多轮标注与交叉验证，并由生物学专家辅助确认部分类别，采用了较为系统的多轮标注与交叉核验流程':
+                  'COD10K 采用多轮标注与交叉验证，并由生物学专家辅助确认部分类别，其标注流程较为系统',
           }
           for old, new in replacements.items():
               if old in ch10:
                   ch10 = ch10.replace(old, new)
-                  print(f'replaced chapter 10: {old}')
-              elif new in ch10:
-                  print(f'already replaced chapter 10: {new}')
-              else:
+              elif new not in ch10:
                   print(f'chapter 10 marker absent: {old}')
+          ch10 = ch10.replace('事实标准', '常用规范')
           ch10_path.write_text(ch10.rstrip() + '\n', encoding='utf-8')
 
           ch14_path = Path('book/chapters/14-foundation-models.qmd')
@@ -67,10 +70,7 @@ jobs:
           for old, new in replacements.items():
               if old in ch14:
                   ch14 = ch14.replace(old, new)
-                  print(f'replaced chapter 14: {old}')
-              elif new in ch14:
-                  print(f'already replaced chapter 14: {new}')
-              else:
+              elif new not in ch14:
                   print(f'chapter 14 marker absent: {old}')
           ch14_path.write_text(ch14.rstrip() + '\n', encoding='utf-8')
 
@@ -80,6 +80,9 @@ jobs:
           additions = (
               '        "四个事实标准指标",\n'
               '        "保证了跨分布评测的干净性",\n'
+              '        "当前最成熟的训练和测试协议",\n'
+              '        "CAMO 首次系统推动",\n'
+              '        "成为主训练集",\n'
           )
           if additions not in check and marker in check:
               check = check.replace(marker, marker + additions, 1)
@@ -94,8 +97,6 @@ jobs:
           ruff check scripts/check_cross_component.py
           python scripts/build_awesome.py
       - name: Validate final evidence claims
-        id: validate
-        continue-on-error: true
         shell: bash
         run: |
           set -o pipefail
@@ -107,9 +108,6 @@ jobs:
           path: claim-cleanup.log
           if-no-files-found: warn
           retention-days: 14
-      - name: Stop after claim validation failure
-        if: steps.validate.outcome == 'failure'
-        run: exit 1
       - name: Commit final claim cleanup
         run: |
           rm -f claim-cleanup.log
