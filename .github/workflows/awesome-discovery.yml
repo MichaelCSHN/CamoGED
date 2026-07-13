@@ -1,5 +1,6 @@
 name: awesome candidate discovery
 
+# Pull requests run a small real-network scan; scheduled/manual runs produce triage issues.
 on:
   pull_request:
     branches: [main, agent/project-audit-remediation]
