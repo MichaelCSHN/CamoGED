@@ -1,5 +1,6 @@
 name: one-shot Grok book review remediation
 
+# Trigger revision 1 after workflow registration.
 on:
   push:
     branches: [agent/evaluation-part-restructure]
