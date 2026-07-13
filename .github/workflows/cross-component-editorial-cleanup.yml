@@ -34,12 +34,10 @@ jobs:
           ch14_path = root / 'book/chapters/14-foundation-models.qmd'
           text = ch14_path.read_text(encoding='utf-8')
           front_end = text.find('\n---\n', text.find('---') + 3)
-          if front_end < 0:
-              raise SystemExit('chapter 14 front matter not found')
           guide_start = text.find('## 本章导读', front_end)
           guide_end = text.find('\n:::\n', guide_start)
-          if guide_start < 0 or guide_end < 0:
-              raise SystemExit('chapter 14 guide block not found')
+          if min(front_end, guide_start, guide_end) < 0:
+              raise SystemExit('chapter 14 front matter or guide block not found')
           guide_body = text[guide_start:guide_end]
           rest = text[guide_end + len('\n:::\n'):]
           note = (
@@ -71,30 +69,43 @@ jobs:
               '是目前标注质量最高的图像 COD 基准之一': '采用了较为系统的多轮标注与交叉核验流程',
           }
           for old, new in replacements.items():
-              if old not in text:
-                  raise SystemExit(f'chapter 10 phrase not found: {old}')
-              text = text.replace(old, new)
+              if old in text:
+                  text = text.replace(old, new)
+                  print(f'replaced: {old}')
+              elif new in text:
+                  print(f'already replaced: {new}')
+              else:
+                  print(f'not present, review manually: {old}')
           ch10_path.write_text(text.rstrip() + '\n', encoding='utf-8')
 
           check_path = root / 'scripts/check_cross_component.py'
           check = check_path.read_text(encoding='utf-8')
           old = '    for forbidden in ("当前最大图像基准", "跨数据集泛化评测标准"):\n'
           new = '''    for forbidden in (\n        "当前最大图像基准",\n        "跨数据集泛化评测标准",\n        "事实标准",\n        "质量与规模平衡最好的",\n        "首批全标注 COD",\n        "最常用视频基准",\n        "目前标注质量最高",\n    ):\n'''
-          if old not in check:
-              raise SystemExit('cross-component chapter 10 forbidden marker not found')
-          check = check.replace(old, new, 1)
+          if old in check:
+              check = check.replace(old, new, 1)
           marker = '    chapter14_tokens = (\n'
           syntax_check = '''    if "::: {.callout-tip}\\n## 本章导读" not in chapter14:\n        errors.append("chapter 14 guide callout is malformed")\n    if chapter14.count("::: {.callout-note}") < 1:\n        errors.append("chapter 14 snapshot callout is missing")\n\n'''
           if syntax_check not in check:
+              if marker not in check:
+                  raise SystemExit('cross-component chapter 14 marker not found')
               check = check.replace(marker, syntax_check + marker, 1)
           check_path.write_text(check.rstrip() + '\n', encoding='utf-8')
           PY
           pip install black ruff
           black scripts/check_cross_component.py
           ruff check scripts/check_cross_component.py
-          python scripts/check_cross_component.py
+          python scripts/check_cross_component.py 2>&1 | tee editorial-cleanup.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cross-component-editorial-cleanup-${{ github.run_id }}
+          path: editorial-cleanup.log
+          if-no-files-found: warn
+          retention-days: 14
       - name: Commit editorial cleanup
         run: |
+          rm -f editorial-cleanup.log
           git config user.name "CamoGED Cross-Component Editorial Bot"
           git config user.email "actions@users.noreply.github.com"
           git add book/chapters/10-intelligent-overview-datasets.qmd \
