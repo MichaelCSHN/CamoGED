@@ -44,14 +44,39 @@ jobs:
         run: python scripts/build_awesome.py
 
       - name: Validate contracts and cross-component closure
+        id: validation
+        continue-on-error: true
+        shell: bash
         run: |
-          python scripts/check_data.py
-          python scripts/discover_awesome.py --self-test
-          python scripts/check_awesome.py
-          python scripts/check_cross_component.py
-          python scripts/check_api.py
-          python scripts/check_assets.py
-          python scripts/check_release.py
+          set -o pipefail
+          : > cross-component-validation.log
+          for command in \
+            "python scripts/check_data.py" \
+            "python scripts/discover_awesome.py --self-test" \
+            "python scripts/check_awesome.py" \
+            "python scripts/check_cross_component.py" \
+            "python scripts/check_api.py" \
+            "python scripts/check_assets.py" \
+            "python scripts/check_release.py"; do
+            echo "### $command" | tee -a cross-component-validation.log
+            bash -lc "$command" 2>&1 | tee -a cross-component-validation.log
+            status=${PIPESTATUS[0]}
+            echo "exit=$status" | tee -a cross-component-validation.log
+            if [ "$status" -ne 0 ]; then
+              echo "failed=true" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cross-component-validation-${{ github.run_id }}
+          path: cross-component-validation.log
+          retention-days: 14
+
+      - name: Stop after validation failure
+        if: steps.validation.outputs.failed == 'true'
+        run: exit 1
 
       - uses: actions/setup-node@v4
         with:
