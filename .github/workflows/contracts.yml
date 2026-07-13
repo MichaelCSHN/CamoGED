@@ -33,20 +33,7 @@ jobs:
       - name: Evaluation-part structure terminology and citations
         run: python scripts/check_evaluation_part.py
       - name: Book navigation mapping and protocol appendices
-        id: book_navigation
-        shell: bash
-        run: |
-          set +e
-          python scripts/check_book_navigation.py > book-navigation-diagnostic.txt 2>&1
-          status=$?
-          cat book-navigation-diagnostic.txt
-          exit "$status"
-      - name: Upload book navigation diagnostic
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: book-navigation-diagnostic
-          path: book-navigation-diagnostic.txt
+        run: python scripts/check_book_navigation.py
       - name: camo-eval API and standard-name guards
         run: python scripts/check_api.py
       - name: Third-party asset ledger
