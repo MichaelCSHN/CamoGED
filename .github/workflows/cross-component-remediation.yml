@@ -5,6 +5,10 @@ on:
     branches: [agent/awesome-special-remediation]
     types: [opened, synchronize, reopened]
 
+concurrency:
+  group: cross-component-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -12,7 +16,7 @@ jobs:
   apply:
     if: github.head_ref == 'agent/book-demo-unified-remediation'
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,7 +24,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - run: pip install pyyaml black ruff jupyter numpy matplotlib scipy
+      - run: pip install pyyaml black ruff
       - name: Apply backlog
         run: python scripts/apply_cross_component_backlog.py
       - name: Format and regenerate
@@ -35,11 +39,6 @@ jobs:
           cd web
           npm ci
           npm run docs:build
-      - uses: quarto-dev/quarto-actions/setup@v2
-      - name: Render book
-        run: |
-          quarto render book --to html
-          quarto render book --to epub --no-execute
       - name: Commit remediation
         run: |
           rm scripts/apply_cross_component_backlog.py
