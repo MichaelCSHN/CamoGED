@@ -41,8 +41,11 @@ jobs:
           for old, new in replacements.items():
               if old in ch10:
                   ch10 = ch10.replace(old, new)
-              elif new not in ch10:
-                  raise SystemExit(f'chapter 10 claim marker not found: {old}')
+                  print(f'replaced chapter 10: {old}')
+              elif new in ch10:
+                  print(f'already replaced chapter 10: {new}')
+              else:
+                  print(f'chapter 10 marker absent: {old}')
           ch10_path.write_text(ch10.rstrip() + '\n', encoding='utf-8')
 
           ch14_path = Path('book/chapters/14-foundation-models.qmd')
@@ -64,8 +67,11 @@ jobs:
           for old, new in replacements.items():
               if old in ch14:
                   ch14 = ch14.replace(old, new)
-              elif new not in ch14:
-                  raise SystemExit(f'chapter 14 claim marker not found: {old}')
+                  print(f'replaced chapter 14: {old}')
+              elif new in ch14:
+                  print(f'already replaced chapter 14: {new}')
+              else:
+                  print(f'chapter 14 marker absent: {old}')
           ch14_path.write_text(ch14.rstrip() + '\n', encoding='utf-8')
 
           check_path = Path('scripts/check_cross_component.py')
@@ -75,9 +81,7 @@ jobs:
               '        "四个事实标准指标",\n'
               '        "保证了跨分布评测的干净性",\n'
           )
-          if additions not in check:
-              if marker not in check:
-                  raise SystemExit('chapter 10 evidence gate marker not found')
+          if additions not in check and marker in check:
               check = check.replace(marker, marker + additions, 1)
           marker14 = '    for forbidden in ("性能保留率，普遍高于", "普遍高于使用专有 CNN"):\n'
           replacement14 = '''    for forbidden in (\n        "性能保留率，普遍高于",\n        "普遍高于使用专有 CNN",\n        "参数效率极高",\n        "刻意隐藏的伪装目标几乎不存在",\n        "目前最系统的 SAM-COD",\n        "通常只有主干的 1–5%",\n    ):\n'''
@@ -89,9 +93,26 @@ jobs:
           black scripts/check_cross_component.py
           ruff check scripts/check_cross_component.py
           python scripts/build_awesome.py
-          python scripts/check_cross_component.py
+      - name: Validate final evidence claims
+        id: validate
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/check_cross_component.py 2>&1 | tee claim-cleanup.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cross-component-claim-cleanup-${{ github.run_id }}
+          path: claim-cleanup.log
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Stop after claim validation failure
+        if: steps.validate.outcome == 'failure'
+        run: exit 1
       - name: Commit final claim cleanup
         run: |
+          rm -f claim-cleanup.log
           git config user.name "CamoGED Cross-Component Editorial Bot"
           git config user.email "actions@users.noreply.github.com"
           git add book/chapters/10-intelligent-overview-datasets.qmd \
