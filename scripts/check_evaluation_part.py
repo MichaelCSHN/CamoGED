@@ -89,6 +89,20 @@ FORBIDDEN = {
     ],
 }
 
+APPENDIX_REQUIRED = [
+    "behavioral detectability",
+    "predictive reliability",
+    "R_{\\mathrm{ctrl}}",
+    "tau_{50}",
+    "IRT-A / IRT-B",
+    "camo-eval/VALIDATION.md",
+]
+
+APPENDIX_FORBIDDEN = [
+    "metrics: [mae, fw, sm, em, boundary_iou]",
+    "事实标准指标",
+]
+
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
@@ -119,6 +133,10 @@ def main() -> int:
         if not (BOOK / path).exists():
             errors.append(f"missing chapter file {path}")
 
+    old_frontiers = CHAPTERS / "16-frontiers-ethics.qmd"
+    if old_frontiers.exists():
+        errors.append("superseded chapters/16-frontiers-ethics.qmd still exists")
+
     combined = ""
     for filename, tokens in REQUIRED.items():
         path = CHAPTERS / filename
@@ -136,10 +154,27 @@ def main() -> int:
             if token in text:
                 errors.append(f"{filename} contains forbidden token {token!r}")
 
+    appendix_path = CHAPTERS / "appendix-resources.qmd"
+    appendix = read(appendix_path)
+    combined += "\n" + appendix
+    for token in APPENDIX_REQUIRED:
+        if token not in appendix:
+            errors.append(f"appendix-resources.qmd missing required token {token!r}")
+    for token in APPENDIX_FORBIDDEN:
+        if token in appendix:
+            errors.append(f"appendix-resources.qmd contains forbidden token {token!r}")
+
     outline = read(ROOT / "docs/EVALUATION_PART_RESTRUCTURE_V1.md")
     evidence = read(ROOT / "docs/EVALUATION_PART_EVIDENCE_MATRIX_V1.md")
     audit = read(ROOT / "docs/EVALUATION_PART_SELF_AUDIT_V1.md")
-    for token in ("第 15 章", "第 16 章", "第 17 章", "第 18 章", "第 19 章", "第 20 章"):
+    for token in (
+        "第 15 章",
+        "第 16 章",
+        "第 17 章",
+        "第 18 章",
+        "第 19 章",
+        "第 20 章",
+    ):
         if token not in outline:
             errors.append(f"outline missing {token}")
     if "逐章证据清单" not in evidence:
