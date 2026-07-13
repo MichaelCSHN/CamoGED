@@ -44,10 +44,26 @@ jobs:
         run: python scripts/build_awesome.py
 
       - name: Validate metadata, discovery, and acceptance criteria
+        id: validate
+        continue-on-error: true
         run: |
-          python scripts/check_data.py
-          python scripts/discover_awesome.py --self-test
-          python scripts/check_awesome.py
+          {
+            python scripts/check_data.py
+            python scripts/discover_awesome.py --self-test
+            python scripts/check_awesome.py
+          } 2>&1 | tee awesome_validation.log
+          test ${PIPESTATUS[0]} -eq 0
+
+      - uses: actions/upload-artifact@v4
+        if: steps.validate.outcome == 'failure'
+        with:
+          name: awesome-validation-${{ github.run_id }}
+          path: awesome_validation.log
+          retention-days: 7
+
+      - name: Stop after validation failure
+        if: steps.validate.outcome == 'failure'
+        run: exit 1
 
       - uses: actions/setup-node@v4
         with:
@@ -63,6 +79,7 @@ jobs:
         run: |
           rm -f scripts/apply_awesome_special_remediation.py
           rm -f .github/workflows/awesome-remediation.yml
+          rm -f awesome_validation.log
           git config user.name "CamoGED Awesome Editorial Bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
