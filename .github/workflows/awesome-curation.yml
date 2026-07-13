@@ -1,0 +1,77 @@
+name: awesome candidate acceptance
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Triage issue containing the machine-readable candidate block"
+        required: true
+        type: string
+      accepted_ids:
+        description: "Comma-separated candidate IDs explicitly accepted by the reviewer"
+        required: true
+        type: string
+      reviewer:
+        description: "Reviewer identifier recorded in metadata"
+        required: true
+        default: "maintainer"
+        type: string
+
+concurrency:
+  group: awesome-curation-${{ inputs.issue_number }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install metadata dependency
+        run: pip install pyyaml
+
+      - name: Fetch candidate issue
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/issues/${{ inputs.issue_number }}" \
+            --jq .body > candidate_issue.md
+
+      - name: Accept explicitly selected candidates
+        run: |
+          python scripts/accept_awesome_candidates.py \
+            --issue-markdown candidate_issue.md \
+            --accepted-ids "${{ inputs.accepted_ids }}" \
+            --reviewer "${{ inputs.reviewer }}"
+
+      - name: Create draft curation PR
+        env:
+          BRANCH_NAME: bot/awesome-curation-${{ github.run_id }}
+        run: |
+          git switch -c "$BRANCH_NAME"
+          git config user.name "CamoGED Awesome Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/papers.yaml awesome/README.md \
+            web/awesome.md web/catalog.md web/updates.md web/papers.md \
+            web/models.md web/datasets.md web/leaderboard.md web/demo.md
+          git commit -m "data(awesome): accept reviewed discovery candidates"
+          git push origin "$BRANCH_NAME"
+          PR_URL=$(gh pr create \
+            --draft \
+            --base "${{ github.event.repository.default_branch }}" \
+            --head "$BRANCH_NAME" \
+            --title "data(awesome): accept candidates from issue #${{ inputs.issue_number }}" \
+            --body "Human-gated Awesome candidate acceptance from #${{ inputs.issue_number }}. Accepted IDs: ${{ inputs.accepted_ids }}. Records enter as metadata-only and curated=false. All generated catalog surfaces and acceptance checks passed.")
+          echo "Created $PR_URL"
