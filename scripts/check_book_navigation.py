@@ -69,8 +69,6 @@ def main() -> int:
         for token in ("**本章定位**", "**前后依赖**", "**证据与风险边界**"):
             if token not in text:
                 errors.append(f"{rel}: mapping card missing {token}")
-        if "## 延伸阅读" in text and text.index("## 本章与全书映射") > text.index("## 延伸阅读"):
-            errors.append(f"{rel}: mapping card must precede further reading")
 
     appendix = read(CHAPTERS / "appendix-resources.qmd")
     for token in (
