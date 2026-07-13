@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""One-shot implementation of the recorded Book, Demo, and web follow-ups."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,7 +24,6 @@ patch('book/chapters/appendix-resources.qmd',
 - 自动扫描状态：网站 `/updates`（只读读取 GitHub 候选 Issue）
 - 其他动态资源：网站 `/datasets`、`/leaderboard`、`/demo`''')
 
-# Chapter 10: expand task map without pretending all categories are equally mature.
 marker = ': COD 任务谱系（按复杂度递增） {#tbl-tasks}'
 addition = marker + '''
 
@@ -37,7 +37,6 @@ addition = marker + '''
 '''
 patch('book/chapters/10-intelligent-overview-datasets.qmd', marker, addition)
 
-# Chapter 14: add a bounded recent-work window.
 p = ROOT / 'book/chapters/14-foundation-models.qmd'
 text = p.read_text(encoding='utf-8')
 recent = '''
@@ -51,14 +50,12 @@ recent = '''
 if '## 14.9 动态文献窗口' not in text:
     p.write_text(text.rstrip() + recent + '\n', encoding='utf-8')
 
-# Fact-check register: recurring dynamic claims gate.
 p = ROOT / 'docs/BOOK_FACTCHECK_REGISTER.md'
 text = p.read_text(encoding='utf-8')
 row = '| F15 | 全书 | “首个/最大/最新/SOTA”动态主张 | OPEN | 每次出版候选冻结前，依据 Catalog 最近人工审核日、正式出版源和任务定义重新核验；自动候选不得直接支持正文主张。 |\n'
 if 'F15' not in text:
     p.write_text(text.rstrip() + '\n' + row, encoding='utf-8')
 
-# Demo remains synthetic; add navigation and evidence boundary.
 p = ROOT / 'web/demo.md'
 text = p.read_text(encoding='utf-8')
 extra = '''
@@ -74,7 +71,6 @@ This remains a deterministic synthetic teaching tool. It does not run any catalo
 if '## Scope and provenance' not in text:
     p.write_text(text.rstrip() + extra + '\n', encoding='utf-8')
 
-# Register interactive components.
 patch('web/.vitepress/theme/index.js',
 '''import CamoDemo from "./components/CamoDemo.vue";''',
 '''import CamoDemo from "./components/CamoDemo.vue";
@@ -86,7 +82,6 @@ patch('web/.vitepress/theme/index.js',
     app.component("CatalogExplorer", CatalogExplorer);
     app.component("ScanStatus", ScanStatus);''')
 
-# Generator emits interactive components and catalog JSON.
 p = ROOT / 'scripts/build_awesome.py'
 text = p.read_text(encoding='utf-8')
 text = text.replace('"## All resources",\n        "",\n        "| Year | Resource | Type | Tasks | Modalities | Supervision | Status | Links |",',
