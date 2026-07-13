@@ -1,15 +1,16 @@
 name: one-shot cross-component remediation
 
 on:
-  push:
-    branches: [agent/book-demo-unified-remediation]
+  pull_request:
+    branches: [agent/awesome-special-remediation]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   apply:
-    if: github.actor != 'github-actions[bot]'
+    if: github.head_ref == 'agent/book-demo-unified-remediation'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
