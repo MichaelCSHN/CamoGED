@@ -139,11 +139,11 @@ COD 还需要关注**阈值化前后的差异**。许多模型输出连续概率
 
 边界指标在 COD 中尤其重要。伪装目标常常只有局部区域可见，模型容易预测一个大致位置却边界粗糙。对应用而言，粗略框出目标可能足够告警，但对分割、测量、跟踪和后续识别则不足。Boundary IoU 或边界 F-score 可以把"找到了目标"与"精确恢复了轮廓"区分开。第 15 章会详细讨论这些指标的数学定义，本节只强调其任务必要性。
 
-下面的示例说明为何 S-measure 和 MAE 会给出不一致的排名——这是 COD 评价不能"只看 MAE"的典型案例：
+下面的教学示意说明：像素平均误差接近时，结构质量仍可能明显不同。示例中的结构分数是简化代理，不是标准 S-measure 实现：
 
 ```{python}
 #| label: fig-metrics-demo
-#| fig-cap: "COD 评价指标互补性示意：两个预测的 MAE 相近，但预测 A 在边界区域错误集中（结构性差），预测 B 误差均匀分散。S-measure 会对 A 给出更低评分——这说明多指标联合评价的必要性。"
+#| fig-cap: "固定种子教学示意：两个预测的 MAE 分别约为 0.155 和 0.175，而简化结构代理对边界缺失更敏感。该代理不等于标准 S-measure；图仅说明平均像素误差与结构质量可能给出不同判断。"
 #| code-fold: true
 import numpy as np, matplotlib.pyplot as plt
 
@@ -164,7 +164,7 @@ pred_b = np.clip(gt * 0.65 + noise, 0, 1)
 mae_a = float(np.mean(np.abs(pred_a - gt)))
 mae_b = float(np.mean(np.abs(pred_b - gt)))
 
-# Simple proxy for S-measure: mean of object-region IoU and edge-region F1
+# Teaching-only structure proxy: mean of region IoU and edge F1; not S-measure
 def _erode(mask):
     # 4-neighbour binary erosion in pure numpy (outside = background),
     # equivalent to scipy.ndimage.binary_erosion's default structure.
@@ -177,7 +177,7 @@ def _erode(mask):
     out[0, :] = out[-1, :] = out[:, 0] = out[:, -1] = False
     return out
 
-def simple_sm(pred, gt, thresh=0.5):
+def structure_proxy(pred, gt, thresh=0.5):
     p = (pred > thresh).astype(float)
     g = gt.astype(bool)
     # region term: IoU
@@ -193,25 +193,25 @@ def simple_sm(pred, gt, thresh=0.5):
     edge = 2*edge_prec*edge_rec / (edge_prec+edge_rec+1e-8)
     return 0.5 * region + 0.5 * edge
 
-sm_a = simple_sm(pred_a, gt)
-sm_b = simple_sm(pred_b, gt)
+sp_a = structure_proxy(pred_a, gt)
+sp_b = structure_proxy(pred_b, gt)
 
 fig, axes = plt.subplots(1, 3, figsize=(9, 3))
 for ax, img, title in zip(axes,
         [gt, pred_a, pred_b],
         ['Ground truth',
-         f'Pred A (boundary miss)\nMAE={mae_a:.3f}  Sm≈{sm_a:.3f}',
-         f'Pred B (diffuse noise)\nMAE={mae_b:.3f}  Sm≈{sm_b:.3f}']):
+         f'Pred A (boundary miss)\nMAE={mae_a:.3f}  Struct≈{sp_a:.3f}',
+         f'Pred B (diffuse noise)\nMAE={mae_b:.3f}  Struct≈{sp_b:.3f}']):
     ax.imshow(img, cmap='gray', vmin=0, vmax=1)
     ax.set_title(title, fontsize=9); ax.axis('off')
-plt.suptitle('Multiple metrics needed: MAE≈same but Sm differs (boundary quality matters)',
+plt.suptitle('MAE can be close while a teaching structure proxy differs',
              fontsize=9)
 plt.tight_layout()
 ```
 
 ## 10.5 数据集全景 {#sec-datasets}
 
-@tbl-datasets 给出主要数据集的综合概览，按任务/模态组织，与 `data/datasets.yaml` 同源。规模与划分以原始论文为准，部分数字待平台核实后更新。
+@tbl-datasets 给出主要数据集的综合概览，按任务/模态组织，与 `data/datasets.yaml` 同源。本表只列当前可从论文或官方项目页核对规模的条目；仍处于 metadata-only 且规模未核的资源只在 Research Catalog 中保留。
 
 **图像 COD**
 
@@ -219,8 +219,8 @@ plt.tight_layout()
 |--------|--------------|------|-----|
 | CHAMELEON[@skurowski2018animal] | 76 | 仅测试 | 早期小集，常见偏差 |
 | CAMO[@le2019anet] | 1,250 | 1,000 训 / 250 测 | 首批全标注 COD，含遮挡 |
-| COD10K[@fan2020sinet] | 5,066 伪装（~10K 总） | 3,040 训 / 2,026 测 | 69 类 / 78 子类；当前最大图像基准 |
-| NC4K[@lyu2021ranknet] | 4,121 | 仅测试 | 跨数据集泛化评测标准 |
+| COD10K[@fan2020sinet] | 5,066 伪装（约 10K 总） | 3,040 训 / 2,026 测 | 类别覆盖较广的常用图像基准 |
+| NC4K[@lyu2021ranknet] | 4,121 | 仅测试 | 常用外部测试与排序标注资源 |
 
 **扩展/专项图像任务**
 
@@ -229,27 +229,25 @@ plt.tight_layout()
 | CoCOD8K[@zhang2023collaborative] | 协同 COD | ~8K | 多图共有目标 |
 | R2C7K[@zhang2023refcod] | 指代 COD | ~7K | 自然语言引导 |
 | MHCD2022[@liu2023mhnet] | 军事 COD | ~3,000 | 5 类军事目标（随 MHNet 提出） |
-| MCOD | 多光谱 COD | — | 首个多光谱伪装基准[@mcod2025] |
-| MM-CamObj | 多模态 | — | MLLM 问答评测[@mmcamobj2024] |
-| PlantCamo[@plantcamo2025] | 农业/植物 | — | 植物伪装，跨域应用 |
+| PlantCamo[@plantcamo2025] | 农业/植物 | 1,250 图像、58 类 | 植物伪装，跨域应用 |
 | ACOD-12K[@wang2024depth] | 农业 COD | ~12K | 大规模跨域基准 |
 
 **视频 COD**
 
 | 数据集 | 规模 | 注 |
 |--------|------|----|
-| MoCA-Mask[@cheng2022implicit] | 87 序列 (71 训 / 16 测) | 移动伪装动物（源自 MoCA[@lamdouar2020moca]）；最常用视频基准 |
+| MoCA-Mask[@cheng2022implicit] | 87 序列（71 训 / 16 测；22,939 帧） | 移动伪装动物（源自 MoCA[@lamdouar2020moca]）；常用视频基准 |
 | CAD[@bideau2016moving] | 9 序列 | 伪装动物视频，较小 |
-| CamoVid60K[@vu2026camovid] | ~60K 帧 | 大规模；用于预训练/增强 |
-| MSVCOD[@gao2025msvcod] | — | 多场景视频，难度多样 |
+| CamoVid60K[@vu2026camovid] | 218 视频、62,774 标注帧 | 较大规模视频理解资源 |
+| MSVCOD[@gao2025msvcod] | 162 clips、9,486 帧 | 多场景视频；当前元数据仍待独立许可核验 |
 
-: COD 数据集全景（与 data/datasets.yaml 同源；— 表示规模待核实；详见附录 A） {#tbl-datasets}
+: COD 数据集全景（规模来自论文或官方项目页；许可与核验状态详见附录 A 和 Research Catalog） {#tbl-datasets}
 
-这张表的作用不是替代附录 A，而是给读者建立数据版图。图像 COD 提供当前最成熟的训练和测试协议；视频 COD 提供时序与运动难题；多光谱和多模态数据集把第 9 章的信道选择权引入智能检测；指代、协同和开放词汇任务则把 COD 推向语言、组关系和开放世界。后续章节每讨论一种方法，都应回到这张版图中定位：它解决的是哪一类数据和哪一种任务。
+这张表的作用不是替代附录 A，而是给读者建立数据版图。图像 COD 提供当前最成熟的训练和测试协议；视频 COD 提供时序与运动难题；多光谱和多模态资源把第 9 章的信道选择权引入智能检测；MCOD 与 MM-CamObj 当前仍以 metadata-only 方式保留在 Catalog，待规模和协议完成独立核验后再进入正式数量表；指代、协同和开放词汇任务则把 COD 推向语言、组关系和开放世界。后续章节每讨论一种方法，都应回到这张版图中定位：它解决的是哪一类数据和哪一种任务。
 
 数据集规模不能只看图像数量。一个包含 4,000 张多样背景和高质量掩膜的数据集，可能比 40,000 张重复场景的弱标注数据更有价值。COD 数据集需要同时看目标类别、背景类型、拍摄条件、标注精度、难度分布和跨域覆盖。视频数据集还要看序列数量、帧数、运动类型和遮挡比例；多模态数据集还要看传感器配准和信道完整性。规模只是第一层信息。
 
-使用数据集时，还要理解每个数据集的历史角色。CHAMELEON 很小，但在早期提供了共同测试入口；CAMO 首次系统推动像素级 COD；COD10K 把类别和样本规模显著扩大，成为主训练集；NC4K 主要承担跨数据集泛化测试；MoCA-Mask 把任务推进到视频；MCOD 和 MM-CamObj 则把第 9 章的多模态思想引入智能识别。不同数据集的角色不同，不能简单按规模排序。
+使用数据集时，还要理解每个数据集的历史角色。CHAMELEON 很小，但在早期提供了共同测试入口；CAMO 较早推动像素级 COD；COD10K 扩大了类别与样本规模，成为常见训练资源；NC4K 常用于外部测试和排序研究；MoCA-Mask 把任务推进到视频；MCOD 和 MM-CamObj 则提示多光谱与多模态评价方向，但其正式数量与协议仍按 Catalog 核验状态解释。不同数据集的角色不同，不能简单按规模排序。
 
 数据集之间还存在**难度结构差异**。CAMO 中许多样本目标边界较复杂，COD10K 类别更广，NC4K 来源更杂，视频数据集则增加运动和遮挡。若一个方法只在某一数据集上提升，应分析它对应的难点是什么。比如边界增强方法可能在 CAMO 上收益更明显，多尺度方法可能在小目标较多的数据上收益更明显，时序方法应在运动复杂视频上体现优势。
 
@@ -257,7 +255,7 @@ plt.tight_layout()
 
 ### 10.5.1 数据集构建方法论 {#sec-annotation}
 
-COD 数据集的标注代价远高于通用数据集：找到伪装目标本身就需要专业知识（标注者需先"发现"目标），像素级标注极为费时，而质量参差不齐的标注会直接污染评测结果。COD10K 采用了多轮标注与交叉验证，并由生物学专家辅助确认部分类别，是目前标注质量最高的图像 COD 基准之一[@fan2020sinet]。
+COD 数据集的标注代价远高于通用数据集：找到伪装目标本身就需要专业知识（标注者需先"发现"目标），像素级标注极为费时，而质量参差不齐的标注会直接污染评测结果。COD10K 采用了多轮标注与交叉验证，并由生物学专家辅助确认部分类别，提供了较系统的标注与类别信息；其边界质量、版本和不确定区域仍应按具体发布包审计[@fan2020sinet]。
 
 标注流程通常包含三个阶段。第一是目标确认：标注者需要判断图中是否真的存在伪装目标，以及目标类别是否合理。第二是粗标注：用多边形或画笔勾出目标大致区域。第三是精修：沿边界、细肢、透明区域、遮挡区域做像素级修正。COD 的困难在于第一阶段和第三阶段都很难：目标难发现，边界也难确定。若标注者找错目标或漏标小目标，后续指标都会被污染。
 

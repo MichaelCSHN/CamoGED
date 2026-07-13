@@ -52,6 +52,7 @@ book:
     - chapters/appendix-resources.qmd
 
 bibliography: references.bib
+number-sections: true
 
 execute:
   freeze: auto
