@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">全书篇章依赖关系</title>
+  <desc id="desc">第一篇机制历史文化连接第二篇生成和第三篇识别，二者汇入第四篇评价，再进入第五篇前沿治理，并反馈生成和识别。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4b5563"/>
+    </marker>
+    <style>
+      .box { fill: #f8fafc; stroke: #475569; stroke-width: 2; rx: 16; }
+      .title { font: 700 24px sans-serif; fill: #0f172a; text-anchor: middle; }
+      .sub { font: 18px sans-serif; fill: #334155; text-anchor: middle; }
+      .arrow { fill: none; stroke: #4b5563; stroke-width: 3; marker-end: url(#arrow); }
+      .feedback { fill: none; stroke: #64748b; stroke-width: 2.5; stroke-dasharray: 10 8; marker-end: url(#arrow); }
+      .label { font: 16px sans-serif; fill: #475569; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <rect class="box" x="40" y="145" width="205" height="105"/>
+  <text class="title" x="142" y="184">第一篇</text>
+  <text class="sub" x="142" y="217">机制、历史与文化</text>
+  <text class="sub" x="142" y="241">Ch 1–4</text>
+
+  <rect class="box" x="330" y="55" width="205" height="105"/>
+  <text class="title" x="432" y="94">第二篇</text>
+  <text class="sub" x="432" y="127">生成</text>
+  <text class="sub" x="432" y="151">Ch 5–8</text>
+
+  <rect class="box" x="330" y="245" width="205" height="105"/>
+  <text class="title" x="432" y="284">第三篇</text>
+  <text class="sub" x="432" y="317">识别</text>
+  <text class="sub" x="432" y="341">Ch 9–14</text>
+
+  <rect class="box" x="640" y="145" width="205" height="105"/>
+  <text class="title" x="742" y="184">第四篇</text>
+  <text class="sub" x="742" y="217">评价</text>
+  <text class="sub" x="742" y="241">Ch 15–20</text>
+
+  <rect class="box" x="950" y="145" width="205" height="105"/>
+  <text class="title" x="1052" y="184">第五篇</text>
+  <text class="sub" x="1052" y="217">前沿与治理</text>
+  <text class="sub" x="1052" y="241">Ch 21</text>
+
+  <path class="arrow" d="M245 180 C285 165 295 120 330 108"/>
+  <path class="arrow" d="M245 215 C285 230 295 285 330 297"/>
+  <path class="arrow" d="M535 108 C590 108 600 165 640 180"/>
+  <path class="arrow" d="M535 297 C590 297 600 230 640 215"/>
+  <path class="arrow" d="M845 198 L950 198"/>
+
+  <path class="feedback" d="M1052 250 C1040 395 520 405 435 350"/>
+  <path class="feedback" d="M1035 145 C980 20 520 15 435 55"/>
+  <text class="label" x="760" y="402">证据缺口、风险与新任务反馈</text>
+</svg>

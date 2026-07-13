@@ -30,6 +30,10 @@ jobs:
         run: |
           python scripts/discover_awesome.py --self-test
           python scripts/check_awesome.py
+      - name: Evaluation-part structure terminology and citations
+        run: python scripts/check_evaluation_part.py
+      - name: Book navigation mapping and protocol appendices
+        run: python scripts/check_book_navigation.py
       - name: camo-eval API and standard-name guards
         run: python scripts/check_api.py
       - name: Third-party asset ledger
