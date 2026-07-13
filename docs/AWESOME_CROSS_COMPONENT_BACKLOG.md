@@ -1,29 +1,31 @@
-# Awesome remediation: deferred cross-component follow-ups
+# Awesome remediation: cross-component follow-up status
 
-This file records findings discovered during the Awesome specialist remediation that affect other CamoGED components. They are deliberately **not** implemented in this branch unless required for Awesome navigation or build integrity.
+This register tracks findings discovered during the Awesome specialist remediation that affect other CamoGED components.
 
-## Book
+## Completed in PR #12
 
-1. `book/chapters/appendix-resources.qmd` still describes the schema-2 single-task fields and should later explain the curated Awesome / complete Catalog split and the multi-axis extension.
-2. Chapter 10's task map should later be checked against the new catalog facets: bbox RCOD, tracking, incomplete supervision, zero-shot/open-vocabulary, VLM, and robustness now have explicit catalog categories.
-3. Chapter 14 should later be checked for 2025–2026 foundation-model references including CamSAM2, MMCSBench, SDDF, and related work. New catalog inclusion does not justify automatic book citation.
-4. `book/references.bib` does not yet contain all new metadata-only catalog records. Only resources actually cited in the book should be added, after bibliographic verification.
-5. The book's publication fact-check register should later add a periodic check for claims such as “first”, “largest”, and “latest” that may be affected by the dynamic catalog.
+### Book
 
-## Demo
+1. **Completed:** `book/chapters/appendix-resources.qmd` now explains the curated Awesome / complete Catalog split and the multi-axis metadata extension.
+2. **Completed:** Chapter 10 now records bbox RCOD, tracking, incomplete supervision, zero-shot/open-vocabulary, VLM, multimodal, and robustness as distinct protocol facets.
+3. **Completed with evidence boundary:** Chapter 14 now contains a versioned 2025–2026 foundation-model literature window. Metadata-only Catalog inclusion does not become a formal citation automatically.
+4. **Intentionally retained rule:** `book/references.bib` contains only resources actually cited after bibliographic verification; it is not synchronized wholesale from the Catalog.
+5. **Completed:** `docs/BOOK_FACTCHECK_REGISTER.md` now requires periodic rechecking of “first”, “largest”, “latest”, and SOTA claims against current primary sources and the Catalog review cutoff.
 
-1. The browser demo remains a synthetic teaching tool. No newly discovered model or dataset should be connected automatically.
-2. The demo's explanatory text should later link to the new Catalog and metric-validation register, but this is not necessary for Awesome acceptance.
-3. Any future model demo must use a catalog record with code/weight provenance and must not treat Awesome inclusion as reproduction evidence.
+### Demo
 
-## Website outside Awesome
+1. **Completed and retained:** the browser demo remains a deterministic synthetic teaching tool. No newly discovered model or dataset is connected automatically.
+2. **Completed:** the Demo explanation links to the Research Catalog and the camo-eval validation register.
+3. **Completed as a gate:** future model-backed demos require fixed code and weight provenance, an explicit license, an evaluation manifest, and an independently reviewable report. Awesome inclusion is not reproduction evidence.
 
-1. The old `/papers` page becomes a short pointer to `/catalog`; broader information architecture should be reviewed after the specialist branch is merged.
-2. Search/filter UI for the multi-axis catalog is currently static Markdown. A later web work package may add client-side filters without changing the accepted metadata model.
-3. A public “latest automated scan date” widget would require a safe dynamic data surface. The current implementation links to GitHub triage issues instead of granting the scheduled scanner contents-write permission.
+### Website outside Awesome
 
-## Project governance
+1. **Completed:** the Resources navigation now distinguishes Awesome, Research Catalog, Update status, Datasets, Code & Resources, and Verified Results.
+2. **Completed:** the Catalog has a client-side search and multi-axis filter for task, modality, and context. The accepted metadata model remains unchanged.
+3. **Completed:** the Update status page has a read-only component that queries the public GitHub API for the latest `awesome:triage` issue. The discovery workflow retains no contents-write permission.
 
-1. Quarterly coverage review requires named domain reviewers for biological camouflage, military history/materials, art/design, and computer vision.
-2. External Awesome lists are candidate sources only. Their entries and update timestamps must not be imported as verified facts.
-3. After PR #9 and this specialist PR are merged, root release notes should describe the new Awesome/Catalog distinction.
+## Still open at project-governance level
+
+1. Quarterly coverage review still requires named domain reviewers for biological camouflage, military history/materials, art/design, and computer vision.
+2. External Awesome lists remain candidate sources only. Their entries and update timestamps must not be imported as verified facts.
+3. After PRs #9, #10, and #12 are merged, root release notes should describe the final project structure and component versions.
