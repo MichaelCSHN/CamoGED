@@ -18,7 +18,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # The expanded monograph now proves 21 chapters in HTML and ePub sequentially.
+    # ePub consumes frozen results and does not re-execute chapter code.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
