@@ -34,8 +34,6 @@ def main() -> int:
         "figures/book-interdependence.svg",
         "#fig-book-interdependence",
         "| 21 | 前沿与责任边界",
-        "机制、历史与文化",
-        "第四篇：评价",
     ):
         if token not in index:
             errors.append(f"book/index.qmd missing {token!r}")
@@ -45,7 +43,7 @@ def main() -> int:
         errors.append("book interdependence SVG is missing")
     else:
         diagram = read(diagram_path)
-        for token in ("<svg", "全书篇章依赖关系", "第五篇", "证据缺口、风险与新任务反馈"):
+        for token in ("<svg", "全书篇章依赖关系", "机制、历史与文化", "第四篇", "第五篇", "证据缺口、风险与新任务反馈"):
             if token not in diagram:
                 errors.append(f"book interdependence SVG missing {token!r}")
 
