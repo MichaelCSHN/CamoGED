@@ -26,6 +26,10 @@ jobs:
         run: pip install -e ./camo-eval
       - name: Metadata schema and source integrity
         run: python scripts/check_data.py
+      - name: Awesome/catalog specialist acceptance
+        run: |
+          python scripts/discover_awesome.py --self-test
+          python scripts/check_awesome.py
       - name: camo-eval API and standard-name guards
         run: python scripts/check_api.py
       - name: Third-party asset ledger
@@ -36,5 +40,5 @@ jobs:
         run: |
           python scripts/build_awesome.py
           git diff --exit-code -- \
-            awesome/README.md web/awesome.md web/papers.md web/datasets.md \
-            web/leaderboard.md web/models.md web/demo.md
+            awesome/README.md web/awesome.md web/catalog.md web/updates.md \
+            web/papers.md web/datasets.md web/leaderboard.md web/models.md web/demo.md
