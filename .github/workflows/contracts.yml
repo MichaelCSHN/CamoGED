@@ -7,52 +7,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: contracts-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  fix-concealment-notation:
-    if: github.head_ref == 'agent/evaluation-part-restructure'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: agent/evaluation-part-restructure
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
-      - name: Correct non-implication symbol
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('book/chapters/01-essence-and-the-game.qmd')
-          text = path.read_text(encoding='utf-8')
-          old = r'\;\Longrightarrow\;'
-          new = r'\;\not\Rightarrow\;'
-          count = text.count(old)
-          if count != 1:
-              raise SystemExit(f'expected one implication arrow, found {count}')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
-          PY
-      - name: Commit notation correction
-        run: |
-          git config user.name "CamoGED Editorial Bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add book/chapters/01-essence-and-the-game.qmd
-          git commit -m "fix(book): distinguish similarity from detectability"
-          git push origin HEAD:agent/evaluation-part-restructure
-
   contracts:
-    needs: fix-concealment-notation
-    if: always() && (needs.fix-concealment-notation.result == 'success' || needs.fix-concealment-notation.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - name: Install contract dependencies
