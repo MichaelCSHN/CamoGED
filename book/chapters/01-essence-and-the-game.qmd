@@ -100,7 +100,7 @@ bibliography: ../references.bib
 
 $$
 \Delta\operatorname{Sim}(\text{target},\text{background})>0
-\;\Longrightarrow\;
+\;\not\Rightarrow\;
 \Delta P_{\mathrm{det}}<0.
 $$
 
