@@ -93,12 +93,11 @@ jobs:
       - name: Render book HTML
         run: quarto render book --to html
 
-      - name: Commit completed backlog
+      - name: Commit completed source changes
         run: |
           rm -f scripts/apply_cross_component_backlog.py
-          rm -f .github/workflows/cross-component-remediation.yml
           git config user.name "CamoGED Cross-Component Editorial Bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A
+          git add -A -- ':!.github/workflows/**'
           git commit -m "feat(project): close Book Demo and Catalog follow-ups"
           git push origin HEAD:agent/cross-component-backlog
