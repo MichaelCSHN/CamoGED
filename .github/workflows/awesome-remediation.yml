@@ -29,6 +29,9 @@ jobs:
       - name: Apply multi-axis metadata migration
         run: python scripts/apply_awesome_special_remediation.py
 
+      - name: Prepare compatibility hooks
+        run: python scripts/prepare_awesome_special_remediation.py
+
       - name: Format and lint maintenance scripts
         run: |
           black scripts/build_awesome.py scripts/check_awesome.py \
@@ -78,6 +81,7 @@ jobs:
       - name: Commit specialist remediation
         run: |
           rm -f scripts/apply_awesome_special_remediation.py
+          rm -f scripts/prepare_awesome_special_remediation.py
           rm -f .github/workflows/awesome-remediation.yml
           rm -f awesome_validation.log
           git config user.name "CamoGED Awesome Editorial Bot"
