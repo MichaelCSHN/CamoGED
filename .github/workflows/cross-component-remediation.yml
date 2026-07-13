@@ -1,0 +1,50 @@
+name: one-shot cross-component remediation
+
+on:
+  push:
+    branches: [agent/book-demo-unified-remediation]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/book-demo-unified-remediation
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install pyyaml black ruff jupyter numpy matplotlib scipy
+      - name: Apply backlog
+        run: python scripts/apply_cross_component_backlog.py
+      - name: Format and regenerate
+        run: |
+          black scripts/build_awesome.py
+          ruff check scripts/build_awesome.py
+          python scripts/build_awesome.py
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Build website
+        run: |
+          cd web
+          npm ci
+          npm run docs:build
+      - uses: quarto-dev/quarto-actions/setup@v2
+      - name: Render book
+        run: |
+          quarto render book --to html
+          quarto render book --to epub --no-execute
+      - name: Commit remediation
+        run: |
+          rm scripts/apply_cross_component_backlog.py
+          rm .github/workflows/cross-component-remediation.yml
+          git config user.name 'CamoGED Cross-Component Editor'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: complete book demo and catalog follow-ups'
+          git push origin HEAD:agent/book-demo-unified-remediation
