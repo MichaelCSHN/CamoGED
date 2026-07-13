@@ -53,9 +53,11 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
             echo "max_results=2" >> "$GITHUB_OUTPUT"
             echo "min_year=2025" >> "$GITHUB_OUTPUT"
+            echo "required_sources=--require-source arxiv --require-source crossref" >> "$GITHUB_OUTPUT"
           else
             echo "max_results=${{ inputs.max_results || '15' }}" >> "$GITHUB_OUTPUT"
             echo "min_year=${{ inputs.min_year || '2024' }}" >> "$GITHUB_OUTPUT"
+            echo "required_sources=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Discover candidates
@@ -63,19 +65,22 @@ jobs:
           python scripts/discover_awesome.py \
             --max-results "${{ steps.limits.outputs.max_results }}" \
             --min-year "${{ steps.limits.outputs.min_year }}" \
+            ${{ steps.limits.outputs.required_sources }} \
             --output-json awesome_candidates.json \
             --output-markdown awesome_candidates.md
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: awesome-candidates-${{ github.run_id }}
           path: |
             awesome_candidates.json
             awesome_candidates.md
+          if-no-files-found: warn
           retention-days: 90
 
       - name: Create candidate triage issue
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && success()
         uses: actions/github-script@v7
         with:
           script: |
