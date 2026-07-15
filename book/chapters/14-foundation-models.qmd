@@ -276,3 +276,10 @@ VSCode 的重要性在于，它把显著和伪装放在同一可辨性谱上，�
 - **多模态**：MM-CamObj[@mmcamobj2024]；MLLM 底座 LLaVA[@liu2023llava]、InternVL[@chen2024internvl]。
 - **综述与跨域**：CAAI 综述[@xiao2024survey]；概念稠密预测综述[@zhao2025cdp]。
 - **图像 COD 基础**：SINet[@fan2020sinet]；ZoomNeXt[@pang2024zoomnext]；HGINet[@hginet2024]。
+
+## 14.9 动态文献窗口：2025—2026 年基础模型方向 {#sec-foundation-dynamic-window}
+
+截至 2026 年 7 月，动态 Catalog 已出现若干值得后续书目核验的方向：面向伪装视频的 SAM2 适配与自动提示（如 CamSAM2、CamoSAM2），面向大视觉语言模型的细粒度伪装场景评价（如 MMCSBench），以及开放词汇、零样本和 bbox 型伪装识别的新任务设置。它们共同表明，研究重点正在从“替换骨干”转向**提示初始化、记忆纠错、语义开放性、跨任务协议和基础模型能力诊断**。
+
+本节是版本化的检索窗口，不是正式综述结论。上述条目在 Catalog 中仍可能处于 `metadata-only` 或预印本状态；出版版只有在核对正式出版身份、代码/数据可用性、任务定义和实验协议后，才应将其写入正文参考文献或据此作“最新”“首个”“最优”等判断。
+

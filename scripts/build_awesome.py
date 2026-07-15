@@ -226,6 +226,10 @@ def render_catalog(resources: list[dict], config: dict) -> str:
         f"- Modalities: {', '.join(f'`{key}` {value}' for key, value in modality_counts.most_common())}",
         f"- Contexts: {', '.join(f'`{key}` {value}' for key, value in context_counts.most_common())}",
         "",
+        "## Interactive explorer",
+        "",
+        "<CatalogExplorer />",
+        "",
         "## All resources",
         "",
         "| Year | Resource | Type | Tasks | Modalities | Supervision | Status | Links |",
@@ -259,7 +263,9 @@ def render_updates(config: dict, resources: list[dict]) -> str:
         "",
         f"- Coverage reviewed through: **{config.get('coverage_through', 'unknown')}**",
         f"- Last human review: **{config.get('last_human_review', 'unknown')}**",
-        "- Automated scan: see the latest GitHub issue labeled `awesome:triage`.",
+        "<ScanStatus />",
+        "",
+        "- Automated scan history is read from public GitHub issues labeled `awesome:triage`.",
         "- Automated candidates are not accepted records until a human-reviewed PR is merged.",
         "",
         "## Latest accepted records",
@@ -394,6 +400,12 @@ def main() -> None:
         render_curated(config, resources, datasets, catalog_link="./catalog.md"),
     )
     write(WEB / "catalog.md", render_catalog(resources, config))
+    import json
+
+    (WEB / "public" / "catalog-data.json").parent.mkdir(parents=True, exist_ok=True)
+    (WEB / "public" / "catalog-data.json").write_text(
+        json.dumps(resources, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     write(WEB / "updates.md", render_updates(config, resources))
     write(WEB / "papers.md", render_papers_page(resources))
     write(WEB / "models.md", render_models_page(resources))
