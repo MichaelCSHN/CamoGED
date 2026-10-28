@@ -33,5 +33,6 @@ jobs:
         run: quarto render book --to epub --no-execute
       - uses: actions/upload-artifact@v4
         with:
+          retention-days: 14
           name: book-html-epub
           path: book/_book
